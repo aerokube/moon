@@ -517,7 +517,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2017-09-26</span>
+<span id="revdate">2017-09-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -576,7 +576,20 @@ table.CodeRay td.code>pre{padding:0}
 <p>Examples of used YAML and JSON files can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section.</p>
 </li>
 <li>
-<p>Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
+<p>Configure your namespace service account to support Aerokube private registry - replace <code>REGISTRY_USERNAME</code>, <code>REGISTRY_PASSWORD</code> and <code>REGISTRY_EMAIL</code> placeholders with your values:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create secret docker-registry registry_aerokube_com --docker-server=registry.aerokube.com --docker-username=REGISTRY_USERNAME --docker-password=REGISTRY-PASSWORD --docker-email=REGISTRY-EMAIL
+$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry_aerokube_com"}]}'</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>See <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">this</a> Kubernetes documentation section for more details.
+. Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>$ mkdir -p quota
@@ -584,7 +597,8 @@ $ touch quota/browsers.json # Add contents to file
 $ kubectl create configmap quota --from-file=quota</pre>
 </div>
 </div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Start one or more Moon replicas:</p>
 <div class="literalblock">
@@ -625,7 +639,7 @@ http://192.168.99.100:41567</pre>
 </div>
 </li>
 <li>
-<p>To check that <code>moon-api</code> returns statistics with <code>curl</code>:</p>
+<p>Check that <code>moon-api</code> returns statistics:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ http://192.168.99.100:41567/status</pre>
@@ -1212,7 +1226,7 @@ http://192.168.99.100:41567</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-09-26 17:36:25 UTC
+Last updated 2017-09-27 03:45:47 UTC
 </div>
 </div>
 </body>
