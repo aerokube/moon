@@ -579,8 +579,8 @@ table.CodeRay td.code>pre{padding:0}
 <p>Configure your namespace service account to support Aerokube private registry - replace <code>REGISTRY_USERNAME</code>, <code>REGISTRY_PASSWORD</code> and <code>REGISTRY_EMAIL</code> placeholders with your values:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret docker-registry registry_aerokube_com --docker-server=registry.aerokube.com --docker-username=REGISTRY_USERNAME --docker-password=REGISTRY-PASSWORD --docker-email=REGISTRY-EMAIL
-$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry_aerokube_com"}]}'</pre>
+<pre>$ kubectl create secret docker-registry registry.aerokube.com --docker-server=registry.aerokube.com --docker-username=REGISTRY_USERNAME --docker-password=REGISTRY-PASSWORD --docker-email=REGISTRY-EMAIL
+$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry.aerokube.com"}]}'</pre>
 </div>
 </div>
 </li>
@@ -1226,7 +1226,7 @@ http://192.168.99.100:41567</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-09-27 03:45:47 UTC
+Last updated 2017-09-27 09:30:53 UTC
 </div>
 </div>
 </body>
