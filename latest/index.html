@@ -517,7 +517,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2017-09-27</span>
+<span id="revdate">2017-09-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -526,6 +526,8 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
 <li><a href="#_cluster_architecture">1.2. Cluster Architecture</a></li>
+<li><a href="#_moon_vs_selenoid">1.3. Moon vs Selenoid</a></li>
+<li><a href="#_early_access_program">1.4. Early Access Program</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
@@ -679,6 +681,34 @@ http://192.168.99.100:41567</pre>
 </div>
 <div class="paragraph">
 <p>Basic browser startup functionality is completely stateless and does not require any external database to be running.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.3. Moon vs Selenoid</h3>
+<div class="paragraph">
+<p>Moon takes all the best practices and features from Selenoid and adds many more:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Unlimited automatic scalability.</strong> You always have enough browsers of any desired version available in the cluster. When running the cluster in cloud platforms such as <a href="http://cloud.google.com/">Google Cloud</a> you can adjust settings to automatically scale depending on current load. This allows to combine efficiency with competitive cost.</p>
+</li>
+<li>
+<p><strong>Completely stateless</strong>. Selenoid stores in memory information about currently running browser sessions. If for some reason its process crashes - then all running sessions are lost. Moon contrarily has no internal state and can be replicated across datacenters. Browser sessions remain alive even if one or more replicas go down.</p>
+</li>
+<li>
+<p><strong>Uniform load distribution</strong>. Load balancers like <a href="http://github.com/aerokube/ggr/">Ggr</a> provide are using random load distribution across available browser hosts. This makes them inefficient when overall load is above 80% of cluster capacity. Moon delivers exactly uniform distribution working good even under 100% load.</p>
+</li>
+<li>
+<p><strong>Fully graceful</strong>. Any maintenance operations with the cluster do not interrupt running browser sessions. Every cluster component shuts down gracefully.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_early_access_program"><a class="anchor" href="#_early_access_program"></a>1.4. Early Access Program</h3>
+<div class="paragraph">
+<p>Although already supporting most of the features Moon is a work in progress. If you are interested to play with it in your Kubernetes cluster - contact us by email: <a href="mailto:support@aerokube.com">support@aerokube.com</a> and we&#8217;ll send you credentials for our registry where compiled binaries reside.</p>
 </div>
 </div>
 </div>
@@ -1226,7 +1256,7 @@ http://192.168.99.100:41567</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-09-27 15:31:02 UTC
+Last updated 2017-09-29 07:19:31 UTC
 </div>
 </div>
 </body>
