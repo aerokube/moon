@@ -537,6 +537,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_updating_browsers_list">2.1.1. Updating Browsers List</a></li>
 </ul>
 </li>
+<li><a href="#_cli_flags">2.2. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#_moon_flags">2.2.1. Moon Flags</a></li>
+<li><a href="#_moon_api_flags">2.2.2. Moon API Flags</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_example_configuration_files">Appendix A: Example Configuration Files</a></li>
@@ -758,6 +764,50 @@ http://192.168.99.100:41567</pre>
 </div>
 <div class="paragraph">
 <p>All running user sessions will continue to work without any interruption.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.2. CLI Flags</h3>
+<div class="paragraph">
+<p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
+</div>
+<div class="sect3">
+<h4 id="_moon_flags"><a class="anchor" href="#_moon_flags"></a>2.2.1. Moon Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported by <code>moon</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>  -grace-period duration
+    	graceful shutdown (default 30s)
+  -guest-user string
+    	guest quota user name (default "browsers")
+  -listen string
+    	address to bind (default ":4444")
+  -namespace string
+    	namespace (default "default")
+  -quota-dir string
+    	quota directory (default "quota")
+  -session-attempt-timeout duration
+    	new session attempt timeout (default 30s)</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_moon_api_flags"><a class="anchor" href="#_moon_api_flags"></a>2.2.2. Moon API Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported by <code>moon-api</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>  -grace-period duration
+    	graceful shutdown (default 30s)
+  -listen string
+    	address to bind (default ":8080")
+  -namespace string
+    	namespace (default "default")</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -1256,7 +1306,7 @@ http://192.168.99.100:41567</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-09-29 07:19:31 UTC
+Last updated 2017-09-29 07:29:16 UTC
 </div>
 </div>
 </body>
