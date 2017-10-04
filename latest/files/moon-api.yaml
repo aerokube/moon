@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: moon-api
-        image: registry.aerokube.com/moon/moon-api:1.0.0
+        image: registry.aerokube.com/moon/moon-api:1.0.1
         ports:
         - containerPort: 8080
         volumeMounts:
