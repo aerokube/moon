@@ -1,0 +1,35 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: moon
+spec:
+  selector:
+    app: moon
+  ports:
+  - protocol: TCP
+    port: 4444
+  type: NodePort
+---
+apiVersion: apps/v1beta1 
+kind: Deployment
+metadata:
+  name: moon
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: moon
+    spec:
+      containers:
+      - name: moon
+        image: registry.aerokube.com/moon/moon:1.0.1
+        ports:
+        - containerPort: 4444
+        volumeMounts:
+        - name: quota
+          mountPath: /quota
+      volumes:
+      - name: quota
+        configMap:
+          name: quota
