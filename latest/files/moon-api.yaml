@@ -33,3 +33,6 @@ spec:
       - name: quota
         configMap:
           name: quota
+      - name: users
+        secret:
+          secretName: users          

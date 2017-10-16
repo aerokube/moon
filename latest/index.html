@@ -517,7 +517,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2017-10-15</span>
+<span id="revdate">2017-10-16</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -532,9 +532,10 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_configuration">2. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_configuring_available_browsers">2.1. Configuring Available Browsers</a>
+<li><a href="#_basic_configuration">2.1. Basic Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_updating_browsers_list">2.1.1. Updating Browsers List</a></li>
+<li><a href="#_updating_users_list">2.1.2. Updating Users List</a></li>
 </ul>
 </li>
 <li><a href="#_cli_flags">2.2. CLI Flags</a>
@@ -596,8 +597,18 @@ $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regis
 </div>
 <div class="paragraph">
 <p>See <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">this</a> Kubernetes documentation section for more details.
-. Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
+. Create <code>users.htpasswd</code> in <code>users</code> directory and initialize users configuration:</p>
 </div>
+<div class="literalblock">
+<div class="content">
+<pre>$ htpasswd -Bbn test test-password &gt;&gt; users.htpasswd
+$ kubectl create secret generic users --from-file=./users.htpasswd</pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ mkdir -p quota
@@ -605,8 +616,7 @@ $ touch quota/browsers.json # Add contents to file
 $ kubectl create configmap quota --from-file=quota</pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Start one or more Moon replicas:</p>
 <div class="literalblock">
@@ -723,11 +733,14 @@ http://192.168.99.100:41567</pre>
 <h2 id="_configuration"><a class="anchor" href="#_configuration"></a>2. Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_configuring_available_browsers"><a class="anchor" href="#_configuring_available_browsers"></a>2.1. Configuring Available Browsers</h3>
+<h3 id="_basic_configuration"><a class="anchor" href="#_basic_configuration"></a>2.1. Basic Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Moon is using exactly the same <a href="http://aerokube.com/selenoid/latest/#_browsers_configuration_file">JSON format</a> as Selenoid. An example file can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section. Because everything in Kubernetes is being run in containers - you cannot specify path to webdriver binary, only container with browser. To be available across the cluster all configuration data is stored in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configmap/">ConfigMap</a>.</p>
+<p>Moon is using exactly the same <a href="http://aerokube.com/selenoid/latest/#_browsers_configuration_file">JSON format</a> as Selenoid. An sample file can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section. Because everything in Kubernetes is being run in containers - you cannot specify path to webdriver binary, only container with browser. To be available across the cluster all configuration data is stored in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configmap/">ConfigMap</a>.</p>
+</li>
+<li>
+<p>Moon is using <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> to store users information as Ggr. This data is stored in <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret</a> and mounted to respective pods.</p>
 </li>
 <li>
 <p>Moon supports multiple users, so you need to create one file for each user named <code>&lt;username&gt;.json</code>. For example for user <code>test</code> to work properly you should create <code>test.json</code> file.</p>
@@ -748,7 +761,7 @@ http://192.168.99.100:41567</pre>
 <p>Having configuration files stored in directory update Moon configuration:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl update configmap quota --from-file=quota</pre>
+<pre>$ kubectl replace configmap quota --from-file=quota</pre>
 </div>
 </div>
 </li>
@@ -756,7 +769,7 @@ http://192.168.99.100:41567</pre>
 <p>Gracefully restart Moon service:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl update -f moon.yaml</pre>
+<pre>$ kubectl replace -f moon.yaml</pre>
 </div>
 </div>
 </li>
@@ -764,6 +777,42 @@ http://192.168.99.100:41567</pre>
 </div>
 <div class="paragraph">
 <p>All running user sessions will continue to work without any interruption.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_updating_users_list"><a class="anchor" href="#_updating_users_list"></a>2.1.2. Updating Users List</h4>
+<div class="paragraph">
+<p>To add or remove users:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Modify <code>users.htpasswd</code> with <code>htpasswd</code> command:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ htpasswd -Bbn new-user new-user-password &gt;&gt; users.htpasswd # Adding new user
+$ htpasswd -Bb users.htpasswd some-user new-password # Updating password
+$ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Update <code>users</code> secret:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace secret users --from-file=./users.htpasswd</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Gracefully restart Moon service:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace -f moon.yaml</pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1254,10 +1303,17 @@ http://192.168.99.100:41567</pre>
         <span class="key">volumeMounts</span>:
         - <span class="string"><span class="content">name: quota</span></span>
           <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
+          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+        - <span class="string"><span class="content">name: users</span></span>
+          <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
+          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
       <span class="key">volumes</span>:
       - <span class="string"><span class="content">name: quota</span></span>
         <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span></code></pre>
+          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+      - <span class="string"><span class="content">name: users</span></span>
+        <span class="key">secret</span>:
+          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -1297,7 +1353,10 @@ http://192.168.99.100:41567</pre>
       <span class="key">volumes</span>:
       - <span class="string"><span class="content">name: quota</span></span>
         <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span></code></pre>
+          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+      - <span class="string"><span class="content">name: users</span></span>
+        <span class="key">secret</span>:
+          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
 </div>
 </div>
 </div>
@@ -1306,7 +1365,7 @@ http://192.168.99.100:41567</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-10-15 08:33:48 UTC
+Last updated 2017-10-16 04:45:38 UTC
 </div>
 </div>
 </body>

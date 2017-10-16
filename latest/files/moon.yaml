@@ -29,7 +29,14 @@ spec:
         volumeMounts:
         - name: quota
           mountPath: /quota
+          readOnly: true
+        - name: users
+          mountPath: /users
+          readOnly: true
       volumes:
       - name: quota
         configMap:
           name: quota
+      - name: users
+        secret:
+          secretName: users
