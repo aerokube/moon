@@ -596,17 +596,19 @@ $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "regis
 </ol>
 </div>
 <div class="paragraph">
-<p>See <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">this</a> Kubernetes documentation section for more details.
-. Create <code>users.htpasswd</code> in <code>users</code> directory and initialize users configuration:</p>
+<p>See <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">this</a> Kubernetes documentation section for more details.</p>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create <code>users.htpasswd</code> in <code>users</code> directory and initialize users configuration:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ htpasswd -Bbn test test-password &gt;&gt; users.htpasswd
 $ kubectl create secret generic users --from-file=./users.htpasswd</pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
 <div class="literalblock">
@@ -1365,7 +1367,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2017-11-27 10:43:45 UTC
+Last updated 2017-11-27 11:03:01 UTC
 </div>
 </div>
 </body>
