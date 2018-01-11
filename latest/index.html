@@ -517,7 +517,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-01-09</span>
+<span id="revdate">2018-01-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -547,7 +547,8 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#_license_agreement">3. License Agreement</a></li>
-<li><a href="#_example_configuration_files">Appendix A: Example Configuration Files</a></li>
+<li><a href="#_pricing">Appendix A: Pricing</a></li>
+<li><a href="#_example_configuration_files">Appendix B: Example Configuration Files</a></li>
 </ul>
 </div>
 </div>
@@ -913,10 +914,10 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p><strong>"User"</strong> means any employee, independent contractor or other personnel obtaining access to the Product(s) from Customer.</p>
 </li>
 <li>
-<p><strong>"Number of Concurrent Users"</strong> means maximum number of User&#8217;s network connections being established to the Product in parallel while working with it.</p>
+<p><strong>"Number of Concurrent Sessions"</strong> means maximum number of software testing processes being run using the Product in parallel. This can be for example browsers executing User&#8217;s tests.</p>
 </li>
 <li>
-<p><strong>"License Key"</strong> means a unique key-code that enables a Licensee to use the Product by unlocking the fixed Number of Concurrent Users. Only Licensor and/or its representatives are permitted to produce License Keys for the Product.</p>
+<p><strong>"License Key"</strong> means a unique key-code that enables a Licensee to use the Product by unlocking the fixed Number of Concurrent Sessions. Only Licensor and/or its representatives are permitted to produce License Keys for the Product.</p>
 </li>
 <li>
 <p><strong>"Subscription"</strong> means an arrangement for making use of the Product of periodic nature on a prepayment plan. For the purpose of clarity, Subscription includes the subscription term, Products provided to Customer, subscription fees, payment schedules and fixed number of License Keys.</p>
@@ -925,7 +926,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p><strong>"Product Evaluation"</strong> means using the Product without a valid License Key.</p>
 </li>
 <li>
-<p><strong>"Subscription Confirmation"</strong> means an email confirming Customer&#8217;s rights to access and use Products, including total Number of Concurrent Users.</p>
+<p><strong>"Subscription Confirmation"</strong> means an email confirming Customer&#8217;s rights to access and use Products, including total Number of Concurrent Sessions.</p>
 </li>
 <li>
 <p><strong>"Product Installation"</strong> means a Product copy running on Customer&#8217;s computer device, hardware server or virtual machine.</p>
@@ -1015,7 +1016,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>The Product include code and libraries licensed to Licensor by third parties, including open source software.</p>
 </li>
 <li>
-<p>The Product is provided basing on the Number of Concurrent Users. If Customer complies with the terms of this Agreement, Customer has the rights stipulated hereunder for each Subscription that Customer acquires. Customer&#8217;s rights acquired in relation to the Product are limited to those necessary to enable Customer and its Users to effectively operate the Product(s). All other rights remain reserved to Licensor.</p>
+<p>The Product is provided basing on the Number of Concurrent Sessions. If Customer complies with the terms of this Agreement, Customer has the rights stipulated hereunder for each Subscription that Customer acquires. Customer&#8217;s rights acquired in relation to the Product are limited to those necessary to enable Customer and its Users to effectively operate the Product(s). All other rights remain reserved to Licensor.</p>
 </li>
 <li>
 <p>Unless the Subscription has expired or this Agreement is terminated in accordance with respective section, and subject to the terms and conditions specified herein, Licensor grants Customer a non-exclusive and non-transferable right to use each Product covered by the Subscription as stipulated below.</p>
@@ -1038,7 +1039,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
-<p>Allow the same Product Installation to be used concurrently by more than the Number of Concurrent Users specified for used License Key in Subscription Confirmation.</p>
+<p>Allow the same Product Installation to be used concurrently by more than the Number of Concurrent Sessions specified for used License Key in Subscription Confirmation.</p>
 </li>
 <li>
 <p>Rent, lease, reproduce, modify, adapt, create derivative works of, distribute, sell, or transfer the Product.</p>
@@ -1078,7 +1079,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Customer enables full access to Product Installation by specifying a License Key from Subscription Confirmation.</p>
 </li>
 <li>
-<p>Subject to the terms of this Agreement, Customer is granted a right to install and use the Product for evaluation purposes without charge for unlimited amount of time. The Product contains a feature that will automatically limit allowed Number of Concurrent Users. Licensor reserves the right at any time to change that limit in new Product versions.</p>
+<p>Subject to the terms of this Agreement, Customer is granted a right to install and use the Product for evaluation purposes without charge for unlimited amount of time. The Product contains a feature that will automatically limit allowed Number of Concurrent Sessions. Licensor reserves the right at any time to change that limit in new Product versions.</p>
 </li>
 </ol>
 </div>
@@ -1282,7 +1283,129 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_example_configuration_files"><a class="anchor" href="#_example_configuration_files"></a>Appendix A: Example Configuration Files</h2>
+<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>Appendix A: Pricing</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Moon price is calculated using so-called <code>Number of Concurrent Sessions</code> that is to say total number of browser sessions being run in parallel. We control this by limiting total number of simultaneously running browser pods to the value you are purchasing.</p>
+</li>
+<li>
+<p>When no license key is provided <code>4 (four)</code> parallel browser sessions maximum are allowed. If such limit is sufficient for you - you are allowed use Moon without license key for unlimited period of time.</p>
+</li>
+</ol>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Moon License Pricing</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Number of Parallel Sessions</th>
+<th class="tableblock halign-left valign-top">Price per Month (Billed Annually)</th>
+<th class="tableblock halign-left valign-top">Price per Month (Month-to-Month)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0-4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">free</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">free</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">480</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">555</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">666</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">700</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">840</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">875</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1050</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">900</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1080</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">40</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1440</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">50</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1800</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">75</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1875</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2250</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">150</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3600</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4800</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">250</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">750</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10800</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12000</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">17500</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">21000</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_configuration_files"><a class="anchor" href="#_example_configuration_files"></a>Appendix B: Example Configuration Files</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="title">Example <code>browsers.json</code> file contents</div>
@@ -1784,7 +1907,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-01-09 14:58:45 UTC
+Last updated 2018-01-11 16:55:42 UTC
 </div>
 </div>
 </body>
