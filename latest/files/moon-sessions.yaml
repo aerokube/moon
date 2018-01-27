@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: max-moon-sessions
+spec:
+  hard:
+    pods: "4"
