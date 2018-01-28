@@ -15,7 +15,7 @@ kind: Deployment
 metadata:
   name: moon
 spec:
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
