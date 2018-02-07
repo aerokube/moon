@@ -517,7 +517,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-02-06</span>
+<span id="revdate">2018-02-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1412,8 +1412,18 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">55.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">57.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">57.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_57.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">56.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_56.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
+      },
       <span class="key"><span class="delimiter">&quot;</span><span class="content">55.0</span><span class="delimiter">&quot;</span></span>: {
         <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_55.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
@@ -1682,8 +1692,24 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
     }
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">64.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_64.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">63.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_63.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_62.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">61.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_61.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
       <span class="key"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>: {
         <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_60.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
@@ -1739,8 +1765,20 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
     }
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">opera</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">47.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_50.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">49.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_49.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">48.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_48.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      },
       <span class="key"><span class="delimiter">&quot;</span><span class="content">47.0</span><span class="delimiter">&quot;</span></span>: {
         <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_47.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
@@ -1907,7 +1945,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-02-06 17:16:30 UTC
+Last updated 2018-02-07 03:57:46 UTC
 </div>
 </div>
 </body>
