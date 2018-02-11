@@ -1877,7 +1877,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
     <span class="key">spec</span>:
       <span class="key">containers</span>:
       - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon:1.0.3</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon:@TAGNAME@</span></span>
         <span class="key">ports</span>:
         - <span class="string"><span class="content">containerPort: 4444</span></span>
         <span class="key">volumeMounts</span>:
@@ -1924,7 +1924,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
     <span class="key">spec</span>:
       <span class="key">containers</span>:
       - <span class="string"><span class="content">name: moon-api</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon-api:1.0.3</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon-api:@TAGNAME@</span></span>
         <span class="key">ports</span>:
         - <span class="string"><span class="content">containerPort: 8080</span></span>
         <span class="key">volumeMounts</span>:
@@ -1945,7 +1945,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-02-11 08:55:28 UTC
+Last updated 2018-02-11 11:04:44 UTC
 </div>
 </div>
 </body>
