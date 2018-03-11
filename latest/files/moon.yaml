@@ -24,6 +24,13 @@ spec:
       containers:
       - name: moon
         image: aerokube/moon:latest
+        resources:
+          limits:
+            cpu: "1"
+            memory: "512Mi"
+          requests:
+            cpu: "0.25"
+            memory: "64Mi"
         ports:
         - containerPort: 4444
         volumeMounts:
