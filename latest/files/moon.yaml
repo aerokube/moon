@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: moon
-        image: registry.aerokube.com/moon/moon:latest
+        image: aerokube/moon:latest
         ports:
         - containerPort: 4444
         volumeMounts:

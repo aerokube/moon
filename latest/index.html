@@ -587,22 +587,6 @@ table.CodeRay td.code>pre{padding:0}
 <p>Examples of used YAML and JSON files can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section.</p>
 </li>
 <li>
-<p>Configure your namespace service account to support Aerokube private registry - replace <code>REGISTRY_USERNAME</code>, <code>REGISTRY_PASSWORD</code> and <code>REGISTRY_EMAIL</code> placeholders with your values:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl create secret docker-registry registry.aerokube.com --docker-server=registry.aerokube.com --docker-username=REGISTRY_USERNAME --docker-password=REGISTRY-PASSWORD --docker-email=REGISTRY-EMAIL
-$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "registry.aerokube.com"}]}'</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>See <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/">this</a> Kubernetes documentation section for more details.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
 <p>Create <code>users.htpasswd</code> in <code>users</code> directory and initialize users configuration:</p>
 <div class="literalblock">
 <div class="content">
@@ -622,7 +606,24 @@ $ kubectl create configmap quota --from-file=quota</pre>
 </div>
 </li>
 <li>
-<p>Start one or more Moon replicas:</p>
+<p>Initialize S3 bucket to upload test videos and logs. Optional, but without this configuration uploading will not work. In this example we are demonstrating how to do this for Google Cloud and assume you have <code>moon-test</code> bucket already created:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create configmap s3-config --from-literal=endpoint="https://storage.googleapis.com" --from-literal=version="S3v2" --from-literal=bucket="moon-test"
+$ kubectl create secret generic s3-credentials --from-literal=accessKey="&lt;Your-S3-Access-Key&gt;" --from-literal=secretKey="&lt;Your-S3-Secret-Key&gt;"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Initialize resource quota:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create -f moon-sessions.yaml</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start Moon:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ kubectl create -f moon.yaml</pre>
@@ -630,7 +631,7 @@ $ kubectl create configmap quota --from-file=quota</pre>
 </div>
 </li>
 <li>
-<p>Start one or more Moon API replicas:</p>
+<p>Start Moon API:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ kubectl create -f moon-api.yaml</pre>
@@ -1408,6 +1409,121 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <h2 id="_example_configuration_files"><a class="anchor" href="#_example_configuration_files"></a>Appendix B: Example Configuration Files</h2>
 <div class="sectionbody">
 <div class="listingblock">
+<div class="title">Example <code>moon-sessions.yaml</code> file contents</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ResourceQuota</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">max-moon-sessions</span></span>
+<span class="key">spec</span>:
+  <span class="key">hard</span>:
+    <span class="key">pods</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4</span><span class="delimiter">&quot;</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1beta1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ClusterRoleBinding</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-rbac</span></span>
+<span class="key">subjects</span>:
+  - <span class="string"><span class="content">kind: ServiceAccount</span></span>
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">default</span></span>
+<span class="key">roleRef</span>:
+  <span class="key">kind</span>: <span class="string"><span class="content">ClusterRole</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">cluster-admin</span></span>
+  <span class="key">apiGroup</span>: <span class="string"><span class="content">rbac.authorization.k8s.io</span></span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example <code>moon.yaml</code> file contents</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">selector</span>:
+    <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">ports</span>:
+  - <span class="string"><span class="content">protocol: TCP</span></span>
+    <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest</span></span>
+        <span class="key">ports</span>:
+        - <span class="string"><span class="content">containerPort: 4444</span></span>
+        <span class="key">volumeMounts</span>:
+        - <span class="string"><span class="content">name: quota</span></span>
+          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
+          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+        - <span class="string"><span class="content">name: users</span></span>
+          <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
+          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+      <span class="key">volumes</span>:
+      - <span class="string"><span class="content">name: quota</span></span>
+        <span class="key">configMap</span>:
+          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+      - <span class="string"><span class="content">name: users</span></span>
+        <span class="key">secret</span>:
+          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Example <code>moon-api.yaml</code> file contents</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
+<span class="key">spec</span>:
+  <span class="key">selector</span>:
+    <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
+  <span class="key">ports</span>:
+  - <span class="string"><span class="content">protocol: TCP</span></span>
+    <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
+  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
+    <span class="key">spec</span>:
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon-api</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon-api:latest</span></span>
+        <span class="key">ports</span>:
+        - <span class="string"><span class="content">containerPort: 8080</span></span>
+        <span class="key">volumeMounts</span>:
+        - <span class="string"><span class="content">name: quota</span></span>
+          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
+      <span class="key">volumes</span>:
+      - <span class="string"><span class="content">name: quota</span></span>
+        <span class="key">configMap</span>:
+          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+      - <span class="string"><span class="content">name: users</span></span>
+        <span class="key">secret</span>:
+          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
+</div>
+</div>
+<div class="listingblock">
 <div class="title">Example <code>browsers.json</code> file contents</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json">{
@@ -1858,103 +1974,13 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 }</code></pre>
 </div>
 </div>
-<div class="listingblock">
-<div class="title">Example <code>moon.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">selector</span>:
-    <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">ports</span>:
-  - <span class="string"><span class="content">protocol: TCP</span></span>
-    <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
-  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon:@TAGNAME@</span></span>
-        <span class="key">ports</span>:
-        - <span class="string"><span class="content">containerPort: 4444</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: quota</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-        - <span class="string"><span class="content">name: users</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-      <span class="key">volumes</span>:
-      - <span class="string"><span class="content">name: quota</span></span>
-        <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-      - <span class="string"><span class="content">name: users</span></span>
-        <span class="key">secret</span>:
-          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>moon-api.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-<span class="key">spec</span>:
-  <span class="key">selector</span>:
-    <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-  <span class="key">ports</span>:
-  - <span class="string"><span class="content">protocol: TCP</span></span>
-    <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
-  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-<span class="key">spec</span>:
-  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon-api</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">registry.aerokube.com/moon/moon-api:@TAGNAME@</span></span>
-        <span class="key">ports</span>:
-        - <span class="string"><span class="content">containerPort: 8080</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: quota</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-      <span class="key">volumes</span>:
-      - <span class="string"><span class="content">name: quota</span></span>
-        <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-      - <span class="string"><span class="content">name: users</span></span>
-        <span class="key">secret</span>:
-          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
-</div>
-</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-03-11 09:30:25 UTC
+Last updated 2018-03-11 10:56:48 UTC
 </div>
 </div>
 </body>
