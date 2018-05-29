@@ -4,7 +4,7 @@ metadata:
   name: max-moon-sessions
 spec:
   hard:
-    pods: "4"
+    pods: "6"
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
