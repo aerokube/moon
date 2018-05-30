@@ -532,8 +532,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_getting_started">1. Getting Started</a>
 <ul class="sectlevel2">
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
-<li><a href="#_cluster_architecture">1.2. Cluster Architecture</a></li>
-<li><a href="#_moon_vs_selenoid">1.3. Moon vs Selenoid</a></li>
+<li><a href="#_installing_to_openshift">1.2. Installing to Openshift</a></li>
+<li><a href="#_cluster_architecture">1.3. Cluster Architecture</a></li>
+<li><a href="#_moon_vs_selenoid">1.4. Moon vs Selenoid</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
@@ -682,7 +683,66 @@ http://192.168.99.100:41567</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.2. Cluster Architecture</h3>
+<h3 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.2. Installing to Openshift</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Prerequisites:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Running <a href="https://www.openshift.com/">Openshift</a> cluster</p>
+</li>
+<li>
+<p><code>oc</code> client installed and pointing to the cluster</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Example YAML and JSON files can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section.</p>
+</li>
+<li>
+<p>Add <code>view</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ export PROJECT=default
+$ oc policy add-role-to-user view system:serviceaccount:$PROJECT:default</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create <code>users.htpasswd</code> and respective secret:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ htpasswd -Bbn test test-password &gt;&gt; users.htpasswd
+$ oc create secret generic users --from-file=./users.htpasswd</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ mkdir -p quota
+$ touch quota/browsers.json # Add contents to file
+$ oc create configmap quota --from-file=./quota</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Start services using Openshift UI or the following command:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc create -f moon-openshift.yaml -n $PROJECT</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.3. Cluster Architecture</h3>
 <div class="paragraph">
 <div class="title">Moon Cluster Architecture</div>
 <p><span class="image"><img src="img/architecture.png" alt="architecture"></span></p>
@@ -711,7 +771,7 @@ http://192.168.99.100:41567</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.3. Moon vs Selenoid</h3>
+<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.4. Moon vs Selenoid</h3>
 <div class="paragraph">
 <p>Moon takes all the best practices and features from Selenoid and adds many more:</p>
 </div>
@@ -1988,13 +2048,204 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 }</code></pre>
 </div>
 </div>
+<div class="listingblock">
+<div class="title">Example <code>moon-openshift.yaml</code> file contents</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Template</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">objects</span>:
+
+  - <span class="string"><span class="content">kind: ResourceQuota</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">max-moon-sessions</span></span>
+    <span class="key">spec</span>:
+      <span class="key">hard</span>:
+        <span class="key">pods</span>: <span class="string"><span class="content">${MOON_PODS}</span></span>
+
+  - <span class="string"><span class="content">kind: Service</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">selector</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+      <span class="key">ports</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
+        <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
+
+  - <span class="string"><span class="content">kind: Service</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
+    <span class="key">spec</span>:
+      <span class="key">selector</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
+      <span class="key">ports</span>:
+      - <span class="string"><span class="content">name: moon-api</span></span>
+        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
+        <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
+      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
+
+  - <span class="string"><span class="content">kind: Service</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon-ui</span></span>
+    <span class="key">spec</span>:
+      <span class="key">selector</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon-ui</span></span>
+      <span class="key">ports</span>:
+      - <span class="string"><span class="content">name: moon-ui</span></span>
+        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
+        <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
+      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
+
+  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+      <span class="key">template</span>:
+        <span class="key">metadata</span>:
+          <span class="key">labels</span>:
+            <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+        <span class="key">spec</span>:
+          <span class="key">containers</span>:
+          - <span class="string"><span class="content">name: moon</span></span>
+            <span class="key">image</span>: <span class="string"><span class="content">${MOON_IMAGE}</span></span>
+            <span class="key">args</span>:
+              - <span class="string"><span class="content">'-namespace'</span></span>
+              - <span class="string"><span class="content">'${NAMESPACE}'</span></span>
+            <span class="key">resources</span>:
+              <span class="key">limits</span>:
+                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
+                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">512Mi</span><span class="delimiter">&quot;</span></span>
+              <span class="key">requests</span>:
+                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
+                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
+            <span class="key">ports</span>:
+            - <span class="string"><span class="content">containerPort: 4444</span></span>
+            <span class="key">volumeMounts</span>:
+            - <span class="string"><span class="content">name: quota</span></span>
+              <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
+              <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+            - <span class="string"><span class="content">name: users</span></span>
+              <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
+              <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+          <span class="key">volumes</span>:
+          - <span class="string"><span class="content">name: quota</span></span>
+            <span class="key">configMap</span>:
+              <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+          - <span class="string"><span class="content">name: users</span></span>
+            <span class="key">secret</span>:
+              <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span>
+
+  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
+    <span class="key">spec</span>:
+      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+      <span class="key">template</span>:
+        <span class="key">metadata</span>:
+          <span class="key">labels</span>:
+            <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
+        <span class="key">spec</span>:
+          <span class="key">containers</span>:
+          - <span class="string"><span class="content">name: moon-api</span></span>
+            <span class="key">image</span>: <span class="string"><span class="content">${MOON_API_IMAGE}</span></span>
+            <span class="key">args</span>:
+              - <span class="string"><span class="content">'-namespace'</span></span>
+              - <span class="string"><span class="content">'${NAMESPACE}'</span></span>
+            <span class="key">resources</span>:
+              <span class="key">limits</span>:
+                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
+                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">128Mi</span><span class="delimiter">&quot;</span></span>
+              <span class="key">requests</span>:
+                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1</span><span class="delimiter">&quot;</span></span>
+                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
+            <span class="key">ports</span>:
+            - <span class="string"><span class="content">containerPort: 8080</span></span>
+            <span class="key">volumeMounts</span>:
+            - <span class="string"><span class="content">name: quota</span></span>
+              <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
+          <span class="key">volumes</span>:
+          - <span class="string"><span class="content">name: quota</span></span>
+            <span class="key">configMap</span>:
+              <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
+          - <span class="string"><span class="content">name: users</span></span>
+            <span class="key">secret</span>:
+              <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span>
+
+  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
+    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+    <span class="key">metadata</span>:
+      <span class="key">name</span>: <span class="string"><span class="content">moon-ui</span></span>
+    <span class="key">spec</span>:
+      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+      <span class="key">template</span>:
+        <span class="key">metadata</span>:
+          <span class="key">labels</span>:
+            <span class="key">app</span>: <span class="string"><span class="content">moon-ui</span></span>
+        <span class="key">spec</span>:
+          <span class="key">containers</span>:
+            - <span class="string"><span class="content">name: moon-ui</span></span>
+              <span class="key">args</span>:
+                - <span class="string"><span class="content">'--selenoid-uri'</span></span>
+                - <span class="string"><span class="content">'http://moon-api:8080'</span></span>
+              <span class="key">image</span>: <span class="string"><span class="content">${MOON_UI_IMAGE}</span></span>
+              <span class="key">ports</span>:
+                - <span class="string"><span class="content">containerPort: 8080</span></span>
+                  <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
+              <span class="key">resources</span>:
+                <span class="key">limits</span>:
+                  <span class="key">cpu</span>: <span class="string"><span class="content">100m</span></span>
+                  <span class="key">memory</span>: <span class="string"><span class="content">64M</span></span>
+
+<span class="key">parameters</span>:
+- <span class="string"><span class="content">name: NAMESPACE</span></span>
+  <span class="key">displayName</span>: <span class="string"><span class="content">Namespace</span></span>
+  <span class="key">description</span>: <span class="string"><span class="content">Namespace where the Moon is running</span></span>
+  <span class="key">value</span>: <span class="string"><span class="content">default</span></span>
+  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
+
+- <span class="string"><span class="content">name: MOON_IMAGE</span></span>
+  <span class="key">displayName</span>: <span class="string"><span class="content">Moon docker image</span></span>
+  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
+  <span class="key">value</span>: <span class="string"><span class="content">aerokube/moon:latest-release</span></span>
+  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
+
+- <span class="string"><span class="content">name: MOON_API_IMAGE</span></span>
+  <span class="key">displayName</span>: <span class="string"><span class="content">Moon-API docker image</span></span>
+  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
+  <span class="key">value</span>: <span class="string"><span class="content">aerokube/moon-api:latest-release</span></span>
+  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
+
+- <span class="string"><span class="content">name: MOON_UI_IMAGE</span></span>
+  <span class="key">displayName</span>: <span class="string"><span class="content">Moon-UI docker image</span></span>
+  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
+  <span class="key">value</span>: <span class="string"><span class="content">aerokube/selenoid-ui:latest-release</span></span>
+  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
+
+- <span class="string"><span class="content">name: MOON_PODS</span></span>
+  <span class="key">displayName</span>: <span class="string"><span class="content">Max moon pods in project</span></span>
+  <span class="key">description</span>: <span class="string"><span class="content">Specify max moon pods for project (4 free slots + Moon + Moon API + Moon UI = 7).</span></span>
+  <span class="key">value</span>: <span class="string"><span class="content">'7'</span></span>
+  <span class="key">required</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-05-30 08:53:25 UTC
+Last updated 2018-05-30 11:27:13 UTC
 </div>
 </div>
 </body>
