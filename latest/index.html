@@ -545,10 +545,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_updating_users_list">2.1.2. Updating Users List</a></li>
 </ul>
 </li>
-<li><a href="#_cli_flags">2.2. CLI Flags</a>
+<li><a href="#_advanced_configuration">2.2. Advanced Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_moon_flags">2.2.1. Moon Flags</a></li>
-<li><a href="#_moon_api_flags">2.2.2. Moon API Flags</a></li>
+<li><a href="#_using_custom_moon_images">2.2.1. Using Custom Moon Images</a></li>
+</ul>
+</li>
+<li><a href="#_cli_flags">2.3. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#_moon_flags">2.3.1. Moon Flags</a></li>
+<li><a href="#_moon_api_flags">2.3.2. Moon API Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -882,12 +887,67 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.2. CLI Flags</h3>
+<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.2. Advanced Configuration</h3>
+<div class="sect3">
+<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.2.1. Using Custom Moon Images</h4>
+<div class="paragraph">
+<p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/uploader</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Copy the following public images to your registry:</p>
+<div class="literalblock">
+<div class="content">
+<pre>aerokube/moon
+aerokube/moon-api
+selenoid/video-recorder
+aerokube/defender
+aerokube/uploader
+aerokube/logger</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <code>service.json</code> file with the following contents:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ mkdir -p moon-config
+$ touch moon-config/service.json # Add contents to file as shown on the next line
+$ cat moon-config/service.json
+{
+  "images": {
+    "videoRecorder": "my-registry.example.com/moon/video-recorder:_{revnumber}_",
+    "defender": "my-registry.example.com/moon/defender:_{revnumber}_",
+    "uploader": "my-registry.example.com/moon/uploader:_{revnumber}_",
+    "logger": "my-registry.example.com/moon/logger:_{revnumber}_"
+  }
+}</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <code>moon-config</code> ConfigMap object:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace configmap moon-config --from-file=moon-config</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Restart Moon to apply changes</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.3. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="_moon_flags"><a class="anchor" href="#_moon_flags"></a>2.2.1. Moon Flags</h4>
+<h4 id="_moon_flags"><a class="anchor" href="#_moon_flags"></a>2.3.1. Moon Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported by <code>moon</code>:</p>
 </div>
@@ -909,7 +969,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_moon_api_flags"><a class="anchor" href="#_moon_api_flags"></a>2.2.2. Moon API Flags</h4>
+<h4 id="_moon_api_flags"><a class="anchor" href="#_moon_api_flags"></a>2.3.2. Moon API Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported by <code>moon-api</code>:</p>
 </div>
@@ -2049,6 +2109,19 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="listingblock">
+<div class="title">Example <code>moon-config/service.json</code> file contents</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">videoRecorder</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/video-recorder</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">defender</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/defender:devel</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">uploader</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/uploader:devel</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/logger:devel</span><span class="delimiter">&quot;</span></span>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
 <div class="title">Example <code>moon-openshift.yaml</code> file contents</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Template</span></span>
@@ -2245,7 +2318,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-07-26 06:55:12 UTC
+Last updated 2018-07-26 11:28:10 UTC
 </div>
 </div>
 </body>
