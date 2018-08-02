@@ -1,0 +1,8 @@
+{
+  "images": {
+    "videoRecorder": "selenoid/video-recorder", 
+    "defender": "aerokube/defender:devel",
+    "uploader": "aerokube/uploader:devel",
+    "logger": "aerokube/logger:devel"
+  }
+}
