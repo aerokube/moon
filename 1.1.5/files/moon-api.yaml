@@ -1,0 +1,45 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: moon-api
+spec:
+  selector:
+    app: moon-api
+  ports:
+  - protocol: TCP
+    port: 8080
+  type: NodePort
+---
+apiVersion: apps/v1beta1 
+kind: Deployment
+metadata:
+  name: moon-api
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: moon-api
+    spec:
+      containers:
+      - name: moon-api
+        image: aerokube/moon-api:1.1.5
+        resources:
+          limits:
+            cpu: "0.25"
+            memory: "128Mi"
+          requests:
+            cpu: "0.1"
+            memory: "64Mi"        
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: quota
+          mountPath: /quota
+      volumes:
+      - name: quota
+        configMap:
+          name: quota
+      - name: users
+        secret:
+          secretName: users          
