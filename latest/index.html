@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-08-07</span>
+<span id="revdate">2018-08-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -543,6 +543,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_updating_browsers_list">2.1.1. Updating Browsers List</a></li>
 <li><a href="#_updating_users_list">2.1.2. Updating Users List</a></li>
+<li><a href="#_installing_license">2.1.3. Installing License</a></li>
 </ul>
 </li>
 <li><a href="#_advanced_configuration">2.2. Advanced Configuration</a>
@@ -553,7 +554,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_cli_flags">2.3. CLI Flags</a>
 <ul class="sectlevel3">
 <li><a href="#_moon_flags">2.3.1. Moon Flags</a></li>
-<li><a href="#_moon_api_flags">2.3.2. Moon API Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -885,6 +885,83 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </ol>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.1.3. Installing License</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+According to license agreement you can use <strong>up to 4 parallel sessions without a license</strong>. If you wish to have more parallel sessions - order a license and follow this section steps to install the license.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>To install a license you should have a license key file. A typical license file looks like this:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat license.key
+Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhWTnRhZVBEQmx5cm1SM0dFWlVpbGIwOWhBSUpvWmlQMnNtYmtoZVRDbnJ3UTlIV3grMUMzaXFJalU3L0NIZDJuSzN3QUpIS0lyV2VoVjlRVUh5NzNCMFg0NEV5KzFSVXg1elhvaC9RUkNjTlBIOHR4WWtrRFBmTFhxYTFESlI0aXNObGtobWpXY2VJNVdna1lsWHFFOUp0OUxValZPN05hb2pCcHJzY0pvZjBrZys2YkhWUDR3cUJvYVFoSFJTYzMzZzNRSTkrWVd4dlZCeExmdTVxM2k2ZnluMDRHSEhGc21Fd2owVHdVa1Z3MmI5Z2FyVXlaVFF4RDdCRjVSVjBmSUVrU1pEQ0ZQdmIvMHZoKythY1V4OVRrR2FBREZzbWR3dExxRlU4NHF3MzBVdE5nTGhnNWYxRXRCQ215R1BHR0wyK2NpR0RDZDBTSXg4K1RsRGNWVzUyVVY4MUt6bkdOanJhTklOeXVtYjVPVXF6aVVpdmJZeVJNVVBSMWF3NUJRVGJDaHVycWVVdGtMMWFRZDgwOCtoWGRxODFOakxRNEJlVENNQTdPL2FneHBTUE1nL0J2QmVQKy84ZGhJeXd5Y0lxQVJhVWxocUdmUko2K05tbkFYV0hzZ2RjTng1dUVHU0w5VWF5TU1rR3RkZEZKQ1FiWmF0RnJMaDFHbHhKTndBRHFWcXIvQ0oxSzBQL2p6K2NFSWpsSG82TktvM3pudVFlanhYT2tGU1p1bWZrS1krZmF3VkVRZWlvcFlmZFk0TU9tc3U5TThsbng3T2VXQXZmOTFUQ2w1NUhBK1ZsQTMzN3VFOG1WV3ZlS0E1Tlk9O2V5SnNhV05sYm5ObFpTSTZJa0ZqYldVZ1RFeERJaXdpY0hKdlpIVmpkQ0k2SWsxdmIyNGlMQ0p0WVhoVFpYTnphVzl1Y3lJNk1qQXNJblJ2SWpveE5UTTRNelV5TURBd2ZRPT0=</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon container is expecting to find license key file in the path specified by <code>-license-file</code> parameter. You need to mount license key file as a volume to every Moon container</p>
+</div>
+</li>
+<li>
+<p>Having a license key file - create a Kubernetes secret:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create secret generic moon-license-key --from-file /path/to/license.key</pre>
+</div>
+</div>
+</li>
+<li>
+<p>When starting Moon - mount this secret as a volume and point <code>-license-file</code> to mounted file:</p>
+<div class="listingblock">
+<div class="title">Starting Moon with license key</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">3</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest</span></span>
+        <span class="key">args</span>: <span class="string"><span class="content">[&quot;-license-file&quot;, &quot;/license/license.key&quot;]</span></span> <span class="comment"># Pointing to license key file</span>
+        <span class="key">resources</span>:
+            <span class="comment"># Resources here</span>
+        <span class="key">ports</span>:
+            <span class="comment"># Ports here</span>
+        <span class="key">volumeMounts</span>:
+        <span class="comment"># Other mounts here</span>
+        - <span class="string"><span class="content">name: license-key</span></span> <span class="comment"># Mounting volume with license key</span>
+          <span class="key">mountPath</span>: <span class="string"><span class="content">/license</span></span>
+          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
+    <span class="key">volumes</span>:
+    <span class="comment"># Other volumes here</span>
+    - <span class="string"><span class="content">name: license-key</span></span> <span class="comment"># Creating volume from secret</span>
+    <span class="key">secret</span>:
+      <span class="key">secretName</span>: <span class="string"><span class="content">moon-license-key</span></span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.2. Advanced Configuration</h3>
@@ -953,10 +1030,13 @@ $ cat moon-config/service.json
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>  -grace-period duration
+<pre class="CodeRay highlight"><code>Usage of ./moon:
+  -grace-period duration
     	graceful shutdown (default 30s)
   -guest-user string
     	guest quota user name (default "browsers")
+  -license-file string
+    	path to license file (default "license/license.key")
   -listen string
     	address to bind (default ":4444")
   -namespace string
@@ -964,23 +1044,11 @@ $ cat moon-config/service.json
   -quota-dir string
     	quota directory (default "quota")
   -session-attempt-timeout duration
-    	new session attempt timeout (default 30s)</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_moon_api_flags"><a class="anchor" href="#_moon_api_flags"></a>2.3.2. Moon API Flags</h4>
-<div class="paragraph">
-<p>The following flags are supported by <code>moon-api</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>  -grace-period duration
-    	graceful shutdown (default 30s)
-  -listen string
-    	address to bind (default ":8080")
-  -namespace string
-    	namespace (default "default")</code></pre>
+    	new session attempt timeout (default 10m0s)
+  -users-file string
+    	path to users file (default "users/users.htpasswd")
+  -version
+    	Show version and exit</code></pre>
 </div>
 </div>
 </div>
@@ -2318,7 +2386,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-08-07 13:47:37 UTC
+Last updated 2018-08-08 14:29:04 UTC
 </div>
 </div>
 </body>
