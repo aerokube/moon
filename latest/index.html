@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-08-21</span>
+<span id="revdate">2018-08-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1482,112 +1482,106 @@ $ cat moon-config/service.json
 <li>
 <p>When no license key is provided <code>4 (four)</code> parallel browser sessions maximum are allowed. If such limit is sufficient for you - you are allowed use Moon without license key for unlimited period of time.</p>
 </li>
+<li>
+<p>If free limit is insufficient - you need <code>a paid license</code>. Such license can include <code>any desired number</code> of parallel browser sessions (yes, even <code>42</code>).</p>
+</li>
+<li>
+<p>Every parallel session has a fixed cost - <code>$5 USD</code> (five United States dollars).</p>
+<div class="listingblock">
+<div class="title">An example price calculation</div>
+<div class="content">
+<pre>42 sessions * $5/month = $210/month</pre>
+</div>
+</div>
+</li>
+<li>
+<p>At the time of writing an average CPU cost in leading cloud platforms such as AWS or Google Cloud is approximately <code>$50/CPU</code>. That is to say a license to one parallel session costs approximately <code>10%</code> of cloud price. Kubernetes and cloud auto-scaling allow you to economize even more.</p>
+</li>
+<li>
+<p>For simplicity we calculated monthly prices for some frequent cases:</p>
+</li>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 1. Moon License Pricing</caption>
 <colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
+<col style="width: 50%;">
+<col style="width: 50%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Number of Parallel Sessions</th>
-<th class="tableblock halign-left valign-top">Price per Month (Billed Annually), USD</th>
-<th class="tableblock halign-left valign-top">Price per Month (Month-to-Month), USD</th>
+<th class="tableblock halign-left valign-top">Price per Month, USD</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">0-4</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">free</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">free</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$240</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$25</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$400</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$480</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$50</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">15</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$555</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$666</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$75</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">20</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$700</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$840</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$100</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$875</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1050</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$125</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">30</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$900</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1080</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$150</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">40</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1440</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$200</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">50</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$250</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">75</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$1875</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$2250</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$375</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">100</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$2500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$500</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">150</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$3000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$3600</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$750</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">200</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$4000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$4800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$1000</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">250</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$5000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$6000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$1250</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$7500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$9000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$2500</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">750</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$9000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$10800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$2750</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$10000</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$12000</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$17500</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">$21000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$5000</p></td>
 </tr>
 </tbody>
 </table>
@@ -2386,7 +2380,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-08-21 04:52:18 UTC
+Last updated 2018-08-22 03:45:46 UTC
 </div>
 </div>
 </body>
