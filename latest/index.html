@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-09-01</span>
+<span id="revdate">2018-09-02</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -610,6 +610,9 @@ table.CodeRay td.code>pre{padding:0}
 <div class="content">
 <pre>$ kubectl apply -f moon.yaml</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
 </div>
 </li>
 <li>
@@ -812,7 +815,7 @@ $ oc create configmap quota --from-file=./quota</pre>
 <p>Having configuration files stored in directory update Moon configuration:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace configmap quota --from-file=quota</pre>
+<pre>$ kubectl replace configmap quota --from-file=quota -n moon</pre>
 </div>
 </div>
 </li>
@@ -820,7 +823,7 @@ $ oc create configmap quota --from-file=./quota</pre>
 <p>Gracefully restart Moon service:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace -f moon.yaml</pre>
+<pre>$ kubectl replace -f moon.yaml -n moon</pre>
 </div>
 </div>
 </li>
@@ -851,7 +854,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Update <code>users</code> secret:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace secret users --from-file=./users.htpasswd</pre>
+<pre>$ kubectl replace secret users --from-file=./users.htpasswd -n moon</pre>
 </div>
 </div>
 </li>
@@ -859,7 +862,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Gracefully restart Moon service:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace -f moon.yaml</pre>
+<pre>$ kubectl moon replace -f moon.yaml -n moon</pre>
 </div>
 </div>
 </li>
@@ -898,7 +901,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Having a license key file - create a Kubernetes secret:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret generic moon-license-key --from-file /path/to/license.key</pre>
+<pre>$ kubectl create secret generic moon-license-key --from-file /path/to/license.key -n moon</pre>
 </div>
 </div>
 </li>
@@ -960,7 +963,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Create an S3 configuration for Moon:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create configmap s3-config --from-literal=endpoint="https://storage.googleapis.com" --from-literal=version="S3v2" --from-literal=bucket="moon-test"</pre>
+<pre>$ kubectl create configmap s3-config --from-literal=endpoint="https://storage.googleapis.com" --from-literal=version="S3v2" --from-literal=bucket="moon-test" -n moon</pre>
 </div>
 </div>
 </li>
@@ -968,12 +971,17 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Create an S3 secret for Moon to store the keys:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret generic s3-credentials --from-literal=accessKey="&lt;Your-S3-Access-Key&gt;" --from-literal=secretKey="&lt;Your-S3-Secret-Key&gt;"</pre>
+<pre>$ kubectl create secret generic s3-credentials --from-literal=accessKey="&lt;Your-S3-Access-Key&gt;" --from-literal=secretKey="&lt;Your-S3-Secret-Key&gt;" -n moon</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Restart Moon pods to apply the changes.</p>
+<p>Restart Moon pods to apply the changes:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl moon delete po -l app=moon -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -1020,12 +1028,17 @@ $ cat moon-config/service.json
 <p>Create a <code>moon-config</code> ConfigMap object:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace configmap moon-config --from-file=moon-config</pre>
+<pre>$ kubectl replace configmap moon-config --from-file=moon-config -n moon</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Restart Moon to apply changes</p>
+<p>Restart Moon to apply changes:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl delete po -l app=moon -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -2390,7 +2403,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-01 11:14:07 UTC
+Last updated 2018-09-02 07:00:38 UTC
 </div>
 </div>
 </body>
