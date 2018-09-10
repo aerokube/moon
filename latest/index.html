@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-09-09</span>
+<span id="revdate">2018-09-10</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -552,11 +552,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_using_custom_moon_images">2.2.2. Using Custom Moon Images</a></li>
 </ul>
 </li>
-<li><a href="#_cli_flags">2.3. CLI Flags</a>
-<ul class="sectlevel3">
-<li><a href="#_moon_flags">2.3.1. Moon Flags</a></li>
-</ul>
-</li>
+<li><a href="#_log_files">2.3. Log Files</a></li>
+<li><a href="#_cli_flags">2.4. CLI Flags</a></li>
 </ul>
 </li>
 <li><a href="#_license_agreement">3. License Agreement</a></li>
@@ -1046,12 +1043,248 @@ $ cat moon-config/service.json
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.3. CLI Flags</h3>
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.3. Log Files</h3>
+<div class="paragraph">
+<p>Every log line contains:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Log entry contents</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Example</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2017/11/01 19:12:42</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Status</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[SESSION_ATTEMPTED]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">See table below for complete list of statuses.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Additional fields</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[firefox-45.0]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more sections showing additional information such as browser name, user name, IP address or error message</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Attempt number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[1]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For SESSION_ATTEMPTED or SESSION_CREATED entries means current attempt number. For SESSION_CREATED entries means total number of attempts to create this session.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duration</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[4.15s]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For some log entries this field shows how much time operation took</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The following statuses are available:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Log entry statuses</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Status</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWAITING_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waiting for Kubernetes service to start</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_REQUEST</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to process user request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_SCREEN_RESOLUTION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested to set wrong custom screen resolution</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_TIMEZONE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested to set wrong custom time zone inside container</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_VIDEO_FRAME_RATE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested to capture video with wrong frame rate</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_VIDEO_SCREEN_SIZE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested to capture video with wrong screen size</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLIENT_DISCONNECTED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User disconnected and session was interrupted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CREATING_POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to create pod with browser</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CREATING_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to create service for browser session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to delete pod with browser</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to delete service for browser session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_SESSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Received request to delete browser session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">EMPTY_REQUEST</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Received empty request from user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_CREATE_POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create browser pod</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_CREATE_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create browser service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_POD</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to delete browser pod</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_SERVICE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to delete browser service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_SESSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to delete browser session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_GET_LOGS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to get session logs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INIT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Service initialization messages</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOGS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Requested session logs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOGS_CLIENT_DISCONNECTED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Client disconnected while streaming session logs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POD_CREATED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser pod created</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">POD_DELETED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser pod deleted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">PROXYING</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Proxying requests to specified URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVER_ERROR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create pod or service due to internal server error (probably a bug)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_CREATED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service created</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_DELETED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service deleted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_IS_UP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service successfully started</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_CREATED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser session successfully created</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_DELETED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Session successfully deleted</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_FAILED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create new session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_TIMED_OUT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Existing session timed out</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SHUTTING_DOWN</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shutting down the service</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STATUS_ERROR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to refresh Moon status</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STATUS_REQUEST</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Received Moon status request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STATUS_REQUEST_ERROR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to return Moon status</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">UNSUPPORTED_BROWSER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested unsupported browser</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">USER_NOT_FOUND</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Trying to request session with unknown user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VNC_CLIENT_DISCONNECTED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User disconnected while proxying VNC traffic</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VNC_ERROR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An error occurred while proxying VNC traffic</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VNC_SESSION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested VNC session</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">VNC_SESSION_CLOSED</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User closed VNC session</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.4. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
-<div class="sect3">
-<h4 id="_moon_flags"><a class="anchor" href="#_moon_flags"></a>2.3.1. Moon Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported by <code>moon</code>:</p>
 </div>
@@ -1076,7 +1309,6 @@ $ cat moon-config/service.json
     	path to users file (default "users/users.htpasswd")
   -version
     	Show version and exit</code></pre>
-</div>
 </div>
 </div>
 </div>
@@ -1527,7 +1759,7 @@ $ cat moon-config/service.json
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Moon License Pricing</caption>
+<caption class="title">Table 3. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2404,7 +2636,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-09 15:07:08 UTC
+Last updated 2018-09-10 10:25:24 UTC
 </div>
 </div>
 </body>
