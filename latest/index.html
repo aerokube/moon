@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
-<meta name="author" content="Alexander Andryashin, Ivan Krutov, Kirill Merkushev">
+<meta name="author" content="Aerokube OÜ">
 <title>Moon</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -522,7 +522,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="header">
 <h1>Moon</h1>
 <div class="details">
-<span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
+<span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
 <span id="revdate">2018-09-12</span>
 </div>
@@ -556,7 +556,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_cli_flags">2.4. CLI Flags</a></li>
 </ul>
 </li>
-<li><a href="#_license_agreement">3. License Agreement</a></li>
+<li><a href="#_advanced_features">3. Advanced Features</a>
+<ul class="sectlevel2">
+<li><a href="#_special_capabilities">3.1. Special Capabilities</a>
+<ul class="sectlevel3">
+<li><a href="#_live_browser_screen_enablevnc">3.1.1. Live Browser Screen: enableVNC</a></li>
+<li><a href="#_custom_screen_resolution_screenresolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
+<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate">3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate</a></li>
+<li><a href="#_custom_test_name_name">3.1.4. Custom Test Name: name</a></li>
+<li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_license_agreement">4. License Agreement</a></li>
 <li><a href="#_pricing">Appendix A: Pricing</a></li>
 <li><a href="#_example_configuration_files">Appendix B: Example Configuration Files</a></li>
 </ul>
@@ -1323,7 +1336,160 @@ $ cat moon-config/service.json
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>3. License Agreement</h2>
+<h2 id="_advanced_features"><a class="anchor" href="#_advanced_features"></a>3. Advanced Features</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_special_capabilities"><a class="anchor" href="#_special_capabilities"></a>3.1. Special Capabilities</h3>
+<div class="paragraph">
+<p>Moon supports a set of custom capabilities. You can pass them in tests to enable or disable some features.</p>
+</div>
+<div class="sect3">
+<h4 id="_live_browser_screen_enablevnc"><a class="anchor" href="#_live_browser_screen_enablevnc"></a>3.1.1. Live Browser Screen: enableVNC</h4>
+<div class="paragraph">
+<p>Moon supports showing browser screen during test execution. To see browser screen add capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>enableVNC: true</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Browser screen will be shown in <a href="http://aerokube.com/selenoid-ui/latest/">Selenoid UI</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_screen_resolution_screenresolution"><a class="anchor" href="#_custom_screen_resolution_screenresolution"></a>3.1.2. Custom Screen Resolution: screenResolution</h4>
+<div class="paragraph">
+<p>Moon allows you to set custom screen resolution in containers being run:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;width&gt;x&lt;height&gt;</div>
+<div class="content">
+<pre>screenResolution: "1280x1024"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add colors depth:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;width&gt;x&lt;height&gt;x&lt;colors-depth&gt;</div>
+<div class="content">
+<pre>screenResolution: "1280x1024x24"</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This capability sets only screen resolution - not browser window size.
+Most of browsers have some default window size value this is why your screenshot size can be smaller than screen resolution specified in capability.
+You should manually resize window to desired width and height or use Selenium <code>maximize</code> operation.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate"></a>3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate</h4>
+<div class="paragraph">
+<p>To enable video recording for session, add:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>enableVideo: true</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>By default saved video files are named <code>&lt;session-id&gt;.mp4</code> where <code>&lt;session-id&gt;</code> is a unique identifier of Selenium session.
+To provide custom video name specify:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoName: "my-cool-video.mp4"</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is important to add <code>mp4</code> file extension.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>By default the entire screen picture is being recorded.
+Specifying <code>screenResolution</code> capability changes recorded video size (width and height) accordingly.
+You can override video screen size by passing a capability. In case of <code>videoScreenSize</code>
+resolution is less than actual, screen on video will be trimmed starting from top-left corner:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoScreenSize: "1024x768"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Default video frame rate is <code>12</code> frames per second. Specifying <code>videoFrameRate</code> capability changes this value:</p>
+<div class="listingblock">
+<div class="title">Type: int</div>
+<div class="content">
+<pre>videoFrameRate: 24</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.4. Custom Test Name: name</h4>
+<div class="paragraph">
+<p>For debugging purposes it is often useful to give a distinct name to every test case. You can set test case name by passing the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>name: "myCoolTestName"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main application of this capability - is debugging tests in the UI which is showing specified name for every running session.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.5. Per-session Time Zone: timeZone</h4>
+<div class="paragraph">
+<p>Some tests require particular time zone to be set in operating system.</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>timeZone: "Europe/Moscow"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can find most of available time zones <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">here</a>.
+Without this capability launched browser containers will have Moon timezone.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>4. License Agreement</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated January 5th, 2018. Replaces the prior version in its entirety.</p>
@@ -2644,7 +2810,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-12 12:24:48 UTC
+Last updated 2018-09-12 19:21:18 UTC
 </div>
 </div>
 </body>
