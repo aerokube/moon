@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Alexander Andryashin, Ivan Krutov, Kirill Merkushev</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-09-10</span>
+<span id="revdate">2018-09-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1154,6 +1154,10 @@ $ cat moon-config/service.json
 <td class="tableblock halign-left valign-top"><p class="tableblock">Received request to delete browser session</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DOWNLOADING_FILE</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Received request to get downloaded files saved to browser pod</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EMPTY_REQUEST</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Received empty request from user</p></td>
 </tr>
@@ -1236,6 +1240,10 @@ $ cat moon-config/service.json
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_TIMED_OUT</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Existing session timed out</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_NOT_FOUND</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Received request with empty session ID</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">SHUTTING_DOWN</p></td>
@@ -2636,7 +2644,7 @@ $ cat moon-config/service.json
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-10 10:25:24 UTC
+Last updated 2018-09-12 07:14:11 UTC
 </div>
 </div>
 </body>
