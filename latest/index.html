@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-09-12</span>
+<span id="revdate">2018-09-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -567,6 +567,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
 </ul>
 </li>
+<li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
 </ul>
 </li>
 <li><a href="#_license_agreement">4. License Agreement</a></li>
@@ -1484,6 +1485,45 @@ resolution is less than actual, screen on video will be trimmed starting from to
 <p>You can find most of available time zones <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">here</a>.
 Without this capability launched browser containers will have Moon timezone.</p>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_files_downloaded_with_browser"><a class="anchor" href="#_accessing_files_downloaded_with_browser"></a>3.2. Accessing Files Downloaded with Browser</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Files are accessible only when browser session is running.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Your tests may need to download files with browsers. To analyze these files a common requirement is then to somehow extract downloaded files from browser containers. Moon provides a <code>/download</code> API dramatically simplifying downloading such files. To work with it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start a new session, for example with ID <code>firefox-61-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code>.</p>
+</li>
+<li>
+<p>In tests code save all files to <code>~/Downloads</code> directory.</p>
+</li>
+<li>
+<p>Access all downloaded files using an URL:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>http://moon-host.example.com:4444/download/firefox-61-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/myfile.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Close the session</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2810,7 +2850,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-12 19:21:18 UTC
+Last updated 2018-09-17 16:28:50 UTC
 </div>
 </div>
 </body>
