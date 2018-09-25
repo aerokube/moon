@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-09-24</span>
+<span id="revdate">2018-09-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -568,6 +568,7 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#_accessing_clipboard">3.3. Accessing Clipboard</a></li>
 </ul>
 </li>
 <li><a href="#_license_agreement">4. License Agreement</a></li>
@@ -1168,10 +1169,6 @@ $ cat moon-config/service.json
 <td class="tableblock halign-left valign-top"><p class="tableblock">Received request to delete browser session</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DOWNLOADING_FILE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Received request to get downloaded files saved to browser pod</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EMPTY_REQUEST</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Received empty request from user</p></td>
 </tr>
@@ -1522,6 +1519,49 @@ Files are accessible only when browser session is running.
 </li>
 <li>
 <p>Close the session</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_clipboard"><a class="anchor" href="#_accessing_clipboard"></a>3.3. Accessing Clipboard</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Clipboard is accessible only when browser session is running.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Sometimes you may need to interact with the clipboard to check that your application copy-paste feature works. Moon has a dedicated API to interact with the clipboard. To use it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start a new session, for example with ID <code>firefox-61-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code>.</p>
+</li>
+<li>
+<p>To get clipboard value send the following HTTP request:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ curl http://moon-host.example.com:4444/clipboard/firefox-61-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840
+
+some-clipboard-value</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To update clipboard value:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ curl -X POST --data 'some-clipboard-value' http://moon-host.example.com:4444/clipboard/firefox-61-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -2850,7 +2890,7 @@ Files are accessible only when browser session is running.
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-24 15:44:16 UTC
+Last updated 2018-09-25 06:51:40 UTC
 </div>
 </div>
 </body>
