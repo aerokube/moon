@@ -1,8 +1,7 @@
 {
   "images": {
-    "videoRecorder": "selenoid/video-recorder", 
+    "videoRecorder": "aerokube/moon-video-recorder:devel", 
     "defender": "aerokube/defender:devel",
-    "uploader": "aerokube/uploader:devel",
     "logger": "aerokube/logger:devel"
   }
 }

@@ -562,7 +562,7 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_live_browser_screen_enablevnc">3.1.1. Live Browser Screen: enableVNC</a></li>
 <li><a href="#_custom_screen_resolution_screenresolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
-<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate">3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate</a></li>
+<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
 <li><a href="#_custom_test_name_name">3.1.4. Custom Test Name: name</a></li>
 <li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
 </ul>
@@ -1002,7 +1002,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div class="sect3">
 <h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.2.2. Using Custom Moon Images</h4>
 <div class="paragraph">
-<p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/uploader</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
+<p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1012,9 +1012,8 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div class="content">
 <pre>aerokube/moon
 aerokube/moon-api
-selenoid/video-recorder
+aerokube/moon-video-recorder
 aerokube/defender
-aerokube/uploader
 aerokube/logger</pre>
 </div>
 </div>
@@ -1028,10 +1027,9 @@ $ touch moon-config/service.json # Add contents to file as shown on the next lin
 $ cat moon-config/service.json
 {
   "images": {
-    "videoRecorder": "my-registry.example.com/moon/video-recorder:_{revnumber}_",
-    "defender": "my-registry.example.com/moon/defender:_{revnumber}_",
-    "uploader": "my-registry.example.com/moon/uploader:_{revnumber}_",
-    "logger": "my-registry.example.com/moon/logger:_{revnumber}_"
+    "videoRecorder": "my-registry.example.com/moon/video-recorder:latest-release",
+    "defender": "my-registry.example.com/moon/defender:latest-release",
+    "logger": "my-registry.example.com/moon/logger:latest-release"
   }
 }</pre>
 </div>
@@ -1041,7 +1039,7 @@ $ cat moon-config/service.json
 <p>Create a <code>moon-config</code> ConfigMap object:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace configmap moon-config --from-file=moon-config -n moon</pre>
+<pre>$ kubectl create configmap moon-config --from-file=moon-config -n moon</pre>
 </div>
 </div>
 </li>
@@ -1394,7 +1392,7 @@ You should manually resize window to desired width and height or use Selenium <c
 </div>
 </div>
 <div class="sect3">
-<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate"></a>3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate</h4>
+<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"></a>3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</h4>
 <div class="paragraph">
 <p>To enable video recording for session, add:</p>
 </div>
@@ -1446,6 +1444,15 @@ resolution is less than actual, screen on video will be trimmed starting from to
 <div class="title">Type: int</div>
 <div class="content">
 <pre>videoFrameRate: 24</pre>
+</div>
+</div>
+</li>
+<li>
+<p>By default Moon is using <code>libx264</code> codec for video output. If this codec is consuming too much CPU, you can change it using <code>videoCodec</code> capability:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoCodec: "mpeg4"</pre>
 </div>
 </div>
 </li>
@@ -2685,9 +2692,8 @@ some-clipboard-value</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">videoRecorder</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/video-recorder</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">videoRecorder</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/moon-video-recorder:devel</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">defender</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/defender:devel</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">uploader</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/uploader:devel</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/logger:devel</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
@@ -2890,7 +2896,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-09-25 06:51:40 UTC
+Last updated 2018-09-25 19:54:48 UTC
 </div>
 </div>
 </body>
