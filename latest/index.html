@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-10-08</span>
+<span id="revdate">2018-10-09</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -539,21 +539,29 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_configuration">2. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_basic_configuration">2.1. Basic Configuration</a>
+<li><a href="#_users_list">2.1. Users List</a>
 <ul class="sectlevel3">
-<li><a href="#_updating_browsers_list">2.1.1. Updating Browsers List</a></li>
-<li><a href="#_updating_users_list">2.1.2. Updating Users List</a></li>
-<li><a href="#_installing_license">2.1.3. Installing License</a></li>
+<li><a href="#_updating_users_list">2.1.1. Updating Users List</a></li>
 </ul>
 </li>
-<li><a href="#_advanced_configuration">2.2. Advanced Configuration</a>
+<li><a href="#_browsers_list">2.2. Browsers List</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_files_to_s3">2.2.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_moon_images">2.2.2. Using Custom Moon Images</a></li>
+<li><a href="#_per_user_browser_lists">2.2.1. Per-user Browser Lists</a></li>
+<li><a href="#_guest_quota">2.2.2. Guest Quota</a></li>
+<li><a href="#_updating_browsers_list">2.2.3. Updating Browsers List</a></li>
 </ul>
 </li>
-<li><a href="#_log_files">2.3. Log Files</a></li>
-<li><a href="#_cli_flags">2.4. CLI Flags</a></li>
+<li><a href="#_installing_license">2.3. Installing License</a></li>
+<li><a href="#_advanced_configuration">2.4. Advanced Configuration</a>
+<ul class="sectlevel3">
+<li><a href="#_uploading_files_to_s3">2.4.1. Uploading Files to S3</a></li>
+<li><a href="#_using_custom_moon_images">2.4.2. Using Custom Moon Images</a></li>
+<li><a href="#_adjusting_timeouts">2.4.3. Adjusting Timeouts</a></li>
+<li><a href="#_adjusting_resources_consumption">2.4.4. Adjusting Resources Consumption</a></li>
+</ul>
+</li>
+<li><a href="#_log_files">2.5. Log Files</a></li>
+<li><a href="#_cli_flags">2.6. CLI Flags</a></li>
 </ul>
 </li>
 <li><a href="#_advanced_features">3. Advanced Features</a>
@@ -565,6 +573,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
 <li><a href="#_custom_test_name_name">3.1.4. Custom Test Name: name</a></li>
 <li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
+<li><a href="#_custom_session_timeout_sessiontimeout">3.1.6. Custom Session Timeout: sessionTimeout</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -663,6 +672,18 @@ moon.example.com has address 104.154.161.58</pre>
 <div class="content">
 <pre>http://104.154.161.58:4444/wd/hub</pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When running your tests for the first time for every browser version Kubernetes will download and cache requested browser image. This can take several minutes depending on your network connection.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Same address using domain name:</p>
@@ -800,54 +821,20 @@ $ oc create configmap quota --from-file=./quota</pre>
 <h2 id="_configuration"><a class="anchor" href="#_configuration"></a>2. Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_basic_configuration"><a class="anchor" href="#_basic_configuration"></a>2.1. Basic Configuration</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Moon is using exactly the same <a href="http://aerokube.com/selenoid/latest/#_browsers_configuration_file">JSON format</a> as Selenoid. An sample file can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section. Because everything in Kubernetes is being run in containers - you cannot specify path to webdriver binary, only container with browser. To be available across the cluster all configuration data is stored in <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configmap/">ConfigMap</a>.</p>
-</li>
-<li>
-<p>Moon is using <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> to store users information as Ggr. This data is stored in <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret</a> and mounted to respective pods.</p>
-</li>
-<li>
-<p>Moon supports multiple users, so you need to create one file for each user named <code>&lt;username&gt;.json</code>. For example for user <code>test</code> to work properly you should create <code>test.json</code> file.</p>
-</li>
-<li>
-<p>All JSON files should be stored in the same directory because in that case you can update configuration with just one command.</p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="_updating_browsers_list"><a class="anchor" href="#_updating_browsers_list"></a>2.1.1. Updating Browsers List</h4>
+<h3 id="_users_list"><a class="anchor" href="#_users_list"></a>2.1. Users List</h3>
 <div class="paragraph">
-<p>To add or remove browsers:</p>
+<p>Moon is a multi-user application allowing different users access different browser versions. One <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> file is used to store users information. This file is saved to <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret</a> and mounted to Moon container as a volume. A typical users file is a text file with user names and their encrypted passwords separated by colon:</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Having configuration files stored in directory update Moon configuration:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ kubectl replace configmap quota --from-file=quota -n moon</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Gracefully restart Moon service:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl replace -f moon.yaml -n moon</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>All running user sessions will continue to work without any interruption.</p>
+<pre class="CodeRay highlight"><code>$ cat users.htpasswd
+test:$apr1$.dZyHlKN$jdoZkin/kPviFNArx/cVL1 # User is test, password is encrypted
+alice:$apr1$mLYJAC4y$VYeJstWjWP/4iVlH/TNcD.
+bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_users_list"><a class="anchor" href="#_updating_users_list"></a>2.1.2. Updating Users List</h4>
+<h4 id="_updating_users_list"><a class="anchor" href="#_updating_users_list"></a>2.1.1. Updating Users List</h4>
 <div class="paragraph">
 <p>To add or remove users:</p>
 </div>
@@ -882,8 +869,159 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </ol>
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_browsers_list"><a class="anchor" href="#_browsers_list"></a>2.2. Browsers List</h3>
+<div class="paragraph">
+<p>Moon is using a simple <a href="https://en.wikipedia.org/wiki/JSON">JSON</a>-based configuration to store available browsers list. A typical browsers list file looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">Typical Browsers List File</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {                                   <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {                                     <i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,           <i class="conum" data-value="5"></i><b>(5)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,                             <i class="conum" data-value="6"></i><b>(6)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,                          <i class="conum" data-value="7"></i><b>(7)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">volumes</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">/from:/to</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">/another:/test</span><span class="delimiter">&quot;</span></span>], <i class="conum" data-value="8"></i><b>(8)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">resources</span><span class="delimiter">&quot;</span></span>: {                              <i class="conum" data-value="9"></i><b>(9)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">limits</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2Gi</span><span class="delimiter">&quot;</span></span>
+          },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">requests</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">200m</span><span class="delimiter">&quot;</span></span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1Gi</span><span class="delimiter">&quot;</span></span>
+          }
+        }
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="comment">//...</span>
+      }
+    }
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">opera</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">56.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+        <span class="comment">//...</span>
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Browser name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Default browser version</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>A list of available browser versions</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Version name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Image name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Port to proxy connections to. In the majority of cases should be 4444.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Path relative to / where we request a new session, see below</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>A list of volumes to mount to browser container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Resource configuration for browser container (CPU and memory)</td>
+</tr>
+</table>
+</div>
 <div class="sect3">
-<h4 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.1.3. Installing License</h4>
+<h4 id="_per_user_browser_lists"><a class="anchor" href="#_per_user_browser_lists"></a>2.2.1. Per-user Browser Lists</h4>
+<div class="paragraph">
+<p>As you already know Moon is a multi-user application. For every user you need to create one file - <code>&lt;username&gt;.json</code>. For example for user <code>alice</code> from <code>users.htpasswd</code> you should create <code>alice.json</code>. All JSON files should be stored in the same directory specified by <code>-quota-dir</code> flag:</p>
+</div>
+<div class="listingblock">
+<div class="title">Per-user browser lists</div>
+<div class="content">
+<pre>\---quota
+|   ---- alice.json
+|   ---- browsers.json
+|   ---- bob.json
+|   ---- test.json</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Such directory is then uploaded to <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configmap/">Kubernetes ConfigMap</a> and mounted to Moon container as a volume.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_guest_quota"><a class="anchor" href="#_guest_quota"></a>2.2.2. Guest Quota</h4>
+<div class="paragraph">
+<p>In some cases you may need anonymous Selenium access - without username and password. In terms of Moon this is called <code>guest quota</code> and is configured with <code>-guest-user</code> flag (default value is <code>browsers</code>). Any browser versions specified in <code>&lt;guest-user&gt;.json</code> file will be available without username and password:</p>
+</div>
+<div class="listingblock">
+<div class="title">Guest quota file name</div>
+<div class="content">
+<pre>-guest-quota browsers ====&gt; browsers.json # This is the default
+-guest-quota guest-user ====&gt; guest-user.json</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_updating_browsers_list"><a class="anchor" href="#_updating_browsers_list"></a>2.2.3. Updating Browsers List</h4>
+<div class="paragraph">
+<p>To add or remove browsers:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Having configuration files stored in <code>quota</code> directory apply desired modifications.</p>
+</li>
+<li>
+<p>Update <code>quota</code> ConfigMap using contents of <code>quota</code> directory:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace configmap quota --from-file=quota -n moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Gracefully restart Moon service:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace -f moon.yaml -n moon</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>All running user sessions will continue to work without any interruption.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.3. Installing License</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -959,11 +1097,10 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </ol>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.2. Advanced Configuration</h3>
+<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.4. Advanced Configuration</h3>
 <div class="sect3">
-<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.2.1. Uploading Files to S3</h4>
+<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.4.1. Uploading Files to S3</h4>
 <div class="paragraph">
 <p>You can configure Moon to send sessions logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a>-compatible storage. Such type of storage is supported by <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://azure.microsoft.com/">Microsoft Azure</a>, <a href="https://digitalocean.com/">Digital Ocean</a> and many other cloud providers. To deploy a private S3-compatible storage you can use <a href="https://minio.io/">Minio</a>. To enable S3 support in Moon:</p>
 </div>
@@ -1000,7 +1137,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.2.2. Using Custom Moon Images</h4>
+<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.4.2. Using Custom Moon Images</h4>
 <div class="paragraph">
 <p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
 </div>
@@ -1054,14 +1191,168 @@ $ cat moon-config/service.json
 </ol>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.4.3. Adjusting Timeouts</h4>
+<div class="paragraph">
+<p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Available Timeout Flags</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1 minute</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum browser session idle time - measured as maximum time between separate HTTP requests corresponding to a running session.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">When this timeout expires - session is automatically closed. You may need to increase this timeout when tested application pages load too slowly.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-session-attempt-timeout</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10 minutes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to start browser pod.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This time includes Kubernetes scheduling time and browser image download duration.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.4.4. Adjusting Resources Consumption</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Flags and fields described in this section apply to browser container consumption only. Other system containers started in browser pod have reasonable fixed values assigned.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following flags:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Resources Consumption Flags</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-cpu-limit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hard CPU limit for browser container (no more than this limit is given)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-cpu-request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Soft (guaranteed) CPU limit for browser container</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-memory-limit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1Gi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hard memory limit for browser container</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-memory-request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">512Mi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Soft memory limit for browser container</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>You can also override the same values for every browser image in browsers list file:</p>
+</div>
+<div class="listingblock">
+<div class="title">Overriding Resources in Browsers List File</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>:
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">resources</span><span class="delimiter">&quot;</span></span>: {                              <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">limits</span><span class="delimiter">&quot;</span></span>: {                               <i class="conum" data-value="2"></i><b>(2)</b>
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span>,                             <i class="conum" data-value="3"></i><b>(3)</b>
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2Gi</span><span class="delimiter">&quot;</span></span>                         <i class="conum" data-value="4"></i><b>(4)</b>
+          },
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">requests</span><span class="delimiter">&quot;</span></span>: {                             <i class="conum" data-value="5"></i><b>(5)</b>
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">200m</span><span class="delimiter">&quot;</span></span>,                          <i class="conum" data-value="6"></i><b>(6)</b>
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1Gi</span><span class="delimiter">&quot;</span></span>                         <i class="conum" data-value="7"></i><b>(7)</b>
+          }
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Resources definition section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Limits definition section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>CPU limit field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Memory limit field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Requests definition section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>CPU request field</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Memory request field</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.3. Log Files</h3>
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.5. Log Files</h3>
 <div class="paragraph">
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Log entry contents</caption>
+<caption class="title">Table 3. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1106,7 +1397,7 @@ $ cat moon-config/service.json
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. Log entry statuses</caption>
+<caption class="title">Table 4. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1133,6 +1424,10 @@ $ cat moon-config/service.json
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_TIMEZONE</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">User requested to set wrong custom time zone inside container</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_TIMEOUT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User requested to set wrong session timeout</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_VIDEO_FRAME_RATE</p></td>
@@ -1205,6 +1500,10 @@ $ cat moon-config/service.json
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">LOGS_CLIENT_DISCONNECTED</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Client disconnected while streaming session logs</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MALFORMED_VOLUME</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Moon skipped malformed volume specification from <code>browsers.json</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">POD_CREATED</p></td>
@@ -1298,7 +1597,7 @@ $ cat moon-config/service.json
 </table>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.4. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.6. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
@@ -1307,25 +1606,34 @@ $ cat moon-config/service.json
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>Usage of ./moon:
-  -grace-period duration
-    	graceful shutdown (default 30s)
-  -guest-user string
-    	guest quota user name (default "browsers")
-  -license-file string
-    	path to license file (default "license/license.key")
-  -listen string
-    	address to bind (default ":4444")
-  -namespace string
-    	namespace (default "default")
-  -quota-dir string
-    	quota directory (default "quota")
-  -session-attempt-timeout duration
-    	new session attempt timeout (default 10m0s)
-  -users-file string
-    	path to users file (default "users/users.htpasswd")
-  -version
-    	Show version and exit</code></pre>
+<pre class="CodeRay highlight"><code>-cpu-limit string
+    browser container cpu limit (default "1")
+-cpu-request string
+    browser container cpu request (default "1")
+-grace-period duration
+    graceful shutdown (default 30s)
+-guest-user string
+    guest quota user name (default "browsers")
+-license-file string
+    path to license file (default "license/license.key")
+-listen string
+    address to bind (default ":4444")
+-memory-limit string
+    browser container memory limit (default "1Gi")
+-memory-request string
+    browser container memory request (default "512Mi")
+-namespace string
+    namespace (default "default")
+-quota-dir string
+    quota directory (default "quota")
+-session-attempt-timeout duration
+    new session attempt timeout (default 10m0s)
+-timeout duration
+    override session timeout (default 1m0s)
+-users-file string
+    path to users file (default "users/users.htpasswd")
+-version
+    show version and exit</code></pre>
 </div>
 </div>
 </div>
@@ -1488,6 +1796,21 @@ resolution is less than actual, screen on video will be trimmed starting from to
 <div class="paragraph">
 <p>You can find most of available time zones <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">here</a>.
 Without this capability launched browser containers will have Moon timezone.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.6. Custom Session Timeout: sessionTimeout</h4>
+<div class="paragraph">
+<p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: int</div>
+<div class="content">
+<pre>sessionTimeout: 1m30s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Timeout is always specified in Golang duration format, e.g. <code>30s</code> or <code>2m</code> or <code>1h</code> and so on.</p>
 </div>
 </div>
 </div>
@@ -2020,7 +2343,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. Moon License Pricing</caption>
+<caption class="title">Table 5. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2896,7 +3219,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-10-08 07:56:53 UTC
+Last updated 2018-10-09 09:57:39 UTC
 </div>
 </div>
 </body>
