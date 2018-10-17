@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-10-16</span>
+<span id="revdate">2018-10-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -576,7 +576,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_custom_test_name_name">3.1.4. Custom Test Name: name</a></li>
 <li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
 <li><a href="#_per_session_environment_variables_env">3.1.6. Per-session Environment Variables: env</a></li>
-<li><a href="#_custom_session_timeout_sessiontimeout">3.1.7. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#_hosts_entries_hostsentries">3.1.7. Hosts Entries: hostsEntries</a></li>
+<li><a href="#_custom_session_timeout_sessiontimeout">3.1.8. Custom Session Timeout: sessionTimeout</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -904,7 +905,8 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
         <span class="key"><span class="delimiter">&quot;</span><span class="content">nodeSelector</span><span class="delimiter">&quot;</span></span>: {                           <i class="conum" data-value="11"></i><b>(11)</b>
           <span class="key"><span class="delimiter">&quot;</span><span class="content">node-type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hardware</span><span class="delimiter">&quot;</span></span>
         },
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=Europe/Moscow</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=ru</span><span class="delimiter">&quot;</span></span>]      <i class="conum" data-value="12"></i><b>(12)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=Europe/Moscow</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=ru</span><span class="delimiter">&quot;</span></span>],     <i class="conum" data-value="12"></i><b>(12)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">hosts</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com:192.168.0.1</span><span class="delimiter">&quot;</span></span>],       <i class="conum" data-value="13"></i><b>(13)</b>
       },
       <span class="key"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>: {
         <span class="comment">//...</span>
@@ -972,6 +974,10 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>Environment variables passed to browser container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>Custom <code>/etc/hosts</code> entries to be passed to browser container in <code>hostname:ip</code> format</td>
 </tr>
 </table>
 </div>
@@ -1904,7 +1910,22 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.7. Custom Session Timeout: sessionTimeout</h4>
+<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.7. Hosts Entries: hostsEntries</h4>
+<div class="paragraph">
+<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#_browsers_list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: array, format: &lt;hostname&gt;:&lt;ip-address&gt;</div>
+<div class="content">
+<pre>hostsEntries: ["example.com:192.168.0.1", "test.com:192.168.0.2"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Entries from this capability will be override <code>/etc/hosts</code> entries from browsers list file.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.8. Custom Session Timeout: sessionTimeout</h4>
 <div class="paragraph">
 <p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
 </div>
@@ -3324,7 +3345,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-10-16 09:24:19 UTC
+Last updated 2018-10-17 16:43:46 UTC
 </div>
 </div>
 </body>
