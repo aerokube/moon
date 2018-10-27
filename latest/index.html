@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-10-22</span>
+<span id="revdate">2018-10-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -578,6 +578,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_per_session_environment_variables_env">3.1.6. Per-session Environment Variables: env</a></li>
 <li><a href="#_hosts_entries_hostsentries">3.1.7. Hosts Entries: hostsEntries</a></li>
 <li><a href="#_custom_session_timeout_sessiontimeout">3.1.8. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.9. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -1937,6 +1938,27 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 <div class="paragraph">
 <p>Timeout is always specified in Golang duration format, e.g. <code>30s</code> or <code>2m</code> or <code>1h</code> and so on.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.9. Specifying Capabilities via Protocol Extensions</h4>
+<div class="paragraph">
+<p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">Passing Capabilities as Usually</div>
+<div class="content">
+<pre>{"browserName": "firefox", "version": "62.0", "screenResolution": "1280x1024x24"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon is using <code>moon:options</code> key to read protocol extension capabilities:</p>
+</div>
+<div class="listingblock">
+<div class="title">Passing Capabilities using Protocol Extensions</div>
+<div class="content">
+<pre>{"browserName": "firefox", "version": "62.0", "moon:options": {"screenResolution": "1280x1024x24"}}</pre>
+</div>
 </div>
 </div>
 </div>
@@ -3345,7 +3367,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-10-22 18:35:19 UTC
+Last updated 2018-10-27 17:35:51 UTC
 </div>
 </div>
 </body>
