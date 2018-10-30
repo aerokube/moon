@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-10-28</span>
+<span id="revdate">2018-10-30</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -533,8 +533,9 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
 <li><a href="#_installing_to_openshift">1.2. Installing to Openshift</a></li>
-<li><a href="#_cluster_architecture">1.3. Cluster Architecture</a></li>
-<li><a href="#_moon_vs_selenoid">1.4. Moon vs Selenoid</a></li>
+<li><a href="#_required_permissions">1.3. Required Permissions</a></li>
+<li><a href="#_cluster_architecture">1.4. Cluster Architecture</a></li>
+<li><a href="#_moon_vs_selenoid">1.5. Moon vs Selenoid</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
@@ -770,7 +771,58 @@ $ oc create configmap quota --from-file=./quota</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.3. Cluster Architecture</h3>
+<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.3. Required Permissions</h3>
+<div class="paragraph">
+<p>Moon requires very limited set of permissions and should work with default Kubernetes settings. The following table summarizes what needs to be accessible.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Required Moon Permissions</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Permission</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Purpose</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>start</strong> and <strong>stop</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to start pods with browsers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>start</strong> and <strong>stop</strong> <a href="https://kubernetes.io/docs/concepts/services-networking/service/">services</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to provide network connectivity to browser pods</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong> data from <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/">config maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to share various configuration data among Moon replicas: S3 configuration, custom images configuration and so on</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong> data from <a href="https://kubernetes.io/docs/concepts/configuration/secret/">secrets</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to share S3 credentials among Moon replicas</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong> <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quota</a> information</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to verify that Moon can run no more than total number of browser pods allowed by license</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+All these permissions are normally enabled by default when running Moon and its browser pods in the same Kubernetes namespace. To configure a namespace for browser pods - use <code>-namespace</code> flag for Moon and Moon API. If you are starting Moon in one namespace and specify <code>-namespace</code> flag pointing to another namespace, then you may require additional Kubernetes permissions to be enabled.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.4. Cluster Architecture</h3>
 <div class="paragraph">
 <div class="title">Moon Cluster Architecture</div>
 <p><span class="image"><img src="img/architecture.png" alt="architecture"></span></p>
@@ -799,7 +851,7 @@ $ oc create configmap quota --from-file=./quota</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.4. Moon vs Selenoid</h3>
+<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.5. Moon vs Selenoid</h3>
 <div class="paragraph">
 <p>Moon takes all the best practices and features from Selenoid and adds many more:</p>
 </div>
@@ -1224,7 +1276,7 @@ $ cat moon-config/service.json
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 1. Available Timeout Flags</caption>
+<caption class="title">Table 2. Available Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1273,7 +1325,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following flags:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 2. Resources Consumption Flags</caption>
+<caption class="title">Table 3. Resources Consumption Flags</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1445,7 +1497,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. Log entry contents</caption>
+<caption class="title">Table 4. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1490,7 +1542,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. Log entry statuses</caption>
+<caption class="title">Table 5. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2491,7 +2543,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. Moon License Pricing</caption>
+<caption class="title">Table 6. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3367,7 +3419,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-10-28 11:38:41 UTC
+Last updated 2018-10-30 08:08:52 UTC
 </div>
 </div>
 </body>
