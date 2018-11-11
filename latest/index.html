@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-11-10</span>
+<span id="revdate">2018-11-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1189,10 +1189,27 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Create an S3 bucket. In this example bucket name is <code>moon-test</code>. You will get an access key and a secret key for the bucket. Also you need to know supported S3 protocol version (usually specified in documentation).</p>
 </li>
 <li>
-<p>Create an S3 configuration for Moon:</p>
+<p>Create a <code>service.json</code> file with the following contents:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create configmap s3-config --from-literal=endpoint="https://storage.googleapis.com" --from-literal=version="S3v2" --from-literal=bucket="moon-test" -n moon</pre>
+<pre>$ mkdir -p moon-config
+$ touch moon-config/service.json # Add contents to file as shown on the next line
+$ cat moon-config/service.json
+{
+  "s3": {
+    "endpoint": "https://storage.googleapis.com",
+    "bucketName": "moon-test",
+    "version": "S3v2"
+  }
+}</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <code>moon-config</code> ConfigMap object:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create configmap moon-config --from-file=moon-config -n moon</pre>
 </div>
 </div>
 </li>
@@ -1249,6 +1266,9 @@ $ cat moon-config/service.json
   }
 }</pre>
 </div>
+</div>
+<div class="paragraph">
+<p>If you already have S3 configuration in <code>service.json</code> file - just append new <code>images</code> key to it.</p>
 </div>
 </li>
 <li>
@@ -1561,6 +1581,10 @@ Flags and fields described in this section apply to browser container consumptio
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_REQUEST</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Failed to process user request</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_RESOURCES</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">User incorrectly configured browser container resources</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_SCREEN_RESOLUTION</p></td>
@@ -3419,7 +3443,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-11-10 12:41:31 UTC
+Last updated 2018-11-11 14:48:37 UTC
 </div>
 </div>
 </body>
