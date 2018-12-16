@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2018-12-11</span>
+<span id="revdate">2018-12-16</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -552,21 +552,19 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_updating_browsers_list">2.2.3. Updating Browsers List</a></li>
 </ul>
 </li>
-<li><a href="#_configuration_file">2.3. Configuration File</a></li>
-<li><a href="#_credentials_file">2.4. Credentials File</a></li>
-<li><a href="#_installing_license">2.5. Installing License</a></li>
-<li><a href="#_advanced_configuration">2.6. Advanced Configuration</a>
+<li><a href="#_installing_license">2.3. Installing License</a></li>
+<li><a href="#_advanced_configuration">2.4. Advanced Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_files_to_s3">2.6.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_moon_images">2.6.2. Using Custom Moon Images</a></li>
-<li><a href="#_adjusting_timeouts">2.6.3. Adjusting Timeouts</a></li>
-<li><a href="#_adjusting_resources_consumption">2.6.4. Adjusting Resources Consumption</a></li>
-<li><a href="#_running_browser_pods_in_privileged_mode">2.6.5. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#_using_node_selectors">2.6.6. Using Node Selectors</a></li>
+<li><a href="#_uploading_files_to_s3">2.4.1. Uploading Files to S3</a></li>
+<li><a href="#_using_custom_moon_images">2.4.2. Using Custom Moon Images</a></li>
+<li><a href="#_adjusting_timeouts">2.4.3. Adjusting Timeouts</a></li>
+<li><a href="#_adjusting_resources_consumption">2.4.4. Adjusting Resources Consumption</a></li>
+<li><a href="#_running_browser_pods_in_privileged_mode">2.4.5. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#_using_node_selectors">2.4.6. Using Node Selectors</a></li>
 </ul>
 </li>
-<li><a href="#_log_files">2.7. Log Files</a></li>
-<li><a href="#_cli_flags">2.8. CLI Flags</a></li>
+<li><a href="#_log_files">2.5. Log Files</a></li>
+<li><a href="#_cli_flags">2.6. CLI Flags</a></li>
 </ul>
 </li>
 <li><a href="#_advanced_features">3. Advanced Features</a>
@@ -882,7 +880,7 @@ All these permissions are normally enabled by default when running Moon and its 
 <div class="sect2">
 <h3 id="_users_list"><a class="anchor" href="#_users_list"></a>2.1. Users List</h3>
 <div class="paragraph">
-<p>Moon is a multi-user application allowing different users access different browser versions. A single <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> file is used to store users information. This file is saved to <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret</a> and mounted to Moon container as a volume. A typical users file is a text file with user names and their encrypted passwords separated by colon:</p>
+<p>Moon is a multi-user application allowing different users access different browser versions. One <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> file is used to store users information. This file is saved to <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret</a> and mounted to Moon container as a volume. A typical users file is a text file with user names and their encrypted passwords separated by colon:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -918,7 +916,12 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </li>
 <li>
-<p>Changes are applied immediately without Moon restart.</p>
+<p>Gracefully restart Moon service:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl moon replace -f moon.yaml -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -1058,8 +1061,8 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div class="listingblock">
 <div class="title">Guest quota file name</div>
 <div class="content">
-<pre>-guest-user browsers ====&gt; browsers.json # This is the default
--guest-user guest-user ====&gt; guest-user.json</pre>
+<pre>-guest-quota browsers ====&gt; browsers.json # This is the default
+-guest-quota guest-user ====&gt; guest-user.json</pre>
 </div>
 </div>
 </div>
@@ -1082,203 +1085,22 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </li>
 <li>
-<p>Changes are applied immediately without Moon restart. All running user sessions will continue to work without any interruption.</p>
+<p>Gracefully restart Moon service:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl replace -f moon.yaml -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_configuration_file"><a class="anchor" href="#_configuration_file"></a>2.3. Configuration File</h3>
 <div class="paragraph">
-<p>Moon stores all advanced configuration options (e.g. S3 settings) in a special JSON file called <code>service.json</code>:</p>
-</div>
-<div class="listingblock">
-<div class="title">Typical <code>service.json</code> file</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {                                          <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">endpoint</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://storage.googleapis.com</span><span class="delimiter">&quot;</span></span>,  <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">bucketName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">moon-test</span><span class="delimiter">&quot;</span></span>,                     <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">S3v2</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="4"></i><b>(4)</b>
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="5"></i><b>(5)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {                                    <i class="conum" data-value="6"></i><b>(6)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-reg.com/moon/logger:1.2.0</span><span class="delimiter">&quot;</span></span>,     <i class="conum" data-value="7"></i><b>(7)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                                <i class="conum" data-value="8"></i><b>(8)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="9"></i><b>(9)</b>
-    }
-  }
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>S3 configuration section</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>S3 endpoint URL</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>S3 bucket name</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>S3 signature version (should be <code>S3v2</code> or <code>S3v4</code>)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Custom Moon system images section (to use Moon with private Docker registries)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Custom Moon image definition (one of <code>logger</code>, <code>defender</code>, <code>videoRecorder</code>)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Custom Moon image reference</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Custom Moon image CPU limit</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Custom Moon image memory limit</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p><code>service.json</code> is mounted to Moon container as a regular file using Kubernetes config map. Path to configuration file is specified with <code>-config-file</code> Moon flag. Any changes to configuration file are applied immediately - no need to restart Moon.</p>
-</div>
-<div class="listingblock">
-<div class="title">Adding <code>service.json</code> file to Moon</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">ConfigMap</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">config</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">data</span>:
-  <span class="key">service.json</span>: <span class="string"><span class="delimiter">|</span><span class="content">
-    {
-      &quot;s3&quot;: {
-        &quot;endpoint&quot;: &quot;https://storage.googleapis.com&quot;,
-        &quot;bucketName&quot;: &quot;moon-test&quot;,
-        &quot;version&quot;: &quot;S3v2&quot;
-      }
-    }</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest-release</span></span>
-        <span class="key">args</span>: <span class="string"><span class="content">[&quot;-config-file&quot;, &quot;/config/service.json&quot;]</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: config</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/config</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-    <span class="key">volumes</span>:
-      - <span class="string"><span class="content">name: config</span></span>
-        <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">config</span></span></code></pre>
+<p>All running user sessions will continue to work without any interruption.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_credentials_file"><a class="anchor" href="#_credentials_file"></a>2.4. Credentials File</h3>
-<div class="paragraph">
-<p>Moon reads all credentials (e.g. S3 keys) from an optional JSON file called :</p>
-</div>
-<div class="listingblock">
-<div class="title">Typical <code>credentials.json</code> file</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {                              <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">accessKey</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">access-key-value</span><span class="delimiter">&quot;</span></span>,   <i class="conum" data-value="2"></i><b>(2)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">secretKey</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">secret-key-value</span><span class="delimiter">&quot;</span></span>    <i class="conum" data-value="3"></i><b>(3)</b>
-  }
-}</code></pre>
-</div>
-</div>
-<div class="colist arabic">
-<table>
-<tr>
-<td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>S3 credentials section</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>S3 access key value</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>S3 secret key value</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Such credentials file is mounted to Moon container as a regular file using Kubernetes secret. Path to credentials file is specified with <code>-credentials-file</code> Moon flag. Any changes to credentials file are applied immediately - no need to restart Moon.</p>
-</div>
-<div class="listingblock">
-<div class="title">Adding credentials file to Moon</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Secret</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">credentials</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">stringData</span>:
-  <span class="key">credentials.json</span>: <span class="string"><span class="delimiter">|</span><span class="content">
-    {
-      &quot;s3&quot;: {
-        &quot;accessKey&quot;: &quot;access-key-value&quot;,
-        &quot;secretKey&quot;: &quot;secret-key-value&quot;
-      }
-    }</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest-release</span></span>
-        <span class="key">args</span>: <span class="string"><span class="content">[&quot;-credentials-file&quot;, &quot;/credentials/credentials.json&quot;]</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: credentials</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/credentials</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-    <span class="key">volumes</span>:
-    - <span class="string"><span class="content">name: credentials</span></span>
-      <span class="key">secret</span>:
-        <span class="key">secretName</span>: <span class="string"><span class="content">credentials</span></span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.5. Installing License</h3>
+<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.3. Installing License</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1309,22 +1131,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Having a license key file - create a Kubernetes secret:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret generic license-key --from-file /path/to/license.key -n moon</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you prefer YAML - this will look like:</p>
-</div>
-<div class="listingblock">
-<div class="title">Creating a secret for license key</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Secret</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">license-key</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">stringData</span>:
-  <span class="key">license.key</span>: <span class="string"><span class="content">Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhWTnRhZVBEQmx5cm1SM0dFWlVpbGIwOWhBSUpvWmlQMnNtYmtoZVRDbnJ3UTlIV3grMUMzaXFJalU3L0NIZDJuSzN3QUpIS0lyV2VoVjlRVUh5NzNCMFg0NEV5KzFSVXg1elhvaC9RUkNjTlBIOHR4WWtrRFBmTFhxYTFESlI0aXNObGtobWpXY2VJNVdna1lsWHFFOUp0OUxValZPN05hb2pCcHJzY0pvZjBrZys2YkhWUDR3cUJvYVFoSFJTYzMzZzNRSTkrWVd4dlZCeExmdTVxM2k2ZnluMDRHSEhGc21Fd2owVHdVa1Z3MmI5Z2FyVXlaVFF4RDdCRjVSVjBmSUVrU1pEQ0ZQdmIvMHZoKythY1V4OVRrR2FBREZzbWR3dExxRlU4NHF3MzBVdE5nTGhnNWYxRXRCQ215R1BHR0wyK2NpR0RDZDBTSXg4K1RsRGNWVzUyVVY4MUt6bkdOanJhTklOeXVtYjVPVXF6aVVpdmJZeVJNVVBSMWF3NUJRVGJDaHVycWVVdGtMMWFRZDgwOCtoWGRxODFOakxRNEJlVENNQTdPL2FneHBTUE1nL0J2QmVQKy84ZGhJeXd5Y0lxQVJhVWxocUdmUko2K05tbkFYV0hzZ2RjTng1dUVHU0w5VWF5TU1rR3RkZEZKQ1FiWmF0RnJMaDFHbHhKTndBRHFWcXIvQ0oxSzBQL2p6K2NFSWpsSG82TktvM3pudVFlanhYT2tGU1p1bWZrS1krZmF3VkVRZWlvcFlmZFk0TU9tc3U5TThsbng3T2VXQXZmOTFUQ2w1NUhBK1ZsQTMzN3VFOG1WV3ZlS0E1Tlk9O2V5SnNhV05sYm5ObFpTSTZJa0ZqYldVZ1RFeERJaXdpY0hKdlpIVmpkQ0k2SWsxdmIyNGlMQ0p0WVhoVFpYTnphVzl1Y3lJNk1qQXNJblJ2SWpveE5UTTRNelV5TURBd2ZRPT0=</span></span></code></pre>
+<pre>$ kubectl create secret generic moon-license-key --from-file /path/to/license.key -n moon</pre>
 </div>
 </div>
 </li>
@@ -1347,7 +1154,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
     <span class="key">spec</span>:
       <span class="key">containers</span>:
       - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest-release</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest</span></span>
         <span class="key">args</span>: <span class="string"><span class="content">[&quot;-license-file&quot;, &quot;/license/license.key&quot;]</span></span> <span class="comment"># Pointing to license key file</span>
         <span class="key">resources</span>:
             <span class="comment"># Resources here</span>
@@ -1361,8 +1168,8 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
     <span class="key">volumes</span>:
     <span class="comment"># Other volumes here</span>
     - <span class="string"><span class="content">name: license-key</span></span> <span class="comment"># Creating volume from secret</span>
-      <span class="key">secret</span>:
-        <span class="key">secretName</span>: <span class="string"><span class="content">license-key</span></span></code></pre>
+    <span class="key">secret</span>:
+      <span class="key">secretName</span>: <span class="string"><span class="content">moon-license-key</span></span></code></pre>
 </div>
 </div>
 </li>
@@ -1370,9 +1177,9 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect2">
-<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.6. Advanced Configuration</h3>
+<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.4. Advanced Configuration</h3>
 <div class="sect3">
-<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.6.1. Uploading Files to S3</h4>
+<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.4.1. Uploading Files to S3</h4>
 <div class="paragraph">
 <p>You can configure Moon to send sessions logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a>-compatible storage. Such type of storage is supported by <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://azure.microsoft.com/">Microsoft Azure</a>, <a href="https://digitalocean.com/">Digital Ocean</a> and many other cloud providers. To deploy a private S3-compatible storage you can use <a href="https://minio.io/">Minio</a>. To enable S3 support in Moon:</p>
 </div>
@@ -1385,7 +1192,9 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Create a <code>service.json</code> file with the following contents:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ cat service.json
+<pre>$ mkdir -p moon-config
+$ touch moon-config/service.json # Add contents to file as shown on the next line
+$ cat moon-config/service.json
 {
   "s3": {
     "endpoint": "https://storage.googleapis.com",
@@ -1397,33 +1206,34 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </li>
 <li>
-<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
-</li>
-<li>
-<p>Create a <code>credentials.json</code> file to store S3 keys:</p>
+<p>Create a <code>moon-config</code> ConfigMap object:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ cat service.json
-{
-  "s3": {
-    "accessKey": "access-key-value",
-    "secretKey": "secret-key-value"
-  }
-}</pre>
+<pre>$ kubectl create configmap moon-config --from-file=moon-config -n moon</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Save <code>credentials.json</code> to a Kubernetes secret, mount it as a file to Moon container and then specify path to the file using <code>-credentials-file</code> flag as shown in <a href="#_credentials_file">Credentials File</a> section.</p>
+<p>Create an S3 secret for Moon to store the keys:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create secret generic s3-credentials --from-literal=accessKey="&lt;Your-S3-Access-Key&gt;" --from-literal=secretKey="&lt;Your-S3-Secret-Key&gt;" -n moon</pre>
+</div>
+</div>
 </li>
 <li>
-<p>When you update a config map with <code>service.json</code> or a secret with <code>credentials.json</code> - settings are applied immediately without Moon restart.</p>
+<p>Restart Moon pods to apply the changes:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl delete po -l app=moon -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.6.2. Using Custom Moon Images</h4>
+<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.4.2. Using Custom Moon Images</h4>
 <div class="paragraph">
 <p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
 </div>
@@ -1445,18 +1255,14 @@ aerokube/logger</pre>
 <p>Create a <code>service.json</code> file with the following contents:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ cat service.json
+<pre>$ mkdir -p moon-config
+$ touch moon-config/service.json # Add contents to file as shown on the next line
+$ cat moon-config/service.json
 {
   "images": {
-    "videoRecorder": {
-        "image": "my-registry.example.com/moon/video-recorder:latest-release"
-    },
-    "defender": {
-        "image": "my-registry.example.com/moon/defender:latest-release"
-    },
-    "logger": {
-        "image": "my-registry.example.com/moon/logger:latest-release"
-    }
+    "videoRecorder": "my-registry.example.com/moon/video-recorder:latest-release",
+    "defender": "my-registry.example.com/moon/defender:latest-release",
+    "logger": "my-registry.example.com/moon/logger:latest-release"
   }
 }</pre>
 </div>
@@ -1464,35 +1270,28 @@ aerokube/logger</pre>
 <div class="paragraph">
 <p>If you already have S3 configuration in <code>service.json</code> file - just append new <code>images</code> key to it.</p>
 </div>
-<div class="paragraph">
-<p>You can optionally adjust CPU and memory limits for each image as follows:</p>
-</div>
-<div class="listingblock">
-<div class="title">Adjusting memory and CPU limits for system images</div>
+</li>
+<li>
+<p>Create a <code>moon-config</code> ConfigMap object:</p>
+<div class="literalblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/video-recorder:latest-release</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>
-    }
-  }
-}</code></pre>
+<pre>$ kubectl create configmap moon-config --from-file=moon-config -n moon</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
-</li>
-<li>
-<p>When you update a config map with <code>service.json</code> - settings are applied immediately without Moon restart.</p>
+<p>Restart Moon to apply changes:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl delete po -l app=moon -n moon</pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.6.3. Adjusting Timeouts</h4>
+<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.4.3. Adjusting Timeouts</h4>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
@@ -1529,7 +1328,7 @@ aerokube/logger</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.6.4. Adjusting Resources Consumption</h4>
+<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.4.4. Adjusting Resources Consumption</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1646,7 +1445,7 @@ Flags and fields described in this section apply to browser container consumptio
 </div>
 </div>
 <div class="sect3">
-<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.6.5. Running Browser Pods in Privileged Mode</h4>
+<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.4.5. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>In some cases like running Android emulators browser container should be run in <code>privileged</code> mode. This setting can be applied separately to each browser version in browsers list file as follows:</p>
 </div>
@@ -1678,7 +1477,7 @@ Flags and fields described in this section apply to browser container consumptio
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.6.6. Using Node Selectors</h4>
+<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.4.6. Using Node Selectors</h4>
 <div class="paragraph">
 <p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers list as shown below:</p>
 </div>
@@ -1713,7 +1512,7 @@ Flags and fields described in this section apply to browser container consumptio
 </div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.7. Log Files</h3>
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.5. Log Files</h3>
 <div class="paragraph">
 <p>Every log line contains:</p>
 </div>
@@ -1971,7 +1770,7 @@ Flags and fields described in this section apply to browser container consumptio
 </table>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.8. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.6. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
@@ -1980,14 +1779,10 @@ Flags and fields described in this section apply to browser container consumptio
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>-config-file string
-    optional configuration file (default "config/service.json")
--cpu-limit string
+<pre class="CodeRay highlight"><code>-cpu-limit string
     browser container cpu limit (default "1")
 -cpu-request string
-    browser container cpu request (default "0.5")
--credentials-file string
-    optional credentials file (default "credentials/credentials.json")
+    browser container cpu request (default "1")
 -grace-period duration
     graceful shutdown (default 30s)
 -guest-user string
@@ -2001,11 +1796,11 @@ Flags and fields described in this section apply to browser container consumptio
 -memory-request string
     browser container memory request (default "512Mi")
 -namespace string
-    namespace
+    namespace (default "default")
 -quota-dir string
     quota directory (default "quota")
 -session-attempt-timeout duration
-    new session attempt timeout (default 30m0s)
+    new session attempt timeout (default 10m0s)
 -timeout duration
     override session timeout (default 1m0s)
 -users-file string
@@ -3648,7 +3443,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2018-12-11 13:08:00 UTC
+Last updated 2018-12-16 07:37:57 UTC
 </div>
 </div>
 </body>
