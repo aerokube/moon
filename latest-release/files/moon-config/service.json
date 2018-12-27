@@ -1,0 +1,7 @@
+{
+  "images": {
+    "videoRecorder": "aerokube/moon-video-recorder:devel", 
+    "defender": "aerokube/defender:devel",
+    "logger": "aerokube/logger:devel"
+  }
+}
