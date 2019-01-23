@@ -532,10 +532,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_getting_started">1. Getting Started</a>
 <ul class="sectlevel2">
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
-<li><a href="#_installing_to_openshift">1.2. Installing to Openshift</a></li>
-<li><a href="#_required_permissions">1.3. Required Permissions</a></li>
-<li><a href="#_cluster_architecture">1.4. Cluster Architecture</a></li>
-<li><a href="#_moon_vs_selenoid">1.5. Moon vs Selenoid</a></li>
+<li><a href="#_frequently_asked_questions">1.2. Frequently Asked Questions</a>
+<ul class="sectlevel3">
+<li><a href="#_features_not_working">1.2.1. Features not Working</a></li>
+</ul>
+</li>
+<li><a href="#_installing_to_openshift">1.3. Installing to Openshift</a></li>
+<li><a href="#_required_permissions">1.4. Required Permissions</a></li>
+<li><a href="#_cluster_architecture">1.5. Cluster Architecture</a></li>
+<li><a href="#_moon_vs_selenoid">1.6. Moon vs Selenoid</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
@@ -714,7 +719,75 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.2. Installing to Openshift</h3>
+<h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.2. Frequently Asked Questions</h3>
+<div class="sect3">
+<h4 id="_features_not_working"><a class="anchor" href="#_features_not_working"></a>1.2.1. Features not Working</h4>
+<div class="paragraph">
+<p><strong>Browser pods are freezing</strong></p>
+</div>
+<div class="paragraph">
+<p>This is a known issue in Kubernetes DNS server settings. Current fix is to turn off DNS caching. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open DNS configuration map for editing (this will open an editor):</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl edit cm coredns -n kube-system</pre>
+</div>
+</div>
+</li>
+<li>
+<p>You will see YAML content like the following:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">data</span>:
+  <span class="key">Corefile</span>: <span class="string"><span class="delimiter">|</span><span class="content">
+    .:53 {
+        errors
+        health
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           upstream
+           fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        proxy . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ConfigMap</span></span>
+<span class="key">metadata</span>:
+  <span class="key">creationTimestamp</span>: <span class="string"><span class="content">2019-01-17T10:32:38Z</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">coredns</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">kube-system</span></span>
+  <span class="key">resourceVersion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">206</span><span class="delimiter">&quot;</span></span>
+  <span class="key">selfLink</span>: <span class="string"><span class="content">/api/v1/namespaces/kube-system/configmaps/coredns</span></span>
+  <span class="key">uid</span>: <span class="string"><span class="content">3668d0fe-1a43-11e9-ad0b-025000000001</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Remove one line:</p>
+<div class="literalblock">
+<div class="content">
+<pre>cache 30</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Save changes and exit the editor.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.3. Installing to Openshift</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -773,7 +846,7 @@ $ oc create configmap quota --from-file=./quota</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.3. Required Permissions</h3>
+<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.4. Required Permissions</h3>
 <div class="paragraph">
 <p>Moon requires very limited set of permissions and should work with default Kubernetes settings. The following table summarizes what needs to be accessible.</p>
 </div>
@@ -832,7 +905,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.4. Cluster Architecture</h3>
+<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.5. Cluster Architecture</h3>
 <div class="paragraph">
 <div class="title">Moon Cluster Architecture</div>
 <p><span class="image"><img src="img/architecture.png" alt="architecture"></span></p>
@@ -861,7 +934,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.5. Moon vs Selenoid</h3>
+<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.6. Moon vs Selenoid</h3>
 <div class="paragraph">
 <p>Moon takes all the best practices and features from Selenoid and adds many more:</p>
 </div>
@@ -3651,7 +3724,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-01-23 06:39:28 UTC
+Last updated 2019-01-23 13:16:56 UTC
 </div>
 </div>
 </body>
