@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-01-23</span>
+<span id="revdate">2019-01-30</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -568,6 +568,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_adjusting_resources_consumption">2.6.4. Adjusting Resources Consumption</a></li>
 <li><a href="#_running_browser_pods_in_privileged_mode">2.6.5. Running Browser Pods in Privileged Mode</a></li>
 <li><a href="#_using_node_selectors">2.6.6. Using Node Selectors</a></li>
+<li><a href="#_using_tolerations">2.6.7. Using Tolerations</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
@@ -783,6 +784,25 @@ When running your tests for the first time for every browser version Kubernetes 
 <p>Save changes and exit the editor.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p><strong>No space left on device</strong></p>
+</div>
+<div class="paragraph">
+<p>If you are getting the following error&#8230;&#8203;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>2019/01/23 13:47:11 [INIT] [Failed to init quota reloader: unable to watch directory: no space left on device]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;and have sufficient disk space then it can be caused by insufficient number of <a href="https://en.wikipedia.org/wiki/Inotify">inotify</a> watchers. Moon is using inotify to automatically reload configuration files when they change. To fix this execute one command on Kubernetes hosts:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf &amp;&amp; sudo sysctl -p</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1664,8 +1684,8 @@ Flags and fields described in this section apply to browser container consumptio
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>:
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">resources</span><span class="delimiter">&quot;</span></span>: {                              <i class="conum" data-value="1"></i><b>(1)</b>
@@ -1729,8 +1749,8 @@ Flags and fields described in this section apply to browser container consumptio
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>:
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">privileged</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">true</span>                  <i class="conum" data-value="1"></i><b>(1)</b>
@@ -1761,13 +1781,13 @@ Flags and fields described in this section apply to browser container consumptio
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>:
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">nodeSelector</span><span class="delimiter">&quot;</span></span>: {                    <i class="conum" data-value="1"></i><b>(1)</b>
           <span class="key"><span class="delimiter">&quot;</span><span class="content">node-type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hardware</span><span class="delimiter">&quot;</span></span>
-        },
+        }
       }
     }
   }
@@ -1779,6 +1799,46 @@ Flags and fields described in this section apply to browser container consumptio
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>Node selector for this browser version</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.6.7. Using Tolerations</h4>
+<div class="paragraph">
+<p>Kubernetes has a cool feature called <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">Taints</a> allowing to fine tune pods scheduling across nodes. If you wish to run browser pods on tainted nodes - you have to adjust so-called <code>tolerations</code>, that is to say a number of conditions to match against tainted nodes. Moon is using exactly the same format as Kubernetes to define tolerations:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding Tolerations</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">tolerations</span><span class="delimiter">&quot;</span></span>: [                    <i class="conum" data-value="1"></i><b>(1)</b>
+                {
+                                        <span class="key"><span class="delimiter">&quot;</span><span class="content">key</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key"><span class="delimiter">&quot;</span><span class="content">operator</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Exists</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key"><span class="delimiter">&quot;</span><span class="content">effect</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">NoExecute</span><span class="delimiter">&quot;</span></span>,
+                                        <span class="key"><span class="delimiter">&quot;</span><span class="content">tolerationSeconds</span><span class="delimiter">&quot;</span></span>: <span class="integer">3600</span>
+                                }
+        ]
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of tolerations for this browser version</td>
 </tr>
 </table>
 </div>
@@ -3724,7 +3784,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-01-23 13:16:56 UTC
+Last updated 2019-01-30 14:12:26 UTC
 </div>
 </div>
 </body>
