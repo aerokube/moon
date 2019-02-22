@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-02-20</span>
+<span id="revdate">2019-02-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -534,7 +534,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
 <li><a href="#_frequently_asked_questions">1.2. Frequently Asked Questions</a>
 <ul class="sectlevel3">
-<li><a href="#_features_not_working">1.2.1. Features not Working</a></li>
+<li><a href="#_browser_pods_are_freezing">1.2.1. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.2.2. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.2.3. DNS lookup timeouts</a></li>
 </ul>
 </li>
 <li><a href="#_installing_to_openshift">1.3. Installing to Openshift</a></li>
@@ -722,10 +724,7 @@ When running your tests for the first time for every browser version Kubernetes 
 <div class="sect2">
 <h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.2. Frequently Asked Questions</h3>
 <div class="sect3">
-<h4 id="_features_not_working"><a class="anchor" href="#_features_not_working"></a>1.2.1. Features not Working</h4>
-<div class="paragraph">
-<p><strong>Browser pods are freezing</strong></p>
-</div>
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.1. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes DNS server settings. Current fix is to turn off DNS caching. To do this:</p>
 </div>
@@ -785,9 +784,9 @@ When running your tests for the first time for every browser version Kubernetes 
 </li>
 </ol>
 </div>
-<div class="paragraph">
-<p><strong>No space left on device</strong></p>
 </div>
+<div class="sect3">
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.2. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -802,6 +801,25 @@ When running your tests for the first time for every browser version Kubernetes 
 <div class="literalblock">
 <div class="content">
 <pre>$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf &amp;&amp; sudo sysctl -p</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.3. DNS lookup timeouts</h4>
+<div class="paragraph">
+<p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>2019/02/21 08:37:32 [VNC_ERROR] [10.244.1.1] [dial tcp: lookup chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b on 10.96.0.10:53: read udp 10.244.1.11:40603-&gt;10.96.0.10:53: i/o timeout]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;then you may need to set the following kernel property on Kubernetes nodes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ sysctl net.bridge.bridge-nf-call-iptables=1</code></pre>
 </div>
 </div>
 </div>
@@ -3784,7 +3802,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-02-20 18:20:06 UTC
+Last updated 2019-02-22 10:07:55 UTC
 </div>
 </div>
 </body>
