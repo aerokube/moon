@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
 <meta name="author" content="Aerokube Software OÜ">
+<link rel="shortcut icon" type="image/png" href="img/favicon.png">
 <title>Moon</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
@@ -569,7 +570,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_advanced_configuration">2.6. Advanced Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_uploading_files_to_s3">2.6.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_moon_images">2.6.2. Using Custom Moon Images</a></li>
+<li><a href="#_using_custom_docker_registry">2.6.2. Using Custom Docker Registry</a></li>
 <li><a href="#_adjusting_timeouts">2.6.3. Adjusting Timeouts</a></li>
 <li><a href="#_adjusting_resources_consumption">2.6.4. Adjusting Resources Consumption</a></li>
 <li><a href="#_running_browser_pods_in_privileged_mode">2.6.5. Running Browser Pods in Privileged Mode</a></li>
@@ -1544,49 +1545,86 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
 </li>
 <li>
-<p>Create a <code>credentials.json</code> file to store S3 keys:</p>
-<div class="literalblock">
+<p>Create a Kubernetes credentials secret, mount it as a directory to Moon container and then specify path to this directory using <code>-credentials-dir</code> flag as shown in <a href="#_credentials_secret">Credentials Secret</a> section.</p>
+<div class="listingblock">
+<div class="title">S3 credentials secret</div>
 <div class="content">
-<pre>$ cat service.json
-{
-  "s3": {
-    "accessKey": "access-key-value",
-    "secretKey": "secret-key-value"
-  }
-}</pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Secret</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">credentials</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">stringData</span>:
+  <span class="key">s3.accessKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">access-key-value</span><span class="delimiter">&quot;</span></span>
+  <span class="key">s3.secretKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">secret-key-value</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Save <code>credentials.json</code> to a Kubernetes secret, mount it as a file to Moon container and then specify path to the file using <code>-credentials-file</code> flag as shown in <a href="#Credentials File">[Credentials File]</a> section.</p>
-</li>
-<li>
-<p>When you update a config map with <code>service.json</code> or a secret with <code>credentials.json</code> - settings are applied immediately without Moon restart.</p>
+<p>When you update a config map with <code>service.json</code> or a <code>credentials secret</code> - settings are applied immediately without Moon restart.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_moon_images"><a class="anchor" href="#_using_custom_moon_images"></a>2.6.2. Using Custom Moon Images</h4>
+<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.6.2. Using Custom Docker Registry</h4>
 <div class="paragraph">
-<p>By default Moon downloads some service images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to provide image names to Moon. To do this:</p>
+<p>By default Moon downloads all images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to configure Moon to work with this registry. To do this:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Copy the following public images to your registry:</p>
+<p>Configure Kubernetes authentication to your private registry:</p>
 <div class="literalblock">
 <div class="content">
-<pre>aerokube/moon
-aerokube/moon-api
-aerokube/moon-video-recorder
-aerokube/defender
-aerokube/logger</pre>
+<pre>$ kubectl create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com
+$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' # Use correct service account name here</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Create a <code>service.json</code> file with the following contents:</p>
+<p>Copy all desired browser images to your registry:</p>
+<div class="literalblock">
+<div class="content">
+<pre>selenoid/chrome:73.0 =&gt; my-registry.example.com/moon/chrome:73.0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Update <a href="#_browsers_list">Browsers List</a> file (<code>browsers.json</code>) to use new browser images:</p>
+<div class="listingblock">
+<div class="title">Browsers List File with Custom Images</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">73.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">73.0</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/chrome:73.0</span><span class="delimiter">&quot;</span></span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">72.0</span><span class="delimiter">&quot;</span></span>: {
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/chrome:72.0</span><span class="delimiter">&quot;</span></span>,
+            <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+        }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Copy desired version of the Moon service images to your registry:</p>
+<div class="literalblock">
+<div class="content">
+<pre>aerokube/moon-video-recorder:1.3.4 =&gt; my-registry.example.com/moon/moon-video-recorder:1.3.4
+aerokube/defender:1.3.4 =&gt; my-registry.example.com/moon/defender:1.3.4
+aerokube/logger =&gt; my-registry.example.com/moon/logger:1.3.4</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Override Moon service images, create a <code>service.json</code> file with the following contents:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ cat service.json
@@ -1627,10 +1665,20 @@ aerokube/logger</pre>
 </div>
 </li>
 <li>
-<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
+<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section. When you update a config map with <code>service.json</code> - settings are applied immediately without Moon restart.</p>
 </li>
 <li>
-<p>When you update a config map with <code>service.json</code> - settings are applied immediately without Moon restart.</p>
+<p>Copy desired version of Moon main images to your registry:</p>
+<div class="literalblock">
+<div class="content">
+<pre>aerokube/moon:1.3.4 =&gt; my-registry.example.com/moon/moon:1.3.4
+aerokube/moon-api:1.3.4 =&gt; my-registry.example.com/moon/moon-api:1.3.4
+aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use new main Moon images from the previous step in Kubernetes YAML definitions to start Moon, Moon API and Moon UI.</p>
 </li>
 </ol>
 </div>
@@ -3836,7 +3884,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-03-21 14:28:22 UTC
+Last updated 2019-03-21 16:14:14 UTC
 </div>
 </div>
 </body>
