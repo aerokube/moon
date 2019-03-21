@@ -524,7 +524,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-03-01</span>
+<span id="revdate">2019-03-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -561,7 +561,11 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_configuration_file">2.3. Configuration File</a></li>
 <li><a href="#_credentials_secret">2.4. Credentials Secret</a></li>
-<li><a href="#_installing_license">2.5. Installing License</a></li>
+<li><a href="#_installing_license">2.5. Installing License</a>
+<ul class="sectlevel3">
+<li><a href="#_how_licenses_work">2.5.1. How Licenses Work</a></li>
+</ul>
+</li>
 <li><a href="#_advanced_configuration">2.6. Advanced Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#_uploading_files_to_s3">2.6.1. Uploading Files to S3</a></li>
@@ -1478,6 +1482,36 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </li>
 </ol>
 </div>
+<div class="sect3">
+<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.5.1. How Licenses Work</h4>
+<div class="paragraph">
+<p>Every license key gives you an ability to run <strong>fixed number of parallel browser sessions</strong>. To limit maximum number of browser sessions Moon is using built-in Kubernetes <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quota</a> feature. Every browser session in Moon is a separate Kubernetes <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pod</a>. When started Moon checks that respective pod resource quota exists (that is to say total number of pods is limited). If not found such resource quota is automatically created. You can have any desired number of Moon, Moon API and Moon UI replicas (i.e. pods) in your cluster. These pods are added to total number of parallel browser sessions from license key. For example:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Your license key covers <strong>100</strong> parallel sessions</p>
+</li>
+<li>
+<p>You have <strong>5</strong> pods with Moon, Moon API and Moon UI (Moon pods)</p>
+</li>
+<li>
+<p>Correct pods quota is no more than <strong>100 + 5 = 105</strong> pods</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Having such pods quota and 5 running Moon pods, Kubernetes will allow to start 100 browser pods maximum. New browser session requests exceeding the quota will wait for previous sessions to finish, i.e. previous pods to be removed by Moon. To determine that a running pod is a Moon pod its labels are analysed. Any pod is considered a Moon pod if the following <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">label selector</a> matches:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>app in (moon, moon-api, moon-ui)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>So when starting Moon - you should add a label <code>app</code> with value: <code>moon</code>, <code>moon-api</code> or <code>moon-ui</code> to respective pod definitions.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.6. Advanced Configuration</h3>
@@ -1583,7 +1617,7 @@ aerokube/logger</pre>
 <pre class="CodeRay highlight"><code data-lang="javascript">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/video-recorder:latest-release</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/logger:latest-release</span><span class="delimiter">&quot;</span></span>,
       <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,
       <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>
     }
@@ -3802,7 +3836,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-03-01 14:11:03 UTC
+Last updated 2019-03-21 14:28:22 UTC
 </div>
 </div>
 </body>
