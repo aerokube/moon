@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-04-22</span>
+<span id="revdate">2019-04-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -576,6 +576,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_running_browser_pods_in_privileged_mode">2.6.5. Running Browser Pods in Privileged Mode</a></li>
 <li><a href="#_using_node_selectors">2.6.6. Using Node Selectors</a></li>
 <li><a href="#_using_tolerations">2.6.7. Using Tolerations</a></li>
+<li><a href="#_using_custom_kubernetes_annotations">2.6.8. Using Custom Kubernetes Annotations</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
@@ -1232,6 +1233,10 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
       <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                                <i class="conum" data-value="8"></i><b>(8)</b>
       <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="9"></i><b>(9)</b>
     }
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="10"></i><b>(10)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="11"></i><b>(11)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
 </div>
@@ -1273,6 +1278,14 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
 <td>Custom Moon image memory limit</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Custom pod annotations section (applies globally to all browser versions)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Custom pod annotation key and value</td>
 </tr>
 </table>
 </div>
@@ -1943,6 +1956,95 @@ Flags and fields described in this section apply to browser container consumptio
 </table>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.6.8. Using Custom Kubernetes Annotations</h4>
+<div class="paragraph">
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. Moon allows to configure custom annotations globally or individually for every browser version. Global annotations are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding global annotations to <code>service.json</code> file</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of global Kubernetes annotations</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To configure Kubernetes annotations for single desired browser version - just add the same <code>annotations</code> section to <a href="#_browsers_list">Browsers List</a> file as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding Tolerations</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                           <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of Kubernetes annotations for this browser version</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon adds some annotations by default and their names are reserved:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 5. Moon Reserved Annotation Names</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Key</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom session label passed in <code>name</code> capability</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom time zone value passed in <code>timeZone</code> capability</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.7. Log Files</h3>
@@ -1950,7 +2052,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. Log entry contents</caption>
+<caption class="title">Table 6. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -1995,7 +2097,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 6. Log entry statuses</caption>
+<caption class="title">Table 7. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3008,7 +3110,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 7. Moon License Pricing</caption>
+<caption class="title">Table 8. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3884,7 +3986,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-04-22 08:32:48 UTC
+Last updated 2019-04-23 18:24:41 UTC
 </div>
 </div>
 </body>
