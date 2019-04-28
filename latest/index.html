@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-04-24</span>
+<span id="revdate">2019-04-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -603,8 +603,7 @@ table.CodeRay td.code>pre{padding:0}
 </ul>
 </li>
 <li><a href="#_license_agreement">4. License Agreement</a></li>
-<li><a href="#_pricing">Appendix A: Pricing</a></li>
-<li><a href="#_example_configuration_files">Appendix B: Example Configuration Files</a></li>
+<li><a href="#_pricing">5. Pricing</a></li>
 </ul>
 </div>
 </div>
@@ -848,41 +847,38 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </li>
 <li>
-<p>Example YAML and JSON files can be found in <a href="#_example_configuration_files">Example Configuration Files</a> section.</p>
-</li>
-<li>
-<p>Add <code>view</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
+<p>Clone an example configuration repository:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ export PROJECT=default
-$ oc policy add-role-to-user view system:serviceaccount:$PROJECT:default</pre>
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Create <code>users.htpasswd</code> and respective secret:</p>
+<p>Add <code>edit</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ htpasswd -Bbn test test-password &gt;&gt; users.htpasswd
-$ oc create secret generic users --from-file=./users.htpasswd</pre>
+<pre>$ oc policy add-role-to-user edit system:serviceaccount:moon:default</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we assume that Openshift project for Moon is called <code>moon</code>.</p>
+</div>
+</li>
+<li>
+<p>Start Moon with Openshift UI or <code>oc</code> client using <code>moon-openshift.yaml</code> file:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc create -f moon-openshift.yaml -n moon</pre>
 </div>
 </div>
 </li>
 <li>
-<p>Copy test quota to <code>quota</code> directory and initialize browsers configuration:</p>
+<p>Run Selenium tests against <code>moon</code> service listening on port <code>4444</code>:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ mkdir -p quota
-$ touch quota/browsers.json # Add contents to file
-$ oc create configmap quota --from-file=./quota</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Start services using Openshift UI or the following command:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ oc create -f moon-openshift.yaml -n $PROJECT</pre>
+<pre>http://&lt;moon-ip-or-hostname&gt;:4444/wd/hub</pre>
 </div>
 </div>
 </li>
@@ -960,21 +956,28 @@ All these permissions are normally enabled by default when running Moon and its 
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/">Kubernetes configuration map</a> to store browser quota information and various runtime settings.</p>
+<p>One or more <code>Moon</code> application instances. Their main purpose is to start and stop browser containers. These replicas are usually exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on standard Selenium port <code>4444</code>. You should run all the tests against this service.</p>
 </li>
 <li>
-<p>One or more <code>moon</code> application containers. Their main purpose is to start and stop browser containers. These replicas are usually exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on standard Selenium port <code>4444</code>. You should run all the tests against this service.</p>
+<p>One or more <code>Moon API</code> application instances. This API collects and returns various data about running browsers. <code>Moon API</code> can be optionally exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on HTTP port <code>8888</code>. By default it is only accessible inside Kubernetes cluster.</p>
 </li>
 <li>
-<p>One or more <code>moon-api</code> application containers. This API collects and returns various data about running browsers. <code>moon-api</code> is usually exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on HTTP port (e.g. <code>80</code> or <code>8080</code>).</p>
+<p>One or more <code>Moon UI</code> application instances. <code>Moon UI</code> collects information from Moon API and visualizes it. It is usually available on HTTP port <code>8080</code>.</p>
 </li>
 <li>
-<p>Running browser containers. Moon is using exactly the same containers as <a href="https://github.com/aerokube/selenoid">Selenoid</a>.</p>
+<p>Running browser pods. Moon is using exactly the same browser images as <a href="https://github.com/aerokube/selenoid">Selenoid</a>.</p>
 </li>
 </ol>
 </div>
 <div class="paragraph">
-<p>Basic browser startup functionality is completely stateless and does not require any external database to be running.</p>
+<p>Moon is completely stateless and does not require any external database to run browser sessions.</p>
+</div>
+<div class="paragraph">
+<div class="title">Why Moon is Stateless</div>
+<p><span class="image"><img src="img/moon-stateless.png" alt="moon-stateless"></span></p>
+</div>
+<div class="paragraph">
+<p>When user requests a new browser session - a Kubernetes pod containing desired browser version is created. Moon also creates a Kubernetes service (with generated name like <code>chrome-71-0-&lt;UUID&gt;</code>) to deliver network connectivity to browser pod. Having a running pod and service - a standard new Selenium session request is sent to it. After receiving unique session identifier (so called <code>Selenium session ID</code>) Moon replaces it with the generated Kubernetes service name and returns the response to user. Subsequent Selenium requests are just proxied to respective service by using Selenium session ID as service name.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1165,10 +1168,10 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div class="title">Per-user browser lists</div>
 <div class="content">
 <pre>\---quota
-|   ---- alice.json
-|   ---- browsers.json
-|   ---- bob.json
-|   ---- test.json</pre>
+    |---- alice.json
+    |---- browsers.json
+    |---- bob.json
+    |---- test.json</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1225,17 +1228,18 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {                                          <i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">endpoint</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://storage.googleapis.com</span><span class="delimiter">&quot;</span></span>,  <i class="conum" data-value="2"></i><b>(2)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">bucketName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">moon-test</span><span class="delimiter">&quot;</span></span>,                     <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">S3v2</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="4"></i><b>(4)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">S3v2</span><span class="delimiter">&quot;</span></span>,                             <i class="conum" data-value="4"></i><b>(4)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">keyPattern</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$quota/$date</span><span class="delimiter">&quot;</span></span>                   <i class="conum" data-value="5"></i><b>(5)</b>
   },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="5"></i><b>(5)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {                                    <i class="conum" data-value="6"></i><b>(6)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-reg.com/moon/logger:1.2.0</span><span class="delimiter">&quot;</span></span>,     <i class="conum" data-value="7"></i><b>(7)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                                <i class="conum" data-value="8"></i><b>(8)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="9"></i><b>(9)</b>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="6"></i><b>(6)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {                                    <i class="conum" data-value="7"></i><b>(7)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-reg.com/moon/logger:1.2.0</span><span class="delimiter">&quot;</span></span>,     <i class="conum" data-value="8"></i><b>(8)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                                <i class="conum" data-value="9"></i><b>(9)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="10"></i><b>(10)</b>
     }
   },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="10"></i><b>(10)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="11"></i><b>(11)</b>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="11"></i><b>(11)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="12"></i><b>(12)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
@@ -1261,30 +1265,34 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Custom Moon system images section (to use Moon with private Docker registries)</td>
+<td>S3 key pattern</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Custom Moon image definition (one of <code>logger</code>, <code>defender</code>, <code>videoRecorder</code>)</td>
+<td>Custom Moon system images section (to use Moon with private Docker registries)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Custom Moon image reference</td>
+<td>Custom Moon image definition (one of <code>logger</code>, <code>defender</code>, <code>videoRecorder</code>)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>Custom Moon image CPU limit</td>
+<td>Custom Moon image reference</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Custom Moon image memory limit</td>
+<td>Custom Moon image CPU limit</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="10"></i><b>10</b></td>
-<td>Custom pod annotations section (applies globally to all browser versions)</td>
+<td>Custom Moon image memory limit</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Custom pod annotations section (applies globally to all browser versions)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>Custom pod annotation key and value</td>
 </tr>
 </table>
@@ -1574,6 +1582,107 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </li>
 <li>
+<p>By default files are uploaded to S3 bucket as follows:</p>
+<div class="listingblock">
+<div class="title">Default S3 bucket layout</div>
+<div class="content">
+<pre>\---my-bucket
+    \---- &lt;session-id&gt;
+        |---- video.mp4
+        |---- session.log</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon allows to organize any custom S3 keys layout using <strong>S3 key pattern</strong> with placeholders. A typical S3 key pattern looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">Typical S3 key pattern</div>
+<div class="content">
+<pre>$quota/$browserName/$browserVersion/$platformName/$sessionId</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here every placeholder such as <code>$quota</code>, <code>$browserName</code>, <code>$browserVersion</code> and so on will be replaced by corresponding information: user name, browser name, browser version. The resulting S3 key will be used as a directory to save log and video files. A list of supported placeholders is shown in the table below:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. S3 Key Placeholders</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Placeholder</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$sessionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium session ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$browserName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium browser name capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$browserVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium browser version capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$platformName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium platform capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by current date, e.g. <code>2018-11-01</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$quota</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by quota name (i.e. user name provided in Selenium URL)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Default S3 key pattern is just <code>$sessionId</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Default video and log paths</div>
+<div class="content">
+<pre>my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/video.mp4
+my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You change S3 key pattern in <code>service.json</code> file as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting custom S3 key pattern in <code>service.json</code></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">// The rest of S3 settings go here...</span>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">keyPattern</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$quota/$browserName/$browserVersion/$platformName/$sessionId</span><span class="delimiter">&quot;</span></span>  <i class="conum" data-value="1"></i><b>(1)</b>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Custom S3 key pattern</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
 <p>When you update a config map with <code>service.json</code> or a <code>credentials secret</code> - settings are applied immediately without Moon restart.</p>
 </li>
 </ol>
@@ -1702,7 +1811,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 3. Available Timeout Flags</caption>
+<caption class="title">Table 4. Available Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1751,7 +1860,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following flags:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 4. Resources Consumption Flags</caption>
+<caption class="title">Table 5. Resources Consumption Flags</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2022,7 +2131,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Moon adds some annotations by default and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. Moon Reserved Annotation Names</caption>
+<caption class="title">Table 6. Moon Reserved Annotation Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2052,7 +2161,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 6. Log entry contents</caption>
+<caption class="title">Table 7. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2097,7 +2206,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 7. Log entry statuses</caption>
+<caption class="title">Table 8. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3082,7 +3191,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>Appendix A: Pricing</h2>
+<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>5. Pricing</h2>
 <div class="sectionbody">
 <div class="olist arabic">
 <ol class="arabic">
@@ -3110,7 +3219,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 8. Moon License Pricing</caption>
+<caption class="title">Table 9. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3194,799 +3303,11 @@ some-clipboard-value</code></pre>
 </table>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_example_configuration_files"><a class="anchor" href="#_example_configuration_files"></a>Appendix B: Example Configuration Files</h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="title">Example <code>moon-sessions.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">ResourceQuota</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">max-moon-sessions</span></span>
-<span class="key">spec</span>:
-  <span class="key">hard</span>:
-    <span class="key">pods</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">6</span><span class="delimiter">&quot;</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">ClusterRoleBinding</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon-rbac</span></span>
-<span class="key">subjects</span>:
-  - <span class="string"><span class="content">kind: ServiceAccount</span></span>
-    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
-    <span class="key">namespace</span>: <span class="string"><span class="content">default</span></span>
-<span class="key">roleRef</span>:
-  <span class="key">kind</span>: <span class="string"><span class="content">ClusterRole</span></span>
-  <span class="key">name</span>: <span class="string"><span class="content">cluster-admin</span></span>
-  <span class="key">apiGroup</span>: <span class="string"><span class="content">rbac.authorization.k8s.io</span></span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>moon.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">selector</span>:
-    <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">ports</span>:
-  - <span class="string"><span class="content">protocol: TCP</span></span>
-    <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
-  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:latest</span></span>
-        <span class="key">resources</span>:
-          <span class="key">limits</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">512Mi</span><span class="delimiter">&quot;</span></span>
-          <span class="key">requests</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
-        <span class="key">ports</span>:
-        - <span class="string"><span class="content">containerPort: 4444</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: quota</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-        - <span class="string"><span class="content">name: users</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
-          <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-      <span class="key">volumes</span>:
-      - <span class="string"><span class="content">name: quota</span></span>
-        <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-      - <span class="string"><span class="content">name: users</span></span>
-        <span class="key">secret</span>:
-          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>moon-api.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-<span class="key">spec</span>:
-  <span class="key">selector</span>:
-    <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-  <span class="key">ports</span>:
-  - <span class="string"><span class="content">protocol: TCP</span></span>
-    <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
-  <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-<span class="head"><span class="head">---</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1beta1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-<span class="key">spec</span>:
-  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon-api</span></span>
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon-api:latest</span></span>
-        <span class="key">resources</span>:
-          <span class="key">limits</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">128Mi</span><span class="delimiter">&quot;</span></span>
-          <span class="key">requests</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1</span><span class="delimiter">&quot;</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
-        <span class="key">ports</span>:
-        - <span class="string"><span class="content">containerPort: 8080</span></span>
-        <span class="key">volumeMounts</span>:
-        - <span class="string"><span class="content">name: quota</span></span>
-          <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-      <span class="key">volumes</span>:
-      - <span class="string"><span class="content">name: quota</span></span>
-        <span class="key">configMap</span>:
-          <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-      - <span class="string"><span class="content">name: users</span></span>
-        <span class="key">secret</span>:
-          <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>browsers.json</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">58.0</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">58.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_58.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">57.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_57.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">56.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_56.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">55.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_55.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">54.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_54.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">53.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_53.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">52.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_52.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">51.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_51.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_50.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">49.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_49.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">48.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_48.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">47.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_47.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">46.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_46.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">45.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_45.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">44.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_44.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">43.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_43.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">42.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_42.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">41.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_41.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">40.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_40.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">39.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_39.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">38.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_38.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">37.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_37.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">36.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_36.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">35.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_35.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">34.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_34.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">33.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_33.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">32.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_32.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">31.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_31.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">30.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_30.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">29.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_29.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">28.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_28.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">27.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_27.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">26.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_26.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">25.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_25.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">24.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_24.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">23.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_23.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">22.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_22.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">21.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_21.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">20.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_20.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">19.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_19.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">18.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_18.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">17.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_17.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">16.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_16.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">15.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_15.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">14.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_14.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_13.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">12.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_12.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">11.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_11.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">10.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_10.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">9.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_9.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">8.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_8.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">7.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_7.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">6.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_6.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">5.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_5.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">4.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_4.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">3.6</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:firefox_3.6</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      }
-    }
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">65.0</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">65.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_65.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">64.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_64.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">63.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_63.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_62.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">61.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_61.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_60.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">59.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_59.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">58.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_58.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">57.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_57.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">56.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_56.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">55.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_55.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">54.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_54.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">53.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_53.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">52.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_52.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">51.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_51.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_50.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">49.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_49.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">48.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:chrome_48.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      }
-    }
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">opera</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">50.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_50.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">49.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_49.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">48.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_48.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">47.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_47.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">46.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_46.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">45.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_45.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">44.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_44.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">43.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_43.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">42.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_42.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">41.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_41.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">40.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_40.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">39.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_39.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">38.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_38.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">37.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_37.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">36.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_36.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">35.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_35.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">34.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_34.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">33.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_33.0</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">12.1</span><span class="delimiter">&quot;</span></span>: {
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/vnc:opera_12.1</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      }
-    }
-  }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>moon-config/service.json</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">videoRecorder</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/moon-video-recorder:devel</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">defender</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/defender:devel</span><span class="delimiter">&quot;</span></span>,
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/logger:devel</span><span class="delimiter">&quot;</span></span>
-  }
-}</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Example <code>moon-openshift.yaml</code> file contents</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Template</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">objects</span>:
-
-  - <span class="string"><span class="content">kind: ResourceQuota</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">max-moon-sessions</span></span>
-    <span class="key">spec</span>:
-      <span class="key">hard</span>:
-        <span class="key">pods</span>: <span class="string"><span class="content">${MOON_PODS}</span></span>
-
-  - <span class="string"><span class="content">kind: Service</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">selector</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-      <span class="key">ports</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
-        <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
-      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-
-  - <span class="string"><span class="content">kind: Service</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-    <span class="key">spec</span>:
-      <span class="key">selector</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-      <span class="key">ports</span>:
-      - <span class="string"><span class="content">name: moon-api</span></span>
-        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
-        <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
-      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-
-  - <span class="string"><span class="content">kind: Service</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon-ui</span></span>
-    <span class="key">spec</span>:
-      <span class="key">selector</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon-ui</span></span>
-      <span class="key">ports</span>:
-      - <span class="string"><span class="content">name: moon-ui</span></span>
-        <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
-        <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
-      <span class="key">type</span>: <span class="string"><span class="content">NodePort</span></span>
-
-  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-      <span class="key">template</span>:
-        <span class="key">metadata</span>:
-          <span class="key">labels</span>:
-            <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-        <span class="key">spec</span>:
-          <span class="key">containers</span>:
-          - <span class="string"><span class="content">name: moon</span></span>
-            <span class="key">image</span>: <span class="string"><span class="content">${MOON_IMAGE}</span></span>
-            <span class="key">args</span>:
-              - <span class="string"><span class="content">'-namespace'</span></span>
-              - <span class="string"><span class="content">'${NAMESPACE}'</span></span>
-            <span class="key">resources</span>:
-              <span class="key">limits</span>:
-                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
-                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">512Mi</span><span class="delimiter">&quot;</span></span>
-              <span class="key">requests</span>:
-                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
-                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
-            <span class="key">ports</span>:
-            - <span class="string"><span class="content">containerPort: 4444</span></span>
-            <span class="key">volumeMounts</span>:
-            - <span class="string"><span class="content">name: quota</span></span>
-              <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-              <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-            - <span class="string"><span class="content">name: users</span></span>
-              <span class="key">mountPath</span>: <span class="string"><span class="content">/users</span></span>
-              <span class="key">readOnly</span>: <span class="string"><span class="content">true</span></span>
-          <span class="key">volumes</span>:
-          - <span class="string"><span class="content">name: quota</span></span>
-            <span class="key">configMap</span>:
-              <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-          - <span class="string"><span class="content">name: users</span></span>
-            <span class="key">secret</span>:
-              <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span>
-
-  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon-api</span></span>
-    <span class="key">spec</span>:
-      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-      <span class="key">template</span>:
-        <span class="key">metadata</span>:
-          <span class="key">labels</span>:
-            <span class="key">app</span>: <span class="string"><span class="content">moon-api</span></span>
-        <span class="key">spec</span>:
-          <span class="key">containers</span>:
-          - <span class="string"><span class="content">name: moon-api</span></span>
-            <span class="key">image</span>: <span class="string"><span class="content">${MOON_API_IMAGE}</span></span>
-            <span class="key">args</span>:
-              - <span class="string"><span class="content">'-namespace'</span></span>
-              - <span class="string"><span class="content">'${NAMESPACE}'</span></span>
-            <span class="key">resources</span>:
-              <span class="key">limits</span>:
-                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.25</span><span class="delimiter">&quot;</span></span>
-                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">128Mi</span><span class="delimiter">&quot;</span></span>
-              <span class="key">requests</span>:
-                <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.1</span><span class="delimiter">&quot;</span></span>
-                <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
-            <span class="key">ports</span>:
-            - <span class="string"><span class="content">containerPort: 8080</span></span>
-            <span class="key">volumeMounts</span>:
-            - <span class="string"><span class="content">name: quota</span></span>
-              <span class="key">mountPath</span>: <span class="string"><span class="content">/quota</span></span>
-          <span class="key">volumes</span>:
-          - <span class="string"><span class="content">name: quota</span></span>
-            <span class="key">configMap</span>:
-              <span class="key">name</span>: <span class="string"><span class="content">quota</span></span>
-          - <span class="string"><span class="content">name: users</span></span>
-            <span class="key">secret</span>:
-              <span class="key">secretName</span>: <span class="string"><span class="content">users</span></span>
-
-  - <span class="string"><span class="content">kind: DeploymentConfig</span></span>
-    <span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-    <span class="key">metadata</span>:
-      <span class="key">name</span>: <span class="string"><span class="content">moon-ui</span></span>
-    <span class="key">spec</span>:
-      <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
-      <span class="key">template</span>:
-        <span class="key">metadata</span>:
-          <span class="key">labels</span>:
-            <span class="key">app</span>: <span class="string"><span class="content">moon-ui</span></span>
-        <span class="key">spec</span>:
-          <span class="key">containers</span>:
-            - <span class="string"><span class="content">name: moon-ui</span></span>
-              <span class="key">args</span>:
-                - <span class="string"><span class="content">'--selenoid-uri'</span></span>
-                - <span class="string"><span class="content">'http://moon-api:8080'</span></span>
-              <span class="key">image</span>: <span class="string"><span class="content">${MOON_UI_IMAGE}</span></span>
-              <span class="key">ports</span>:
-                - <span class="string"><span class="content">containerPort: 8080</span></span>
-                  <span class="key">protocol</span>: <span class="string"><span class="content">TCP</span></span>
-              <span class="key">resources</span>:
-                <span class="key">limits</span>:
-                  <span class="key">cpu</span>: <span class="string"><span class="content">100m</span></span>
-                  <span class="key">memory</span>: <span class="string"><span class="content">64M</span></span>
-
-<span class="key">parameters</span>:
-- <span class="string"><span class="content">name: NAMESPACE</span></span>
-  <span class="key">displayName</span>: <span class="string"><span class="content">Namespace</span></span>
-  <span class="key">description</span>: <span class="string"><span class="content">Namespace where the Moon is running</span></span>
-  <span class="key">value</span>: <span class="string"><span class="content">default</span></span>
-  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
-
-- <span class="string"><span class="content">name: MOON_IMAGE</span></span>
-  <span class="key">displayName</span>: <span class="string"><span class="content">Moon docker image</span></span>
-  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
-  <span class="key">value</span>: <span class="string"><span class="content">aerokube/moon:latest-release</span></span>
-  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
-
-- <span class="string"><span class="content">name: MOON_API_IMAGE</span></span>
-  <span class="key">displayName</span>: <span class="string"><span class="content">Moon-API docker image</span></span>
-  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
-  <span class="key">value</span>: <span class="string"><span class="content">aerokube/moon-api:latest-release</span></span>
-  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
-
-- <span class="string"><span class="content">name: MOON_UI_IMAGE</span></span>
-  <span class="key">displayName</span>: <span class="string"><span class="content">Moon-UI docker image</span></span>
-  <span class="key">description</span>: <span class="string"><span class="content">Name of the image to be used.</span></span>
-  <span class="key">value</span>: <span class="string"><span class="content">aerokube/selenoid-ui:latest-release</span></span>
-  <span class="key">required</span>: <span class="string"><span class="content">true</span></span>
-
-- <span class="string"><span class="content">name: MOON_PODS</span></span>
-  <span class="key">displayName</span>: <span class="string"><span class="content">Max moon pods in project</span></span>
-  <span class="key">description</span>: <span class="string"><span class="content">Specify max moon pods for project (4 free slots + Moon + Moon API + Moon UI = 7).</span></span>
-  <span class="key">value</span>: <span class="string"><span class="content">'7'</span></span>
-  <span class="key">required</span>: <span class="string"><span class="content">true</span></span></code></pre>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-04-24 11:14:35 UTC
+Last updated 2019-04-28 08:14:59 UTC
 </div>
 </div>
 </body>
