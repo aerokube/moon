@@ -535,9 +535,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
 <li><a href="#_frequently_asked_questions">1.2. Frequently Asked Questions</a>
 <ul class="sectlevel3">
-<li><a href="#_browser_pods_are_freezing">1.2.1. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.2.2. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.2.3. DNS lookup timeouts</a></li>
+<li><a href="#_where_are_moon_logs">1.2.1. Where are Moon logs?</a></li>
+<li><a href="#_where_are_recorded_videos_stored">1.2.2. Where are recorded videos stored?</a></li>
+<li><a href="#_browser_pods_are_freezing">1.2.3. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.2.4. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.2.5. DNS lookup timeouts</a></li>
 </ul>
 </li>
 <li><a href="#_installing_to_openshift">1.3. Installing to Openshift</a></li>
@@ -729,7 +731,19 @@ When running your tests for the first time for every browser version Kubernetes 
 <div class="sect2">
 <h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.2. Frequently Asked Questions</h3>
 <div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.1. Browser pods are freezing</h4>
+<h4 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>1.2.1. Where are Moon logs?</h4>
+<div class="paragraph">
+<p>See <a href="#_log_files">Log Files</a> section.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>1.2.2. Where are recorded videos stored?</h4>
+<div class="paragraph">
+<p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.3. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes DNS server settings. Current fix is to turn off DNS caching. To do this:</p>
 </div>
@@ -791,7 +805,7 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.2. No space left on device</h4>
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.4. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -810,7 +824,7 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.3. DNS lookup timeouts</h4>
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.5. DNS lookup timeouts</h4>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -2158,6 +2172,36 @@ Flags and fields described in this section apply to browser container consumptio
 <div class="sect2">
 <h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.7. Log Files</h3>
 <div class="paragraph">
+<p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>) so you can use well-known <code>kubectl</code> commands to see the log:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get pods -n moon
+NAME                    READY     STATUS    RESTARTS   AGE
+moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Everything related to Selenium sessions is being output by <code>moon</code> container:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs moon-58f8b57966-s648q -c moon -n moon
+2019/05/03 11:20:37 [INIT] [Loading quota files from: quota]
+2019/05/03 11:20:37 [INIT] [Quota configuration updated]
+2019/05/03 11:20:37 [INIT] [Loading users from: users/users.htpasswd]
+...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To follow the logs while running the tests add <code>-f</code> flag:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs -f moon-58f8b57966-s648q -c moon -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -2187,13 +2231,8 @@ Flags and fields described in this section apply to browser container consumptio
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Additional fields</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">[firefox-45.0]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[my-user]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">One or more sections showing additional information such as browser name, user name, IP address or error message</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Attempt number</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">[1]</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">For SESSION_ATTEMPTED or SESSION_CREATED entries means current attempt number. For SESSION_CREATED entries means total number of attempts to create this session.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Duration</p></td>
@@ -2416,6 +2455,23 @@ Flags and fields described in this section apply to browser container consumptio
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p>You can also take a look at <code>moon-api</code> and moon-ui logs as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs -f moon-58f8b57966-s648q -c moon-api -n moon
+$ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are encountering browser pods not being deleted - then take a look at <code>defender</code> container logs for every frozen browser pod:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs chrome-73-0-ac15ffaa-e641-4c7f-a54c-f25b5be1f135 -c defender -n moon # Here chrome-73-0-ac15ffaa-e641-4c7f-a54c-f25b5be1f135 is Selenium session ID equal to browser pod name</pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.8. CLI Flags</h3>
@@ -3307,7 +3363,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-05-03 11:36:43 UTC
+Last updated 2019-05-03 11:56:42 UTC
 </div>
 </div>
 </body>
