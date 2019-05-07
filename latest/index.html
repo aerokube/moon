@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-05-05</span>
+<span id="revdate">2019-05-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -537,9 +537,10 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_where_are_moon_logs">1.2.1. Where are Moon logs?</a></li>
 <li><a href="#_where_are_recorded_videos_stored">1.2.2. Where are recorded videos stored?</a></li>
-<li><a href="#_browser_pods_are_freezing">1.2.3. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.2.4. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.2.5. DNS lookup timeouts</a></li>
+<li><a href="#_connection_was_closed_unexpectedly">1.2.3. Connection was closed unexpectedly</a></li>
+<li><a href="#_browser_pods_are_freezing">1.2.4. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.2.5. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.2.6. DNS lookup timeouts</a></li>
 </ul>
 </li>
 <li><a href="#_installing_to_openshift">1.3. Installing to Openshift</a></li>
@@ -743,7 +744,27 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.3. Browser pods are freezing</h4>
+<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.2.3. Connection was closed unexpectedly</h4>
+<div class="paragraph">
+<p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="comment"># AWS load balancer timeout setting</span>
+<span class="key">spec</span>:
+  <span class="key">type</span>: <span class="string"><span class="content">LoadBalancer</span></span>
+  <span class="comment"># The rest of spec goes here...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.4. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes DNS server settings. Current fix is to turn off DNS caching. To do this:</p>
 </div>
@@ -805,7 +826,7 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.4. No space left on device</h4>
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.5. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -824,7 +845,7 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.5. DNS lookup timeouts</h4>
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.6. DNS lookup timeouts</h4>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -3363,7 +3384,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-05-05 14:18:35 UTC
+Last updated 2019-05-07 04:31:32 UTC
 </div>
 </div>
 </body>
