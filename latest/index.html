@@ -673,6 +673,25 @@ $ cd moon-deploy</pre>
 <div class="paragraph">
 <p>By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In Google Cloud you may also need to give cluster admin permissions to your Google account as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=username@example.com # Use you real Google account email</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </li>
 <li>
 <p>Wait for LoadBalancer IP to allocate:</p>
@@ -3414,7 +3433,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-05-12 11:27:16 UTC
+Last updated 2019-05-12 12:47:29 UTC
 </div>
 </div>
 </body>
