@@ -11,7 +11,7 @@ Moon is a commercial closed-source enterprise [Selenium](https://en.wikipedia.or
 * The only limitation that determines final Moon price is the **total number of browser pods** being run in parallel.
 * You can run up to **4 (four)** parallel pods for free. Everything on top of free limit is paid as a subscription.
 * **Detailed pricing** information is available in respective documentation [section](https://aerokube.com/moon/latest/#_pricing).
-* Currently we provide **free evaluation license keys** for any number of browser pods: https://moon.aerokube.com/
+* To obtain **a free evaluation license key** email to [sales@aerokube.com](mailto:sales@aerokube.com)
 
 ## Free Support
 
