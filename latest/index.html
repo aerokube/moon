@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-06-12</span>
+<span id="revdate">2019-06-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -593,13 +593,14 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel3">
 <li><a href="#_live_browser_screen_enablevnc">3.1.1. Live Browser Screen: enableVNC</a></li>
 <li><a href="#_custom_screen_resolution_screenresolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
-<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
-<li><a href="#_custom_test_name_name">3.1.4. Custom Test Name: name</a></li>
-<li><a href="#_per_session_time_zone_timezone">3.1.5. Per-session Time Zone: timeZone</a></li>
-<li><a href="#_per_session_environment_variables_env">3.1.6. Per-session Environment Variables: env</a></li>
-<li><a href="#_hosts_entries_hostsentries">3.1.7. Hosts Entries: hostsEntries</a></li>
-<li><a href="#_custom_session_timeout_sessiontimeout">3.1.8. Custom Session Timeout: sessionTimeout</a></li>
-<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.9. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#_android_skin_skin">3.1.3. Android Skin: skin</a></li>
+<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
+<li><a href="#_custom_test_name_name">3.1.5. Custom Test Name: name</a></li>
+<li><a href="#_per_session_time_zone_timezone">3.1.6. Per-session Time Zone: timeZone</a></li>
+<li><a href="#_per_session_environment_variables_env">3.1.7. Per-session Environment Variables: env</a></li>
+<li><a href="#_hosts_entries_hostsentries">3.1.8. Hosts Entries: hostsEntries</a></li>
+<li><a href="#_custom_session_timeout_sessiontimeout">3.1.9. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.10. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -2651,7 +2652,98 @@ You should manually resize window to desired width and height or use Selenium <c
 </div>
 </div>
 <div class="sect3">
-<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"></a>3.1.3. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</h4>
+<h4 id="_android_skin_skin"><a class="anchor" href="#_android_skin_skin"></a>3.1.3. Android Skin: skin</h4>
+<div class="paragraph">
+<p>When testing for Android platform you can select emulator skin with capabilities. List of available skins:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 9. Available Android Skins</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Skin</th>
+<th class="tableblock halign-left valign-top">Screen Resolution</th>
+<th class="tableblock halign-left valign-top">DPI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">QVGA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240x320</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">120</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WQVGA400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240x400</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">120</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WQVGA432</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240x432</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">120</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HVGA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">320x480</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WVGA800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">480x800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WVGA854</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">480x854</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">240</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WSVGA</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1024x600</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WXGA720</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">720x1280</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">320</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WXGA800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1280x800</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WXGA800-7in</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">800x1280</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">213</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To select a skin - set <code>skin</code> capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;desired-skin&gt;</div>
+<div class="content">
+<pre>skin: "WXGA720"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also pass desired screen resolution as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;desired-screen-resolution&gt;</div>
+<div class="content">
+<pre>skin: "720x1280"</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"></a>3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</h4>
 <div class="paragraph">
 <p>To enable video recording for session, add:</p>
 </div>
@@ -2719,7 +2811,7 @@ resolution is less than actual, screen on video will be trimmed starting from to
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.4. Custom Test Name: name</h4>
+<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.5. Custom Test Name: name</h4>
 <div class="paragraph">
 <p>For debugging purposes it is often useful to give a distinct name to every test case. You can set test case name by passing the following capability:</p>
 </div>
@@ -2734,7 +2826,7 @@ resolution is less than actual, screen on video will be trimmed starting from to
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.5. Per-session Time Zone: timeZone</h4>
+<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.6. Per-session Time Zone: timeZone</h4>
 <div class="paragraph">
 <p>Some tests require particular time zone to be set in operating system.</p>
 </div>
@@ -2750,7 +2842,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_environment_variables_env"><a class="anchor" href="#_per_session_environment_variables_env"></a>3.1.6. Per-session Environment Variables: env</h4>
+<h4 id="_per_session_environment_variables_env"><a class="anchor" href="#_per_session_environment_variables_env"></a>3.1.7. Per-session Environment Variables: env</h4>
 <div class="paragraph">
 <p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
 </div>
@@ -2765,7 +2857,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.7. Hosts Entries: hostsEntries</h4>
+<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.8. Hosts Entries: hostsEntries</h4>
 <div class="paragraph">
 <p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#_browsers_list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
 </div>
@@ -2780,7 +2872,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.8. Custom Session Timeout: sessionTimeout</h4>
+<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.9. Custom Session Timeout: sessionTimeout</h4>
 <div class="paragraph">
 <p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
 </div>
@@ -2795,7 +2887,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.9. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.10. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -3345,7 +3437,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 9. Moon License Pricing</caption>
+<caption class="title">Table 10. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3433,7 +3525,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-06-12 17:22:39 UTC
+Last updated 2019-06-14 04:00:23 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
