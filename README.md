@@ -79,3 +79,6 @@ We also provide [detailed installation video](https://www.youtube.com/watch?v=x6
 
 Complete reference guide can be found at: http://aerokube.com/moon/latest/
 
+## Users
+
+[![Ozon.ru](img/logo/ozon.png)](https://www.ozon.ru/) [![Frontier Car Group](img/logo/frontier-car-group.png)](https://www.frontiercargroup.com/)
