@@ -81,4 +81,4 @@ Complete reference guide can be found at: http://aerokube.com/moon/latest/
 
 ## Users
 
-[![Ozon.ru](img/logo/ozon.png)](https://www.ozon.ru/) [![Frontier Car Group](img/logo/frontier-car-group.png)](https://www.frontiercargroup.com/) [![SocialTech](img/logo/socialtechnologies-io.png)](https://www.socialtechnologies.io/)
+[![Ozon.ru](img/logo/ozon.png)](https://www.ozon.ru/) [![Frontier Car Group](img/logo/frontier-car-group.png)](https://www.frontiercargroup.com/) [![SocialTech](img/logo/socialtechnologies-io.png)](https://www.socialtechnologies.io/)  [![Showpad](img/logo/showpad.png)](https://www.showpad.com/)
