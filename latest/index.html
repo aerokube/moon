@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-07-21</span>
+<span id="revdate">2019-07-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2043,6 +2043,32 @@ Flags and fields described in this section apply to browser container consumptio
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>In some installations you may also want to completely disable CPU or memory limits for all browsers pods. This can be achieved with one of the following flags:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 6. Disabling Memory and CPU limits</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Flag</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-disable-cpu-limits</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Completely disables CPU limits for all browser pods</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-disable-memory-limits</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Completely disables memory limits for all browser pods</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
 <h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.6.5. Running Browser Pods in Privileged Mode</h4>
@@ -2216,7 +2242,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>Moon adds some annotations by default and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 6. Moon Reserved Annotation Names</caption>
+<caption class="title">Table 7. Moon Reserved Annotation Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2276,7 +2302,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 7. Log entry contents</caption>
+<caption class="title">Table 8. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2316,7 +2342,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 8. Log entry statuses</caption>
+<caption class="title">Table 9. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2562,6 +2588,10 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     browser container cpu request (default "0.5")
 -credentials-dir string
     directory where credentials are mounted (default "credentials")
+-disable-cpu-limits
+    disable cpu limits for pods
+-disable-memory-limits
+    disable memory limits for pods
 -grace-period duration
     graceful shutdown (default 30s)
 -guest-user string
@@ -2657,7 +2687,7 @@ You should manually resize window to desired width and height or use Selenium <c
 <p>When testing for Android platform you can select emulator skin with capabilities. List of available skins:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 9. Available Android Skins</caption>
+<caption class="title">Table 10. Available Android Skins</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3437,7 +3467,7 @@ some-clipboard-value</code></pre>
 </ol>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 10. Moon License Pricing</caption>
+<caption class="title">Table 11. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3525,7 +3555,7 @@ some-clipboard-value</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-07-21 12:04:34 UTC
+Last updated 2019-07-29 17:23:56 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
