@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta name="generator" content="Hugo 0.56.3" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  
+  
+  <base href="https://aerokube.com/moon/">
+  <meta name="theme-color" content="#000000">
+  <link rel="manifest" href="manifest.json">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+  <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <meta property="og:image:height" content="1106">
+  <meta property="og:image:width" content="2113">
+  
+  <meta property="og:title" content="Aerokube Moon | An Enterprise Selenium Solution Running in Kubernetes">
+  
+  
+  <meta property="description" content="Launch an unlimited number of Selenium sessions in isolated containers running in Kubernetes cluster">
+  <meta property="og:description" content="Launch an unlimited number of Selenium sessions in isolated containers running in Kubernetes cluster">
+  <meta property="og:url" content="https://aerokube.com/moon/">
+  <meta property="og:image" content="/images/og-image.jpg">
+  <meta name="twitter:site" content="@aerokube">
+  
+  
+  <link rel="canonical" href="https://aerokube.com/moon/">
+  
+  
+  <title>Aerokube Moon | An Enterprise Selenium Solution Running in Kubernetes</title>
+
+  
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  
+    <link href="/moon/main.38b2c.css" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&amp;display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="js/odometer.min.js" type="text/javascript"></script>
+
+  
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-23854888-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-23854888-2');
+  </script>
+
+  
+  <script type="text/javascript" >
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(50174314, "init", {
+      clickmap:true,
+      trackLinks:true,
+      accurateTrackBounce:true,
+      webvisor:true
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/50174314" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
+  <header class="container">
+    <div class="row header align-items-center">
+        <div class="col-auto">
+            <a href="/" class="header__logo">
+                <img src="images/aerokube_logo.svg" alt="logo" class="header__logo-image">
+                <span class="header__logo-title">Moon</span>
+            </a>
+        </div>
+        <nav class="d-none d-sm-block col">
+            <ul class="header__links">
+                
+                <li><a href="https://aerokube.com/moon/latest">Docs</a></li>
+                
+                <li><a href="https://github.com/aerokube/moon">Github</a></li>
+                
+                <li><a href="https://t.me/aerokube_moon">Telegram</a></li>
+                
+                <li><a href="https://twitter.com/aerokube">Twitter</a></li>
+                
+                <li><a href="https://www.youtube.com/channel/UC9HvE3FNfTvftzpvXi9c69g">Youtube</a></li>
+                
+                <li><a href="mailto:support@aerokube.com">Mail us</a></li>
+                
+            </ul>
+        </nav>
+        <nav class="d-block d-sm-none col">
+            <div class="header__menu">
+    <label for="menu" class="header__menu-button">
+        <img src="images/nav.svg" alt="menu sandwich">
+    </label>
+    <input id="menu" type="checkbox">
+    <div class="header__menu-wrapper">
+        <ul class="header__menu-container">
+            
+            <li><a href="/#pricing">Pricing</a></li>
+            
+            <li><a href="/#articles">Documentation</a></li>
+            
+        </ul>
+    </div>
+</div>
+
+        </nav>
+    </div>
+</header>
+
+
+  
+<div class="background">
+    <div class="container hero">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-12 col-md-5">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="hero__heading-title">Selenium in Kubernetes</h1>
+                    <p class="hero__heading-description">Unlimited cluster in 5 minutes</p>
+                </div>
+                <div class="col-12 d-none d-md-block">
+                    <form class="feedback" id="license-form">
+    <div>
+        <label for="feedback-email" class="feedback__title">
+            Receive your free one month<br />evaluation key
+        </label>
+        <div class="feedback__input-container">
+            <input id="feedback-email" name="email" type="email" class="input input_feedback" placeholder="Your e-mail">
+            <input type="submit" class="button button_feedback g-recaptcha" data-sitekey="6Lf9rrQUAAAAAKEqzSGM7jXYvAlQzyT8wwQX6foW" data-callback="onSubmit" value="Try for free">
+        </div>
+    </div>
+</form>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-7">
+            <img class="hero__preview" src="images/preview.png" alt="preview">
+        </div>
+    </div>
+    <div class="row d-block d-md-none mt-4 text-center">
+        <div class="col-12">
+            <form class="feedback" id="license-form">
+    <div>
+        <label for="feedback-email" class="feedback__title">
+            Receive your free one month<br />evaluation key
+        </label>
+        <div class="feedback__input-container">
+            <input id="feedback-email" name="email" type="email" class="input input_feedback" placeholder="Your e-mail">
+            <input type="submit" class="button button_feedback g-recaptcha" data-sitekey="6Lf9rrQUAAAAAKEqzSGM7jXYvAlQzyT8wwQX6foW" data-callback="onSubmit" value="Try for free">
+        </div>
+    </div>
+</form>
+
+        </div>
+    </div>
+</div>
+
+    <div class="container features">
+    <div class="row">
+        
+        <div class="col-12 col-md-3 mb-4 mb-md-0 features__feature">
+            <img src="images/features/cluster.svg" alt="In-house cluster">
+            <p class="features__feature-title">In-house cluster</p>
+            <p class="features__feature-description">Runs on any hardware <br/>and in the cloud</p>
+        </div>
+        
+        <div class="col-12 col-md-3 mb-4 mb-md-0 features__feature">
+            <img src="images/features/browsers.svg" alt="Unlimited browsers">
+            <p class="features__feature-title">Unlimited browsers</p>
+            <p class="features__feature-description">Run as many browsers <br/>as your cluster allows</p>
+        </div>
+        
+        <div class="col-12 col-md-3 mb-4 mb-md-0 features__feature">
+            <img src="images/features/openshift.svg" alt="Openshift supported">
+            <p class="features__feature-title">Openshift supported</p>
+            <p class="features__feature-description">Runs on top of Kubernetes or Openshift</p>
+        </div>
+        
+        <div class="col-12 col-md-3 mb-4 mb-md-0 features__feature">
+            <img src="images/features/pricing.svg" alt="Flexible pricing">
+            <p class="features__feature-title">Flexible pricing</p>
+            <p class="features__feature-description">$5 per parallel session <br/>per month</p>
+        </div>
+        
+    </div>
+</div>
+
+</div>
+<div class="container pricing">
+    <div class="row">
+        <div class="col">
+            <h2 class="pricing__title" id="pricing">Pricing</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-md-9">
+            <form id="range" class="pricing-range">
+                <div class="d-none d-sm-block pricing-range__range">
+                    <div class="pricing-range__range-line">
+                        <div class="lol"></div>
+                    </div>
+                </div>
+                <div class="pricing-range__config">
+                    <label class="d-flex justify-content-between align-items-center d-sm-none pricing-range__range-label">
+                        <span>Parallel sessions: </span>
+                        <span class="select-wrapper">
+                        <select name="range" class="select pricing-range__range-select"></select>
+                    </span>
+                    </label>
+                    <label class="d-flex justify-content-between align-items-center d-sm-inline pricing-range__duration-label">
+                        <span class="pricing-range__duration-label-text">Duration: </span>
+                        <span class="select-wrapper">
+                            <select name="duration" class="select pricing-range__duration"></select>
+                        </span>
+                    </label>
+                    <label class="d-flex justify-content-between align-items-center pricing-range__price-label">
+                        <span class="pricing-range__price-label-text">Your price:</span>
+                        <span class="pricing-range__toggle-container">
+                            <span class="pricing-range__odometer-container">
+                                <span class="pricing-range__price-label-currency">$</span><span id="price-odometer"></span>
+                            </span>
+                            <a href="mailto:support@aerokube.com" class="pricing-range__contact-us-container">Contact us</a>
+                        </span>
+                        <input id="price-input" type="hidden" name="price" value="0">
+                    </label>
+                </div>
+                <p>To buy a license key - contact us: <a href="mailto:sales@aerokube.com" title="Contact email">sales@aerokube.com</a></p>
+                
+                    
+                    
+                    
+                
+            </form>
+        </div>
+        <div class="col-12 col-md-3">
+            <ul class="browsers">
+    <li><img src="images/browsers/firefox.svg" alt="firefox"></li>
+    <li><img src="images/browsers/chrome.svg" alt="chrome"></li>
+    <li><img src="images/browsers/opera.svg" alt="opera"></li>
+    <li><img src="images/browsers/edge.svg" alt="edge"></li>
+    <li><img src="images/browsers/ie.svg" alt="ie"></li>
+    <li><img src="images/browsers/android.svg" alt="android"></li>
+</ul>
+
+        </div>
+    </div>
+</div>
+
+<div class="container articles">
+    <div class="row">
+        <div class="col">
+            <h2 id="articles">Articles</h2>
+        </div>
+    </div>
+    <div class="row articles__content">
+        <div class="col-12">
+            <div class="row articles__articles">
+                
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="articles__article">
+                        <a href="https://medium.com/@aandryashin/selenium-done-in-60-seconds-176796f8bdc7"><h3 class="articles__article-title">Selenium: Back to the Moon</h3></a>
+                        <p class="articles__article-description">
+                            In this article we provide motivation for creating Moon and demonstrate first features.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="articles__article">
+                        <a href="https://medium.com/@aandryashin/selenium-on-windows-docker-revolution-f5a7eab205ad"><h3 class="articles__article-title">Selenium: Exploring the Moon</h3></a>
+                        <p class="articles__article-description">
+                            This article describes Moon architecture, why it is stateless and some  advanced stuff.
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+  <footer class="footer">
+    <div class="container">
+        <div class="row">
+            <nav class="col-12 col-md footer__left">
+                <ul>
+                    
+                    <li><a href="https://aerokube.com/">Aerokube</a></li>
+                    
+                    <li><a href="https://browsers.aerokube.com/">Browsers</a></li>
+                    
+                    <li><a href="https://aerokube.com/moon/">Moon</a></li>
+                    
+                    <li><a href="https://aerokube.com/selenoid/">Selenoid</a></li>
+                    
+                </ul>
+            </nav>
+            <nav class="col-12 col-md footer__right">
+                <ul>
+                    
+                    <li><a href="https://aerokube.com/moon/latest">Docs</a></li>
+                    
+                    <li><a href="https://github.com/aerokube/moon">Github</a></li>
+                    
+                    <li><a href="https://t.me/aerokube_moon">Telegram</a></li>
+                    
+                    <li><a href="https://twitter.com/aerokube">Twitter</a></li>
+                    
+                    <li><a href="https://www.youtube.com/channel/UC9HvE3FNfTvftzpvXi9c69g">Youtube</a></li>
+                    
+                    <li><a href="mailto:support@aerokube.com">Mail us</a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col footer__separator"></div>
+        </div>
+        <div class="row footer__bottom align-items-center">
+            <div class="col-12 col-md-auto footer__copyright">© 2019 Aerokube Software</div>
+            <div class="col-12 col-md footer__terms">
+                
+                
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+  
+  
+    <script src="/moon/main.38b2c.js"></script>
+  
+</body>
+
+</html>
