@@ -525,26 +525,31 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-10-21</span>
+<span id="revdate">2019-10-22</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_getting_started">1. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#_quick_start_guide">1.1. Quick Start Guide</a></li>
-<li><a href="#_frequently_asked_questions">1.2. Frequently Asked Questions</a>
+<li><a href="#_quick_start_guide">1.1. Quick Start Guide</a>
 <ul class="sectlevel3">
-<li><a href="#_where_are_moon_logs">1.2.1. Where are Moon logs?</a></li>
-<li><a href="#_where_are_recorded_videos_stored">1.2.2. Where are recorded videos stored?</a></li>
-<li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">1.2.3. How to update configuration of a running Moon cluster?</a></li>
-<li><a href="#_connection_was_closed_unexpectedly">1.2.4. Connection was closed unexpectedly</a></li>
-<li><a href="#_browser_pods_are_freezing">1.2.5. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.2.6. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.2.7. DNS lookup timeouts</a></li>
+<li><a href="#_installing_to_kubernetes">1.1.1. Installing to Kubernetes</a></li>
+<li><a href="#_installing_to_openshift">1.1.2. Installing to Openshift</a></li>
 </ul>
 </li>
-<li><a href="#_installing_to_openshift">1.3. Installing to Openshift</a></li>
+<li><a href="#_recommended_cluster_settings">1.2. Recommended Cluster Settings</a></li>
+<li><a href="#_frequently_asked_questions">1.3. Frequently Asked Questions</a>
+<ul class="sectlevel3">
+<li><a href="#_where_are_moon_logs">1.3.1. Where are Moon logs?</a></li>
+<li><a href="#_where_are_recorded_videos_stored">1.3.2. Where are recorded videos stored?</a></li>
+<li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">1.3.3. How to update configuration of a running Moon cluster?</a></li>
+<li><a href="#_connection_was_closed_unexpectedly">1.3.4. Connection was closed unexpectedly</a></li>
+<li><a href="#_browser_pods_are_freezing">1.3.5. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.3.6. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.3.7. DNS lookup timeouts</a></li>
+</ul>
+</li>
 <li><a href="#_required_permissions">1.4. Required Permissions</a></li>
 <li><a href="#_cluster_architecture">1.5. Cluster Architecture</a></li>
 <li><a href="#_moon_vs_selenoid">1.6. Moon vs Selenoid</a></li>
@@ -629,6 +634,8 @@ table.CodeRay td.code>pre{padding:0}
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_quick_start_guide"><a class="anchor" href="#_quick_start_guide"></a>1.1. Quick Start Guide</h3>
+<div class="sect3">
+<h4 id="_installing_to_kubernetes"><a class="anchor" href="#_installing_to_kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -763,22 +770,101 @@ When running your tests for the first time for every browser version Kubernetes 
 </ol>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.2. Frequently Asked Questions</h3>
 <div class="sect3">
-<h4 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>1.2.1. Where are Moon logs?</h4>
+<h4 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.1.2. Installing to Openshift</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Prerequisites:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Running <a href="https://www.openshift.com/">Openshift</a> cluster</p>
+</li>
+<li>
+<p><code>oc</code> client installed and pointing to the cluster</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Clone an example configuration repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add <code>edit</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc policy add-role-to-user edit system:serviceaccount:moon:default</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we assume that Openshift project for Moon is called <code>moon</code>.</p>
+</div>
+</li>
+<li>
+<p>Start Moon with Openshift UI or <code>oc</code> client using <code>moon-openshift.yaml</code> file:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc create -f moon-openshift.yaml -n moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run Selenium tests against <code>moon</code> service listening on port <code>4444</code>:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://&lt;moon-ip-or-hostname&gt;:4444/wd/hub</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recommended_cluster_settings"><a class="anchor" href="#_recommended_cluster_settings"></a>1.2. Recommended Cluster Settings</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Use the biggest possible cluster node sizes</strong>. For example having 100 CPUs overall it is better to launch 5 nodes with 20 CPUs each than 50 nodes with 2 CPUs each. Browser pods can in some cases require more than 2 CPUs and this can lead to preliminary cluster fragmentation.</p>
+</li>
+<li>
+<p><strong>Avoid cluster nodes with RedHat \ CentOS if possible.</strong> Nodes using these distributions are known to suffer from issues related to firewall \ SeLinux and can be more complicated to configure correctly.</p>
+</li>
+<li>
+<p><strong>Use Calico container network interface instead of Flannel if possible</strong>. Calico has better performance than Flannel especially on big clusters.</p>
+</li>
+<li>
+<p><strong>Turn off DNS cache at least for Moon namespace</strong>. Being a completely stateless solution, Moon significantly depends on cluster DNS stability. One of the known Kubernetes issues is occasional DNS inconsistency - when one browser pods are not accessible using domain name (it does not resolve). Such inconsistency can lead to frozen browser pods and cluster exhaustion. Possible way to turn off DNS cache is described in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+</li>
+<li>
+<p><strong>Use more than 1 Kubernetes API replica if needed</strong>. Moon is using Kubernetes API to create and delete browser pods. If you plan to run hundreds of browsers in parallel - take a look at Kubernetes API (Kubernetes master) host system metrics. Overloaded master can stop responding to requests properly and this can lead to frozen browser pods.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.3. Frequently Asked Questions</h3>
+<div class="sect3">
+<h4 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>1.3.1. Where are Moon logs?</h4>
 <div class="paragraph">
 <p>See <a href="#_log_files">Log Files</a> section.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>1.2.2. Where are recorded videos stored?</h4>
+<h4 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>1.3.2. Where are recorded videos stored?</h4>
 <div class="paragraph">
 <p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_how_to_update_configuration_of_a_running_moon_cluster"><a class="anchor" href="#_how_to_update_configuration_of_a_running_moon_cluster"></a>1.2.3. How to update configuration of a running Moon cluster?</h4>
+<h4 id="_how_to_update_configuration_of_a_running_moon_cluster"><a class="anchor" href="#_how_to_update_configuration_of_a_running_moon_cluster"></a>1.3.3. How to update configuration of a running Moon cluster?</h4>
 <div class="paragraph">
 <p>Just update respective config maps (<code>config</code>, <code>quota</code>) or secrets (<code>users</code>, <code>credentials</code>) with standard Kubernetes commands (<code>kubectl edit</code> or <code>kubectl replace</code>). For example:</p>
 </div>
@@ -795,7 +881,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.2.4. Connection was closed unexpectedly</h4>
+<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.4. Connection was closed unexpectedly</h4>
 <div class="paragraph">
 <p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
 </div>
@@ -815,7 +901,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.2.5. Browser pods are freezing</h4>
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.5. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes DNS server settings. Current fix is to turn off DNS caching. To do this:</p>
 </div>
@@ -877,7 +963,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.2.6. No space left on device</h4>
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.6. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -896,7 +982,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.2.7. DNS lookup timeouts</h4>
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.7. DNS lookup timeouts</h4>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -913,62 +999,6 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 <pre class="CodeRay highlight"><code>$ sysctl net.bridge.bridge-nf-call-iptables=1</code></pre>
 </div>
 </div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.3. Installing to Openshift</h3>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Prerequisites:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Running <a href="https://www.openshift.com/">Openshift</a> cluster</p>
-</li>
-<li>
-<p><code>oc</code> client installed and pointing to the cluster</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Clone an example configuration repository:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ git clone https://github.com/aerokube/moon-deploy.git
-$ cd moon-deploy</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Add <code>edit</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ oc policy add-role-to-user edit system:serviceaccount:moon:default</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here we assume that Openshift project for Moon is called <code>moon</code>.</p>
-</div>
-</li>
-<li>
-<p>Start Moon with Openshift UI or <code>oc</code> client using <code>moon-openshift.yaml</code> file:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ oc create -f moon-openshift.yaml -n moon</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run Selenium tests against <code>moon</code> service listening on port <code>4444</code>:</p>
-<div class="literalblock">
-<div class="content">
-<pre>http://&lt;moon-ip-or-hostname&gt;:4444/wd/hub</pre>
-</div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect2">
@@ -3676,7 +3706,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-10-21 17:59:37 UTC
+Last updated 2019-10-22 06:27:51 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
