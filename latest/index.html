@@ -5,9 +5,10 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.6.1">
+<meta name="description" content="A Selenium testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
 <meta name="author" content="Aerokube Software OÜ">
 <link rel="shortcut icon" type="image/png" href="img/favicon.png">
-<title>Moon</title>
+<title>Moon - A cross browser Selenium solution for Kubernetes or Openshift cluster</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -518,6 +519,14 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
+<base href="https://aerokube.com/moon/latest">
+<meta property="og:image:height" content="1106">
+<meta property="og:image:width" content="2113">
+<meta property="og:title" content="Aerokube Moon | A cross browser Selenium solution for Kubernetes or Openshift cluster">
+<meta property="og:description" content="Live and automated cross browser Selenium testing in Kubernetes or Openshift cluster">
+<meta property="og:url" content="https://aerokube.com/moon/latest">
+<meta property="og:image" content="/img/og-image.jpg">
+<meta name="twitter:site" content="@aerokube">
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
@@ -525,7 +534,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-10-22</span>
+<span id="revdate">2019-10-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -625,7 +634,7 @@ table.CodeRay td.code>pre{padding:0}
 <p>This reference for version: <em>latest</em></p>
 </div>
 <div class="paragraph">
-<p>Moon is an enterprise version of <a href="http://github.com/aerokube/selenoid">Selenoid</a> using <a href="https://kubernetes.io/">Kubernetes</a> to launch browsers.</p>
+<p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium Webdriver</a> protocol and using <a href="https://kubernetes.io/">Kubernetes</a> to launch browsers.</p>
 </div>
 </div>
 </div>
@@ -841,7 +850,7 @@ $ cd moon-deploy</pre>
 <p><strong>Use Calico container network interface instead of Flannel if possible</strong>. Calico has better performance than Flannel especially on big clusters.</p>
 </li>
 <li>
-<p><strong>Turn off DNS cache at least for Moon namespace</strong>. Being a completely stateless solution, Moon significantly depends on cluster DNS stability. One of the known Kubernetes issues is occasional DNS inconsistency - when one browser pods are not accessible using domain name (it does not resolve). Such inconsistency can lead to frozen browser pods and cluster exhaustion. Possible way to turn off DNS cache is described in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+<p><strong>Turn off DNS cache at least for Moon namespace</strong>. Being a completely stateless solution, Moon significantly depends on cluster DNS stability. One of the known Kubernetes issues is occasional DNS inconsistency - when somew browser pods are not accessible using domain name (it does not resolve). Such inconsistency can lead to frozen browser pods and cluster exhaustion. Possible way to turn off DNS cache is described in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
 </li>
 <li>
 <p><strong>Use more than 1 Kubernetes API replica if needed</strong>. Moon is using Kubernetes API to create and delete browser pods. If you plan to run hundreds of browsers in parallel - take a look at Kubernetes API (Kubernetes master) host system metrics. Overloaded master can stop responding to requests properly and this can lead to frozen browser pods.</p>
@@ -3706,7 +3715,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-10-22 06:27:51 UTC
+Last updated 2019-10-25 03:47:23 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
