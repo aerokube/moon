@@ -519,7 +519,7 @@ table.CodeRay td.code>pre{padding:0}
 .CodeRay .change .change{color:#66f}
 .CodeRay .head .head{color:#f4f}
 </style>
-<base href="https://aerokube.com/moon/latest">
+<base href="https://aerokube.com/moon/latest/">
 <meta property="og:image:height" content="1106">
 <meta property="og:image:width" content="2113">
 <meta property="og:title" content="Aerokube Moon | A cross browser Selenium solution for Kubernetes or Openshift cluster">
@@ -534,7 +534,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-10-25</span>
+<span id="revdate">2019-10-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -624,6 +624,12 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_license_agreement">4. License Agreement</a></li>
 <li><a href="#_pricing">5. Pricing</a></li>
+<li><a href="#_cloud_platforms">Appendix A: Cloud Platforms</a>
+<ul class="sectlevel2">
+<li><a href="#_digitalocean">A.1. DigitalOcean</a></li>
+<li><a href="#_google_cloud">A.2. Google Cloud</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -645,6 +651,8 @@ table.CodeRay td.code>pre{padding:0}
 <h3 id="_quick_start_guide"><a class="anchor" href="#_quick_start_guide"></a>1.1. Quick Start Guide</h3>
 <div class="sect3">
 <h4 id="_installing_to_kubernetes"><a class="anchor" href="#_installing_to_kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
+<div class="sect4">
+<h5 id="_option_1_you_have_a_running_kubernetes_cluster"><a class="anchor" href="#_option_1_you_have_a_running_kubernetes_cluster"></a>Option 1: you have a running Kubernetes cluster</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -777,6 +785,13 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_option_2_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_2_you_have_digitalocean_or_google_cloud"></a>Option 2: you have DigitalOcean or Google Cloud</h5>
+<div class="paragraph">
+<p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#_cloud_platforms">Cloud Platforms</a> section for more details.</p>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -3711,11 +3726,99 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_cloud_platforms"><a class="anchor" href="#_cloud_platforms"></a>Appendix A: Cloud Platforms</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Moon ready-to-use configurations are present in popular cloud platforms and can be run in a few clicks. This section contains step-by-step instructions on launching Moon in these platforms.</p>
+</div>
+<div class="sect2">
+<h3 id="_digitalocean"><a class="anchor" href="#_digitalocean"></a>A.1. DigitalOcean</h3>
+<div class="paragraph">
+<p>Moon can be run from <a href="https://marketplace.digitalocean.com/">DigitalOcean Marketplace</a> as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <a href="https://marketplace.digitalocean.com/apps/moon">Moon page</a>:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/digitalocean-marketplace-page.png" alt="digitalocean-marketplace"></span></p>
+</div>
+</li>
+<li>
+<p>Click on <strong>Create Moon</strong> button.</p>
+</li>
+<li>
+<p>Choose a data center region near you:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/digitalocean-cluster-datacenter.png" alt="digitalocean-cluster-datacenter"></span></p>
+</div>
+</li>
+<li>
+<p>Select a name for your cluster:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/digitalocean-cluster-name.png" alt="digitalocean-cluster-name"></span></p>
+</div>
+</li>
+<li>
+<p>Click on <strong>Create Cluster</strong> button.</p>
+</li>
+<li>
+<p>Wait for Kubernetes cluster to start. Follow instructions on the screen to configure access to cluster.</p>
+</li>
+<li>
+<p>Go to <strong>Manage &gt; Networking &gt; Load Balancers</strong> and find IP address of Moon load balancer:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/digitalocean-cluster-load-balancer.png" alt="digitalocean-cluster-load-balancer"></span></p>
+</div>
+</li>
+<li>
+<p>Moon user interface is available at <code><a href="http://&lt;load-balancer-ip-address&gt;:8080/" class="bare">http://&lt;load-balancer-ip-address&gt;:8080/</a></code>. Selenium tests should be run against <code><a href="http://&lt;load-balancer-ip-address&gt;:4444/wd/hub" class="bare">http://&lt;load-balancer-ip-address&gt;:4444/wd/hub</a></code>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_google_cloud"><a class="anchor" href="#_google_cloud"></a>A.2. Google Cloud</h3>
+<div class="paragraph">
+<p>Moon can be run from <a href="https://console.cloud.google.com/marketplace">Google Cloud Marketplace</a> as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Go to <a href="https://console.cloud.google.com/marketplace/details/aerokube/moon">Moon page</a> and click the <strong>Configure</strong> button:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/google-cloud-marketplace-page.png" alt="google-cloud-marketplace"></span></p>
+</div>
+</li>
+<li>
+<p>Select a zone near you for a new Kubernetes cluster to be created and click on <strong>Create cluster</strong> button:</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/google-cloud-cluster-settings.png" alt="google-cloud-cluster-settings"></span></p>
+</div>
+</li>
+<li>
+<p>Wait for cluster to be created and click on <strong>Deploy button</strong>.</p>
+</li>
+<li>
+<p>Wait for Moon to start (mainly you are waiting for the load balancer to initialize). You may need to refresh the page several times until correct URLs appear in <strong>Moon info</strong> section.</p>
+<div class="paragraph">
+<p><span class="image"><img src="img/google-cloud-app-details.png" alt="google-cloud-app-details"></span></p>
+</div>
+</li>
+<li>
+<p>Click on <strong>Moon UI access URL</strong> to open Moon user interface. Use <strong>Moon Selenium access URL</strong> in your tests.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-10-25 03:47:23 UTC
+Last updated 2019-10-27 14:56:38 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
