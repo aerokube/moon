@@ -525,7 +525,7 @@ table.CodeRay td.code>pre{padding:0}
 <meta property="og:title" content="Aerokube Moon | A cross browser Selenium solution for Kubernetes or Openshift cluster">
 <meta property="og:description" content="Live and automated cross browser Selenium testing in Kubernetes or Openshift cluster">
 <meta property="og:url" content="https://aerokube.com/moon/latest">
-<meta property="og:image" content="/img/og-image.jpg">
+<meta property="og:image" content="https://aerokube.com/moon/latest/img/og-image.jpg">
 <meta name="twitter:site" content="@aerokube">
 </head>
 <body class="article toc2 toc-left">
@@ -534,7 +534,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-10-27</span>
+<span id="revdate">2019-10-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -595,6 +595,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_using_node_selectors">2.6.6. Using Node Selectors</a></li>
 <li><a href="#_using_tolerations">2.6.7. Using Tolerations</a></li>
 <li><a href="#_using_custom_kubernetes_annotations">2.6.8. Using Custom Kubernetes Annotations</a></li>
+<li><a href="#_using_custom_kubernetes_labels">2.6.9. Using Custom Kubernetes Labels</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
@@ -1381,6 +1382,10 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
   <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="11"></i><b>(11)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="12"></i><b>(12)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="13"></i><b>(13)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="14"></i><b>(14)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
 </div>
@@ -1434,6 +1439,14 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>Custom pod annotation key and value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>Custom pod labels section (applies globally to all browser versions)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>Custom pod label key and value</td>
 </tr>
 </table>
 </div>
@@ -2265,7 +2278,7 @@ Flags and fields described in this section apply to browser container consumptio
 <p>To configure Kubernetes annotations for single desired browser version - just add the same <code>annotations</code> section to <a href="#_browsers_list">Browsers List</a> file as follows:</p>
 </div>
 <div class="listingblock">
-<div class="title">Adding Tolerations</div>
+<div class="title">Adding annotations to browser version</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="javascript">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
@@ -2294,7 +2307,7 @@ Flags and fields described in this section apply to browser container consumptio
 </table>
 </div>
 <div class="paragraph">
-<p>Moon adds some annotations by default and their names are reserved:</p>
+<p>Moon adds some annotations by default to browser pods and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 7. Moon Reserved Annotation Names</caption>
@@ -2316,6 +2329,118 @@ Flags and fields described in this section apply to browser container consumptio
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Custom time zone value passed in <code>timeZone</code> capability</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.6.9. Using Custom Kubernetes Labels</h4>
+<div class="paragraph">
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. Moon allows to configure custom labels globally or individually for every browser version. Similarly to annotations global labels are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding global labels to <code>service.json</code> file</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
+    <span class="comment">//...</span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {           <i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of global Kubernetes labels</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To configure Kubernetes labels for single desired browser version - just add the same <code>labels</code> section to <a href="#_browsers_list">Browsers List</a> file as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding labels to browser version</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">77.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">77.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/chrome:77.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {                           <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+        }
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>A list of Kubernetes labels for this browser version</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon adds some labels by default to browser pods and their names are reserved:</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 8. Moon Reserved Label Names</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Key</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores unique name for every pod</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">browserName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores <code>browserName</code> capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores <code>enableVideo</code> capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVNC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores <code>enableVNC</code> capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System label, always equal to <code>browsers</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quota</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores user quota name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores screen resolution requested by user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">version</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores <code>version</code> or <code>browserVersion</code> capability value</p></td>
 </tr>
 </tbody>
 </table>
@@ -2357,7 +2482,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 8. Log entry contents</caption>
+<caption class="title">Table 9. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2397,7 +2522,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 9. Log entry statuses</caption>
+<caption class="title">Table 10. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2412,6 +2537,10 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AWAITING_SERVICE</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Waiting for Kubernetes service to start</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BAD_LABEL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Wrong pod label is requested</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_REQUEST</p></td>
@@ -2742,7 +2871,7 @@ You should manually resize window to desired width and height or use Selenium <c
 <p>When testing for Android platform you can select emulator skin with capabilities. List of available skins:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 10. Available Android Skins</caption>
+<caption class="title">Table 11. Available Android Skins</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3113,7 +3242,7 @@ some-clipboard-value</code></pre>
 <p>Here <code>&lt;method&gt;</code> is one of the following:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 11. Supported Developer Tools Methods</caption>
+<caption class="title">Table 12. Supported Developer Tools Methods</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3639,7 +3768,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <li>
 <p>For simplicity we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 12. Moon License Pricing</caption>
+<caption class="title">Table 13. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3818,7 +3947,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-10-27 14:56:38 UTC
+Last updated 2019-10-29 17:32:05 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
