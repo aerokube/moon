@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2019-12-27</span>
+<span id="revdate">2020-01-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2842,6 +2842,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     disable cpu limits for pods
 -disable-memory-limits
     disable memory limits for pods
+-domain-name string
+    browsers service domain name (default &quot;browsers&quot;)
 -grace-period duration
     graceful shutdown (default 30s)
 -guest-user string
@@ -2854,6 +2856,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     browser container memory limit (default &quot;1Gi&quot;)
 -memory-request string
     browser container memory request (default &quot;512Mi&quot;)
+-moon-url string
+    moon service url (default &quot;http://moon:4444/wd/hub&quot;)
 -namespace string
     namespace
 -quota-dir string
@@ -4028,7 +4032,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2019-12-27 06:50:50 UTC
+Last updated 2020-01-27 12:32:51 UTC
 </div>
 </div>
 <style>
