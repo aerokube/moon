@@ -523,6 +523,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_using_custom_kubernetes_annotations">2.6.8. Using Custom Kubernetes Annotations</a></li>
 <li><a href="#_using_custom_kubernetes_labels">2.6.9. Using Custom Kubernetes Labels</a></li>
 <li><a href="#_using_custom_linux_kernel_capabilities">2.6.10. Using Custom Linux Kernel Capabilities</a></li>
+<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.6.11. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
@@ -2477,7 +2478,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <div class="sect3">
 <h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.6.10. Using Custom Linux Kernel Capabilities</h4>
 <div class="paragraph">
-<p>By default Moon starts all browser pods with <code>SYS_ADMIN</code> <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capability</a>. In some cases you may need to set custom Linux capabilities to started browser pods. Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+<p>By default Moon starts all browser pods without any explicit <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capabilities</a>. In some cases you may need to set custom Linux capabilities to started browser pods (e.g. <code>SYS_ADMIN</code>). Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding global Linux capabilities to <code>service.json</code> file</div>
@@ -2501,14 +2502,43 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </tr>
 </table>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.6.11. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
-<p>In some restricted environments you may need to completely turn off Linux capabilities. To do this - pass an empty <code>kernelCaps</code> value as follows:</p>
+<p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_browsers_list">Browsers List</a> file:</p>
 </div>
 <div class="listingblock">
-<div class="title">Turning off Linux capabilities</div>
+<div class="title">Setting customer user and group identifier</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">&quot;</span><span class="content">kernelCaps</span><span class="delimiter">&quot;</span></span>: []</code></pre>
+<pre class="CodeRay highlight"><code data-lang="javascript">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">80.0</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">80.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/chrome:80.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">runAs</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>: <span class="integer">1000</span>,                  <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">group</span><span class="delimiter">&quot;</span></span>: <span class="integer">2000</span>                  <i class="conum" data-value="2"></i><b>(2)</b>
+        }
+      }
+    }
+  }
+}</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Custom user identifier (UID)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Custom group identifier (GID)</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -4032,7 +4062,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-03-29 13:38:31 UTC
+Last updated 2020-03-29 17:18:09 UTC
 </div>
 </div>
 <style>
