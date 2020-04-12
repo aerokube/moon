@@ -550,6 +550,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#_accessing_clipboard">3.3. Accessing Clipboard</a></li>
 <li><a href="#_accessing_browser_developer_tools">3.4. Accessing Browser Developer Tools</a></li>
+<li><a href="#_changing_browser_locale">3.5. Changing Browser Locale</a>
+<ul class="sectlevel3">
+<li><a href="#_firefox">3.5.1. Firefox</a></li>
+<li><a href="#_chromium_based_browsers">3.5.2. Chromium-based Browsers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_license_agreement">4. License Agreement</a></li>
@@ -2626,8 +2632,8 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AWAITING_SERVICE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Waiting for Kubernetes service to start</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWAITING_DRIVER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waiting for webdriver binary to start</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">BAD_LABEL</p></td>
@@ -2670,16 +2676,8 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Starting to create pod with browser</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">CREATING_SERVICE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to create service for browser session</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_POD</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Starting to delete pod with browser</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_SERVICE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Starting to delete service for browser session</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">DELETING_SESSION</p></td>
@@ -2694,16 +2692,8 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create browser pod</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_CREATE_SERVICE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create browser service</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_POD</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Failed to delete browser pod</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_SERVICE</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to delete browser service</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">FAILED_TO_DELETE_SESSION</p></td>
@@ -2754,16 +2744,8 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Failed to create pod or service due to internal server error (probably a bug)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_CREATED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service created</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_DELETED</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service deleted</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">SERVICE_IS_UP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Browser service successfully started</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DRIVER_IS_UP</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Webdriver binary successfully started</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">SESSION_CREATED</p></td>
@@ -2800,6 +2782,10 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">STATUS_REQUEST_ERROR</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Failed to return Moon status</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">STOP_AWAITING_DRIVER</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stopped waiting for webdriver binary to start</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">UNSUPPORTED_BROWSER</p></td>
@@ -3431,6 +3417,36 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.5. Changing Browser Locale</h3>
+<div class="paragraph">
+<p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
+</div>
+<div class="sect3">
+<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.5.1. Firefox</h4>
+<div class="listingblock">
+<div class="title">Overriding Browser Locale in Firefox</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">FirefoxOptions options = <span class="keyword">new</span> FirefoxOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">75.0</span><span class="delimiter">&quot;</span></span>);
+options.addPreference(<span class="string"><span class="delimiter">&quot;</span><span class="content">intl.accept_languages</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">de</span><span class="delimiter">&quot;</span></span>);
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://moon.example.com:4444/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.5.2. Chromium-based Browsers</h4>
+<div class="listingblock">
+<div class="title">Overriding Browser Locale in Chromium-base Browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">81.0</span><span class="delimiter">&quot;</span></span>);
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANGUAGE=at:de</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LC_ALL=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>));
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://moon.example.com:4444/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -4057,7 +4073,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-04-12 14:13:15 UTC
+Last updated 2020-04-12 16:28:12 UTC
 </div>
 </div>
 <style>
