@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-04-12</span>
+<span id="revdate">2020-04-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1691,6 +1691,8 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.6. Advanced Configuration</h3>
 <div class="sect3">
 <h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.6.1. Uploading Files to S3</h4>
+<div class="sect4">
+<h5 id="_how_to_configure_s3_support"><a class="anchor" href="#_how_to_configure_s3_support"></a>How to Configure S3 Support</h5>
 <div class="paragraph">
 <p>You can configure Moon to send sessions logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a>-compatible storage. Such type of storage is supported by <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://azure.microsoft.com/">Microsoft Azure</a>, <a href="https://digitalocean.com/">Digital Ocean</a> and many other cloud providers. To deploy a private S3-compatible storage you can use <a href="https://minio.io/">Minio</a>. To enable S3 support in Moon:</p>
 </div>
@@ -1713,6 +1715,52 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 }</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>You can create an S3-compatible bucket in the majority of public cloud platforms. How to configure Moon with these platforms in shown in the table below:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. S3 settings for popular cloud platforms</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Platform Name</th>
+<th class="tableblock halign-left valign-top">Service Name</th>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Signature Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS S3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Depends on region, e.g. <code><a href="https://s3.us-east-2.amazonaws.com" class="bare">https://s3.us-east-2.amazonaws.com</a></code>. See AWS <a href="https://docs.aws.amazon.com/general/latest/gr/s3.html">documentation</a> for detailed list of endpoints.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DigitalOcean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DigitalOcean Spaces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Depends on region, e.g. <code><a href="https://nyc3.digitaloceanspaces.com" class="bare">https://nyc3.digitaloceanspaces.com</a></code>. See <a href="https://www.digitalocean.com/docs/spaces/">documentation</a> for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Cloud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Cloud Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://storage.googleapis.com" class="bare">https://storage.googleapis.com</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Azure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Azure Blob Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No built-in S3 support. Need to deploy additional software like <a href="https://az.minio.io/">Minio</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
 <p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
@@ -1734,7 +1782,16 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </li>
 <li>
+<p>When you update already mounted config map with <code>service.json</code> or a <code>credentials secret</code> - settings are applied immediately without Moon restart.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_custom_s3_layout"><a class="anchor" href="#_custom_s3_layout"></a>Custom S3 Layout</h5>
+<div class="paragraph">
 <p>By default files are uploaded to S3 bucket as follows:</p>
+</div>
 <div class="listingblock">
 <div class="title">Default S3 bucket layout</div>
 <div class="content">
@@ -1757,7 +1814,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Here every placeholder such as <code>$quota</code>, <code>$browserName</code>, <code>$browserVersion</code> and so on will be replaced by corresponding information: user name, browser name, browser version. The resulting S3 key will be used as a directory to save log and video files. A list of supported placeholders is shown in the table below:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. S3 Key Placeholders</caption>
+<caption class="title">Table 5. S3 Key Placeholders</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1836,11 +1893,6 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 <div class="paragraph">
 <p>To define S3 key pattern for every browser session independently - use <code>s3KeyPattern</code> capability described in <a href="#_special_capabilities">Special Capabilities</a> section.</p>
 </div>
-</li>
-<li>
-<p>When you update a config map with <code>service.json</code> or a <code>credentials secret</code> - settings are applied immediately without Moon restart.</p>
-</li>
-</ol>
 </div>
 </div>
 <div class="sect3">
@@ -1949,7 +2001,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Available Timeout Flags</caption>
+<caption class="title">Table 6. Available Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1988,7 +2040,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following flags:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Resources Consumption Flags</caption>
+<caption class="title">Table 7. Resources Consumption Flags</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2090,7 +2142,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>In some installations you may also want to completely disable CPU or memory limits for all browsers pods. This can be achieved with one of the following flags:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Disabling Memory and CPU limits</caption>
+<caption class="title">Table 8. Disabling Memory and CPU limits</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2119,7 +2171,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>By default service images have the following resources requirements:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Service Images Default Resources Limits</caption>
+<caption class="title">Table 9. Service Images Default Resources Limits</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2144,7 +2196,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <td class="tableblock halign-left valign-top"><p class="tableblock">128Mi</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">video-recorder</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoRecorder</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1024Mi</p></td>
 </tr>
@@ -2166,6 +2218,22 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
   }
 }</code></pre>
 </div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_pods_quality_of_service"><a class="anchor" href="#_pods_quality_of_service"></a>Pods Quality of Service</h5>
+<div class="paragraph">
+<p>Browser automation stability and speed highly depends on how many computing resources are actually available to browser pods. Kubernetes has so-called <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service (QoS)</a> defining how many resources are assigned to pods being started. For stable browser automation we recommend always setting <code>Guaranteed</code> QoS class to Moon browser pods. To deliver this you have to make sure that <code>requests</code> and <code>limits</code> values for CPU and memory have equal values:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Moon automatically sets <code>requests</code> equal to <code>limits</code> for service images like <code>defender</code>, <code>logger</code> and <code>videoRecorder</code>. This is why there is no separate <code>requests</code> and <code>limits</code> setting in <code>service.json</code> configuration file.</p>
+</li>
+<li>
+<p>For browser containers you can override <code>requests</code> and <code>limits</code> independently as shown above. Anyway we also recommend setting them to equal values. Only this way you will be sure that browsers are always getting the same computing resources. Otherwise you may encounter randomly failing browser tests caused by insufficient computing resources assigned to some browser pods.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2341,7 +2409,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Moon adds some annotations by default to browser pods and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. Moon Reserved Annotation Names</caption>
+<caption class="title">Table 10. Moon Reserved Annotation Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2429,7 +2497,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Moon adds some labels by default to browser pods and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Moon Reserved Label Names</caption>
+<caption class="title">Table 11. Moon Reserved Label Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2579,7 +2647,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>Every log line contains:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Log entry contents</caption>
+<caption class="title">Table 12. Log entry contents</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -2619,7 +2687,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 <p>The following statuses are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Log entry statuses</caption>
+<caption class="title">Table 13. Log entry statuses</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2952,7 +3020,7 @@ You should manually resize window to desired width and height or use Selenium <c
 <p>When testing for Android platform you can select emulator skin with capabilities. List of available skins:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. Available Android Skins</caption>
+<caption class="title">Table 14. Available Android Skins</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3338,7 +3406,7 @@ some-clipboard-value</code></pre>
 <p>Here <code>&lt;method&gt;</code> is one of the following:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Supported Developer Tools Methods</caption>
+<caption class="title">Table 15. Supported Developer Tools Methods</caption>
 <colgroup>
 <col style="width: 33.3333%;">
 <col style="width: 33.3333%;">
@@ -3894,7 +3962,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <li>
 <p>For simplicity we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Moon License Pricing</caption>
+<caption class="title">Table 16. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4073,7 +4141,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-04-12 16:28:12 UTC
+Last updated 2020-04-13 13:36:42 UTC
 </div>
 </div>
 <style>
