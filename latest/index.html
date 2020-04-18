@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-04-17</span>
+<span id="revdate">2020-04-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -526,7 +526,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_using_custom_kubernetes_annotations">2.6.8. Using Custom Kubernetes Annotations</a></li>
 <li><a href="#_using_custom_kubernetes_labels">2.6.9. Using Custom Kubernetes Labels</a></li>
 <li><a href="#_using_custom_linux_kernel_capabilities">2.6.10. Using Custom Linux Kernel Capabilities</a></li>
-<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.6.11. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#_using_custom_service_account">2.6.11. Using Custom Service Account</a></li>
+<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.6.12. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
@@ -2673,7 +2674,89 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.6.11. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.6.11. Using Custom Service Account</h4>
+<div class="paragraph">
+<p>By default Moon is using service account named <code>default</code> to access Kubernetes API. In some cases you only have permissions for another service account, e.g. named <code>moon</code>. To use this service account with Moon you need to change deployment as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Optionally create a service account as follows:</p>
+<div class="listingblock">
+<div class="title">Creating custom service account</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ServiceAccount</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">custom-moon-service-account</span></span> <span class="comment"># &lt;== Insert desired service account name</span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Make sure you have respective Kubernetes <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole">Role</a> and <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding">RoleBinding</a> for desired service account:</p>
+<div class="listingblock">
+<div class="title">Assigning roles to custom service account</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Role</span></span>
+<span class="key">metadata</span>:
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">rules</span>:
+- <span class="string"><span class="content">apiGroups:</span></span>
+  - <span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span>
+  <span class="key">resources</span>:
+  - <span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span>
+  <span class="key">verbs</span>:
+  - <span class="string"><span class="delimiter">&quot;</span><span class="content">*</span><span class="delimiter">&quot;</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">RoleBinding</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">roleRef</span>:
+  <span class="key">kind</span>: <span class="string"><span class="content">Role</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">apiGroup</span>: <span class="string"><span class="content">rbac.authorization.k8s.io</span></span>
+<span class="key">subjects</span>:
+- <span class="string"><span class="content">kind: ServiceAccount</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">custom-moon-service-account</span></span> <span class="comment"># &lt;== Insert name of service account to assign roles</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use your custom service account when deploying Moon pods:</p>
+<div class="listingblock">
+<div class="title">Using custom service account for Mood pods</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+    <span class="comment"># ... deployment metadata definition</span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">2</span></span>
+  <span class="key">selector</span>:
+    <span class="comment"># ... selector definition</span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+        <span class="comment"># ... spec metadata definition</span>
+    <span class="key">spec</span>:
+      <span class="key">serviceAccountName</span>: <span class="string"><span class="content">custom-moon-service-account</span></span> <span class="comment"># &lt;== Insert name of service account here</span>
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon:1.4.1</span></span>
+    <span class="comment"># ... the rest of spec</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.6.12. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_browsers_list">Browsers List</a> file:</p>
 </div>
@@ -4241,7 +4324,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-04-17 09:22:25 UTC
+Last updated 2020-04-18 12:26:41 UTC
 </div>
 </div>
 <style>
