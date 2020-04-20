@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-04-18</span>
+<span id="revdate">2020-04-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -505,6 +505,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_per_user_browser_lists">2.2.1. Per-user Browser Lists</a></li>
 <li><a href="#_guest_quota">2.2.2. Guest Quota</a></li>
 <li><a href="#_updating_browsers_list">2.2.3. Updating Browsers List</a></li>
+<li><a href="#_using_external_selenium">2.2.4. Using External Selenium</a></li>
 </ul>
 </li>
 <li><a href="#_configuration_file">2.3. Configuration File</a></li>
@@ -665,6 +666,7 @@ $ cd moon-deploy</pre>
 <div class="content">
 <pre>$ kubectl get svc -n moon
 NAME      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
+browsers  ClusterIP      None            &lt;none&gt;        &lt;none&gt;                          51s
 moon      LoadBalancer   10.63.242.109   &lt;pending&gt;     4444:31894/TCP,8080:30625/TCP   17s</pre>
 </div>
 </div>
@@ -675,6 +677,7 @@ moon      LoadBalancer   10.63.242.109   &lt;pending&gt;     4444:31894/TCP,8080
 <div class="content">
 <pre>$ kubectl get svc -n moon
 NAME      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
+browsers  ClusterIP      None            &lt;none&gt;           &lt;none&gt;                          51s
 moon      LoadBalancer   10.63.242.109   104.154.161.58   4444:31894/TCP,8080:30625/TCP   1m</pre>
 </div>
 </div>
@@ -1427,6 +1430,96 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Changes are applied immediately without Moon restart. All running user sessions will continue to work without any interruption.</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_using_external_selenium"><a class="anchor" href="#_using_external_selenium"></a>2.2.4. Using External Selenium</h4>
+<div class="paragraph">
+<p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Running Selenium tests on some complicated platforms such as MacOS or iOS. According to license agreement these platforms require Apple hardware devices and it is complicated to run Kubernetes on top of these devices.</p>
+</li>
+<li>
+<p>Using Selenium online platforms (e.g. <a href="https://browsers.aerokube.com/">Aerokube Browsers</a>) for some browsers. In that case you can run the majority of browsers (e.g. Firefox, Chrome, Opera) in Moon and complicated browsers (don&#8217;t work on standard virtual machines) such as Chrome Mobile in external Selenium platform.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_using_external_hosts"><a class="anchor" href="#_using_external_hosts"></a>Using External Hosts</h5>
+<div class="paragraph">
+<p>For this case you should have the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A set of hosts with Selenium-compatible solution (Selenoid, Appium, Selenium Grid, etc.): <code>host1.example.com:4444</code>, <code>host1.example.com:4444</code> and so on.</p>
+</li>
+<li>
+<p>A <a href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">VNC</a> server listening on every such host on standard port <code>5900</code>.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Every VNC server should be password protected with the same password having 8+ characters.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For every browser version supported on the hosts you need to add the following to browsers list file:</p>
+</div>
+<div class="listingblock">
+<div class="title">Typical Browsers List File</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">&quot;</span><span class="content">safari</span><span class="delimiter">&quot;</span></span>: {
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">77</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/moon-external-host:1.0.0</span><span class="delimiter">&quot;</span></span>,                                         <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[</span><span class="char">\&quot;</span><span class="content">http://host1.example.com:4444/</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">http://host2.example.com:4444/</span><span class="char">\&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>,    <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span>, <span class="comment">// At least 8 symbols                                 </span><i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">SCREEN_RESOLUTION=1921x1080x24</span><span class="delimiter">&quot;</span></span> <span class="comment">// This is optional                                </span><i class="conum" data-value="4"></i><b>(4)</b>
+      ]
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Special proxy image for external hosts</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>A list of external hosts</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>VNC password value for the hosts</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><em>Optional.</em> Screen resolution of remote host to use for VNC.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>With such configuration Selenium session requests with be randomly load-balanced across the hosts specified in <code>URLS</code> environment variable. VNC feature should also work - you should be seeing remote host screen in Moon UI.</p>
+</div>
 </div>
 </div>
 </div>
@@ -4324,7 +4417,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-04-18 12:26:41 UTC
+Last updated 2020-04-20 10:32:57 UTC
 </div>
 </div>
 <style>
