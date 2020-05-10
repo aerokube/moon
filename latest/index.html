@@ -516,28 +516,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_how_licenses_work">2.5.1. How Licenses Work</a></li>
 </ul>
 </li>
-<li><a href="#_advanced_configuration">2.6. Advanced Configuration</a>
+<li><a href="#_monitoring">2.6. Monitoring</a></li>
+<li><a href="#_advanced_configuration">2.7. Advanced Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_files_to_s3">2.6.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_docker_registry">2.6.2. Using Custom Docker Registry</a></li>
-<li><a href="#_adjusting_timeouts">2.6.3. Adjusting Timeouts</a></li>
-<li><a href="#_adjusting_resources_consumption">2.6.4. Adjusting Resources Consumption</a></li>
-<li><a href="#_using_volumes">2.6.5. Using Volumes</a></li>
-<li><a href="#_running_browser_pods_in_privileged_mode">2.6.6. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#_using_node_selectors">2.6.7. Using Node Selectors</a></li>
-<li><a href="#_using_tolerations">2.6.8. Using Tolerations</a></li>
-<li><a href="#_using_custom_kubernetes_annotations">2.6.9. Using Custom Kubernetes Annotations</a></li>
-<li><a href="#_using_custom_kubernetes_labels">2.6.10. Using Custom Kubernetes Labels</a></li>
-<li><a href="#_using_custom_linux_kernel_capabilities">2.6.11. Using Custom Linux Kernel Capabilities</a></li>
-<li><a href="#_using_custom_service_account">2.6.12. Using Custom Service Account</a></li>
-<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.6.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#_uploading_files_to_s3">2.7.1. Uploading Files to S3</a></li>
+<li><a href="#_using_custom_docker_registry">2.7.2. Using Custom Docker Registry</a></li>
+<li><a href="#_adjusting_timeouts">2.7.3. Adjusting Timeouts</a></li>
+<li><a href="#_adjusting_resources_consumption">2.7.4. Adjusting Resources Consumption</a></li>
+<li><a href="#_using_volumes">2.7.5. Using Volumes</a></li>
+<li><a href="#_running_browser_pods_in_privileged_mode">2.7.6. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#_using_node_selectors">2.7.7. Using Node Selectors</a></li>
+<li><a href="#_using_tolerations">2.7.8. Using Tolerations</a></li>
+<li><a href="#_using_custom_kubernetes_annotations">2.7.9. Using Custom Kubernetes Annotations</a></li>
+<li><a href="#_using_custom_kubernetes_labels">2.7.10. Using Custom Kubernetes Labels</a></li>
+<li><a href="#_using_custom_linux_kernel_capabilities">2.7.11. Using Custom Linux Kernel Capabilities</a></li>
+<li><a href="#_using_custom_service_account">2.7.12. Using Custom Service Account</a></li>
+<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.7.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
-<li><a href="#_log_files">2.7. Log Files</a></li>
-<li><a href="#_cli_flags">2.8. CLI Flags</a>
+<li><a href="#_log_files">2.8. Log Files</a></li>
+<li><a href="#_cli_flags">2.9. CLI Flags</a>
 <ul class="sectlevel3">
-<li><a href="#_moon_container_flags">2.8.1. Moon Container Flags</a></li>
-<li><a href="#_moon_api_container_flags">2.8.2. Moon API Container Flags</a></li>
+<li><a href="#_moon_container_flags">2.9.1. Moon Container Flags</a></li>
+<li><a href="#_moon_api_container_flags">2.9.2. Moon API Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -1895,9 +1896,166 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect2">
-<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.6. Advanced Configuration</h3>
+<h3 id="_monitoring"><a class="anchor" href="#_monitoring"></a>2.6. Monitoring</h3>
+<div class="paragraph">
+<p>Moon has a dedicated microservice <code>moon-monitor</code> allowing to easily visualize browsers consumption with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>.</p>
+</div>
+<div class="paragraph">
+<p><code>moon-monitor</code> (distributed as <code>aerokube/moon-monitor</code> image) exposes browsers consumption information in <a href="https://prometheus.io/docs/instrumenting/exposition_formats/#text-format-example">Prometheus text format</a> via <code>/metrics</code> HTTP API.
+One of the most simple ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>. When using it monitoring solution could work like the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Moon should be already running (e.g. in <code>moon</code> namespace).</p>
+</li>
+<li>
+<p>Deploy Prometheus and Grafana using Prometheus Operator (e.g. to <code>monitoring</code> namespace).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>An example Prometheus Operator installation command using Helm 3 is:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+$ helm install prometheus-operator stable/prometheus-operator --create-namespace --namespace monitoring</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Deploy <code>moon-monitor</code> to the same <code>monitoring</code> namespace (optionally using a service account with permissions to access <code>moon</code> namespace):</p>
+<div class="listingblock">
+<div class="title">Deploying moon-monitor with Kubernetes Service and Deployment</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ServiceAccount</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Role</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">rules</span>:
+- <span class="string"><span class="content">apiGroups:</span></span>
+  - <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span>
+  <span class="key">resources</span>:
+  - <span class="string"><span class="content">pods</span></span>
+  - <span class="string"><span class="content">resourcequotas</span></span>
+  <span class="key">verbs</span>:
+  - <span class="string"><span class="content">get</span></span>
+  - <span class="string"><span class="content">watch</span></span>
+  - <span class="string"><span class="content">list</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">rbac.authorization.k8s.io/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">RoleBinding</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">roleRef</span>:
+  <span class="key">kind</span>: <span class="string"><span class="content">Role</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">apiGroup</span>: <span class="string"><span class="content">rbac.authorization.k8s.io</span></span>
+<span class="key">subjects</span>:
+- <span class="string"><span class="content">kind: ServiceAccount</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
+  <span class="key">labels</span>:
+    <span class="key">app</span>: <span class="string"><span class="content">moon-monitor</span></span>
+<span class="key">spec</span>:
+  <span class="key">selector</span>:
+    <span class="key">app</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">ports</span>:
+  - <span class="string"><span class="content">name: metrics</span></span>
+    <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
+<span class="head"><span class="head">---</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">1</span></span>
+  <span class="key">selector</span>:
+    <span class="key">matchLabels</span>:
+      <span class="key">app</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon-monitor</span></span>
+    <span class="key">spec</span>:
+      <span class="key">serviceAccountName</span>: <span class="string"><span class="content">moon-monitor</span></span>
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon-monitor</span></span>
+        <span class="key">image</span>: <span class="string"><span class="content">aerokube/moon-monitor:latest</span></span>
+        <span class="key">args</span>:
+        - <span class="string"><span class="content">-namespace</span></span>
+        - <span class="string"><span class="content">moon</span></span>
+        <span class="key">imagePullPolicy</span>: <span class="string"><span class="content">IfNotPresent</span></span>
+        <span class="key">ports</span>:
+        - <span class="string"><span class="content">name: metrics</span></span>
+          <span class="key">containerPort</span>: <span class="string"><span class="content">8080</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <a href="https://github.com/coreos/prometheus-operator/blob/master/Documentation/design.md#servicemonitor">ServiceMonitor</a> object to start fetching Moon metrics:</p>
+<div class="listingblock">
+<div class="title">Creating ServiceMonitor for Moon</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">monitoring.coreos.com/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ServiceMonitor</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
+  <span class="key">labels</span>:
+    <span class="key">release</span>: <span class="string"><span class="content">prometheus-operator</span></span>
+<span class="key">spec</span>:
+  <span class="key">selector</span>:
+    <span class="key">matchLabels</span>:
+      <span class="key">app</span>: <span class="string"><span class="content">moon-monitor</span></span>
+  <span class="key">endpoints</span>:
+  - <span class="string"><span class="content">port: metrics</span></span>
+    <span class="key">interval</span>: <span class="string"><span class="content">15s</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To fetch browser consumption information from Prometheus, query it like the following:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>sum(moon_browser_count{browserName=&quot;chrome&quot;}) by (version)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create a Grafana dashboard you can import and customize our <a href="https://grafana.com/grafana/dashboards/12264">example configuration</a>.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.7. Advanced Configuration</h3>
 <div class="sect3">
-<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.6.1. Uploading Files to S3</h4>
+<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.7.1. Uploading Files to S3</h4>
 <div class="sect4">
 <h5 id="_how_to_configure_s3_support"><a class="anchor" href="#_how_to_configure_s3_support"></a>How to Configure S3 Support</h5>
 <div class="paragraph">
@@ -2103,7 +2261,7 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.6.2. Using Custom Docker Registry</h4>
+<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.7.2. Using Custom Docker Registry</h4>
 <div class="paragraph">
 <p>By default Moon downloads all images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to configure Moon to work with this registry. To do this:</p>
 </div>
@@ -2203,7 +2361,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.6.3. Adjusting Timeouts</h4>
+<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.7.3. Adjusting Timeouts</h4>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
@@ -2240,7 +2398,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </table>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.6.4. Adjusting Resources Consumption</h4>
+<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.7.4. Adjusting Resources Consumption</h4>
 <div class="sect4">
 <h5 id="_browser_resources_consumption"><a class="anchor" href="#_browser_resources_consumption"></a>Browser Resources Consumption</h5>
 <div class="paragraph">
@@ -2445,7 +2603,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_volumes"><a class="anchor" href="#_using_volumes"></a>2.6.5. Using Volumes</h4>
+<h4 id="_using_volumes"><a class="anchor" href="#_using_volumes"></a>2.7.5. Using Volumes</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2489,7 +2647,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.6.6. Running Browser Pods in Privileged Mode</h4>
+<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.7.6. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>In some cases like running Android emulators browser container should be run in <code>privileged</code> mode. This setting can be applied separately to each browser version in browsers list file as follows:</p>
 </div>
@@ -2521,7 +2679,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.6.7. Using Node Selectors</h4>
+<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.7.7. Using Node Selectors</h4>
 <div class="paragraph">
 <p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers list as shown below:</p>
 </div>
@@ -2555,7 +2713,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.6.8. Using Tolerations</h4>
+<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.7.8. Using Tolerations</h4>
 <div class="paragraph">
 <p>Kubernetes has a cool feature called <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">Taints</a> allowing to fine tune pods scheduling across nodes. If you wish to run browser pods on tainted nodes - you have to adjust so-called <code>tolerations</code>, that is to say a number of conditions to match against tainted nodes. Moon is using exactly the same format as Kubernetes to define tolerations:</p>
 </div>
@@ -2595,7 +2753,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.6.9. Using Custom Kubernetes Annotations</h4>
+<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.7.9. Using Custom Kubernetes Annotations</h4>
 <div class="paragraph">
 <p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. Moon allows to configure custom annotations globally or individually for every browser version. Global annotations are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -2684,7 +2842,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.6.10. Using Custom Kubernetes Labels</h4>
+<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.7.10. Using Custom Kubernetes Labels</h4>
 <div class="paragraph">
 <p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. Moon allows to configure custom labels globally or individually for every browser version. Similarly to annotations global labels are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -2796,7 +2954,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.6.11. Using Custom Linux Kernel Capabilities</h4>
+<h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.7.11. Using Custom Linux Kernel Capabilities</h4>
 <div class="paragraph">
 <p>By default Moon starts all browser pods without any explicit <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capabilities</a>. In some cases you may need to set custom Linux capabilities to started browser pods (e.g. <code>SYS_ADMIN</code>). Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -2824,7 +2982,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.6.12. Using Custom Service Account</h4>
+<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.7.12. Using Custom Service Account</h4>
 <div class="paragraph">
 <p>By default Moon is using service account named <code>default</code> to access Kubernetes API. In some cases you only have permissions for another service account, e.g. named <code>moon</code>. To use this service account with Moon you need to change deployment as follows:</p>
 </div>
@@ -2906,7 +3064,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.6.13. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.7.13. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_browsers_list">Browsers List</a> file:</p>
 </div>
@@ -2945,7 +3103,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.7. Log Files</h3>
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.8. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>) so you can use well-known <code>kubectl</code> commands to see the log:</p>
 </div>
@@ -3233,12 +3391,12 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.8. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.9. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.8.1. Moon Container Flags</h4>
+<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.9.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -3290,7 +3448,7 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.8.2. Moon API Container Flags</h4>
+<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.9.2. Moon API Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -4507,7 +4665,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-05-10 15:01:56 UTC
+Last updated 2020-05-10 16:27:40 UTC
 </div>
 </div>
 <style>
