@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-05-09</span>
+<span id="revdate">2020-05-10</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -474,12 +474,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_where_are_moon_logs">1.3.1. Where are Moon logs?</a></li>
 <li><a href="#_where_are_recorded_videos_stored">1.3.2. Where are recorded videos stored?</a></li>
 <li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">1.3.3. How to update configuration of a running Moon cluster?</a></li>
-<li><a href="#_sessions_are_not_starting">1.3.4. Sessions are not starting</a></li>
-<li><a href="#_connection_was_closed_unexpectedly">1.3.5. Connection was closed unexpectedly</a></li>
-<li><a href="#_browser_pods_are_freezing">1.3.6. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.3.7. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.3.8. DNS lookup timeouts</a></li>
-<li><a href="#_no_such_host_messages">1.3.9. No such host messages</a></li>
+<li><a href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon">1.3.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
+<li><a href="#_sessions_are_not_starting">1.3.5. Sessions are not starting</a></li>
+<li><a href="#_connection_was_closed_unexpectedly">1.3.6. Connection was closed unexpectedly</a></li>
+<li><a href="#_browser_pods_are_freezing">1.3.7. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.3.8. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.3.9. DNS lookup timeouts</a></li>
+<li><a href="#_no_such_host_messages">1.3.10. No such host messages</a></li>
 </ul>
 </li>
 <li><a href="#_required_permissions">1.4. Required Permissions</a></li>
@@ -533,7 +534,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_log_files">2.7. Log Files</a></li>
-<li><a href="#_cli_flags">2.8. CLI Flags</a></li>
+<li><a href="#_cli_flags">2.8. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#_moon_container_flags">2.8.1. Moon Container Flags</a></li>
+<li><a href="#_moon_api_container_flags">2.8.2. Moon API Container Flags</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_main_features">3. Main Features</a>
@@ -868,7 +874,13 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>1.3.4. Sessions are not starting</h4>
+<h4 id="_is_it_possible_to_configure_kubernetes_service_account_for_moon"><a class="anchor" href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon"></a>1.3.4. Is it possible to configure Kubernetes service account for Moon?</h4>
+<div class="paragraph">
+<p>Yes, Moon has <code>-service-account-name</code> flag described in <a href="#_moon_container_flags">Moon Container Flags</a> section.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>1.3.5. Sessions are not starting</h4>
 <div class="paragraph">
 <p>In recent Moon versions (1.4.0+) you may encounter an issue when browser sessions are not starting at all. Moon logs will show something like this:</p>
 </div>
@@ -901,7 +913,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.5. Connection was closed unexpectedly</h4>
+<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.6. Connection was closed unexpectedly</h4>
 <div class="paragraph">
 <p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
 </div>
@@ -921,7 +933,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.6. Browser pods are freezing</h4>
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.7. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes CoreDNS server settings. Current fix is to turn off DNS caching for Moon namespace. To do this:</p>
 </div>
@@ -1008,7 +1020,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.7. No space left on device</h4>
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.8. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -1027,7 +1039,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.8. DNS lookup timeouts</h4>
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.9. DNS lookup timeouts</h4>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -1046,7 +1058,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>1.3.9. No such host messages</h4>
+<h4 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>1.3.10. No such host messages</h4>
 <div class="paragraph">
 <p>If you are seeing messages like this&#8230;&#8203;</p>
 </div>
@@ -3225,8 +3237,10 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
+<div class="sect3">
+<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.8.1. Moon Container Flags</h4>
 <div class="paragraph">
-<p>The following flags are supported by <code>moon</code>:</p>
+<p>The following flags are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3262,6 +3276,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     namespace
 -quota-dir string
     quota directory (default &quot;quota&quot;)
+-service-account-name string
+    service account name (default &quot;default&quot;)
 -session-attempt-timeout duration
     new session attempt timeout (default 30m0s)
 -timeout duration
@@ -3270,6 +3286,35 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     path to users file (default &quot;users/users.htpasswd&quot;)
 -version
     show version and exit</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.8.2. Moon API Container Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>-domain-name string
+    browsers service domain name (default &quot;browsers&quot;)
+-grace-period duration
+    graceful shutdown period (default 30s)
+-guest-user string
+    guest quota user name (default &quot;browsers&quot;)
+-license-file string
+    path to license file (default &quot;license/license.key&quot;)
+-listen string
+    address to bind (default &quot;:8080&quot;)
+-namespace string
+    namespace
+-quota-dir string
+    quota directory (default &quot;quota&quot;)
+-sse-period duration
+    sse refresh period (default 5s)
+-version
+    Show version and exit</code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -4462,7 +4507,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-05-09 17:41:41 UTC
+Last updated 2020-05-10 15:01:56 UTC
 </div>
 </div>
 <style>
