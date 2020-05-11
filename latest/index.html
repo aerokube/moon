@@ -1555,16 +1555,24 @@ Every VNC server should be password protected with the same password having 8+ c
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="6"></i><b>(6)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {                                    <i class="conum" data-value="7"></i><b>(7)</b>
       <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-reg.com/moon/logger:1.2.0</span><span class="delimiter">&quot;</span></span>,     <i class="conum" data-value="8"></i><b>(8)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                                <i class="conum" data-value="9"></i><b>(9)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                              <i class="conum" data-value="10"></i><b>(10)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">resources</span><span class="delimiter">&quot;</span></span>: {                               <i class="conum" data-value="9"></i><b>(9)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">limits</span><span class="delimiter">&quot;</span></span>: {                                <i class="conum" data-value="10"></i><b>(10)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                            <i class="conum" data-value="11"></i><b>(11)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                       <i class="conum" data-value="12"></i><b>(12)</b>
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">requests</span><span class="delimiter">&quot;</span></span>: {                              <i class="conum" data-value="13"></i><b>(13)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,                            <i class="conum" data-value="14"></i><b>(14)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>                       <i class="conum" data-value="15"></i><b>(15)</b>
+        }
+      }
     }
   },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="11"></i><b>(11)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="12"></i><b>(12)</b>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="16"></i><b>(16)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="17"></i><b>(17)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
   },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="13"></i><b>(13)</b>
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="14"></i><b>(14)</b>
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="18"></i><b>(18)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="19"></i><b>(19)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
@@ -1606,26 +1614,46 @@ Every VNC server should be password protected with the same password having 8+ c
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td>Custom Moon image CPU limit</td>
+<td>Custom Moon image resources definition</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="10"></i><b>10</b></td>
-<td>Custom Moon image memory limit</td>
+<td>Custom Moon image limits section</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
-<td>Custom pod annotations section (applies globally to all browser versions)</td>
+<td>Custom Moon image CPU limit</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
-<td>Custom pod annotation key and value</td>
+<td>Custom Moon image memory limit</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="13"></i><b>13</b></td>
-<td>Custom pod labels section (applies globally to all browser versions)</td>
+<td>Custom Moon image requests section</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>Custom Moon image CPU request</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>Custom Moon image memory request</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>Custom pod annotations section (applies globally to all browser versions)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td>Custom pod annotation key and value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td>Custom pod labels section (applies globally to all browser versions)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
 <td>Custom pod label key and value</td>
 </tr>
 </table>
@@ -2050,7 +2078,7 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 </div>
 </div>
 <div class="paragraph">
-<p>To create a Grafana dashboard you can import and customize our <a href="https://grafana.com/grafana/dashboards/12264">example configuration</a>.</p>
+<p>To create a Grafana dashboard you can import and customize our <a href="https://grafana.com/grafana/dashboards/12264">example configuration</a>. An example YAML manifest for deploying <code>moon-monitor</code> could be found <a href="https://github.com/aerokube/moon-deploy/blob/master/moon-monitor.yaml">here</a>.</p>
 </div>
 </li>
 </ol>
@@ -2572,7 +2600,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </tbody>
 </table>
 <div class="paragraph">
-<p>You can optionally adjust CPU and memory limits for each service image in <code>service.json</code> configuration file as follows:</p>
+<p>You can optionally adjust CPU and memory consumption for each service image in <code>service.json</code> configuration file similarly to browser images:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adjusting memory and CPU limits for service images</div>
@@ -2581,8 +2609,16 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {
       <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/logger:latest-release</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">mem</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">resources</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">limits</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>
+        },
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">requests</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">cpu</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0.3</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1024Mi</span><span class="delimiter">&quot;</span></span>
+        }
+      }
     }
   }
 }</code></pre>
@@ -2597,7 +2633,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Moon automatically sets <code>requests</code> equal to <code>limits</code> for service images like <code>defender</code>, <code>logger</code> and <code>videoRecorder</code>. This is why there is no separate <code>requests</code> and <code>limits</code> setting in <code>service.json</code> configuration file.</p>
+<p>Moon by default sets <code>requests</code> equal to <code>limits</code> for service images like <code>defender</code>, <code>logger</code> and <code>videoRecorder</code>. But in recent releases you can override them independently if you wish.</p>
 </li>
 <li>
 <p>For browser containers you can override <code>requests</code> and <code>limits</code> independently as shown above. Anyway we also recommend setting them to equal values. Only this way you will be sure that browsers are always getting the same computing resources. Otherwise you may encounter randomly failing browser tests caused by insufficient computing resources assigned to some browser pods.</p>
@@ -4669,7 +4705,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-05-11 13:24:33 UTC
+Last updated 2020-05-11 14:57:22 UTC
 </div>
 </div>
 <style>
