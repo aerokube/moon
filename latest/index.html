@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-05-26</span>
+<span id="revdate">2020-05-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -481,6 +481,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_no_space_left_on_device">1.3.8. No space left on device</a></li>
 <li><a href="#_dns_lookup_timeouts">1.3.9. DNS lookup timeouts</a></li>
 <li><a href="#_no_such_host_messages">1.3.10. No such host messages</a></li>
+<li><a href="#_browser_session_timeouts_dont_work">1.3.11. Browser session timeouts don&#8217;t work</a></li>
 </ul>
 </li>
 <li><a href="#_required_permissions">1.4. Required Permissions</a></li>
@@ -817,6 +818,9 @@ $ cd moon-deploy</pre>
 <li>
 <p>While using Moon for the first time - make sure you are not suffering from various Kubernetes issues described in <a href="#_no_space_left_on_device">No space left on device</a> and <a href="#_dns_lookup_timeouts">DNS lookup timeouts</a> sections as well as some Github issues: <a href="https://github.com/kubernetes/kops/issues/5916">kubernetes/kops#5916</a>.</p>
 </li>
+<li>
+<p>In case of customized Moon installation (e.g. when changing Moon service name from default <code>moon</code> to something else) make sure you are setting <code>-moon-url</code> parameter correctly as described in <a href="Browser session timeouts don&.html#8217;t work">Browser session timeouts don&.html</a> section.</p>
+</li>
 </ol>
 </div>
 </div>
@@ -1074,6 +1078,12 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 <p>then check that you disabled DNS cache for Moon namespace as shown in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_browser_session_timeouts_dont_work"><a class="anchor" href="#_browser_session_timeouts_dont_work"></a>1.3.11. Browser session timeouts don&#8217;t work</h4>
+<div class="paragraph">
+<p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
 </div>
 </div>
 </div>
@@ -4705,7 +4715,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-05-26 17:18:02 UTC
+Last updated 2020-05-28 17:44:57 UTC
 </div>
 </div>
 <style>
