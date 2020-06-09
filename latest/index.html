@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-06-08</span>
+<span id="revdate">2020-06-09</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -475,13 +475,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_where_are_recorded_videos_stored">1.3.2. Where are recorded videos stored?</a></li>
 <li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">1.3.3. How to update configuration of a running Moon cluster?</a></li>
 <li><a href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon">1.3.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
-<li><a href="#_sessions_are_not_starting">1.3.5. Sessions are not starting</a></li>
-<li><a href="#_connection_was_closed_unexpectedly">1.3.6. Connection was closed unexpectedly</a></li>
-<li><a href="#_browser_pods_are_freezing">1.3.7. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.3.8. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.3.9. DNS lookup timeouts</a></li>
-<li><a href="#_no_such_host_messages">1.3.10. No such host messages</a></li>
-<li><a href="#_browser_session_timeouts_dont_work">1.3.11. Browser session timeouts don&#8217;t work</a></li>
+<li><a href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods">1.3.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
+<li><a href="#_sessions_are_not_starting">1.3.6. Sessions are not starting</a></li>
+<li><a href="#_connection_was_closed_unexpectedly">1.3.7. Connection was closed unexpectedly</a></li>
+<li><a href="#_browser_pods_are_freezing">1.3.8. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">1.3.9. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">1.3.10. DNS lookup timeouts</a></li>
+<li><a href="#_no_such_host_messages">1.3.11. No such host messages</a></li>
+<li><a href="#_browser_session_timeouts_dont_work">1.3.12. Browser session timeouts don&#8217;t work</a></li>
 </ul>
 </li>
 <li><a href="#_required_permissions">1.4. Required Permissions</a></li>
@@ -647,26 +648,15 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>In Google Cloud you may also need to give cluster admin permissions to your Google account as follows:</p>
+<p>When launching in small Kubernetes clusters with only several CPUs available (e.g. started on workstation with tools like <a href="https://github.com/kubernetes/minikube/">minikube</a>) you can use <code>moon-local.yaml</code> file instead:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=username@example.com # Use you real Google account email</pre>
+<pre>$ kubectl apply -f moon-local.yaml</pre>
 </div>
 </div>
-</td>
-</tr>
-</table>
+<div class="paragraph">
+<p>By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
 </div>
 </li>
 <li>
@@ -885,7 +875,13 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>1.3.5. Sessions are not starting</h4>
+<h4 id="_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"><a class="anchor" href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"></a>1.3.5. Is it possible to assign custom firewall rules to browser pods?</h4>
+<div class="paragraph">
+<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. How to do this is described in <a href="#_using_custom_kubernetes_labels">Using Custom Kubernetes Labels</a> section. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>1.3.6. Sessions are not starting</h4>
 <div class="paragraph">
 <p>In recent Moon versions (1.4.0+) you may encounter an issue when browser sessions are not starting at all. Moon logs will show something like this:</p>
 </div>
@@ -918,7 +914,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.6. Connection was closed unexpectedly</h4>
+<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.7. Connection was closed unexpectedly</h4>
 <div class="paragraph">
 <p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
 </div>
@@ -938,7 +934,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.7. Browser pods are freezing</h4>
+<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.8. Browser pods are freezing</h4>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes CoreDNS server settings. Current fix is to turn off DNS caching for Moon namespace. To do this:</p>
 </div>
@@ -1025,7 +1021,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.8. No space left on device</h4>
+<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.9. No space left on device</h4>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -1044,7 +1040,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.9. DNS lookup timeouts</h4>
+<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.10. DNS lookup timeouts</h4>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -1063,7 +1059,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>1.3.10. No such host messages</h4>
+<h4 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>1.3.11. No such host messages</h4>
 <div class="paragraph">
 <p>If you are seeing messages like this&#8230;&#8203;</p>
 </div>
@@ -1081,7 +1077,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_session_timeouts_dont_work"><a class="anchor" href="#_browser_session_timeouts_dont_work"></a>1.3.11. Browser session timeouts don&#8217;t work</h4>
+<h4 id="_browser_session_timeouts_dont_work"><a class="anchor" href="#_browser_session_timeouts_dont_work"></a>1.3.12. Browser session timeouts don&#8217;t work</h4>
 <div class="paragraph">
 <p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
 </div>
@@ -4715,7 +4711,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-06-08 09:55:42 UTC
+Last updated 2020-06-09 17:48:44 UTC
 </div>
 </div>
 <style>
