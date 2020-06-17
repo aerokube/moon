@@ -565,10 +565,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#_accessing_clipboard">3.3. Accessing Clipboard</a></li>
 <li><a href="#_accessing_browser_developer_tools">3.4. Accessing Browser Developer Tools</a></li>
-<li><a href="#_changing_browser_locale">3.5. Changing Browser Locale</a>
+<li><a href="#_using_playwright">3.5. Using Playwright</a>
 <ul class="sectlevel3">
-<li><a href="#_firefox">3.5.1. Firefox</a></li>
-<li><a href="#_chromium_based_browsers">3.5.2. Chromium-based Browsers</a></li>
+<li><a href="#_selecting_requested_browser">3.5.1. Selecting Requested Browser</a></li>
+<li><a href="#_selecting_exact_browser_version">3.5.2. Selecting Exact Browser Version</a></li>
+<li><a href="#_enabling_additional_features">3.5.3. Enabling Additional Features</a></li>
+</ul>
+</li>
+<li><a href="#_changing_browser_locale">3.6. Changing Browser Locale</a>
+<ul class="sectlevel3">
+<li><a href="#_firefox">3.6.1. Firefox</a></li>
+<li><a href="#_chromium_based_browsers">3.6.2. Chromium-based Browsers</a></li>
 </ul>
 </li>
 </ul>
@@ -4056,12 +4063,153 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect2">
-<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.5. Changing Browser Locale</h3>
+<h3 id="_using_playwright"><a class="anchor" href="#_using_playwright"></a>3.5. Using Playwright</h3>
+<div class="paragraph">
+<p>Moon is able to run browser images for <a href="https://github.com/microsoft/playwright">Playwright</a> framework out of the box. An example Playwright test that will work with Moon looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">An example Playwright test working with Moon</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
+
+(async () =&gt; {
+  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
+  const page = await browser.newPage();
+  await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
+  await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
+  await browser.close();
+})();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that the only difference from standard Playwright example is a web socket endpoint URL. Playwright compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser version or e.g. enable video recording is passing all these requirements in websocket endpoint URL. Next section describe supported URL naming conventions.</p>
+</div>
+<div class="sect3">
+<h4 id="_selecting_requested_browser"><a class="anchor" href="#_selecting_requested_browser"></a>3.5.1. Selecting Requested Browser</h4>
+<div class="paragraph">
+<p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chromium (<code>playwright/chromium:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chromium</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Firefox (<code>playwright/firefox:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Webkit (<code>playwright/webkit:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/webkit</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_selecting_exact_browser_version"><a class="anchor" href="#_selecting_exact_browser_version"></a>3.5.2. Selecting Exact Browser Version</h4>
+<div class="paragraph">
+<p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting Firefox 76.0 (<code>playwright/firefox:76.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/76.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.5.3. Enabling Additional Features</h4>
+<div class="paragraph">
+<p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, enabling video recording and so on. All these optional features are set by adding parameters to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chrome?headless=false&amp;enableVideo=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of supported parameters and their meaning is shown below.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar (only applicable to <code>chromium</code> browser).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to record video of running browser session (same meaning as <code>enableVideo</code> Selenium capability). Only works in conjunction with <code>headless=false</code>, i.e. <code>headless=false&amp;enableVideo=true</code>. You can see browser screen in Moon UI only when this is set to <code>false</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Playwright methods to set browser window size.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Supported video codec name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libx264</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize video codec name being used by video recorder (same meaning as <code>videoCodec</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoFrameRate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>12</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize frame rate of the video being recorded (same meaning as <code>videoFrameRate</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;your-name&gt;.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>video.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize video file name being uploaded to S3 (same meaning as <code>videoName</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoScreenSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the video being recorded  (same meaning as <code>videoScreenSize</code> Selenium capability).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.6. Changing Browser Locale</h3>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
 <div class="sect3">
-<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.5.1. Firefox</h4>
+<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.6.1. Firefox</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Firefox</div>
 <div class="content">
@@ -4073,7 +4221,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.5.2. Chromium-based Browsers</h4>
+<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.6.2. Chromium-based Browsers</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Chromium-base Browsers</div>
 <div class="content">
@@ -4532,7 +4680,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <li>
 <p>For simplicity we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Moon License Pricing</caption>
+<caption class="title">Table 17. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4711,7 +4859,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-06-17 14:12:26 UTC
+Last updated 2020-06-17 14:19:12 UTC
 </div>
 </div>
 <style>
