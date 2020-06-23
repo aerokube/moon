@@ -4097,7 +4097,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
 
 (async () =&gt; {
-  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
+  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
   const page = await browser.newPage();
   await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
   await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
@@ -4883,7 +4883,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-06-23 15:26:14 UTC
+Last updated 2020-06-23 16:56:32 UTC
 </div>
 </div>
 <style>
