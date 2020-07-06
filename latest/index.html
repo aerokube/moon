@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-06-30</span>
+<span id="revdate">2020-07-06</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2431,6 +2431,8 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 <div class="sect3">
 <h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.7.3. Adjusting Timeouts</h4>
+<div class="sect4">
+<h5 id="_adjusting_moon_timeouts"><a class="anchor" href="#_adjusting_moon_timeouts"></a>Adjusting Moon Timeouts</h5>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
@@ -2465,6 +2467,36 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect4">
+<h5 id="_adjusting_other_timeouts"><a class="anchor" href="#_adjusting_other_timeouts"></a>Adjusting Other Timeouts</h5>
+<div class="paragraph">
+<p>Not only Moon timeout settings can cause your tests to break. A typical Moon installation looks like the following:</p>
+</div>
+<div class="paragraph">
+<div class="title">Possible Timeout Sources</div>
+<p><span class="image"><img src="img/timeouts.png" alt="timeouts"></span></p>
+</div>
+<div class="paragraph">
+<p>In addition to Moon timeouts other possible sources of timeouts exist:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Client-side Timeout.</strong> Every Selenium library is internally using an HTTP client having default request timeout settings. If you are frequently seeing <code>CLIENT_DISCONNECTED</code> messages (meaning that client disconnected before request handling completed) in Moon log - this could be a sign to increase HTTP client timeouts in your code.</p>
+</li>
+<li>
+<p><strong>Load Balancer Timeout.</strong> Usually Moon is running behind load balancer (<code>LoadBalancer</code>, <code>Ingress</code> or <code>Router</code>) and it also has a default request proxy timeout. A frequent value is <code>60 seconds</code>, so if you are often seeing test fails with <code>502 Bad Gateway</code> or <code>504 Gateway Timeout</code> errors - this could be a sign to increase load balancer timeout. How to do this depends on your cloud platform and load balancer type being used. So refer to their documentation for more details. An example of doing this for AWS cloud is shown in <a href="#_connection_was_closed_unexpectedly">Connection was closed unexpectedly</a> section.</p>
+</li>
+<li>
+<p><strong>Cluster Capacity Reached.</strong> When you have already started the maximum number of browser pods allowed by your license, all new browser requests on top of this number will be waiting in queue for already running pods to stop. Waiting too much in queue will lead to user timeout described above. So if you are seeing a lot of <code>FORBIDDEN_TO_CREATE_POD</code> messages in the log that can signalize that you used all available browsers or all available computing resources (CPUs and memory) assigned to Moon namespace.</p>
+</li>
+<li>
+<p><strong>Cluster Fragmentation.</strong> Similarly to the previous one, in some cases you can have sufficient number of cores and not all browsers are exhausted. However sometimes for example you can have 4 CPUs available distributed among 4 Kubernetes nodes (1 available CPU per node) and a new browser pod requiring at least 2 CPUs to start (all pod containers always run on the same node). In that case although total number of available CPUs is sufficient to start a pod, there is no node where pod will be able to start. If you are seeing too many browser pods in <code>Pending</code> state - check with <code>kubectl describe</code> command why these pods are not starting.</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.7.4. Adjusting Resources Consumption</h4>
@@ -3479,7 +3511,9 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>-config-file string
+<pre class="CodeRay highlight"><code>-browser-timeout duration
+    awaiting browser timeout (default 30s)
+-config-file string
     optional configuration file (default &quot;config/service.json&quot;)
 -cpu-limit string
     browser container cpu limit (default &quot;1&quot;)
@@ -3511,6 +3545,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     namespace
 -quota-dir string
     quota directory (default &quot;quota&quot;)
+-repository-root string
+    repository to pull playwright images (default &quot;playwright&quot;)
 -service-account-name string
     service account name (default &quot;default&quot;)
 -session-attempt-timeout duration
@@ -4194,10 +4230,22 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Playwright methods to set browser window size.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
@@ -4883,7 +4931,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-06-30 12:27:56 UTC
+Last updated 2020-07-06 15:46:16 UTC
 </div>
 </div>
 <style>
