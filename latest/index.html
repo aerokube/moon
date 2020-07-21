@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-07-20</span>
+<span id="revdate">2020-07-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -747,7 +747,57 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect4">
-<h5 id="_option_2_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_2_you_have_digitalocean_or_google_cloud"></a>Option 2: you have DigitalOcean or Google Cloud</h5>
+<h5 id="_option_2_you_are_using_helm"><a class="anchor" href="#_option_2_you_are_using_helm"></a>Option 2: you are using Helm</h5>
+<div class="paragraph">
+<p>We deliver already packed and published <a href="https://helm.sh/">Helm</a> charts, so installing Moon with Helm is straightforward:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add Aerokube charts repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm repo add aerokube https://charts.aerokube.com/</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To list available Moon versions type:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm search repo aerokube</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To install or upgrade Moon type:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm upgrade --install -n moon moon aerokube/moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Moon chart has a lot of various configuration parameters that can be listed as follows:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm show values aerokube/moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To change one of these parameters - use <code>--set</code> flag:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm upgrade --install --set=moon.enabled.resources=false -n moon moon aerokube/moon</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_option_3_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_3_you_have_digitalocean_or_google_cloud"></a>Option 3: you have DigitalOcean or Google Cloud</h5>
 <div class="paragraph">
 <p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#_cloud_platforms">Cloud Platforms</a> section for more details.</p>
 </div>
@@ -4931,7 +4981,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-07-20 14:24:34 UTC
+Last updated 2020-07-21 14:51:31 UTC
 </div>
 </div>
 <style>
