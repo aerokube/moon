@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-08-02</span>
+<span id="revdate">2020-08-04</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -630,7 +630,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-If you are running Kubernetes cluster on virtual machines, we usually recommend having bigger VMs instead of smaller ones. This allows to avoid available CPUs and memory fragmentation issues. For example having 24 CPU cores overall it is better to start 3 x 8 CPU core VMs instead of 12 x 2 CPU core.
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you are running Kubernetes cluster on virtual machines, we usually recommend having bigger VMs instead of smaller ones. This allows to avoid available CPUs and memory fragmentation issues. For example having 24 CPU cores overall it is better to start 3 x 8 CPU core VMs instead of 12 x 2 CPU core.</p>
+</li>
+<li>
+<p>If you are starting Moon in Kubernetes cluster deployed on workstation with <a href="https://github.com/kubernetes/minikube/">minikube</a> tool - see <a href="#_option_3_you_have_minikube">Option 3: you have Minikube</a>.</p>
+</li>
+</ol>
+</div>
 </td>
 </tr>
 </table>
@@ -656,15 +665,7 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When launching in small Kubernetes clusters with only several CPUs available (e.g. started on workstation with tools like <a href="https://github.com/kubernetes/minikube/">minikube</a>) you can use <code>moon-local.yaml</code> file instead:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl apply -f moon-local.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
+<p>If you have only several CPUs available in your cluster - use <code>moon-local.yaml</code> file instead. By default Moon is started in a separate namespace called <code>moon</code> so we append <code>-n moon</code> to the next commands.</p>
 </div>
 </li>
 <li>
@@ -686,15 +687,6 @@ moon      LoadBalancer   10.63.242.109   &lt;pending&gt;     4444:31894/TCP,8080
 NAME      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
 browsers  ClusterIP      None            &lt;none&gt;           &lt;none&gt;                          51s
 moon      LoadBalancer   10.63.242.109   104.154.161.58   4444:31894/TCP,8080:30625/TCP   1m</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>When starting in <a href="https://github.com/kubernetes/minikube">minikube</a> you can obtain Moon IP address with the following command:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ minikube service moon --url
-http://192.168.99.100:30979</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -805,7 +797,64 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect4">
-<h5 id="_option_3_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_3_you_have_digitalocean_or_google_cloud"></a>Option 3: you have DigitalOcean or Google Cloud</h5>
+<h5 id="_option_3_you_have_minikube"><a class="anchor" href="#_option_3_you_have_minikube"></a>Option 3: you have Minikube</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clone an example configuration repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run one command to start Moon and Moon API:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube kubectl apply -f moon-local.yaml</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Minikube does not automatically assign IP address to LoadBalancer, so let&#8217;s do this manually:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube kubectl -- patch svc moon -n moon --patch "{\"spec\":{\"externalIPs\":[\"$(minikube ip)\"]}}"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>The last step is to get Selenium URL:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube ip
+192.168.99.100</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the following as Selenium URL:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://192.168.99.100:4444/wd/hub</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon web interface is available at:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://192.168.99.100:8080/</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_option_4_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_4_you_have_digitalocean_or_google_cloud"></a>Option 4: you have DigitalOcean or Google Cloud</h5>
 <div class="paragraph">
 <p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#_cloud_platforms">Cloud Platforms</a> section for more details.</p>
 </div>
@@ -4993,7 +5042,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-02 04:10:30 UTC
+Last updated 2020-08-04 15:58:32 UTC
 </div>
 </div>
 <style>
