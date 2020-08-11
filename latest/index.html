@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-08-08</span>
+<span id="revdate">2020-08-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -746,10 +746,11 @@ When running your tests for the first time for every browser version Kubernetes 
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Add Aerokube charts repository:</p>
+<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ helm repo add aerokube https://charts.aerokube.com/</pre>
+<pre>$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</pre>
 </div>
 </div>
 </li>
@@ -757,12 +758,12 @@ When running your tests for the first time for every browser version Kubernetes 
 <p>To list available Moon versions type:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ helm search repo aerokube</pre>
+<pre>$ helm search repo aerokube --versions</pre>
 </div>
 </div>
 </li>
 <li>
-<p>To create namespace <code><code>moon</code></code>:</p>
+<p>Create a namespace:</p>
 <div class="literalblock">
 <div class="content">
 <pre>$ kubectl create namespace moon</pre>
@@ -5042,7 +5043,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-08 14:25:57 UTC
+Last updated 2020-08-11 04:31:21 UTC
 </div>
 </div>
 <style>
