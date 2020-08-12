@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-08-11</span>
+<span id="revdate">2020-08-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -3322,21 +3322,11 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="sect2">
 <h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.8. Log Files</h3>
 <div class="paragraph">
-<p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>) so you can use well-known <code>kubectl</code> commands to see the log:</p>
+<p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>) so you can use well-known <code>kubectl</code> commands to see the log. Everything related to Selenium sessions is being output by <code>moon</code> container:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl get pods -n moon
-NAME                    READY     STATUS    RESTARTS   AGE
-moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Everything related to Selenium sessions is being output by <code>moon</code> container:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl logs moon-58f8b57966-s648q -c moon -n moon
+<pre>$ kubectl logs -l app=moon -c moon -n moon
 2019/05/03 11:20:37 [INIT] [Loading quota files from: quota]
 2019/05/03 11:20:37 [INIT] [Quota configuration updated]
 2019/05/03 11:20:37 [INIT] [Loading users from: users/users.htpasswd]
@@ -3348,7 +3338,7 @@ moon-58f8b57966-s648q   1/1       Running   0          1m</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl logs -f moon-58f8b57966-s648q -c moon -n moon</pre>
+<pre>$ kubectl logs -f -l app=moon -c moon -n moon</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5043,7 +5033,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-11 04:31:21 UTC
+Last updated 2020-08-12 11:42:09 UTC
 </div>
 </div>
 <style>
