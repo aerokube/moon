@@ -2464,6 +2464,15 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' # Use correct service account name here</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>In case of Openshift the following commands will work:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com
+$ oc secrets link default my-registry.example.com --for=pull</pre>
+</div>
+</div>
 </li>
 <li>
 <p>Copy all desired browser images to your registry:</p>
@@ -5045,7 +5054,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-28 03:55:13 UTC
+Last updated 2020-08-28 14:32:21 UTC
 </div>
 </div>
 <style>
