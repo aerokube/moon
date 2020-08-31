@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-08-28</span>
+<span id="revdate">2020-08-31</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1453,7 +1453,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <div class="listingblock">
 <div class="title">Typical Browsers List File</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="2"></i><b>(2)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {                                   <i class="conum" data-value="3"></i><b>(3)</b>
@@ -1471,7 +1471,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
             <span class="key"><span class="delimiter">&quot;</span><span class="content">memory</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1Gi</span><span class="delimiter">&quot;</span></span>
           }
         },
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">privileged</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">true</span>,                         <i class="conum" data-value="9"></i><b>(9)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">privileged</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>,                         <i class="conum" data-value="9"></i><b>(9)</b>
         <span class="key"><span class="delimiter">&quot;</span><span class="content">nodeSelector</span><span class="delimiter">&quot;</span></span>: {                           <i class="conum" data-value="10"></i><b>(10)</b>
           <span class="key"><span class="delimiter">&quot;</span><span class="content">node-type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hardware</span><span class="delimiter">&quot;</span></span>
         },
@@ -1479,17 +1479,17 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
         <span class="key"><span class="delimiter">&quot;</span><span class="content">hosts</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">example.com:192.168.0.1</span><span class="delimiter">&quot;</span></span>],       <i class="conum" data-value="12"></i><b>(12)</b>
       },
       <span class="key"><span class="delimiter">&quot;</span><span class="content">60.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="comment">//...</span>
+        <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
       }
     }
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">opera</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">56.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-        <span class="comment">//...</span>
+        <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
     }
   }
 }</code></pre>
@@ -1651,7 +1651,7 @@ Every VNC server should be password protected with the same password having 8+ c
 <div class="listingblock">
 <div class="title">Typical Browsers List File</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript"><span class="string"><span class="delimiter">&quot;</span><span class="content">safari</span><span class="delimiter">&quot;</span></span>: {
+<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">safari</span><span class="delimiter">&quot;</span></span>: {
   <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>,
   <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">77</span><span class="delimiter">&quot;</span></span>: {
@@ -1660,8 +1660,8 @@ Every VNC server should be password protected with the same password having 8+ c
       <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>,
       <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [
         <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[</span><span class="char">\&quot;</span><span class="content">http://host1.example.com:4444/</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\&quot;</span><span class="content">http://host2.example.com:4444/</span><span class="char">\&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>,    <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span>, <span class="comment">// At least 8 symbols                                 </span><i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">SCREEN_RESOLUTION=1921x1080x24</span><span class="delimiter">&quot;</span></span> <span class="comment">// This is optional                                </span><i class="conum" data-value="4"></i><b>(4)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span>, <span class="error">/</span><span class="error">/</span> <span class="error">A</span><span class="error">t</span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">s</span><span class="error">t</span> <span class="integer">8</span> <span class="error">s</span><span class="error">y</span><span class="error">m</span><span class="error">b</span><span class="error">o</span><span class="error">l</span><span class="error">s</span>                                 <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">SCREEN_RESOLUTION=1921x1080x24</span><span class="delimiter">&quot;</span></span> <span class="error">/</span><span class="error">/</span> <span class="error">T</span><span class="error">h</span><span class="error">i</span><span class="error">s</span> <span class="error">i</span><span class="error">s</span> <span class="error">o</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">a</span><span class="error">l</span>                                <i class="conum" data-value="4"></i><b>(4)</b>
       ]
     }
   }
@@ -1702,7 +1702,7 @@ Every VNC server should be password protected with the same password having 8+ c
 <div class="listingblock">
 <div class="title">Typical <code>service.json</code> file</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {                                          <i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">endpoint</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://storage.googleapis.com</span><span class="delimiter">&quot;</span></span>,  <i class="conum" data-value="2"></i><b>(2)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">bucketName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">moon-test</span><span class="delimiter">&quot;</span></span>,                     <i class="conum" data-value="3"></i><b>(3)</b>
@@ -1731,6 +1731,10 @@ Every VNC server should be password protected with the same password having 8+ c
   <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {                                      <i class="conum" data-value="18"></i><b>(18)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,                              <i class="conum" data-value="19"></i><b>(19)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">runAs</span><span class="delimiter">&quot;</span></span>: {                                       <i class="conum" data-value="20"></i><b>(20)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>: <span class="integer">1000</span>,                                  <i class="conum" data-value="21"></i><b>(21)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">group</span><span class="delimiter">&quot;</span></span>: <span class="integer">2000</span>                                  <i class="conum" data-value="22"></i><b>(22)</b>
   }
 }</code></pre>
 </div>
@@ -1812,6 +1816,18 @@ Every VNC server should be password protected with the same password having 8+ c
 <tr>
 <td><i class="conum" data-value="19"></i><b>19</b></td>
 <td>Custom pod label key and value</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>Custom pod user and group id section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="21"></i><b>21</b></td>
+<td>Custom pod user id</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="22"></i><b>22</b></td>
+<td>Custom pod group id</td>
 </tr>
 </table>
 </div>
@@ -2422,16 +2438,16 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 <div class="listingblock">
 <div class="title">Setting custom S3 key pattern in <code>service.json</code></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">// The rest of S3 settings go here...</span>
+    <span class="error">/</span><span class="error">/</span> <span class="error">T</span><span class="error">h</span><span class="error">e</span> <span class="error">r</span><span class="error">e</span><span class="error">s</span><span class="error">t</span> <span class="error">o</span><span class="error">f</span> <span class="error">S</span><span class="integer">3</span> <span class="error">s</span><span class="error">e</span><span class="error">t</span><span class="error">t</span><span class="error">i</span><span class="error">n</span><span class="error">g</span><span class="error">s</span> <span class="error">g</span><span class="error">o</span> <span class="error">h</span><span class="error">e</span><span class="error">r</span><span class="error">e</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">keyPattern</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$quota/$browserName/$browserVersion/$platformName/$sessionId</span><span class="delimiter">&quot;</span></span>  <i class="conum" data-value="1"></i><b>(1)</b>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   }
 }</code></pre>
 </div>
@@ -2487,7 +2503,7 @@ $ oc secrets link default my-registry.example.com --for=pull</pre>
 <div class="listingblock">
 <div class="title">Browsers List File with Custom Images</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">73.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2677,7 +2693,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <div class="listingblock">
 <div class="title">Overriding Resources in Browsers List File</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2803,7 +2819,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <div class="listingblock">
 <div class="title">Adjusting memory and CPU limits for service images</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">logger</span><span class="delimiter">&quot;</span></span>: {
       <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">my-registry.example.com/moon/logger:latest-release</span><span class="delimiter">&quot;</span></span>,
@@ -2860,7 +2876,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Mounting HostPath Volumes</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2892,7 +2908,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Starting Container in Privileged Mode</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2900,7 +2916,7 @@ This was initially created for mounting really big files cached on Kubernetes no
         <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">selenoid/firefox:62.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>,
-        <span class="key"><span class="delimiter">&quot;</span><span class="content">privileged</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">true</span>                  <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">privileged</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span>                  <i class="conum" data-value="1"></i><b>(1)</b>
       }
     }
   }
@@ -2924,7 +2940,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding Node Selectors</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2958,7 +2974,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding Tolerations</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -2998,12 +3014,12 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding global annotations to <code>service.json</code> file</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">annotations</span><span class="delimiter">&quot;</span></span>: {                                 <i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
@@ -3026,7 +3042,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding annotations to browser version</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">62.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -3087,12 +3103,12 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding global labels to <code>service.json</code> file</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">labels</span><span class="delimiter">&quot;</span></span>: {           <i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">key1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>,
@@ -3115,7 +3131,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding labels to browser version</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">77.0</span><span class="delimiter">&quot;</span></span>,
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
@@ -3199,12 +3215,12 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="listingblock">
 <div class="title">Adding global Linux capabilities to <code>service.json</code> file</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">s3</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">images</span><span class="delimiter">&quot;</span></span>: {
-    <span class="comment">//...</span>
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   },
   <span class="key"><span class="delimiter">&quot;</span><span class="content">kernelCaps</span><span class="delimiter">&quot;</span></span>: [ <span class="string"><span class="delimiter">&quot;</span><span class="content">NET_ADMIN</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">KILL</span><span class="delimiter">&quot;</span></span> ]   <i class="conum" data-value="1"></i><b>(1)</b>
 }</code></pre>
@@ -3304,12 +3320,38 @@ This was initially created for mounting really big files cached on Kubernetes no
 <div class="sect3">
 <h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.7.13. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
-<p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_browsers_list">Browsers List</a> file:</p>
+<p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_configuration_file">Configuration File</a>:</p>
 </div>
 <div class="listingblock">
-<div class="title">Setting customer user and group identifier</div>
+<div class="title">Setting customer UID and GID globally in <code>service.json</code></div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">{
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">runAs</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>: <span class="integer">1000</span>,                  <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">group</span><span class="delimiter">&quot;</span></span>: <span class="integer">2000</span>                  <i class="conum" data-value="2"></i><b>(2)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Custom user identifier (UID)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Custom group identifier (GID)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To set custom UID and GID values for selected browser versions - use <a href="#_browsers_list">Browsers List</a> file:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting customer UID and GID for selected browser version</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
     <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">80.0</span><span class="delimiter">&quot;</span></span>,
@@ -3337,6 +3379,9 @@ This was initially created for mounting really big files cached on Kubernetes no
 <td>Custom group identifier (GID)</td>
 </tr>
 </table>
+</div>
+<div class="paragraph">
+<p>Similarly to</p>
 </div>
 </div>
 </div>
@@ -4212,32 +4257,32 @@ some-clipboard-value</code></pre>
 <div class="listingblock">
 <div class="title">Accessing Developer Tools API with Webdriver.io and Puppeteer</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">const { remote } = require(<span class="string"><span class="delimiter">'</span><span class="content">webdriverio</span><span class="delimiter">'</span></span>);
-const puppeteer = require(<span class="string"><span class="delimiter">'</span><span class="content">puppeteer-core</span><span class="delimiter">'</span></span>);
-const host = <span class="string"><span class="delimiter">'</span><span class="content">moon.example.com</span><span class="delimiter">'</span></span>;
-(async () =&gt; {
-    const browser = await remote({
-        <span class="key">hostname</span>: host,
-        <span class="key">capabilities</span>: {
-            <span class="key">browserName</span>: <span class="string"><span class="delimiter">'</span><span class="content">chrome</span><span class="delimiter">'</span></span>,
-            <span class="key">browserVersion</span>: <span class="string"><span class="delimiter">'</span><span class="content">75.0</span><span class="delimiter">'</span></span>
+<pre class="CodeRay highlight"><code data-lang="json"><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> { <span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">o</span><span class="error">t</span><span class="error">e</span> } <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">d</span><span class="error">r</span><span class="error">i</span><span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">i</span><span class="error">o</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
+<span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span><span class="error">-</span><span class="error">c</span><span class="error">o</span><span class="error">r</span><span class="error">e</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
+<span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span> <span class="error">=</span> <span class="error">'</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">.</span><span class="error">e</span><span class="error">x</span><span class="error">a</span><span class="error">m</span><span class="error">p</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">'</span><span class="error">;</span>
+<span class="error">(</span><span class="error">a</span><span class="error">s</span><span class="error">y</span><span class="error">n</span><span class="error">c</span> <span class="error">(</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> {
+    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">o</span><span class="error">t</span><span class="error">e</span><span class="error">(</span>{
+        <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span><span class="error">n</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>: <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span>,
+        <span class="error">c</span><span class="error">a</span><span class="error">p</span><span class="error">a</span><span class="error">b</span><span class="error">i</span><span class="error">l</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">e</span><span class="error">s</span>: {
+            <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>: <span class="error">'</span><span class="error">c</span><span class="error">h</span><span class="error">r</span><span class="error">o</span><span class="error">m</span><span class="error">e</span><span class="error">'</span>,
+            <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">V</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>: <span class="error">'</span><span class="float">75.0</span><span class="error">'</span>
         }
-    });
+    }<span class="error">)</span><span class="error">;</span>
 
-    const devtools = await puppeteer.connect(
-        { <span class="key">browserWSEndpoint</span>: <span class="error">`</span>ws:<span class="comment">//${host}:4444/devtools/${browser.sessionId}` }</span>
-    );
-    const page = await devtools.newPage();
-    await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com</span><span class="delimiter">'</span></span>);
-    await page.screenshot({<span class="key">path</span>: <span class="string"><span class="delimiter">'</span><span class="content">screenshot.png</span><span class="delimiter">'</span></span>});
-    const title = await page.title();
+    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">n</span><span class="error">e</span><span class="error">c</span><span class="error">t</span><span class="error">(</span>
+        { <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">W</span><span class="error">S</span><span class="error">E</span><span class="error">n</span><span class="error">d</span><span class="error">p</span><span class="error">o</span><span class="error">i</span><span class="error">n</span><span class="error">t</span>: <span class="error">`</span><span class="error">w</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">$</span>{<span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span>}:<span class="integer">4444</span><span class="error">/</span><span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">/</span><span class="error">$</span>{<span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">s</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>}<span class="error">`</span> }
+    <span class="error">)</span><span class="error">;</span>
+    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">.</span><span class="error">n</span><span class="error">e</span><span class="error">w</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
+    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">g</span><span class="error">o</span><span class="error">t</span><span class="error">o</span><span class="error">(</span><span class="error">'</span><span class="error">h</span><span class="error">t</span><span class="error">t</span><span class="error">p</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">a</span><span class="error">e</span><span class="error">r</span><span class="error">o</span><span class="error">k</span><span class="error">u</span><span class="error">b</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
+    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">(</span>{<span class="error">p</span><span class="error">a</span><span class="error">t</span><span class="error">h</span>: <span class="error">'</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">.</span><span class="error">p</span><span class="error">n</span><span class="error">g</span><span class="error">'</span>}<span class="error">)</span><span class="error">;</span>
+    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
 
-    console.log(title);
+    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">o</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">l</span><span class="error">o</span><span class="error">g</span><span class="error">(</span><span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span><span class="error">)</span><span class="error">;</span>
 
-    await devtools.close();
-    await browser.deleteSession();
+    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">.</span><span class="error">c</span><span class="error">l</span><span class="error">o</span><span class="error">s</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
+    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">d</span><span class="error">e</span><span class="error">l</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">S</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
 
-})().<span class="keyword">catch</span>((e) =&gt; console.error(e));</code></pre>
+}<span class="error">)</span><span class="error">(</span><span class="error">)</span><span class="error">.</span><span class="error">c</span><span class="error">a</span><span class="error">t</span><span class="error">c</span><span class="error">h</span><span class="error">(</span><span class="error">(</span><span class="error">e</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">o</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">e</span><span class="error">r</span><span class="error">r</span><span class="error">o</span><span class="error">r</span><span class="error">(</span><span class="error">e</span><span class="error">)</span><span class="error">)</span><span class="error">;</span></code></pre>
 </div>
 </div>
 </div>
@@ -4249,15 +4294,15 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <div class="listingblock">
 <div class="title">An example Playwright test working with Moon</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
+<pre class="CodeRay highlight"><code data-lang="json"><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> { <span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span> } <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">p</span><span class="error">l</span><span class="error">a</span><span class="error">y</span><span class="error">w</span><span class="error">r</span><span class="error">i</span><span class="error">g</span><span class="error">h</span><span class="error">t</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
 
-(async () =&gt; {
-  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
-  const page = await browser.newPage();
-  await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
-  await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
-  await browser.close();
-})();</code></pre>
+<span class="error">(</span><span class="error">a</span><span class="error">s</span><span class="error">y</span><span class="error">n</span><span class="error">c</span> <span class="error">(</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> {
+  <span class="error">v</span><span class="error">a</span><span class="error">r</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">n</span><span class="error">e</span><span class="error">c</span><span class="error">t</span><span class="error">(</span>{ <span class="error">t</span><span class="error">i</span><span class="error">m</span><span class="error">e</span><span class="error">o</span><span class="error">u</span><span class="error">t</span>: <span class="integer">0</span>, <span class="error">w</span><span class="error">s</span><span class="error">E</span><span class="error">n</span><span class="error">d</span><span class="error">p</span><span class="error">o</span><span class="error">i</span><span class="error">n</span><span class="error">t</span>: <span class="error">'</span><span class="error">w</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">.</span><span class="error">e</span><span class="error">x</span><span class="error">a</span><span class="error">m</span><span class="error">p</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span>:<span class="integer">4444</span><span class="error">/</span><span class="error">p</span><span class="error">l</span><span class="error">a</span><span class="error">y</span><span class="error">w</span><span class="error">r</span><span class="error">i</span><span class="error">g</span><span class="error">h</span><span class="error">t</span><span class="error">/</span><span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span><span class="error">'</span> }<span class="error">)</span><span class="error">;</span>
+  <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">n</span><span class="error">e</span><span class="error">w</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
+  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">g</span><span class="error">o</span><span class="error">t</span><span class="error">o</span><span class="error">(</span><span class="error">'</span><span class="error">h</span><span class="error">t</span><span class="error">t</span><span class="error">p</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">a</span><span class="error">e</span><span class="error">r</span><span class="error">o</span><span class="error">k</span><span class="error">u</span><span class="error">b</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">/</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">/</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
+  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">(</span>{ <span class="error">p</span><span class="error">a</span><span class="error">t</span><span class="error">h</span>: <span class="error">`</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">.</span><span class="error">p</span><span class="error">n</span><span class="error">g</span><span class="error">`</span> }<span class="error">)</span><span class="error">;</span>
+  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">c</span><span class="error">l</span><span class="error">o</span><span class="error">s</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
+}<span class="error">)</span><span class="error">(</span><span class="error">)</span><span class="error">;</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5054,7 +5099,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-28 14:32:21 UTC
+Last updated 2020-08-31 10:26:13 UTC
 </div>
 </div>
 <style>
