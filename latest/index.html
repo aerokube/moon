@@ -3323,7 +3323,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_configuration_file">Configuration File</a>:</p>
 </div>
 <div class="listingblock">
-<div class="title">Setting customer UID and GID globally in <code>service.json</code></div>
+<div class="title">Setting custom UID and GID globally in <code>service.json</code></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json">{
     <span class="key"><span class="delimiter">&quot;</span><span class="content">runAs</span><span class="delimiter">&quot;</span></span>: {
@@ -3349,7 +3349,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 <p>To set custom UID and GID values for selected browser versions - use <a href="#_browsers_list">Browsers List</a> file:</p>
 </div>
 <div class="listingblock">
-<div class="title">Setting customer UID and GID for selected browser version</div>
+<div class="title">Setting custom UID and GID for selected browser version</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="json">{
   <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
@@ -5099,7 +5099,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-08-31 10:26:13 UTC
+Last updated 2020-08-31 10:38:53 UTC
 </div>
 </div>
 <style>
