@@ -5,10 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="description" content="A Selenium testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
+<meta name="description" content="A Selenium, Playwright and Puppeteer testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
 <meta name="author" content="Aerokube Software OÜ">
 <link rel="icon" type="image/png" href="img/favicon.png">
-<title>Moon - A cross browser Selenium solution for Kubernetes or Openshift cluster</title>
+<title>Moon - A cross browser Selenium, Playwright and Puppeteer solution for Kubernetes or Openshift cluster</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-10-08</span>
+<span id="revdate">2020-10-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -565,14 +565,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#_accessing_clipboard">3.3. Accessing Clipboard</a></li>
-<li><a href="#_accessing_browser_developer_tools">3.4. Accessing Browser Developer Tools</a></li>
-<li><a href="#_using_playwright">3.5. Using Playwright</a>
+<li><a href="#_using_playwright">3.4. Using Playwright</a>
 <ul class="sectlevel3">
-<li><a href="#_selecting_requested_browser">3.5.1. Selecting Requested Browser</a></li>
-<li><a href="#_selecting_exact_browser_version">3.5.2. Selecting Exact Browser Version</a></li>
-<li><a href="#_enabling_additional_features">3.5.3. Enabling Additional Features</a></li>
+<li><a href="#_selecting_requested_browser">3.4.1. Selecting Requested Browser</a></li>
+<li><a href="#_selecting_exact_browser_version">3.4.2. Selecting Exact Browser Version</a></li>
+<li><a href="#_enabling_additional_features">3.4.3. Enabling Additional Features</a></li>
 </ul>
 </li>
+<li><a href="#_accessing_chrome_developer_tools">3.5. Accessing Chrome Developer Tools</a></li>
 <li><a href="#_changing_browser_locale">3.6. Changing Browser Locale</a>
 <ul class="sectlevel3">
 <li><a href="#_firefox">3.6.1. Firefox</a></li>
@@ -600,7 +600,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>This reference for version: <em>latest</em></p>
 </div>
 <div class="paragraph">
-<p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium Webdriver</a> protocol and using <a href="https://kubernetes.io/">Kubernetes</a> to launch browsers.</p>
+<p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium</a>, <a href="https://playwright.dev/">Playwright</a> and <a href="https://pptr.dev/">Puppeteer</a> using <a href="https://kubernetes.io/">Kubernetes</a> to launch browsers.</p>
 </div>
 </div>
 </div>
@@ -4183,146 +4183,29 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_accessing_browser_developer_tools"><a class="anchor" href="#_accessing_browser_developer_tools"></a>3.4. Accessing Browser Developer Tools</h3>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Currently only <a href="https://chromedevtools.github.io/devtools-protocol/">Chrome Developer Tools</a> are supported.</p>
-</li>
-<li>
-<p>This feature will work only for Chrome 63+.</p>
-</li>
-<li>
-<p>We recommend to use the most recent Chrome version possible.</p>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Moon is proxying Chrome Developer Tools API to browser container.  For every running Selenium session to access the API just use the following URL:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>&lt;ws or http&gt;://moon.example.com:4444/devtools/&lt;session-id&gt;/&lt;method&gt;</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Here <code>&lt;method&gt;</code> is one of the following:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Supported Developer Tools Methods</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Method</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Protocol</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Meaning</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/browser</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">WebSocket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Developer Tools browser websocket</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">WebSocket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">An alias for /browser</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/page</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">WebSocket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Developer Tools current page (target) websocket - mainly useful when only one browser tab is open</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/page/&lt;target-id&gt;</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">WebSocket</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Developer Tools specified page (target) websocket - allows to connect to concrete browser tab</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">/protocol/json</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">HTTP</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A list of supported Developer Tools protocol methods in JSON format (some client libraries are using it)</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>For example an URL to connect to current page websocket would be:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>ws://moon.example.com:4444/devtools/&lt;session-id&gt;/page</code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Accessing Developer Tools API with Webdriver.io and Puppeteer</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> { <span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">o</span><span class="error">t</span><span class="error">e</span> } <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">w</span><span class="error">e</span><span class="error">b</span><span class="error">d</span><span class="error">r</span><span class="error">i</span><span class="error">v</span><span class="error">e</span><span class="error">r</span><span class="error">i</span><span class="error">o</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
-<span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span><span class="error">-</span><span class="error">c</span><span class="error">o</span><span class="error">r</span><span class="error">e</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
-<span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span> <span class="error">=</span> <span class="error">'</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">.</span><span class="error">e</span><span class="error">x</span><span class="error">a</span><span class="error">m</span><span class="error">p</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">'</span><span class="error">;</span>
-<span class="error">(</span><span class="error">a</span><span class="error">s</span><span class="error">y</span><span class="error">n</span><span class="error">c</span> <span class="error">(</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> {
-    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">r</span><span class="error">e</span><span class="error">m</span><span class="error">o</span><span class="error">t</span><span class="error">e</span><span class="error">(</span>{
-        <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span><span class="error">n</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>: <span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span>,
-        <span class="error">c</span><span class="error">a</span><span class="error">p</span><span class="error">a</span><span class="error">b</span><span class="error">i</span><span class="error">l</span><span class="error">i</span><span class="error">t</span><span class="error">i</span><span class="error">e</span><span class="error">s</span>: {
-            <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">N</span><span class="error">a</span><span class="error">m</span><span class="error">e</span>: <span class="error">'</span><span class="error">c</span><span class="error">h</span><span class="error">r</span><span class="error">o</span><span class="error">m</span><span class="error">e</span><span class="error">'</span>,
-            <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">V</span><span class="error">e</span><span class="error">r</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span>: <span class="error">'</span><span class="float">75.0</span><span class="error">'</span>
-        }
-    }<span class="error">)</span><span class="error">;</span>
-
-    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">u</span><span class="error">p</span><span class="error">p</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">n</span><span class="error">e</span><span class="error">c</span><span class="error">t</span><span class="error">(</span>
-        { <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">W</span><span class="error">S</span><span class="error">E</span><span class="error">n</span><span class="error">d</span><span class="error">p</span><span class="error">o</span><span class="error">i</span><span class="error">n</span><span class="error">t</span>: <span class="error">`</span><span class="error">w</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">$</span>{<span class="error">h</span><span class="error">o</span><span class="error">s</span><span class="error">t</span>}:<span class="integer">4444</span><span class="error">/</span><span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">/</span><span class="error">$</span>{<span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">s</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">I</span><span class="error">d</span>}<span class="error">`</span> }
-    <span class="error">)</span><span class="error">;</span>
-    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">.</span><span class="error">n</span><span class="error">e</span><span class="error">w</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">g</span><span class="error">o</span><span class="error">t</span><span class="error">o</span><span class="error">(</span><span class="error">'</span><span class="error">h</span><span class="error">t</span><span class="error">t</span><span class="error">p</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">a</span><span class="error">e</span><span class="error">r</span><span class="error">o</span><span class="error">k</span><span class="error">u</span><span class="error">b</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
-    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">(</span>{<span class="error">p</span><span class="error">a</span><span class="error">t</span><span class="error">h</span>: <span class="error">'</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">.</span><span class="error">p</span><span class="error">n</span><span class="error">g</span><span class="error">'</span>}<span class="error">)</span><span class="error">;</span>
-    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-
-    <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">o</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">l</span><span class="error">o</span><span class="error">g</span><span class="error">(</span><span class="error">t</span><span class="error">i</span><span class="error">t</span><span class="error">l</span><span class="error">e</span><span class="error">)</span><span class="error">;</span>
-
-    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">d</span><span class="error">e</span><span class="error">v</span><span class="error">t</span><span class="error">o</span><span class="error">o</span><span class="error">l</span><span class="error">s</span><span class="error">.</span><span class="error">c</span><span class="error">l</span><span class="error">o</span><span class="error">s</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-    <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">d</span><span class="error">e</span><span class="error">l</span><span class="error">e</span><span class="error">t</span><span class="error">e</span><span class="error">S</span><span class="error">e</span><span class="error">s</span><span class="error">s</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-
-}<span class="error">)</span><span class="error">(</span><span class="error">)</span><span class="error">.</span><span class="error">c</span><span class="error">a</span><span class="error">t</span><span class="error">c</span><span class="error">h</span><span class="error">(</span><span class="error">(</span><span class="error">e</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">o</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">e</span><span class="error">r</span><span class="error">r</span><span class="error">o</span><span class="error">r</span><span class="error">(</span><span class="error">e</span><span class="error">)</span><span class="error">)</span><span class="error">;</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_using_playwright"><a class="anchor" href="#_using_playwright"></a>3.5. Using Playwright</h3>
+<h3 id="_using_playwright"><a class="anchor" href="#_using_playwright"></a>3.4. Using Playwright</h3>
 <div class="paragraph">
 <p>Moon is able to run browser images for <a href="https://github.com/microsoft/playwright">Playwright</a> framework out of the box. An example Playwright test that will work with Moon looks like the following:</p>
 </div>
 <div class="listingblock">
 <div class="title">An example Playwright test working with Moon</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> { <span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span> } <span class="error">=</span> <span class="error">r</span><span class="error">e</span><span class="error">q</span><span class="error">u</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">(</span><span class="error">'</span><span class="error">p</span><span class="error">l</span><span class="error">a</span><span class="error">y</span><span class="error">w</span><span class="error">r</span><span class="error">i</span><span class="error">g</span><span class="error">h</span><span class="error">t</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
+<pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
 
-<span class="error">(</span><span class="error">a</span><span class="error">s</span><span class="error">y</span><span class="error">n</span><span class="error">c</span> <span class="error">(</span><span class="error">)</span> <span class="error">=</span><span class="error">&gt;</span> {
-  <span class="error">v</span><span class="error">a</span><span class="error">r</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">n</span><span class="error">e</span><span class="error">c</span><span class="error">t</span><span class="error">(</span>{ <span class="error">t</span><span class="error">i</span><span class="error">m</span><span class="error">e</span><span class="error">o</span><span class="error">u</span><span class="error">t</span>: <span class="integer">0</span>, <span class="error">w</span><span class="error">s</span><span class="error">E</span><span class="error">n</span><span class="error">d</span><span class="error">p</span><span class="error">o</span><span class="error">i</span><span class="error">n</span><span class="error">t</span>: <span class="error">'</span><span class="error">w</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">.</span><span class="error">e</span><span class="error">x</span><span class="error">a</span><span class="error">m</span><span class="error">p</span><span class="error">l</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span>:<span class="integer">4444</span><span class="error">/</span><span class="error">p</span><span class="error">l</span><span class="error">a</span><span class="error">y</span><span class="error">w</span><span class="error">r</span><span class="error">i</span><span class="error">g</span><span class="error">h</span><span class="error">t</span><span class="error">/</span><span class="error">f</span><span class="error">i</span><span class="error">r</span><span class="error">e</span><span class="error">f</span><span class="error">o</span><span class="error">x</span><span class="error">'</span> }<span class="error">)</span><span class="error">;</span>
-  <span class="error">c</span><span class="error">o</span><span class="error">n</span><span class="error">s</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span> <span class="error">=</span> <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">n</span><span class="error">e</span><span class="error">w</span><span class="error">P</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">g</span><span class="error">o</span><span class="error">t</span><span class="error">o</span><span class="error">(</span><span class="error">'</span><span class="error">h</span><span class="error">t</span><span class="error">t</span><span class="error">p</span><span class="error">s</span>:<span class="error">/</span><span class="error">/</span><span class="error">a</span><span class="error">e</span><span class="error">r</span><span class="error">o</span><span class="error">k</span><span class="error">u</span><span class="error">b</span><span class="error">e</span><span class="error">.</span><span class="error">c</span><span class="error">o</span><span class="error">m</span><span class="error">/</span><span class="error">m</span><span class="error">o</span><span class="error">o</span><span class="error">n</span><span class="error">/</span><span class="error">'</span><span class="error">)</span><span class="error">;</span>
-  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">p</span><span class="error">a</span><span class="error">g</span><span class="error">e</span><span class="error">.</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">(</span>{ <span class="error">p</span><span class="error">a</span><span class="error">t</span><span class="error">h</span>: <span class="error">`</span><span class="error">s</span><span class="error">c</span><span class="error">r</span><span class="error">e</span><span class="error">e</span><span class="error">n</span><span class="error">s</span><span class="error">h</span><span class="error">o</span><span class="error">t</span><span class="error">.</span><span class="error">p</span><span class="error">n</span><span class="error">g</span><span class="error">`</span> }<span class="error">)</span><span class="error">;</span>
-  <span class="error">a</span><span class="error">w</span><span class="error">a</span><span class="error">i</span><span class="error">t</span> <span class="error">b</span><span class="error">r</span><span class="error">o</span><span class="error">w</span><span class="error">s</span><span class="error">e</span><span class="error">r</span><span class="error">.</span><span class="error">c</span><span class="error">l</span><span class="error">o</span><span class="error">s</span><span class="error">e</span><span class="error">(</span><span class="error">)</span><span class="error">;</span>
-}<span class="error">)</span><span class="error">(</span><span class="error">)</span><span class="error">;</span></code></pre>
+(async () =&gt; {
+  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
+  const page = await browser.newPage();
+  await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
+  await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
+  await browser.close();
+})();</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>You can see that the only difference from standard Playwright example is a web socket endpoint URL. Playwright compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser version or e.g. enable video recording is passing all these requirements in websocket endpoint URL. Next section describe supported URL naming conventions.</p>
 </div>
 <div class="sect3">
-<h4 id="_selecting_requested_browser"><a class="anchor" href="#_selecting_requested_browser"></a>3.5.1. Selecting Requested Browser</h4>
+<h4 id="_selecting_requested_browser"><a class="anchor" href="#_selecting_requested_browser"></a>3.4.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -4346,7 +4229,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_selecting_exact_browser_version"><a class="anchor" href="#_selecting_exact_browser_version"></a>3.5.2. Selecting Exact Browser Version</h4>
+<h4 id="_selecting_exact_browser_version"><a class="anchor" href="#_selecting_exact_browser_version"></a>3.4.2. Selecting Exact Browser Version</h4>
 <div class="paragraph">
 <p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
 </div>
@@ -4358,7 +4241,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.5.3. Enabling Additional Features</h4>
+<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.4.3. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, enabling video recording and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -4372,7 +4255,7 @@ some-clipboard-value</code></pre>
 <p>Full list of supported parameters and their meaning is shown below.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Supported parameters for enabling additional features</caption>
+<caption class="title">Table 15. Supported parameters for enabling additional features</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -4451,6 +4334,155 @@ some-clipboard-value</code></pre>
 </tbody>
 </table>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_accessing_chrome_developer_tools"><a class="anchor" href="#_accessing_chrome_developer_tools"></a>3.5. Accessing Chrome Developer Tools</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature will work only for Chrome 63+.</p>
+</li>
+<li>
+<p>We recommend using the most recent Chrome version possible.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon can automate browsers using <a href="https://chromedevtools.github.io/devtools-protocol/">Chrome Developer Tools Protocol</a>. This allows you to run tests in parallel using libraries like <a href="https://github.com/puppeteer/puppeteer">Puppeteer</a> or <a href="https://github.com/getgauge/taiko">Taiko</a>. In order to start a new browser with these tools - simply use the following URL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/cdtp/chrome</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>An example Puppeteer test is shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Accessing Developer Tools API with Puppeteer</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">const puppeteer = require(<span class="string"><span class="delimiter">'</span><span class="content">puppeteer-core</span><span class="delimiter">'</span></span>);
+const host = <span class="string"><span class="delimiter">'</span><span class="content">moon.example.com</span><span class="delimiter">'</span></span>;
+(async () =&gt; {
+    const devtools = await puppeteer.connect(
+        { <span class="key">browserWSEndpoint</span>: <span class="error">`</span>ws:<span class="comment">//${host}:4444/cdtp/chrome` }</span>
+    ); <span class="comment">// For every call of this method a new browser is started</span>
+    const page = await devtools.newPage();
+    await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com</span><span class="delimiter">'</span></span>);
+    await page.screenshot({<span class="key">path</span>: <span class="string"><span class="delimiter">'</span><span class="content">screenshot.png</span><span class="delimiter">'</span></span>});
+    const title = await page.title();
+
+    console.log(title);
+
+    await devtools.close();
+})();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly to Playwright you can choose browser version and enable additional features by changing connection URL.</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting Chrome version (<code>cdtp/chrome:85.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/cdtp/chrome/85.0</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/cdtp/chrome?headless=false&amp;enableVideo=true</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to record video of running browser session.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Supported video codec name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libx264</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize video codec name being used by video recorder.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoFrameRate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>12</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize frame rate of the video being recorded.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;your-name&gt;.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>video.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to customize video file name being uploaded to S3.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoScreenSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the video being recorded.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.6. Changing Browser Locale</h3>
@@ -5120,7 +5152,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-10-08 19:10:15 UTC
+Last updated 2020-10-21 11:10:11 UTC
 </div>
 </div>
 <style>
