@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-10-21</span>
+<span id="revdate">2020-10-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -554,13 +554,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_custom_screen_resolution_screenresolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
 <li><a href="#_android_skin_skin">3.1.3. Android Skin: skin</a></li>
 <li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
-<li><a href="#_custom_test_name_name">3.1.5. Custom Test Name: name</a></li>
-<li><a href="#_per_session_time_zone_timezone">3.1.6. Per-session Time Zone: timeZone</a></li>
-<li><a href="#_per_session_environment_variables_env">3.1.7. Per-session Environment Variables: env</a></li>
-<li><a href="#_hosts_entries_hostsentries">3.1.8. Hosts Entries: hostsEntries</a></li>
-<li><a href="#_custom_session_timeout_sessiontimeout">3.1.9. Custom Session Timeout: sessionTimeout</a></li>
-<li><a href="#_s3_key_pattern_s3keypattern">3.1.10. S3 Key Pattern: s3KeyPattern</a></li>
-<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.11. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#_custom_log_name_logname">3.1.5. Custom Log Name: logName</a></li>
+<li><a href="#_custom_test_name_name">3.1.6. Custom Test Name: name</a></li>
+<li><a href="#_per_session_time_zone_timezone">3.1.7. Per-session Time Zone: timeZone</a></li>
+<li><a href="#_per_session_environment_variables_env">3.1.8. Per-session Environment Variables: env</a></li>
+<li><a href="#_hosts_entries_hostsentries">3.1.9. Hosts Entries: hostsEntries</a></li>
+<li><a href="#_custom_session_timeout_sessiontimeout">3.1.10. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#_s3_key_pattern_s3keypattern">3.1.11. S3 Key Pattern: s3KeyPattern</a></li>
+<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.12. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -1447,7 +1448,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Update <code>users</code> secret:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace secret users --from-file=./users.htpasswd -n moon</pre>
+<pre>$ kubectl replace secret users --filename=./users.htpasswd -n moon</pre>
 </div>
 </div>
 </li>
@@ -1606,7 +1607,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Update <code>quota</code> ConfigMap using contents of <code>quota</code> directory:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl replace configmap quota --from-file=quota -n moon</pre>
+<pre>$ kubectl replace configmap quota --filename=quota -n moon</pre>
 </div>
 </div>
 </li>
@@ -1992,7 +1993,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <p>Having a license key file - create a Kubernetes secret:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret generic license-key --from-file /path/to/license.key -n moon</pre>
+<pre>$ kubectl create secret generic license-key --filename /path/to/license.key -n moon</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3933,8 +3934,7 @@ You should manually resize window to desired width and height or use Selenium <c
 <div class="ulist">
 <ul>
 <li>
-<p>By default saved video files are named <code>&lt;session-id&gt;.mp4</code> where <code>&lt;session-id&gt;</code> is a unique identifier of Selenium session.
-To provide custom video name specify:</p>
+<p>By default saved video files are named <code>video.mp4</code>. To provide custom video name specify:</p>
 <div class="listingblock">
 <div class="title">Type: string</div>
 <div class="content">
@@ -3988,7 +3988,31 @@ resolution is less than actual, screen on video will be trimmed starting from to
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.5. Custom Test Name: name</h4>
+<h4 id="_custom_log_name_logname"><a class="anchor" href="#_custom_log_name_logname"></a>3.1.5. Custom Log Name: logName</h4>
+<div class="paragraph">
+<p>By default saved log files are named <code>session.log</code>. To provide custom log name specify:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>logName: "session.log"</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is important to add <code>log</code> file extension.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.6. Custom Test Name: name</h4>
 <div class="paragraph">
 <p>For debugging purposes it is often useful to give a distinct name to every test case. You can set test case name by passing the following capability:</p>
 </div>
@@ -4003,7 +4027,7 @@ resolution is less than actual, screen on video will be trimmed starting from to
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.6. Per-session Time Zone: timeZone</h4>
+<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.7. Per-session Time Zone: timeZone</h4>
 <div class="paragraph">
 <p>Some tests require particular time zone to be set in operating system.</p>
 </div>
@@ -4019,7 +4043,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_environment_variables_env"><a class="anchor" href="#_per_session_environment_variables_env"></a>3.1.7. Per-session Environment Variables: env</h4>
+<h4 id="_per_session_environment_variables_env"><a class="anchor" href="#_per_session_environment_variables_env"></a>3.1.8. Per-session Environment Variables: env</h4>
 <div class="paragraph">
 <p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
 </div>
@@ -4034,7 +4058,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.8. Hosts Entries: hostsEntries</h4>
+<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.9. Hosts Entries: hostsEntries</h4>
 <div class="paragraph">
 <p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#_browsers_list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
 </div>
@@ -4049,7 +4073,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.9. Custom Session Timeout: sessionTimeout</h4>
+<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.10. Custom Session Timeout: sessionTimeout</h4>
 <div class="paragraph">
 <p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
 </div>
@@ -4064,7 +4088,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_s3_key_pattern_s3keypattern"><a class="anchor" href="#_s3_key_pattern_s3keypattern"></a>3.1.10. S3 Key Pattern: s3KeyPattern</h4>
+<h4 id="_s3_key_pattern_s3keypattern"><a class="anchor" href="#_s3_key_pattern_s3keypattern"></a>3.1.11. S3 Key Pattern: s3KeyPattern</h4>
 <div class="paragraph">
 <p>This capability allows to override S3 key pattern (specified by <code>s3 &gt; keyPattern</code> key in <code>service.json</code>) used when uploading files to S3.</p>
 </div>
@@ -4079,7 +4103,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.11. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.12. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -5152,7 +5176,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-10-21 11:10:11 UTC
+Last updated 2020-10-24 14:06:17 UTC
 </div>
 </div>
 <style>
