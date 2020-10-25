@@ -1064,6 +1064,37 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 <div class="paragraph">
 <p>This service is required for successful network communication between Moon and created browser pods and is included to our <a href="https://github.com/aerokube/moon-deploy/">official deployment manifests</a> by default.</p>
 </div>
+<div class="paragraph">
+<p>One more possible reason could be related to DNS configuration in your cluster. Moon relies on resolving short domain names like <code>chrome-85-0-xxxxxx</code> to communicate with browser pods. If in your cluster only fully qualified domain names (such as <code>chrome-85-0-xxxxxx.moon.svc.cluster-domain.example</code>) are allowed you need to additionally configure DNS settings of Moon pod:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">2</span></span>
+  <span class="key">selector</span>:
+    <span class="key">matchLabels</span>:
+      <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="comment"># ...</span>
+      <span class="key">dnsConfig</span>:
+        <span class="key">nameservers</span>:
+        - <span class="string"><span class="content">1.2.3.4</span></span>
+        <span class="key">searches</span>:
+          - <span class="string"><span class="content">ns1.svc.cluster-domain.example</span></span>
+          - <span class="string"><span class="content">my.dns.search.suffix</span></span></code></pre>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.7. Connection was closed unexpectedly</h4>
@@ -5189,7 +5220,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-10-25 11:55:04 UTC
+Last updated 2020-10-25 13:53:57 UTC
 </div>
 </div>
 <style>
