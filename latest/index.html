@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-10-24</span>
+<span id="revdate">2020-10-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -559,9 +559,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_per_session_time_zone_timezone">3.1.7. Per-session Time Zone: timeZone</a></li>
 <li><a href="#_per_session_environment_variables_env">3.1.8. Per-session Environment Variables: env</a></li>
 <li><a href="#_hosts_entries_hostsentries">3.1.9. Hosts Entries: hostsEntries</a></li>
-<li><a href="#_custom_session_timeout_sessiontimeout">3.1.10. Custom Session Timeout: sessionTimeout</a></li>
-<li><a href="#_s3_key_pattern_s3keypattern">3.1.11. S3 Key Pattern: s3KeyPattern</a></li>
-<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.12. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#_custom_dns_servers_nameservers">3.1.10. Custom DNS Servers: nameservers</a></li>
+<li><a href="#_custom_session_timeout_sessiontimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#_s3_key_pattern_s3keypattern">3.1.12. S3 Key Pattern: s3KeyPattern</a></li>
+<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.13. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -4073,7 +4074,19 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.10. Custom Session Timeout: sessionTimeout</h4>
+<h4 id="_custom_dns_servers_nameservers"><a class="anchor" href="#_custom_dns_servers_nameservers"></a>3.1.10. Custom DNS Servers: nameservers</h4>
+<div class="paragraph">
+<p>By default browser pods are using global Kubernetes DNS settings. Sometimes you may need to override used DNS servers list for particular test cases. This can be easily achieved with:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: array, format: &lt;dns-ip-address&gt;</div>
+<div class="content">
+<pre>nameservers: ["192.168.0.1", "192.168.0.2"]</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.11. Custom Session Timeout: sessionTimeout</h4>
 <div class="paragraph">
 <p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
 </div>
@@ -4088,7 +4101,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_s3_key_pattern_s3keypattern"><a class="anchor" href="#_s3_key_pattern_s3keypattern"></a>3.1.11. S3 Key Pattern: s3KeyPattern</h4>
+<h4 id="_s3_key_pattern_s3keypattern"><a class="anchor" href="#_s3_key_pattern_s3keypattern"></a>3.1.12. S3 Key Pattern: s3KeyPattern</h4>
 <div class="paragraph">
 <p>This capability allows to override S3 key pattern (specified by <code>s3 &gt; keyPattern</code> key in <code>service.json</code>) used when uploading files to S3.</p>
 </div>
@@ -4103,7 +4116,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.12. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.13. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -5176,7 +5189,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-10-24 14:06:17 UTC
+Last updated 2020-10-25 11:55:04 UTC
 </div>
 </div>
 <style>
