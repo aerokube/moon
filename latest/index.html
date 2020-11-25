@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-11-07</span>
+<span id="revdate">2020-11-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2617,6 +2617,15 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <li>
 <p>Use new main Moon images from the previous step in Kubernetes YAML definitions to start Moon, Moon API and Moon UI.</p>
 </li>
+<li>
+<p>If you are using Playwright or Chrome Developer Tools feature - to override repository you have to set the following flags to <code>moon</code> container:</p>
+<div class="literalblock">
+<div class="content">
+<pre>-chrome-devtools-repository my-registry.example.com/cdtp
+-playwright-repository my-registry.example.com/playwright</pre>
+</div>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -3723,6 +3732,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 <div class="content">
 <pre class="CodeRay highlight"><code>-browser-timeout duration
     awaiting browser timeout (default 30s)
+-chrome-devtools-repository string
+    repository to pull chrome devtools images (default &quot;cdtp&quot;)
 -config-file string
     optional configuration file (default &quot;config/service.json&quot;)
 -cpu-limit string
@@ -3753,10 +3764,10 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     moon service url (default &quot;http://moon:4444/wd/hub&quot;)
 -namespace string
     namespace
+-playwright-repository string
+    repository to pull playwright images (default &quot;playwright&quot;)
 -quota-dir string
     quota directory (default &quot;quota&quot;)
--repository-root string
-    repository to pull playwright images (default &quot;playwright&quot;)
 -service-account-name string
     service account name (default &quot;default&quot;)
 -session-attempt-timeout duration
@@ -5220,7 +5231,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-11-07 15:08:21 UTC
+Last updated 2020-11-25 09:12:26 UTC
 </div>
 </div>
 <style>
