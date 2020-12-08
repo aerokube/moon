@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2020-12-07</span>
+<span id="revdate">2020-12-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -571,7 +571,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#_selecting_requested_browser">3.4.1. Selecting Requested Browser</a></li>
 <li><a href="#_selecting_exact_browser_version">3.4.2. Selecting Exact Browser Version</a></li>
-<li><a href="#_enabling_additional_features">3.4.3. Enabling Additional Features</a></li>
+<li><a href="#_selecting_exact_playwright_version">3.4.3. Selecting Exact Playwright Version</a></li>
+<li><a href="#_enabling_additional_features">3.4.4. Enabling Additional Features</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_chrome_developer_tools">3.5. Accessing Chrome Developer Tools</a></li>
@@ -4318,9 +4319,24 @@ some-clipboard-value</code></pre>
 <pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/76.0</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Full list of images can be found <a href="https://aerokube.com/images/latest/#_playwright">here</a>.</p>
+</div>
 </div>
 <div class="sect3">
-<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.4.3. Enabling Additional Features</h4>
+<h4 id="_selecting_exact_playwright_version"><a class="anchor" href="#_selecting_exact_playwright_version"></a>3.4.3. Selecting Exact Playwright Version</h4>
+<div class="paragraph">
+<p>Currently Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting an image compatible to Playwright 1.5.1 (<code>playwright/firefox:playwright-1.5.1</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/playwright-1.5.1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.4.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, enabling video recording and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -4351,6 +4367,12 @@ some-clipboard-value</code></pre>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more additional command-line arguments to be passed to browser. This parameter can be passed multiple times: <code>arg=--use-fake-ui-for-media-stream&amp;arg=--use-gl</code>.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
@@ -4361,6 +4383,12 @@ some-clipboard-value</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to record video of running browser session (same meaning as <code>enableVideo</code> Selenium capability). Only works in conjunction with <code>headless=false</code>, i.e. <code>headless=false&amp;enableVideo=true</code>. You can see browser screen in Moon UI only when this is set to <code>false</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. This parameter can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
@@ -5231,7 +5259,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2020-12-07 08:47:16 UTC
+Last updated 2020-12-08 09:37:45 UTC
 </div>
 </div>
 <style>
