@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-01-06</span>
+<span id="revdate">2021-01-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -513,35 +513,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_configuration_file">2.3. Configuration File</a></li>
-<li><a href="#_credentials_secret">2.4. Credentials Secret</a></li>
-<li><a href="#_installing_license">2.5. Installing License</a>
+<li><a href="#_devices_file">2.4. Devices File</a></li>
+<li><a href="#_credentials_secret">2.5. Credentials Secret</a></li>
+<li><a href="#_installing_license">2.6. Installing License</a>
 <ul class="sectlevel3">
-<li><a href="#_how_licenses_work">2.5.1. How Licenses Work</a></li>
+<li><a href="#_how_licenses_work">2.6.1. How Licenses Work</a></li>
 </ul>
 </li>
-<li><a href="#_monitoring">2.6. Monitoring</a></li>
-<li><a href="#_advanced_configuration">2.7. Advanced Configuration</a>
+<li><a href="#_monitoring">2.7. Monitoring</a></li>
+<li><a href="#_advanced_configuration">2.8. Advanced Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_files_to_s3">2.7.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_docker_registry">2.7.2. Using Custom Docker Registry</a></li>
-<li><a href="#_adjusting_timeouts">2.7.3. Adjusting Timeouts</a></li>
-<li><a href="#_adjusting_resources_consumption">2.7.4. Adjusting Resources Consumption</a></li>
-<li><a href="#_using_volumes">2.7.5. Using Volumes</a></li>
-<li><a href="#_running_browser_pods_in_privileged_mode">2.7.6. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#_using_node_selectors">2.7.7. Using Node Selectors</a></li>
-<li><a href="#_using_tolerations">2.7.8. Using Tolerations</a></li>
-<li><a href="#_using_custom_kubernetes_annotations">2.7.9. Using Custom Kubernetes Annotations</a></li>
-<li><a href="#_using_custom_kubernetes_labels">2.7.10. Using Custom Kubernetes Labels</a></li>
-<li><a href="#_using_custom_linux_kernel_capabilities">2.7.11. Using Custom Linux Kernel Capabilities</a></li>
-<li><a href="#_using_custom_service_account">2.7.12. Using Custom Service Account</a></li>
-<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.7.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#_uploading_files_to_s3">2.8.1. Uploading Files to S3</a></li>
+<li><a href="#_using_custom_docker_registry">2.8.2. Using Custom Docker Registry</a></li>
+<li><a href="#_adjusting_timeouts">2.8.3. Adjusting Timeouts</a></li>
+<li><a href="#_adjusting_resources_consumption">2.8.4. Adjusting Resources Consumption</a></li>
+<li><a href="#_using_volumes">2.8.5. Using Volumes</a></li>
+<li><a href="#_running_browser_pods_in_privileged_mode">2.8.6. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#_using_node_selectors">2.8.7. Using Node Selectors</a></li>
+<li><a href="#_using_tolerations">2.8.8. Using Tolerations</a></li>
+<li><a href="#_using_custom_kubernetes_annotations">2.8.9. Using Custom Kubernetes Annotations</a></li>
+<li><a href="#_using_custom_kubernetes_labels">2.8.10. Using Custom Kubernetes Labels</a></li>
+<li><a href="#_using_custom_linux_kernel_capabilities">2.8.11. Using Custom Linux Kernel Capabilities</a></li>
+<li><a href="#_using_custom_service_account">2.8.12. Using Custom Service Account</a></li>
+<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.8.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
-<li><a href="#_log_files">2.8. Log Files</a></li>
-<li><a href="#_cli_flags">2.9. CLI Flags</a>
+<li><a href="#_log_files">2.9. Log Files</a></li>
+<li><a href="#_cli_flags">2.10. CLI Flags</a>
 <ul class="sectlevel3">
-<li><a href="#_moon_container_flags">2.9.1. Moon Container Flags</a></li>
-<li><a href="#_moon_api_container_flags">2.9.2. Moon API Container Flags</a></li>
+<li><a href="#_moon_container_flags">2.10.1. Moon Container Flags</a></li>
+<li><a href="#_moon_api_container_flags">2.10.2. Moon API Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -562,7 +563,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_custom_dns_servers_nameservers">3.1.10. Custom DNS Servers: nameservers</a></li>
 <li><a href="#_custom_session_timeout_sessiontimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
 <li><a href="#_s3_key_pattern_s3keypattern">3.1.12. S3 Key Pattern: s3KeyPattern</a></li>
-<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.13. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#_mobile_emulation_mobiledevice">3.1.13. Mobile Emulation: mobileDevice</a></li>
+<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.14. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -576,10 +578,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_accessing_chrome_developer_tools">3.5. Accessing Chrome Developer Tools</a></li>
-<li><a href="#_changing_browser_locale">3.6. Changing Browser Locale</a>
+<li><a href="#_mobile_emulation">3.6. Mobile Emulation</a>
 <ul class="sectlevel3">
-<li><a href="#_firefox">3.6.1. Firefox</a></li>
-<li><a href="#_chromium_based_browsers">3.6.2. Chromium-based Browsers</a></li>
+<li><a href="#_supported_mobile_devices">3.6.1. Supported Mobile Devices</a></li>
+</ul>
+</li>
+<li><a href="#_changing_browser_locale">3.7. Changing Browser Locale</a>
+<ul class="sectlevel3">
+<li><a href="#_firefox">3.7.1. Firefox</a></li>
+<li><a href="#_chromium_based_browsers">3.7.2. Chromium-based Browsers</a></li>
 </ul>
 </li>
 </ul>
@@ -897,6 +904,41 @@ $ cd moon-deploy</pre>
 <div class="content">
 <pre>http://192.168.99.100:8080/</pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Another possible option is to use <a href="https://minikube.sigs.k8s.io/docs/commands/tunnel/">minikube tunnel</a> instead:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In a separate terminal run command to start Minikube tunnel:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube tunnel</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use <code>127.0.0.1</code> to access Moon:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://127.0.0.1:4444/wd/hub
+http://127.0.0.1:8080/</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </li>
 </ol>
@@ -1946,7 +1988,58 @@ Every VNC server should be password protected with the same password having 8+ c
 </div>
 </div>
 <div class="sect2">
-<h3 id="_credentials_secret"><a class="anchor" href="#_credentials_secret"></a>2.4. Credentials Secret</h3>
+<h3 id="_devices_file"><a class="anchor" href="#_devices_file"></a>2.4. Devices File</h3>
+<div class="paragraph">
+<p>Moon load information about available mobile devices for <a href="#_mobile_emulation">Mobile Emulation</a> from a special file usually called <code>devices.json</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Typical <code>devices.json</code> file</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">Google Nexus 4</span><span class="delimiter">&quot;</span></span>: { <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">width</span><span class="delimiter">&quot;</span></span>: <span class="integer">384</span>, <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">height</span><span class="delimiter">&quot;</span></span>: <span class="integer">640</span>, <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">pixelRatio</span><span class="delimiter">&quot;</span></span>: <span class="integer">2</span>, <i class="conum" data-value="4"></i><b>(4)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">userAgent</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">user-agent-string-for-chrome-%s</span><span class="delimiter">&quot;</span></span>, <i class="conum" data-value="5"></i><b>(5)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">printVersion</span><span class="delimiter">&quot;</span></span>: <span class="value">true</span> <i class="conum" data-value="6"></i><b>(6)</b>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Mobile device name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Device screen width</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Device screen height</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Device pixel ratio</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Device user agent</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Whether to substitute Chrome version to user agent string (<code>%s</code> placeholder is replaced by Chrome version)</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>devices.json</code> similarly to <code>service.json</code> is mounted to Moon container as a regular file using Kubernetes config map. Path to configuration file is specified with <code>-device-file</code> Moon flag. Any changes to configuration file are applied immediately - no need to restart Moon.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_credentials_secret"><a class="anchor" href="#_credentials_secret"></a>2.5. Credentials Secret</h3>
 <div class="paragraph">
 <p>Moon reads all credentials (e.g. S3 keys) from an optional Kubernetes secret called <code>credentials</code>. This secret is mounted to Moon container as a regular directory with distinct files corresponding to different keys. Path to credentials directory is specified with <code>-credentials-dir</code> Moon flag. Any changes to credentials secret are applied immediately - no need to restart Moon.</p>
 </div>
@@ -2015,7 +2108,7 @@ Every VNC server should be password protected with the same password having 8+ c
 </table>
 </div>
 <div class="sect2">
-<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.5. Installing License</h3>
+<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.6. Installing License</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2133,7 +2226,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </ol>
 </div>
 <div class="sect3">
-<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.5.1. How Licenses Work</h4>
+<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.6.1. How Licenses Work</h4>
 <div class="paragraph">
 <p>Every license key gives you an ability to run <strong>fixed number of parallel browser sessions</strong>. To limit maximum number of browser sessions Moon is using built-in Kubernetes <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quota</a> feature. Every browser session in Moon is a separate Kubernetes <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pod</a>. When started Moon checks that respective pod resource quota exists (that is to say total number of pods is limited). If not found such resource quota is automatically created. You can have any desired number of Moon, Moon API and Moon UI replicas (i.e. pods) in your cluster. These pods are added to total number of parallel browser sessions from license key. For example:</p>
 </div>
@@ -2164,7 +2257,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect2">
-<h3 id="_monitoring"><a class="anchor" href="#_monitoring"></a>2.6. Monitoring</h3>
+<h3 id="_monitoring"><a class="anchor" href="#_monitoring"></a>2.7. Monitoring</h3>
 <div class="paragraph">
 <p>Moon has a dedicated microservice <code>moon-monitor</code> allowing to easily visualize browsers consumption with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>.</p>
 </div>
@@ -2325,9 +2418,9 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 </div>
 </div>
 <div class="sect2">
-<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.7. Advanced Configuration</h3>
+<h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.8. Advanced Configuration</h3>
 <div class="sect3">
-<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.7.1. Uploading Files to S3</h4>
+<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.8.1. Uploading Files to S3</h4>
 <div class="sect4">
 <h5 id="_how_to_configure_s3_support"><a class="anchor" href="#_how_to_configure_s3_support"></a>How to Configure S3 Support</h5>
 <div class="paragraph">
@@ -2533,7 +2626,7 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.7.2. Using Custom Docker Registry</h4>
+<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.8.2. Using Custom Docker Registry</h4>
 <div class="paragraph">
 <p>By default Moon downloads all images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to configure Moon to work with this registry. To do this:</p>
 </div>
@@ -2651,7 +2744,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.7.3. Adjusting Timeouts</h4>
+<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.8.3. Adjusting Timeouts</h4>
 <div class="sect4">
 <h5 id="_adjusting_moon_timeouts"><a class="anchor" href="#_adjusting_moon_timeouts"></a>Adjusting Moon Timeouts</h5>
 <div class="paragraph">
@@ -2720,7 +2813,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.7.4. Adjusting Resources Consumption</h4>
+<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.8.4. Adjusting Resources Consumption</h4>
 <div class="sect4">
 <h5 id="_browser_resources_consumption"><a class="anchor" href="#_browser_resources_consumption"></a>Browser Resources Consumption</h5>
 <div class="paragraph">
@@ -2933,7 +3026,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_volumes"><a class="anchor" href="#_using_volumes"></a>2.7.5. Using Volumes</h4>
+<h4 id="_using_volumes"><a class="anchor" href="#_using_volumes"></a>2.8.5. Using Volumes</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2977,7 +3070,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.7.6. Running Browser Pods in Privileged Mode</h4>
+<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.8.6. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>In some cases like running Android emulators browser container should be run in <code>privileged</code> mode. This setting can be applied separately to each browser version in browsers list file as follows:</p>
 </div>
@@ -3009,7 +3102,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.7.7. Using Node Selectors</h4>
+<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.8.7. Using Node Selectors</h4>
 <div class="paragraph">
 <p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers list as shown below:</p>
 </div>
@@ -3043,7 +3136,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.7.8. Using Tolerations</h4>
+<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.8.8. Using Tolerations</h4>
 <div class="paragraph">
 <p>Kubernetes has a cool feature called <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">Taints</a> allowing to fine tune pods scheduling across nodes. If you wish to run browser pods on tainted nodes - you have to adjust so-called <code>tolerations</code>, that is to say a number of conditions to match against tainted nodes. Moon is using exactly the same format as Kubernetes to define tolerations:</p>
 </div>
@@ -3083,7 +3176,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.7.9. Using Custom Kubernetes Annotations</h4>
+<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.8.9. Using Custom Kubernetes Annotations</h4>
 <div class="paragraph">
 <p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. Moon allows to configure custom annotations globally or individually for every browser version. Global annotations are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -3172,7 +3265,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.7.10. Using Custom Kubernetes Labels</h4>
+<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.8.10. Using Custom Kubernetes Labels</h4>
 <div class="paragraph">
 <p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. Moon allows to configure custom labels globally or individually for every browser version. Similarly to annotations global labels are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -3284,7 +3377,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.7.11. Using Custom Linux Kernel Capabilities</h4>
+<h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.8.11. Using Custom Linux Kernel Capabilities</h4>
 <div class="paragraph">
 <p>By default Moon starts all browser pods without any explicit <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capabilities</a>. In some cases you may need to set custom Linux capabilities to started browser pods (e.g. <code>SYS_ADMIN</code>). Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
@@ -3312,7 +3405,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.7.12. Using Custom Service Account</h4>
+<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.8.12. Using Custom Service Account</h4>
 <div class="paragraph">
 <p>By default Moon is using service account named <code>default</code> to access Kubernetes API. In some cases you only have permissions for another service account, e.g. named <code>moon</code>. To use this service account with Moon you need to change deployment as follows:</p>
 </div>
@@ -3394,7 +3487,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.7.13. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.8.13. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_configuration_file">Configuration File</a>:</p>
 </div>
@@ -3462,7 +3555,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.8. Log Files</h3>
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>2.9. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>) so you can use well-known <code>kubectl</code> commands to see the log. Everything related to Selenium sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -3740,12 +3833,12 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.9. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>2.10. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.9.1. Moon Container Flags</h4>
+<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.10.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -3763,6 +3856,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     browser container cpu request (default &quot;0.5&quot;)
 -credentials-dir string
     directory where credentials are mounted (default &quot;credentials&quot;)
+-device-file string
+    mobile devices configuration file (default &quot;config/devices.json&quot;)
 -disable-cpu-limits
     disable cpu limits for pods
 -disable-memory-limits
@@ -3803,7 +3898,7 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.9.2. Moon API Container Flags</h4>
+<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.10.2. Moon API Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -4179,7 +4274,43 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.13. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="_mobile_emulation_mobiledevice"><a class="anchor" href="#_mobile_emulation_mobiledevice"></a>3.1.13. Mobile Emulation: mobileDevice</h4>
+<div class="paragraph">
+<p>This capability configures desired mobile device <a href="#_mobile_emulation">Mobile Emulation</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: object</div>
+<div class="content">
+<pre>"mobileDevice": {
+    "deviceName": "Apple iPhone XR",
+    "orientation": "landscape"
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To select which device to emulate use <code>deviceName</code> key:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>deviceName: "Apple iPhone XR"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To explicitly specify device screen orientation (portait or landscape) use <code>orientation</code> key:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>orientation: "landscape"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Possible <code>orientation</code> values are: <code>portait</code>, <code>vertical</code> (alias for <code>portrait</code>), <code>landscape</code>, <code>horizontal</code> (alias for <code>landscape</code>).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.14. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -4284,6 +4415,20 @@ some-clipboard-value</code></pre>
 </div>
 <div class="sect2">
 <h3 id="_using_playwright"><a class="anchor" href="#_using_playwright"></a>3.4. Using Playwright</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This feature is supported in Moon 1.6.0 and above.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Moon is able to run browser images for <a href="https://github.com/microsoft/playwright">Playwright</a> framework out of the box. An example Playwright test that will work with Moon looks like the following:</p>
 </div>
@@ -4474,6 +4619,9 @@ some-clipboard-value</code></pre>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
+<p>This is feature is supported in Moon 1.7.0 and above.</p>
+</li>
+<li>
 <p>This feature will work only for Chrome 63+.</p>
 </li>
 <li>
@@ -4612,12 +4760,410 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </table>
 </div>
 <div class="sect2">
-<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.6. Changing Browser Locale</h3>
+<h3 id="_mobile_emulation"><a class="anchor" href="#_mobile_emulation"></a>3.6. Mobile Emulation</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is supported in Moon 1.8.0 and above.</p>
+</li>
+<li>
+<p>This feature works with Chrome browser only.</p>
+</li>
+<li>
+<p>Testing mobile applications is not possible.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Running automated tests in mobile platforms is nowadays very important. Using a set of real devices connected to server via USB requires too much work to deploy and maintain. Running Android Emulators requires hardware server or virtual machines with nested virtualization enabled. Running iOS Simulators requires to have Apple hardware. Even with correct computing resources tests are slower than on desktop platforms and consume slightly more CPUs and memory per browser.</p>
+</div>
+<div class="paragraph">
+<p>Your goal however is catching bugs and not deploying complicated browser automation infrastructure. There are a lot of cases when a bug related to mobile version of tested web application can be reproduced simply by having exactly the same screen size and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent">User-Agent</a> HTTP header being sent by browser. This feature is already available in Chromium-based browsers and is called <strong>Mobile Emulation</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Moon provides an improved version of mobile emulation. In order to start a new browser with mobile emulation you have to use the following URL as Selenium URL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">http://moon.example.com:4444/mobile</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Example tests using this functionality are shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Mobile Emulation in Java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">87.0</span><span class="delimiter">&quot;</span></span>);
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Object</span>&gt;() {{
+    put(<span class="string"><span class="delimiter">&quot;</span><span class="content">mobileDevice</span><span class="delimiter">&quot;</span></span>, <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">Object</span>&gt;(){
+        {
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">deviceName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Apple iPhone XR</span><span class="delimiter">&quot;</span></span>);
+            put(<span class="string"><span class="delimiter">&quot;</span><span class="content">orientation</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">landscape</span><span class="delimiter">&quot;</span></span>);
+        }
+    });
+}});
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://moon.example.com:4444/mobile</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Mobile Emulation in Python</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">selenium.webdriver</span>
+
+capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">87.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">mobileDevice</span><span class="delimiter">&quot;</span></span>: {
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">deviceName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Apple iPhone XR</span><span class="delimiter">&quot;</span></span>,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">orientation</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">landscape</span><span class="delimiter">&quot;</span></span>
+        }
+    }
+}
+
+driver = selenium.webdriver.remote.webdriver.WebDriver(
+    command_executor=<span class="string"><span class="delimiter">'</span><span class="content">http://moon.example.com:4444/mobile</span><span class="delimiter">'</span></span>,
+    desired_capabilities = capabilities,
+    keep_alive = <span class="predefined-constant">False</span>,
+)
+
+<span class="keyword">try</span>:
+    driver.get(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>)
+    driver.get_screenshot_as_file(<span class="string"><span class="delimiter">'</span><span class="content">screenshot.png</span><span class="delimiter">'</span></span>)
+<span class="keyword">finally</span>:
+    driver.quit()</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_supported_mobile_devices"><a class="anchor" href="#_supported_mobile_devices"></a>3.6.1. Supported Mobile Devices</h4>
+<div class="paragraph">
+<p>Moon comes with a preconfigured list of supported devices stored in <a href="#_devices_file">Devices File</a>. In order to add your own mobile devices definitions - simply update this file and wait for Moon to reload it.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 17. Supported Mobile Devices</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><code>deviceName</code> capability</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad 10.2 (2019)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (10.5)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 10.5"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (12.9)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 12.9"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 5/SE</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 6/7/8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 6/7/8 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone SE</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone XR</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blackberry PlayBook</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BlackBerry Z30</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 5X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 6</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 6P</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 2 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 3 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 4 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JioPhone 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kindle Fire HDX</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with HiDPI screen</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with MDPI screen</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with touch</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LG Optimus L70</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Lumia 550</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Lumia 950</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Surface Duo</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Moto G4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nokia Lumia 520</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nokia N9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Palm PVG100</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Red Hydrogen One</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy A20</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Fold</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 10+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S8+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S9+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10e</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Tab S3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Tab S4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.7. Changing Browser Locale</h3>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
 <div class="sect3">
-<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.6.1. Firefox</h4>
+<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.7.1. Firefox</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Firefox</div>
 <div class="content">
@@ -4629,7 +5175,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.6.2. Chromium-based Browsers</h4>
+<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.7.2. Chromium-based Browsers</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Chromium-base Browsers</div>
 <div class="content">
@@ -5400,7 +5946,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <li>
 <p>For simplicity we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. Moon License Pricing</caption>
+<caption class="title">Table 18. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5587,7 +6133,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-01-06 13:25:35 UTC
+Last updated 2021-01-12 17:50:53 UTC
 </div>
 </div>
 <style>
