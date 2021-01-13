@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-01-12</span>
+<span id="revdate">2021-01-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -469,32 +469,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_recommended_cluster_settings">1.2. Recommended Cluster Settings</a></li>
-<li><a href="#_frequently_asked_questions">1.3. Frequently Asked Questions</a>
+<li><a href="#_required_permissions">1.3. Required Permissions</a></li>
+<li><a href="#_cluster_architecture">1.4. Cluster Architecture</a>
 <ul class="sectlevel3">
-<li><a href="#_where_are_moon_logs">1.3.1. Where are Moon logs?</a></li>
-<li><a href="#_where_are_recorded_videos_stored">1.3.2. Where are recorded videos stored?</a></li>
-<li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">1.3.3. How to update configuration of a running Moon cluster?</a></li>
-<li><a href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon">1.3.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
-<li><a href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods">1.3.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
-<li><a href="#_sessions_are_not_starting">1.3.6. Sessions are not starting</a></li>
-<li><a href="#_connection_was_closed_unexpectedly">1.3.7. Connection was closed unexpectedly</a></li>
-<li><a href="#_browser_pods_are_freezing">1.3.8. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">1.3.9. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">1.3.10. DNS lookup timeouts</a></li>
-<li><a href="#_no_such_host_messages">1.3.11. No such host messages</a></li>
-<li><a href="#_browser_session_timeouts_do_not_work">1.3.12. Browser session timeouts do not work</a></li>
-<li><a href="#_json_processing_errors_in_tests">1.3.13. JSON processing errors in tests</a></li>
+<li><a href="#_moon_components">1.4.1. Moon Components</a></li>
+<li><a href="#_why_moon_is_stateless">1.4.2. Why Moon is Stateless</a></li>
+<li><a href="#_browser_pod_contents">1.4.3. Browser Pod Contents</a></li>
 </ul>
 </li>
-<li><a href="#_required_permissions">1.4. Required Permissions</a></li>
-<li><a href="#_cluster_architecture">1.5. Cluster Architecture</a>
-<ul class="sectlevel3">
-<li><a href="#_moon_components">1.5.1. Moon Components</a></li>
-<li><a href="#_why_moon_is_stateless">1.5.2. Why Moon is Stateless</a></li>
-<li><a href="#_browser_pod_contents">1.5.3. Browser Pod Contents</a></li>
-</ul>
-</li>
-<li><a href="#_moon_vs_selenoid">1.6. Moon vs Selenoid</a></li>
+<li><a href="#_moon_vs_selenoid">1.5. Moon vs Selenoid</a></li>
 </ul>
 </li>
 <li><a href="#_configuration">2. Configuration</a>
@@ -517,7 +500,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_credentials_secret">2.5. Credentials Secret</a></li>
 <li><a href="#_installing_license">2.6. Installing License</a>
 <ul class="sectlevel3">
-<li><a href="#_how_licenses_work">2.6.1. How Licenses Work</a></li>
+<li><a href="#_option_1_you_are_using_official_yaml_manifests">2.6.1. Option 1: you are using official YAML manifests</a></li>
+<li><a href="#_option_2_you_are_using_helm_2">2.6.2. Option 2: you are using Helm</a></li>
+<li><a href="#_option_3_doing_everything_manually">2.6.3. Option 3: doing everything manually</a></li>
+<li><a href="#_how_licenses_work">2.6.4. How Licenses Work</a></li>
+<li><a href="#_installing_license_to_restricted_cluster">2.6.5. Installing License to Restricted Cluster</a></li>
 </ul>
 </li>
 <li><a href="#_monitoring">2.7. Monitoring</a></li>
@@ -591,28 +578,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ul>
 </li>
-<li><a href="#_license_agreement">4. License Agreement</a></li>
-<li><a href="#_privacy_policy">5. Privacy Policy</a>
+<li><a href="#_frequently_asked_questions">4. Frequently Asked Questions</a>
 <ul class="sectlevel2">
-<li><a href="#_information_we_collect">5.1. Information We Collect</a>
+<li><a href="#_where_are_moon_logs">4.1. Where are Moon logs?</a></li>
+<li><a href="#_where_are_recorded_videos_stored">4.2. Where are recorded videos stored?</a></li>
+<li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">4.3. How to update configuration of a running Moon cluster?</a></li>
+<li><a href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon">4.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
+<li><a href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods">4.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
+<li><a href="#_sessions_are_not_starting">4.6. Sessions are not starting</a></li>
+<li><a href="#_connection_was_closed_unexpectedly">4.7. Connection was closed unexpectedly</a></li>
+<li><a href="#_browser_pods_are_freezing">4.8. Browser pods are freezing</a></li>
+<li><a href="#_no_space_left_on_device">4.9. No space left on device</a></li>
+<li><a href="#_dns_lookup_timeouts">4.10. DNS lookup timeouts</a></li>
+<li><a href="#_no_such_host_messages">4.11. No such host messages</a></li>
+<li><a href="#_browser_session_timeouts_do_not_work">4.12. Browser session timeouts do not work</a></li>
+<li><a href="#_json_processing_errors_in_tests">4.13. JSON processing errors in tests</a></li>
+</ul>
+</li>
+<li><a href="#_license_agreement">5. License Agreement</a></li>
+<li><a href="#_privacy_policy">6. Privacy Policy</a>
+<ul class="sectlevel2">
+<li><a href="#_information_we_collect">6.1. Information We Collect</a>
 <ul class="sectlevel3">
-<li><a href="#_information_you_provide">5.1.1. Information You Provide</a></li>
-<li><a href="#_information_we_collect_when_you_use_our_services">5.1.2. Information We Collect When You Use Our Services</a></li>
-<li><a href="#_information_we_receive_from_third_parties">5.1.3. Information We Receive from Third Parties</a></li>
+<li><a href="#_information_you_provide">6.1.1. Information You Provide</a></li>
+<li><a href="#_information_we_collect_when_you_use_our_services">6.1.2. Information We Collect When You Use Our Services</a></li>
+<li><a href="#_information_we_receive_from_third_parties">6.1.3. Information We Receive from Third Parties</a></li>
 </ul>
 </li>
-<li><a href="#_how_we_use_information">5.2. How We Use Information</a></li>
-<li><a href="#_how_we_share_information">5.3. How We Share Information</a></li>
-<li><a href="#_access">5.4. Access</a></li>
-<li><a href="#_data_retention">5.5. Data Retention</a></li>
-<li><a href="#_how_we_protect_information">5.6. How We Protect Information</a></li>
-<li><a href="#_childrens_privacy">5.7. Children&#8217;s Privacy</a></li>
-<li><a href="#_general_data_protection_regulation_gdpr">5.8. General Data Protection Regulation (GDPR)</a></li>
-<li><a href="#_changes_to_this_privacy_policy">5.9. Changes To This Privacy Policy</a></li>
-<li><a href="#_how_to_contact_us">5.10. How to Contact Us</a></li>
+<li><a href="#_how_we_use_information">6.2. How We Use Information</a></li>
+<li><a href="#_how_we_share_information">6.3. How We Share Information</a></li>
+<li><a href="#_access">6.4. Access</a></li>
+<li><a href="#_data_retention">6.5. Data Retention</a></li>
+<li><a href="#_how_we_protect_information">6.6. How We Protect Information</a></li>
+<li><a href="#_childrens_privacy">6.7. Children&#8217;s Privacy</a></li>
+<li><a href="#_general_data_protection_regulation_gdpr">6.8. General Data Protection Regulation (GDPR)</a></li>
+<li><a href="#_changes_to_this_privacy_policy">6.9. Changes To This Privacy Policy</a></li>
+<li><a href="#_how_to_contact_us">6.10. How to Contact Us</a></li>
 </ul>
 </li>
-<li><a href="#_pricing">6. Pricing</a></li>
+<li><a href="#_pricing">7. Pricing</a></li>
 <li><a href="#_browser_image_information">Appendix A: Browser Image information</a></li>
 <li><a href="#_cloud_platforms">Appendix B: Cloud Platforms</a>
 <ul class="sectlevel2">
@@ -639,6 +643,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_quick_start_guide"><a class="anchor" href="#_quick_start_guide"></a>1.1. Quick Start Guide</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#_installing_license">Installing License</a> section.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="sect3">
 <h4 id="_installing_to_kubernetes"><a class="anchor" href="#_installing_to_kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
 <div class="sect4">
@@ -1053,298 +1071,7 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>1.3. Frequently Asked Questions</h3>
-<div class="sect3">
-<h4 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>1.3.1. Where are Moon logs?</h4>
-<div class="paragraph">
-<p>See <a href="#_log_files">Log Files</a> section.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>1.3.2. Where are recorded videos stored?</h4>
-<div class="paragraph">
-<p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_how_to_update_configuration_of_a_running_moon_cluster"><a class="anchor" href="#_how_to_update_configuration_of_a_running_moon_cluster"></a>1.3.3. How to update configuration of a running Moon cluster?</h4>
-<div class="paragraph">
-<p>Just update respective config maps (<code>config</code>, <code>quota</code>) or secrets (<code>users</code>, <code>credentials</code>) with standard Kubernetes commands (<code>kubectl edit</code> or <code>kubectl replace</code>). For example:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl edit configmap config -n moon # Updating global Moon configuration
-$ kubectl edit configmap quota -n moon # Updating Moon quota
-$ kubectl edit secret users -n moon # Updating Moon users
-$ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 access keypair)</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>These commands will open your preferred editor with respective data: do any desired modifications, save and exit. Changes are applied immediately but how fast Moon will see them depends on Kubernetes caching settings (default is <code>1 minute</code>).</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_is_it_possible_to_configure_kubernetes_service_account_for_moon"><a class="anchor" href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon"></a>1.3.4. Is it possible to configure Kubernetes service account for Moon?</h4>
-<div class="paragraph">
-<p>Yes, Moon has <code>-service-account-name</code> flag described in <a href="#_moon_container_flags">Moon Container Flags</a> section.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"><a class="anchor" href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"></a>1.3.5. Is it possible to assign custom firewall rules to browser pods?</h4>
-<div class="paragraph">
-<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. How to do this is described in <a href="#_using_custom_kubernetes_labels">Using Custom Kubernetes Labels</a> section. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>1.3.6. Sessions are not starting</h4>
-<div class="paragraph">
-<p>In recent Moon versions (1.4.0+) you may encounter an issue when browser sessions are not starting at all. Moon logs will show something like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>2019/12/26 13:33:16 [POD_CREATED] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931] [0.03s]
-2019/12/26 13:33:16 [AWAITING_DRIVER] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931]
-2019/12/26 13:49:14 [CLIENT_DISCONNECTED] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931] [] [957.78s]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In the majority of cases this is because you did not create a special Kubernetes service like the following:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">browsers</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">selector</span>:
-    <span class="key">moon</span>: <span class="string"><span class="content">browser</span></span>
-  <span class="key">clusterIP</span>: <span class="string"><span class="content">None</span></span>
-  <span class="key">publishNotReadyAddresses</span>: <span class="string"><span class="content">true</span></span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This service is required for successful network communication between Moon and created browser pods and is included to our <a href="https://github.com/aerokube/moon-deploy/">official deployment manifests</a> by default.</p>
-</div>
-<div class="paragraph">
-<p>One more possible reason could be related to DNS configuration in your cluster. Moon relies on resolving short domain names like <code>chrome-85-0-xxxxxx</code> to communicate with browser pods. If in your cluster only fully qualified domain names (such as <code>chrome-85-0-xxxxxx.moon.svc.cluster-domain.example</code>) are allowed you need to additionally configure DNS settings of Moon pod:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-<span class="key">spec</span>:
-  <span class="key">replicas</span>: <span class="string"><span class="content">2</span></span>
-  <span class="key">selector</span>:
-    <span class="key">matchLabels</span>:
-      <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">template</span>:
-    <span class="key">metadata</span>:
-      <span class="key">labels</span>:
-        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">spec</span>:
-      <span class="key">containers</span>:
-      - <span class="string"><span class="content">name: moon</span></span>
-        <span class="comment"># ...</span>
-      <span class="key">dnsConfig</span>:
-        <span class="key">nameservers</span>:
-        - <span class="string"><span class="content">1.2.3.4</span></span>
-        <span class="key">searches</span>:
-          - <span class="string"><span class="content">ns1.svc.cluster-domain.example</span></span>
-          - <span class="string"><span class="content">my.dns.search.suffix</span></span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>1.3.7. Connection was closed unexpectedly</h4>
-<div class="paragraph">
-<p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
-<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">metadata</span>:
-  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-  <span class="key">annotations</span>:
-    <span class="key">service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="comment"># AWS load balancer timeout setting</span>
-<span class="key">spec</span>:
-  <span class="key">type</span>: <span class="string"><span class="content">LoadBalancer</span></span>
-  <span class="comment"># The rest of spec goes here...</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>1.3.8. Browser pods are freezing</h4>
-<div class="paragraph">
-<p>This is a known issue in Kubernetes CoreDNS server settings. Current fix is to turn off DNS caching for Moon namespace. To do this:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Open DNS configuration map for editing (this will open an editor):</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl edit cm coredns -n kube-system</pre>
-</div>
-</div>
-</li>
-<li>
-<p>You will see YAML content like the following:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">data</span>:
-  <span class="key">Corefile</span>: <span class="string"><span class="delimiter">|</span><span class="content">
-    .:53 {
-        errors
-        health
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
-           pods insecure
-           upstream
-           fallthrough in-addr.arpa ip6.arpa
-        }
-        prometheus :9153
-        proxy . /etc/resolv.conf
-        cache 30
-        loop
-        reload
-        loadbalance
-    }</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">ConfigMap</span></span>
-<span class="key">metadata</span>:
-  <span class="key">creationTimestamp</span>: <span class="string"><span class="content">2019-01-17T10:32:38Z</span></span>
-  <span class="key">name</span>: <span class="string"><span class="content">coredns</span></span>
-  <span class="key">namespace</span>: <span class="string"><span class="content">kube-system</span></span>
-  <span class="key">resourceVersion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">206</span><span class="delimiter">&quot;</span></span>
-  <span class="key">selfLink</span>: <span class="string"><span class="content">/api/v1/namespaces/kube-system/configmaps/coredns</span></span>
-  <span class="key">uid</span>: <span class="string"><span class="content">3668d0fe-1a43-11e9-ad0b-025000000001</span></span></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Update <code>Corefile</code> section as follows:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
-<span class="key">data</span>:
-  <span class="key">Corefile</span>: <span class="string"><span class="delimiter">|</span><span class="content">
-    moon.svc.cluster.local:53 {
-        errors
-        kubernetes cluster.local {
-          namespaces moon
-        }
-    }
-    .:53 {
-        errors
-        health
-        ready
-        kubernetes cluster.local in-addr.arpa ip6.arpa {
-           pods insecure
-           fallthrough in-addr.arpa ip6.arpa
-           ttl 30
-        }
-        cache 30
-        prometheus :9153
-        forward . /etc/resolv.conf
-        loop
-        reload
-        loadbalance
-    }</span></span>
-<span class="comment"># ... the rest of the file</span></code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Save changes and exit the editor.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>1.3.9. No space left on device</h4>
-<div class="paragraph">
-<p>If you are getting the following error&#8230;&#8203;</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>2019/01/23 13:47:11 [INIT] [Failed to init quota reloader: unable to watch directory: no space left on device]</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;and have sufficient disk space then it can be caused by insufficient number of <a href="https://en.wikipedia.org/wiki/Inotify">inotify</a> watchers. Moon is using inotify to automatically reload configuration files when they change. To fix this execute one command on Kubernetes hosts:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf &amp;&amp; sudo sysctl -p</pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>1.3.10. DNS lookup timeouts</h4>
-<div class="paragraph">
-<p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>2019/02/21 08:37:32 [VNC_ERROR] [10.244.1.1] [dial tcp: lookup chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b on 10.96.0.10:53: read udp 10.244.1.11:40603-&gt;10.96.0.10:53: i/o timeout]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>&#8230;&#8203;then you may need to set the following kernel property on Kubernetes nodes:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>$ sysctl net.bridge.bridge-nf-call-iptables=1</code></pre>
-</div>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>1.3.11. No such host messages</h4>
-<div class="paragraph">
-<p>If you are seeing messages like this&#8230;&#8203;</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>[PROXY_ERROR] [unknown] [10.240.6.76] [POST http://chrome-60-0-1ae4b9f3-5b5c-441a-af0b-b1f24b39c252.browsers:4545/session] [dial tcp: lookup chrome-60-0-1ae4b9f3-5b5c-441a-af0b-b1f24b39c252.browsers on 10.0.0.10:53: no such host]</code></pre>
-</div>
-</div>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>then check that you disabled DNS cache for Moon namespace as shown in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_browser_session_timeouts_do_not_work"><a class="anchor" href="#_browser_session_timeouts_do_not_work"></a>1.3.12. Browser session timeouts do not work</h4>
-<div class="paragraph">
-<p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_json_processing_errors_in_tests"><a class="anchor" href="#_json_processing_errors_in_tests"></a>1.3.13. JSON processing errors in tests</h4>
-<div class="paragraph">
-<p>In some environments your Selenium tests could from time to time start getting JSON processing errors like this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>Json exception: Expected to read a START_MAP but instead have: END. Last 0 characters read</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The main reason of such behavior usually is incorrectly configured request proxy timeout on <code>LoadBalancer</code> or <code>Ingress</code> time. Very frequently default timeout value is <code>60 seconds</code> and in cases when some Selenium operation takes more time, load balancer will abort request and send 502 error with no body or with HTML body. However Selenium clients always expect to have JSON in Selenium response body and anything else leads to JSON processing exceptions. To solve this - increase request timeout on load balancer side. How to do this should be described in load balancer documentation.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.4. Required Permissions</h3>
+<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.3. Required Permissions</h3>
 <div class="paragraph">
 <p>Moon requires very limited set of permissions and should work with default Kubernetes settings. The following table summarizes what needs to be accessible.</p>
 </div>
@@ -1403,9 +1130,9 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.5. Cluster Architecture</h3>
+<h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.4. Cluster Architecture</h3>
 <div class="sect3">
-<h4 id="_moon_components"><a class="anchor" href="#_moon_components"></a>1.5.1. Moon Components</h4>
+<h4 id="_moon_components"><a class="anchor" href="#_moon_components"></a>1.4.1. Moon Components</h4>
 <div class="paragraph">
 <div class="title">Moon Cluster Architecture</div>
 <p><span class="image"><img src="img/architecture.png" alt="architecture"></span></p>
@@ -1431,7 +1158,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_why_moon_is_stateless"><a class="anchor" href="#_why_moon_is_stateless"></a>1.5.2. Why Moon is Stateless</h4>
+<h4 id="_why_moon_is_stateless"><a class="anchor" href="#_why_moon_is_stateless"></a>1.4.2. Why Moon is Stateless</h4>
 <div class="paragraph">
 <p>Moon is completely stateless and does not require any external database to run browser sessions.</p>
 </div>
@@ -1444,7 +1171,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pod_contents"><a class="anchor" href="#_browser_pod_contents"></a>1.5.3. Browser Pod Contents</h4>
+<h4 id="_browser_pod_contents"><a class="anchor" href="#_browser_pod_contents"></a>1.4.3. Browser Pod Contents</h4>
 <div class="paragraph">
 <p>In addition to container with browser every pod created by Moon contains one or more service images.</p>
 </div>
@@ -1483,7 +1210,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.6. Moon vs Selenoid</h3>
+<h3 id="_moon_vs_selenoid"><a class="anchor" href="#_moon_vs_selenoid"></a>1.5. Moon vs Selenoid</h3>
 <div class="paragraph">
 <p>Moon takes all the best practices and features from Selenoid and adds many more:</p>
 </div>
@@ -2116,25 +1843,76 @@ Every VNC server should be password protected with the same password having 8+ c
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-According to license agreement you can use <strong>up to 4 parallel sessions without a license</strong>. If you wish to have more parallel sessions - order a license and follow this section steps to install the license. A trial license key with more parallel sessions can be generated on <a href="https://aerokube.com/moon/">Moon website</a>.
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>According to license agreement you can use <strong>up to 4 parallel sessions without a license</strong>. If you wish to have more parallel sessions - order a license and follow this section steps to install the license. A trial license key with more parallel sessions can be generated on <a href="https://aerokube.com/moon/">Moon website</a>.</p>
+</li>
+<li>
+<p>We recommend installing Moon to a clean namespace because pods already running in an existing namespace will be by default considered as browser pods and thus will consume your license.</p>
+</li>
+</ol>
+</div>
 </td>
 </tr>
 </table>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
+<div class="paragraph">
 <p>To install a license you should have a license key file. A typical license file looks like this:</p>
+</div>
 <div class="literalblock">
 <div class="content">
 <pre>$ cat license.key
 Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhWTnRhZVBEQmx5cm1SM0dFWlVpbGIwOWhBSUpvWmlQMnNtYmtoZVRDbnJ3UTlIV3grMUMzaXFJalU3L0NIZDJuSzN3QUpIS0lyV2VoVjlRVUh5NzNCMFg0NEV5KzFSVXg1elhvaC9RUkNjTlBIOHR4WWtrRFBmTFhxYTFESlI0aXNObGtobWpXY2VJNVdna1lsWHFFOUp0OUxValZPN05hb2pCcHJzY0pvZjBrZys2YkhWUDR3cUJvYVFoSFJTYzMzZzNRSTkrWVd4dlZCeExmdTVxM2k2ZnluMDRHSEhGc21Fd2owVHdVa1Z3MmI5Z2FyVXlaVFF4RDdCRjVSVjBmSUVrU1pEQ0ZQdmIvMHZoKythY1V4OVRrR2FBREZzbWR3dExxRlU4NHF3MzBVdE5nTGhnNWYxRXRCQ215R1BHR0wyK2NpR0RDZDBTSXg4K1RsRGNWVzUyVVY4MUt6bkdOanJhTklOeXVtYjVPVXF6aVVpdmJZeVJNVVBSMWF3NUJRVGJDaHVycWVVdGtMMWFRZDgwOCtoWGRxODFOakxRNEJlVENNQTdPL2FneHBTUE1nL0J2QmVQKy84ZGhJeXd5Y0lxQVJhVWxocUdmUko2K05tbkFYV0hzZ2RjTng1dUVHU0w5VWF5TU1rR3RkZEZKQ1FiWmF0RnJMaDFHbHhKTndBRHFWcXIvQ0oxSzBQL2p6K2NFSWpsSG82TktvM3pudVFlanhYT2tGU1p1bWZrS1krZmF3VkVRZWlvcFlmZFk0TU9tc3U5TThsbng3T2VXQXZmOTFUQ2w1NUhBK1ZsQTMzN3VFOG1WV3ZlS0E1Tlk9O2V5SnNhV05sYm5ObFpTSTZJa0ZqYldVZ1RFeERJaXdpY0hKdlpIVmpkQ0k2SWsxdmIyNGlMQ0p0WVhoVFpYTnphVzl1Y3lJNk1qQXNJblJ2SWpveE5UTTRNelV5TURBd2ZRPT0=</pre>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_option_1_you_are_using_official_yaml_manifests"><a class="anchor" href="#_option_1_you_are_using_official_yaml_manifests"></a>2.6.1. Option 1: you are using official YAML manifests</h4>
+<div class="paragraph">
+<p>Our <a href="https://github.com/aerokube/moon-deploy">official YAML manifests</a> already contain everything needed to install a license key and by default have the following definition:</p>
+</div>
+<div class="listingblock">
+<div class="title">License key secret definition in YAML manifest</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Secret</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">licensekey</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">stringData</span>:
+  <span class="key">license.key</span>: <span class="string"><span class="content">MG1RSVdpc2Z6YjdQQVZjd2lpei9KMkd1T3dzMTFuL1dlRjVSc3NOMUcxZk9QaUxWa3Q5SnBIakIxa09wWm0vVFJqQ0tsa21xVG1OODVRZnlQbjBjVmRHVWFLampTOFF1a3VLRXRPcEUwbnEySG16QWFQWHRDYTVjMm9jZzZFaUJqeFd5ODE4UFBHZzNCNWpCYXlha3oweFBscFl1RnB0V0U1Q3FwOGl5VDdKTk9abG5aSmlPdnRmZDFvSG1nNnVwVXBLV2E4RmYwWHcreERIR29ZTE1XTldPb1hvT2ZCUnZpcDhPWW05a1FqN0hBWWVOYUtLT1lPWlVJa1dsb1gxdjNOT1htTFpZalhsQ3h1Q3V6NWhiQjIwSjVIY0JTYnZybm9zYm14RXFkSFpQWVBKWUlKTzZvVlBnODhQeFErZ1EyTk5sWG82TC9XeXU3aisrNU0rSEdPcXlOSEdlNGx4Zm1nNVhjMWlnNkN1OCtNSVVYRzNqUllqOUY4ZHdReWpSbFNMNmFpL2dRQnc3TzY0U0lwdVF2d29jYi9kVzFSYWFRVkd3ZXYrOVdING8zRWRrYkVONUhRTmQ2MUxsUnFNdmtKeWVHV21tVlVUZ2dsMDRsTFFLTmZNVG81L2JVakNBMGhNeER5VHNJdmVRRGFMMklvTWpvcFk4VERlK1U2bUJvUDVxNVYrcCtDQVhjbjYxQlRaUVp0bmNqL0JBVkdNOEZ4NW9rWHRYSVAxUkY0a1VCckZVTDFyTWF1VkZqSk5xU1pLT293dUpMTTg2SEZ0Sld0eUlRK3ZZZm1pZU0xM292MnVleDBoRlhRdFkvMkt1dUhhN3dKV2pFT0pqaEVzTjhXSy82ZlFFbi9EQzcrNkw3NzhlbmVVZ2lLZ3VFbjlMMXZMYVZ5VWtQaWc9O2V5SnNhV05sYm5ObFpTSTZJa1JsWm1GMWJIUWlMQ0p3Y205a2RXTjBJam9pVFc5dmJpSXNJbTFoZUZObGMzTnBiMjV6SWpvMGZRPT0=</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You have to replace value of <code>license.key</code> with yours and reapply the manifest with <code>kubectl apply</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_option_2_you_are_using_helm_2"><a class="anchor" href="#_option_2_you_are_using_helm_2"></a>2.6.2. Option 2: you are using Helm</h4>
+<div class="paragraph">
+<p>In our <a href="https://github.com/aerokube/charts">Helm charts</a> license key is exposed as <code>moon.licenseKey</code> parameter that could be set as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm install --upgrade --set-file moon.licenseKey=/path/to/license.key -n moon moon aerokube/moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same command using shell expansion:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm install --upgrade --set moon.licenseKey=$(&lt;/path/to/license.key) -n moon moon aerokube/moon</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_option_3_doing_everything_manually"><a class="anchor" href="#_option_3_doing_everything_manually"></a>2.6.3. Option 3: doing everything manually</h4>
 <div class="paragraph">
 <p>Moon container is expecting to find license key file in the path specified by <code>-license-file</code> parameter. You need to mount license key file as a volume to every Moon container.</p>
 </div>
-</li>
+<div class="olist arabic">
+<ol class="arabic">
 <li>
 <p>Having a license key file - create a Kubernetes secret:</p>
 <div class="literalblock">
@@ -2225,8 +2003,9 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </li>
 </ol>
 </div>
+</div>
 <div class="sect3">
-<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.6.1. How Licenses Work</h4>
+<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.6.4. How Licenses Work</h4>
 <div class="paragraph">
 <p>Every license key gives you an ability to run <strong>fixed number of parallel browser sessions</strong>. To limit maximum number of browser sessions Moon is using built-in Kubernetes <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quota</a> feature. Every browser session in Moon is a separate Kubernetes <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pod</a>. When started Moon checks that respective pod resource quota exists (that is to say total number of pods is limited). If not found such resource quota is automatically created. You can have any desired number of Moon, Moon API and Moon UI replicas (i.e. pods) in your cluster. These pods are added to total number of parallel browser sessions from license key. For example:</p>
 </div>
@@ -2253,6 +2032,26 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 <div class="paragraph">
 <p>So when starting Moon - you should add a label <code>app</code> with value: <code>moon</code>, <code>moon-api</code> or <code>moon-ui</code> to respective pod definitions.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_installing_license_to_restricted_cluster"><a class="anchor" href="#_installing_license_to_restricted_cluster"></a>2.6.5. Installing License to Restricted Cluster</h4>
+<div class="paragraph">
+<p>In some environments Moon has no permission to automatically create resource quota for its namespace. In that case you need to ask your Kubernetes administrator to create resource quota manually:</p>
+</div>
+<div class="listingblock">
+<div class="title">Required ResourceQuota object definition</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ResourceQuota</span></span>
+<span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">max-moon-sessions</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+    <span class="key">hard</span>:
+      <span class="key">pods</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">105</span><span class="delimiter">&quot;</span></span> <span class="comment"># 100 pods with browsers + 5 pods with Moon</span>
+    <span class="key">scopes</span>: <span class="string"><span class="content">[&quot;NotTerminating&quot;]</span></span></code></pre>
+</div>
 </div>
 </div>
 </div>
@@ -5190,7 +4989,300 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>4. License Agreement</h2>
+<h2 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>4. Frequently Asked Questions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>4.1. Where are Moon logs?</h3>
+<div class="paragraph">
+<p>See <a href="#_log_files">Log Files</a> section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>4.2. Where are recorded videos stored?</h3>
+<div class="paragraph">
+<p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_how_to_update_configuration_of_a_running_moon_cluster"><a class="anchor" href="#_how_to_update_configuration_of_a_running_moon_cluster"></a>4.3. How to update configuration of a running Moon cluster?</h3>
+<div class="paragraph">
+<p>Just update respective config maps (<code>config</code>, <code>quota</code>) or secrets (<code>users</code>, <code>credentials</code>) with standard Kubernetes commands (<code>kubectl edit</code> or <code>kubectl replace</code>). For example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl edit configmap config -n moon # Updating global Moon configuration
+$ kubectl edit configmap quota -n moon # Updating Moon quota
+$ kubectl edit secret users -n moon # Updating Moon users
+$ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 access keypair)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These commands will open your preferred editor with respective data: do any desired modifications, save and exit. Changes are applied immediately but how fast Moon will see them depends on Kubernetes caching settings (default is <code>1 minute</code>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_is_it_possible_to_configure_kubernetes_service_account_for_moon"><a class="anchor" href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon"></a>4.4. Is it possible to configure Kubernetes service account for Moon?</h3>
+<div class="paragraph">
+<p>Yes, Moon has <code>-service-account-name</code> flag described in <a href="#_moon_container_flags">Moon Container Flags</a> section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"><a class="anchor" href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"></a>4.5. Is it possible to assign custom firewall rules to browser pods?</h3>
+<div class="paragraph">
+<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. How to do this is described in <a href="#_using_custom_kubernetes_labels">Using Custom Kubernetes Labels</a> section. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>4.6. Sessions are not starting</h3>
+<div class="paragraph">
+<p>In recent Moon versions (1.4.0+) you may encounter an issue when browser sessions are not starting at all. Moon logs will show something like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>2019/12/26 13:33:16 [POD_CREATED] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931] [0.03s]
+2019/12/26 13:33:16 [AWAITING_DRIVER] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931]
+2019/12/26 13:49:14 [CLIENT_DISCONNECTED] [browsers] [172.26.213.8] [chrome-78-0-77632dac-b46c-4e6e-af24-8a160251e931] [] [957.78s]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the majority of cases this is because you did not create a special Kubernetes service like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">browsers</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">selector</span>:
+    <span class="key">moon</span>: <span class="string"><span class="content">browser</span></span>
+  <span class="key">clusterIP</span>: <span class="string"><span class="content">None</span></span>
+  <span class="key">publishNotReadyAddresses</span>: <span class="string"><span class="content">true</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This service is required for successful network communication between Moon and created browser pods and is included to our <a href="https://github.com/aerokube/moon-deploy/">official deployment manifests</a> by default.</p>
+</div>
+<div class="paragraph">
+<p>One more possible reason could be related to DNS configuration in your cluster. Moon relies on resolving short domain names like <code>chrome-85-0-xxxxxx</code> to communicate with browser pods. If in your cluster only fully qualified domain names (such as <code>chrome-85-0-xxxxxx.moon.svc.cluster-domain.example</code>) are allowed you need to additionally configure DNS settings of Moon pod:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">apps/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Deployment</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">2</span></span>
+  <span class="key">selector</span>:
+    <span class="key">matchLabels</span>:
+      <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">template</span>:
+    <span class="key">metadata</span>:
+      <span class="key">labels</span>:
+        <span class="key">app</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">spec</span>:
+      <span class="key">containers</span>:
+      - <span class="string"><span class="content">name: moon</span></span>
+        <span class="comment"># ...</span>
+      <span class="key">dnsConfig</span>:
+        <span class="key">nameservers</span>:
+        - <span class="string"><span class="content">1.2.3.4</span></span>
+        <span class="key">searches</span>:
+          - <span class="string"><span class="content">ns1.svc.cluster-domain.example</span></span>
+          - <span class="string"><span class="content">my.dns.search.suffix</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>4.7. Connection was closed unexpectedly</h3>
+<div class="paragraph">
+<p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="comment"># AWS load balancer timeout setting</span>
+<span class="key">spec</span>:
+  <span class="key">type</span>: <span class="string"><span class="content">LoadBalancer</span></span>
+  <span class="comment"># The rest of spec goes here...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>4.8. Browser pods are freezing</h3>
+<div class="paragraph">
+<p>This is a known issue in Kubernetes CoreDNS server settings. Current fix is to turn off DNS caching for Moon namespace. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Open DNS configuration map for editing (this will open an editor):</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl edit cm coredns -n kube-system</pre>
+</div>
+</div>
+</li>
+<li>
+<p>You will see YAML content like the following:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">data</span>:
+  <span class="key">Corefile</span>: <span class="string"><span class="delimiter">|</span><span class="content">
+    .:53 {
+        errors
+        health
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           upstream
+           fallthrough in-addr.arpa ip6.arpa
+        }
+        prometheus :9153
+        proxy . /etc/resolv.conf
+        cache 30
+        loop
+        reload
+        loadbalance
+    }</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">ConfigMap</span></span>
+<span class="key">metadata</span>:
+  <span class="key">creationTimestamp</span>: <span class="string"><span class="content">2019-01-17T10:32:38Z</span></span>
+  <span class="key">name</span>: <span class="string"><span class="content">coredns</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">kube-system</span></span>
+  <span class="key">resourceVersion</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">206</span><span class="delimiter">&quot;</span></span>
+  <span class="key">selfLink</span>: <span class="string"><span class="content">/api/v1/namespaces/kube-system/configmaps/coredns</span></span>
+  <span class="key">uid</span>: <span class="string"><span class="content">3668d0fe-1a43-11e9-ad0b-025000000001</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Update <code>Corefile</code> section as follows:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">data</span>:
+  <span class="key">Corefile</span>: <span class="string"><span class="delimiter">|</span><span class="content">
+    moon.svc.cluster.local:53 {
+        errors
+        kubernetes cluster.local {
+          namespaces moon
+        }
+    }
+    .:53 {
+        errors
+        health
+        ready
+        kubernetes cluster.local in-addr.arpa ip6.arpa {
+           pods insecure
+           fallthrough in-addr.arpa ip6.arpa
+           ttl 30
+        }
+        cache 30
+        prometheus :9153
+        forward . /etc/resolv.conf
+        loop
+        reload
+        loadbalance
+    }</span></span>
+<span class="comment"># ... the rest of the file</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Save changes and exit the editor.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>4.9. No space left on device</h3>
+<div class="paragraph">
+<p>If you are getting the following error&#8230;&#8203;</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>2019/01/23 13:47:11 [INIT] [Failed to init quota reloader: unable to watch directory: no space left on device]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;and have sufficient disk space then it can be caused by insufficient number of <a href="https://en.wikipedia.org/wiki/Inotify">inotify</a> watchers. Moon is using inotify to automatically reload configuration files when they change. To fix this execute one command on Kubernetes hosts:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf &amp;&amp; sudo sysctl -p</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>4.10. DNS lookup timeouts</h3>
+<div class="paragraph">
+<p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>2019/02/21 08:37:32 [VNC_ERROR] [10.244.1.1] [dial tcp: lookup chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b on 10.96.0.10:53: read udp 10.244.1.11:40603-&gt;10.96.0.10:53: i/o timeout]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;then you may need to set the following kernel property on Kubernetes nodes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ sysctl net.bridge.bridge-nf-call-iptables=1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>4.11. No such host messages</h3>
+<div class="paragraph">
+<p>If you are seeing messages like this&#8230;&#8203;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>[PROXY_ERROR] [unknown] [10.240.6.76] [POST http://chrome-60-0-1ae4b9f3-5b5c-441a-af0b-b1f24b39c252.browsers:4545/session] [dial tcp: lookup chrome-60-0-1ae4b9f3-5b5c-441a-af0b-b1f24b39c252.browsers on 10.0.0.10:53: no such host]</code></pre>
+</div>
+</div>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>then check that you disabled DNS cache for Moon namespace as shown in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_browser_session_timeouts_do_not_work"><a class="anchor" href="#_browser_session_timeouts_do_not_work"></a>4.12. Browser session timeouts do not work</h3>
+<div class="paragraph">
+<p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_json_processing_errors_in_tests"><a class="anchor" href="#_json_processing_errors_in_tests"></a>4.13. JSON processing errors in tests</h3>
+<div class="paragraph">
+<p>In some environments your Selenium tests could from time to time start getting JSON processing errors like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>Json exception: Expected to read a START_MAP but instead have: END. Last 0 characters read</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main reason of such behavior usually is incorrectly configured request proxy timeout on <code>LoadBalancer</code> or <code>Ingress</code> time. Very frequently default timeout value is <code>60 seconds</code> and in cases when some Selenium operation takes more time, load balancer will abort request and send 502 error with no body or with HTML body. However Selenium clients always expect to have JSON in Selenium response body and anything else leads to JSON processing exceptions. To solve this - increase request timeout on load balancer side. How to do this should be described in load balancer documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>5. License Agreement</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated December 11th, 2020. Replaces the prior version in its entirety.</p>
@@ -5613,7 +5705,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect1">
-<h2 id="_privacy_policy"><a class="anchor" href="#_privacy_policy"></a>5. Privacy Policy</h2>
+<h2 id="_privacy_policy"><a class="anchor" href="#_privacy_policy"></a>6. Privacy Policy</h2>
 <div class="sectionbody">
 <div class="admonitionblock important">
 <table>
@@ -5656,9 +5748,9 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <p>We recommend that you read this Privacy Policy in full to ensure you are fully informed. If you have any questions about this Privacy Policy or Aerokube&#8217;s data collection, use, and disclosure practices, please contact us at <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>. The data controller of your personal information is Aerokube Software OÜ.</p>
 </div>
 <div class="sect2">
-<h3 id="_information_we_collect"><a class="anchor" href="#_information_we_collect"></a>5.1. Information We Collect</h3>
+<h3 id="_information_we_collect"><a class="anchor" href="#_information_we_collect"></a>6.1. Information We Collect</h3>
 <div class="sect3">
-<h4 id="_information_you_provide"><a class="anchor" href="#_information_you_provide"></a>5.1.1. Information You Provide</h4>
+<h4 id="_information_you_provide"><a class="anchor" href="#_information_you_provide"></a>6.1.1. Information You Provide</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5671,7 +5763,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect3">
-<h4 id="_information_we_collect_when_you_use_our_services"><a class="anchor" href="#_information_we_collect_when_you_use_our_services"></a>5.1.2. Information We Collect When You Use Our Services</h4>
+<h4 id="_information_we_collect_when_you_use_our_services"><a class="anchor" href="#_information_we_collect_when_you_use_our_services"></a>6.1.2. Information We Collect When You Use Our Services</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5687,7 +5779,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect3">
-<h4 id="_information_we_receive_from_third_parties"><a class="anchor" href="#_information_we_receive_from_third_parties"></a>5.1.3. Information We Receive from Third Parties</h4>
+<h4 id="_information_we_receive_from_third_parties"><a class="anchor" href="#_information_we_receive_from_third_parties"></a>6.1.3. Information We Receive from Third Parties</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5698,7 +5790,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_use_information"><a class="anchor" href="#_how_we_use_information"></a>5.2. How We Use Information</h3>
+<h3 id="_how_we_use_information"><a class="anchor" href="#_how_we_use_information"></a>6.2. How We Use Information</h3>
 <div class="paragraph">
 <p>We use the information we collect in various ways:</p>
 </div>
@@ -5738,7 +5830,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_share_information"><a class="anchor" href="#_how_we_share_information"></a>5.3. How We Share Information</h3>
+<h3 id="_how_we_share_information"><a class="anchor" href="#_how_we_share_information"></a>6.3. How We Share Information</h3>
 <div class="paragraph">
 <p>We may share the information we collect in various ways:</p>
 </div>
@@ -5794,7 +5886,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_access"><a class="anchor" href="#_access"></a>5.4. Access</h3>
+<h3 id="_access"><a class="anchor" href="#_access"></a>6.4. Access</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5829,7 +5921,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_data_retention"><a class="anchor" href="#_data_retention"></a>5.5. Data Retention</h3>
+<h3 id="_data_retention"><a class="anchor" href="#_data_retention"></a>6.5. Data Retention</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5845,7 +5937,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_protect_information"><a class="anchor" href="#_how_we_protect_information"></a>5.6. How We Protect Information</h3>
+<h3 id="_how_we_protect_information"><a class="anchor" href="#_how_we_protect_information"></a>6.6. How We Protect Information</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5870,13 +5962,13 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_childrens_privacy"><a class="anchor" href="#_childrens_privacy"></a>5.7. Children&#8217;s Privacy</h3>
+<h3 id="_childrens_privacy"><a class="anchor" href="#_childrens_privacy"></a>6.7. Children&#8217;s Privacy</h3>
 <div class="paragraph">
 <p>We do not knowingly collect information from children under the age of 13. Children under 13 are prohibited from using our Services. If you learn that a child has provided us with personal information in violation of this Privacy Policy, you can alert us at <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_general_data_protection_regulation_gdpr"><a class="anchor" href="#_general_data_protection_regulation_gdpr"></a>5.8. General Data Protection Regulation (GDPR)</h3>
+<h3 id="_general_data_protection_regulation_gdpr"><a class="anchor" href="#_general_data_protection_regulation_gdpr"></a>6.8. General Data Protection Regulation (GDPR)</h3>
 <div class="paragraph">
 <p>If you are a resident of the European Economic Area (EEA), you have the following data protection rights:</p>
 </div>
@@ -5904,13 +5996,13 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_changes_to_this_privacy_policy"><a class="anchor" href="#_changes_to_this_privacy_policy"></a>5.9. Changes To This Privacy Policy</h3>
+<h3 id="_changes_to_this_privacy_policy"><a class="anchor" href="#_changes_to_this_privacy_policy"></a>6.9. Changes To This Privacy Policy</h3>
 <div class="paragraph">
 <p>This Privacy Policy may be modified from time to time, so please review it frequently. Changes to this Privacy Policy will be posted on our websites. If we materially change the ways in which we use or share personal information previously collected from you through our Services, we will notify you through our Services, by email, or other communication.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_contact_us"><a class="anchor" href="#_how_to_contact_us"></a>5.10. How to Contact Us</h3>
+<h3 id="_how_to_contact_us"><a class="anchor" href="#_how_to_contact_us"></a>6.10. How to Contact Us</h3>
 <div class="paragraph">
 <p>If you need to contact us with regard to any of your rights as set out in this Policy, all such requests should be made in writing by email to <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>.</p>
 </div>
@@ -5918,7 +6010,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>6. Pricing</h2>
+<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>7. Pricing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated August 7th, 2019. Replaces the prior version in its entirety.</p>
@@ -6133,7 +6225,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-01-12 17:50:53 UTC
+Last updated 2021-01-13 17:56:42 UTC
 </div>
 </div>
 <style>
