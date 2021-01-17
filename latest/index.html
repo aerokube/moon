@@ -4438,7 +4438,7 @@ some-clipboard-value</code></pre>
 const host = <span class="string"><span class="delimiter">'</span><span class="content">moon.example.com</span><span class="delimiter">'</span></span>;
 (async () =&gt; {
     const devtools = await puppeteer.connect(
-        { <span class="key">browserWSEndpoint</span>: <span class="error">`</span>ws:<span class="comment">//${host}:4444/cdtp/chrome` }</span>
+        { <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">browserWSEndpoint</span>: <span class="error">`</span>ws:<span class="comment">//${host}:4444/cdtp/chrome` }</span>
     ); <span class="comment">// For every call of this method a new browser is started</span>
     const page = await devtools.newPage();
     await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com</span><span class="delimiter">'</span></span>);
@@ -6213,7 +6213,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-01-17 10:26:25 UTC
+Last updated 2021-01-17 13:30:46 UTC
 </div>
 </div>
 <style>
