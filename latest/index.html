@@ -463,18 +463,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_quick_start_guide">1.1. Quick Start Guide</a>
 <ul class="sectlevel3">
-<li><a href="#_installing_to_kubernetes">1.1.1. Installing to Kubernetes</a></li>
-<li><a href="#_installing_to_openshift">1.1.2. Installing to Openshift</a></li>
-<li><a href="#_moon_checklist">1.1.3. Moon Checklist</a></li>
+<li><a href="#install-kubernetes">1.1.1. Installing to Kubernetes</a></li>
+<li><a href="#install-openshift">1.1.2. Installing to Openshift</a></li>
+<li><a href="#install-checklist">1.1.3. Moon Checklist</a></li>
 </ul>
 </li>
 <li><a href="#_recommended_cluster_settings">1.2. Recommended Cluster Settings</a></li>
 <li><a href="#_required_permissions">1.3. Required Permissions</a></li>
 <li><a href="#_cluster_architecture">1.4. Cluster Architecture</a>
 <ul class="sectlevel3">
-<li><a href="#_moon_components">1.4.1. Moon Components</a></li>
-<li><a href="#_why_moon_is_stateless">1.4.2. Why Moon is Stateless</a></li>
-<li><a href="#_browser_pod_contents">1.4.3. Browser Pod Contents</a></li>
+<li><a href="#moon-components">1.4.1. Moon Components</a></li>
+<li><a href="#moon-stateless">1.4.2. Why Moon is Stateless</a></li>
+<li><a href="#moon-pod-contents">1.4.3. Browser Pod Contents</a></li>
 </ul>
 </li>
 <li><a href="#_moon_vs_selenoid">1.5. Moon vs Selenoid</a></li>
@@ -489,10 +489,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_browsers_list">2.2. Browsers List</a>
 <ul class="sectlevel3">
-<li><a href="#_per_user_browser_lists">2.2.1. Per-user Browser Lists</a></li>
-<li><a href="#_guest_quota">2.2.2. Guest Quota</a></li>
-<li><a href="#_updating_browsers_list">2.2.3. Updating Browsers List</a></li>
-<li><a href="#_using_external_selenium">2.2.4. Using External Selenium</a></li>
+<li><a href="#browsers-list-per-user">2.2.1. Per-user Browser Lists</a></li>
+<li><a href="#browsers-list-guest-quota">2.2.2. Guest Quota</a></li>
+<li><a href="#browsers-list-updating">2.2.3. Updating Browsers List</a></li>
+<li><a href="#external-selenium">2.2.4. Using External Selenium</a></li>
 </ul>
 </li>
 <li><a href="#_configuration_file">2.3. Configuration File</a></li>
@@ -500,36 +500,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_credentials_secret">2.5. Credentials Secret</a></li>
 <li><a href="#_installing_license">2.6. Installing License</a>
 <ul class="sectlevel3">
-<li><a href="#_option_1_you_are_using_official_yaml_manifests">2.6.1. Option 1: you are using official YAML manifests</a></li>
-<li><a href="#_option_2_you_are_using_helm_2">2.6.2. Option 2: you are using Helm</a></li>
-<li><a href="#_option_3_doing_everything_manually">2.6.3. Option 3: doing everything manually</a></li>
-<li><a href="#_how_licenses_work">2.6.4. How Licenses Work</a></li>
-<li><a href="#_installing_license_to_restricted_cluster">2.6.5. Installing License to Restricted Cluster</a></li>
+<li><a href="#license-yaml-manifests">2.6.1. Option 1: you are using official YAML manifests</a></li>
+<li><a href="#license-helm">2.6.2. Option 2: you are using Helm</a></li>
+<li><a href="#license-manually">2.6.3. Option 3: doing everything manually</a></li>
+<li><a href="#license-how-it-works">2.6.4. How Licenses Work</a></li>
+<li><a href="#license-restricted-cluster">2.6.5. Installing License to Restricted Cluster</a></li>
 </ul>
 </li>
 <li><a href="#_monitoring">2.7. Monitoring</a></li>
 <li><a href="#_advanced_configuration">2.8. Advanced Configuration</a>
 <ul class="sectlevel3">
-<li><a href="#_uploading_files_to_s3">2.8.1. Uploading Files to S3</a></li>
-<li><a href="#_using_custom_docker_registry">2.8.2. Using Custom Docker Registry</a></li>
-<li><a href="#_adjusting_timeouts">2.8.3. Adjusting Timeouts</a></li>
-<li><a href="#_adjusting_resources_consumption">2.8.4. Adjusting Resources Consumption</a></li>
-<li><a href="#_using_volumes">2.8.5. Using Volumes</a></li>
-<li><a href="#_running_browser_pods_in_privileged_mode">2.8.6. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#_using_node_selectors">2.8.7. Using Node Selectors</a></li>
-<li><a href="#_using_tolerations">2.8.8. Using Tolerations</a></li>
-<li><a href="#_using_custom_kubernetes_annotations">2.8.9. Using Custom Kubernetes Annotations</a></li>
-<li><a href="#_using_custom_kubernetes_labels">2.8.10. Using Custom Kubernetes Labels</a></li>
-<li><a href="#_using_custom_linux_kernel_capabilities">2.8.11. Using Custom Linux Kernel Capabilities</a></li>
-<li><a href="#_using_custom_service_account">2.8.12. Using Custom Service Account</a></li>
-<li><a href="#_setting_custom_user_and_group_identifier_to_browser_pods">2.8.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#s3">2.8.1. Uploading Files to S3</a></li>
+<li><a href="#custom-docker-registry">2.8.2. Using Custom Docker Registry</a></li>
+<li><a href="#timeouts">2.8.3. Adjusting Timeouts</a></li>
+<li><a href="#resources">2.8.4. Adjusting Resources Consumption</a></li>
+<li><a href="#volumes">2.8.5. Using Volumes</a></li>
+<li><a href="#privileged-mode">2.8.6. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#node-selectors">2.8.7. Using Node Selectors</a></li>
+<li><a href="#tolerations">2.8.8. Using Tolerations</a></li>
+<li><a href="#kubernetes-annotations">2.8.9. Using Custom Kubernetes Annotations</a></li>
+<li><a href="#kubernetes-labels">2.8.10. Using Custom Kubernetes Labels</a></li>
+<li><a href="#kernel-caps">2.8.11. Using Custom Linux Kernel Capabilities</a></li>
+<li><a href="#service-account">2.8.12. Using Custom Service Account</a></li>
+<li><a href="#user-group">2.8.13. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
 <li><a href="#_log_files">2.9. Log Files</a></li>
 <li><a href="#_cli_flags">2.10. CLI Flags</a>
 <ul class="sectlevel3">
-<li><a href="#_moon_container_flags">2.10.1. Moon Container Flags</a></li>
-<li><a href="#_moon_api_container_flags">2.10.2. Moon API Container Flags</a></li>
+<li><a href="#cli-flags-moon">2.10.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-api">2.10.2. Moon API Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -538,42 +538,42 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_special_capabilities">3.1. Special Capabilities</a>
 <ul class="sectlevel3">
-<li><a href="#_live_browser_screen_enablevnc">3.1.1. Live Browser Screen: enableVNC</a></li>
-<li><a href="#_custom_screen_resolution_screenresolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
-<li><a href="#_android_skin_skin">3.1.3. Android Skin: skin</a></li>
-<li><a href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec">3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
-<li><a href="#_custom_log_name_logname">3.1.5. Custom Log Name: logName</a></li>
-<li><a href="#_custom_test_name_name">3.1.6. Custom Test Name: name</a></li>
-<li><a href="#_per_session_time_zone_timezone">3.1.7. Per-session Time Zone: timeZone</a></li>
+<li><a href="#capability-enableVNC">3.1.1. Live Browser Screen: enableVNC</a></li>
+<li><a href="#capability-screenResolution">3.1.2. Custom Screen Resolution: screenResolution</a></li>
+<li><a href="#capability-skin">3.1.3. Android Skin: skin</a></li>
+<li><a href="#capability-video-recording">3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</a></li>
+<li><a href="#capability-logName">3.1.5. Custom Log Name: logName</a></li>
+<li><a href="#capability-name">3.1.6. Custom Test Name: name</a></li>
+<li><a href="#capability-timeZone">3.1.7. Per-session Time Zone: timeZone</a></li>
 <li><a href="#capability-env">3.1.8. Per-session Environment Variables: env</a></li>
-<li><a href="#_hosts_entries_hostsentries">3.1.9. Hosts Entries: hostsEntries</a></li>
-<li><a href="#_custom_dns_servers_nameservers">3.1.10. Custom DNS Servers: nameservers</a></li>
-<li><a href="#_custom_session_timeout_sessiontimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
-<li><a href="#_s3_key_pattern_s3keypattern">3.1.12. S3 Key Pattern: s3KeyPattern</a></li>
-<li><a href="#_mobile_emulation_mobiledevice">3.1.13. Mobile Emulation: mobileDevice</a></li>
-<li><a href="#_specifying_capabilities_via_protocol_extensions">3.1.14. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#capability-hostsEntries">3.1.9. Hosts Entries: hostsEntries</a></li>
+<li><a href="#capability-nameservers">3.1.10. Custom DNS Servers: nameservers</a></li>
+<li><a href="#capability-sessionTimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
+<li><a href="#capability-s3KeyPattern">3.1.12. S3 Key Pattern: s3KeyPattern</a></li>
+<li><a href="#capability-mobile-emulation">3.1.13. Mobile Emulation: mobileDevice</a></li>
+<li><a href="#capability-protocol-extensions">3.1.14. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#_accessing_clipboard">3.3. Accessing Clipboard</a></li>
 <li><a href="#_using_playwright">3.4. Using Playwright</a>
 <ul class="sectlevel3">
-<li><a href="#_selecting_requested_browser">3.4.1. Selecting Requested Browser</a></li>
-<li><a href="#_selecting_exact_browser_version">3.4.2. Selecting Exact Browser Version</a></li>
-<li><a href="#_selecting_exact_playwright_version">3.4.3. Selecting Exact Playwright Version</a></li>
-<li><a href="#_enabling_additional_features">3.4.4. Enabling Additional Features</a></li>
+<li><a href="#playwright-select-browser">3.4.1. Selecting Requested Browser</a></li>
+<li><a href="#playwright-select-browser-version">3.4.2. Selecting Exact Browser Version</a></li>
+<li><a href="#playwright-select-playwright-version">3.4.3. Selecting Exact Playwright Version</a></li>
+<li><a href="#playwright-additional-features">3.4.4. Enabling Additional Features</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_chrome_developer_tools">3.5. Accessing Chrome Developer Tools</a></li>
 <li><a href="#_mobile_emulation">3.6. Mobile Emulation</a>
 <ul class="sectlevel3">
-<li><a href="#_supported_mobile_devices">3.6.1. Supported Mobile Devices</a></li>
+<li><a href="#mobile-emulation-devices">3.6.1. Supported Mobile Devices</a></li>
 </ul>
 </li>
 <li><a href="#_changing_browser_locale">3.7. Changing Browser Locale</a>
 <ul class="sectlevel3">
-<li><a href="#_firefox">3.7.1. Firefox</a></li>
-<li><a href="#_chromium_based_browsers">3.7.2. Chromium-based Browsers</a></li>
+<li><a href="#locale-firefox">3.7.1. Firefox</a></li>
+<li><a href="#locale-chromium">3.7.2. Chromium-based Browsers</a></li>
 </ul>
 </li>
 <li><a href="#_using_self_signed_tls_certificates">3.8. Using self-signed TLS certificates</a></li>
@@ -581,48 +581,48 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_frequently_asked_questions">4. Frequently Asked Questions</a>
 <ul class="sectlevel2">
-<li><a href="#_where_are_moon_logs">4.1. Where are Moon logs?</a></li>
-<li><a href="#_where_are_recorded_videos_stored">4.2. Where are recorded videos stored?</a></li>
-<li><a href="#_how_to_update_configuration_of_a_running_moon_cluster">4.3. How to update configuration of a running Moon cluster?</a></li>
-<li><a href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon">4.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
-<li><a href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods">4.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
-<li><a href="#_sessions_are_not_starting">4.6. Sessions are not starting</a></li>
-<li><a href="#_connection_was_closed_unexpectedly">4.7. Connection was closed unexpectedly</a></li>
-<li><a href="#_browser_pods_are_freezing">4.8. Browser pods are freezing</a></li>
-<li><a href="#_no_space_left_on_device">4.9. No space left on device</a></li>
-<li><a href="#_dns_lookup_timeouts">4.10. DNS lookup timeouts</a></li>
-<li><a href="#_no_such_host_messages">4.11. No such host messages</a></li>
-<li><a href="#_browser_session_timeouts_do_not_work">4.12. Browser session timeouts do not work</a></li>
-<li><a href="#_json_processing_errors_in_tests">4.13. JSON processing errors in tests</a></li>
+<li><a href="#faq-moon-logs">4.1. Where are Moon logs?</a></li>
+<li><a href="#faq-recorded-videos">4.2. Where are recorded videos stored?</a></li>
+<li><a href="#faq-update-configuration">4.3. How to update configuration of a running Moon cluster?</a></li>
+<li><a href="#faq-kubernetes-service-account">4.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
+<li><a href="#faq-custom-firewall-rules">4.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
+<li><a href="#faq-sessions-not-starting">4.6. Sessions are not starting</a></li>
+<li><a href="#faq-connection-closed-unexpectedly">4.7. Connection was closed unexpectedly</a></li>
+<li><a href="#faq-browser-pods-freezing">4.8. Browser pods are freezing</a></li>
+<li><a href="#faq-no-space-left">4.9. No space left on device</a></li>
+<li><a href="#faq-dns-lookup-timeouts">4.10. DNS lookup timeouts</a></li>
+<li><a href="#faq-no-such-host">4.11. No such host messages</a></li>
+<li><a href="#faq-session-timeouts-do-no-work">4.12. Browser session timeouts do not work</a></li>
+<li><a href="#faq-json-errors">4.13. JSON processing errors in tests</a></li>
 </ul>
 </li>
 <li><a href="#_license_agreement">5. License Agreement</a></li>
 <li><a href="#_privacy_policy">6. Privacy Policy</a>
 <ul class="sectlevel2">
-<li><a href="#_information_we_collect">6.1. Information We Collect</a>
+<li><a href="#privacy-information-we-collect">6.1. Information We Collect</a>
 <ul class="sectlevel3">
-<li><a href="#_information_you_provide">6.1.1. Information You Provide</a></li>
-<li><a href="#_information_we_collect_when_you_use_our_services">6.1.2. Information We Collect When You Use Our Services</a></li>
-<li><a href="#_information_we_receive_from_third_parties">6.1.3. Information We Receive from Third Parties</a></li>
+<li><a href="#privacy-information-you-provide">6.1.1. Information You Provide</a></li>
+<li><a href="#privacy-information-we-collect-you-use">6.1.2. Information We Collect When You Use Our Services</a></li>
+<li><a href="#privacy-information-we-receive">6.1.3. Information We Receive from Third Parties</a></li>
 </ul>
 </li>
-<li><a href="#_how_we_use_information">6.2. How We Use Information</a></li>
-<li><a href="#_how_we_share_information">6.3. How We Share Information</a></li>
-<li><a href="#_access">6.4. Access</a></li>
-<li><a href="#_data_retention">6.5. Data Retention</a></li>
-<li><a href="#_how_we_protect_information">6.6. How We Protect Information</a></li>
-<li><a href="#_childrens_privacy">6.7. Children&#8217;s Privacy</a></li>
-<li><a href="#_general_data_protection_regulation_gdpr">6.8. General Data Protection Regulation (GDPR)</a></li>
-<li><a href="#_changes_to_this_privacy_policy">6.9. Changes To This Privacy Policy</a></li>
-<li><a href="#_how_to_contact_us">6.10. How to Contact Us</a></li>
+<li><a href="#privacy-how-we-use-information">6.2. How We Use Information</a></li>
+<li><a href="#privacy-how-we-share-information">6.3. How We Share Information</a></li>
+<li><a href="#privacy-access">6.4. Access</a></li>
+<li><a href="#privacy-data-retention">6.5. Data Retention</a></li>
+<li><a href="#privacy-how-we-protect-information">6.6. How We Protect Information</a></li>
+<li><a href="#privacy-children">6.7. Children&#8217;s Privacy</a></li>
+<li><a href="#privacy-gdpr">6.8. General Data Protection Regulation (GDPR)</a></li>
+<li><a href="#privacy-changes">6.9. Changes To This Privacy Policy</a></li>
+<li><a href="#privacy-contact">6.10. How to Contact Us</a></li>
 </ul>
 </li>
 <li><a href="#_pricing">7. Pricing</a></li>
 <li><a href="#_browser_image_information">Appendix A: Browser Image information</a></li>
 <li><a href="#_cloud_platforms">Appendix B: Cloud Platforms</a>
 <ul class="sectlevel2">
-<li><a href="#_digitalocean">B.1. DigitalOcean</a></li>
-<li><a href="#_google_cloud">B.2. Google Cloud</a></li>
+<li><a href="#cloud-digital-ocean">B.1. DigitalOcean</a></li>
+<li><a href="#cloud-google-cloud">B.2. Google Cloud</a></li>
 </ul>
 </li>
 </ul>
@@ -652,16 +652,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#_installing_license">Installing License</a> section.</p>
+<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#">Installing License</a> section.</p>
 </div>
 </td>
 </tr>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_installing_to_kubernetes"><a class="anchor" href="#_installing_to_kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
+<h4 id="install-kubernetes"><a class="anchor" href="#install-kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
 <div class="sect4">
-<h5 id="_option_1_you_have_a_running_kubernetes_cluster"><a class="anchor" href="#_option_1_you_have_a_running_kubernetes_cluster"></a>Option 1: you have a running Kubernetes cluster</h5>
+<h5 id="install-moon-deploy"><a class="anchor" href="#install-moon-deploy"></a>Option 1: you have a running Kubernetes cluster</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -686,7 +686,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>If you are running Kubernetes cluster on virtual machines, we usually recommend having bigger VMs instead of smaller ones. This allows to avoid available CPUs and memory fragmentation issues. For example having 24 CPU cores overall it is better to start 3 x 8 CPU core VMs instead of 12 x 2 CPU core.</p>
 </li>
 <li>
-<p>If you are starting Moon in Kubernetes cluster deployed on workstation with <a href="https://github.com/kubernetes/minikube/">minikube</a> tool - see <a href="#_option_3_you_have_minikube">Option 3: you have Minikube</a>.</p>
+<p>If you are starting Moon in Kubernetes cluster deployed on workstation with <a href="https://github.com/kubernetes/minikube/">minikube</a> tool - see <a href="#install-minikube">Option 3: you have Minikube</a>.</p>
 </li>
 </ol>
 </div>
@@ -789,7 +789,7 @@ When running your tests for the first time for every browser version Kubernetes 
 </div>
 </div>
 <div class="sect4">
-<h5 id="_option_2_you_are_using_helm"><a class="anchor" href="#_option_2_you_are_using_helm"></a>Option 2: you are using Helm</h5>
+<h5 id="install-helm"><a class="anchor" href="#install-helm"></a>Option 2: you are using Helm</h5>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -860,7 +860,7 @@ $ helm repo update</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_option_3_you_have_minikube"><a class="anchor" href="#_option_3_you_have_minikube"></a>Option 3: you have Minikube</h5>
+<h5 id="install-minikube"><a class="anchor" href="#install-minikube"></a>Option 3: you have Minikube</h5>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -952,14 +952,14 @@ http://127.0.0.1:8080/</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_option_4_you_have_digitalocean_or_google_cloud"><a class="anchor" href="#_option_4_you_have_digitalocean_or_google_cloud"></a>Option 4: you have DigitalOcean or Google Cloud</h5>
+<h5 id="install-cloud"><a class="anchor" href="#install-cloud"></a>Option 4: you have DigitalOcean or Google Cloud</h5>
 <div class="paragraph">
-<p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#_cloud_platforms">Cloud Platforms</a> section for more details.</p>
+<p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#">Cloud Platforms</a> section for more details.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_installing_to_openshift"><a class="anchor" href="#_installing_to_openshift"></a>1.1.2. Installing to Openshift</h4>
+<h4 id="install-openshift"><a class="anchor" href="#install-openshift"></a>1.1.2. Installing to Openshift</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1015,23 +1015,23 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_moon_checklist"><a class="anchor" href="#_moon_checklist"></a>1.1.3. Moon Checklist</h4>
+<h4 id="install-checklist"><a class="anchor" href="#install-checklist"></a>1.1.3. Moon Checklist</h4>
 <div class="paragraph">
 <p>Although Moon installation is as simple as deploying one YAML manifest - there are some well-known issues you may encounter while running your tests. The following checklist will help you to have everything running smoothly from the beginning:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Make sure you turned off DNS cache for Moon namespace as described in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+<p>Make sure you turned off DNS cache for Moon namespace as described in <a href="#faq-browser-pods-freezing">Browser pods are freezing</a> section.</p>
 </li>
 <li>
-<p>For Moon 1.4.0+ make sure you have a required Kubernetes service described in <a href="#_sessions_are_not_starting">Sessions are not starting</a> section.</p>
+<p>For Moon 1.4.0+ make sure you have a required Kubernetes service described in <a href="#faq-sessions-not-starting">Sessions are not starting</a> section.</p>
 </li>
 <li>
-<p>While using Moon for the first time - make sure you are not suffering from various Kubernetes issues described in <a href="#_no_space_left_on_device">No space left on device</a> and <a href="#_dns_lookup_timeouts">DNS lookup timeouts</a> sections as well as some Github issues: <a href="https://github.com/kubernetes/kops/issues/5916">kubernetes/kops#5916</a>.</p>
+<p>While using Moon for the first time - make sure you are not suffering from various Kubernetes issues described in <a href="#faq-no-space-left">No space left on device</a> and <a href="#faq-dns-lookup-timeouts">DNS lookup timeouts</a> sections as well as some Github issues: <a href="https://github.com/kubernetes/kops/issues/5916">kubernetes/kops#5916</a>.</p>
 </li>
 <li>
-<p>In case of customized Moon installation (e.g. when changing Moon service name from default <code>moon</code> to something else) make sure you are setting <code>-moon-url</code> parameter correctly as described in <a href="#_browser_session_timeouts_do_not_work">Browser session timeouts do not work</a> section.</p>
+<p>In case of customized Moon installation (e.g. when changing Moon service name from default <code>moon</code> to something else) make sure you are setting <code>-moon-url</code> parameter correctly as described in <a href="#faq-session-timeouts-do-no-work">Browser session timeouts do not work</a> section.</p>
 </li>
 </ol>
 </div>
@@ -1051,7 +1051,7 @@ $ cd moon-deploy</pre>
 <p><strong>Use Calico container network interface instead of Flannel if possible</strong>. Calico has better performance than Flannel especially on big clusters.</p>
 </li>
 <li>
-<p><strong>Turn off DNS cache at least for Moon namespace</strong>. Being a completely stateless solution, Moon significantly depends on cluster DNS stability. One of the known Kubernetes issues is occasional DNS inconsistency - when somew browser pods are not accessible using domain name (it does not resolve). Such inconsistency can lead to frozen browser pods and cluster exhaustion. Possible way to turn off DNS cache is described in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+<p><strong>Turn off DNS cache at least for Moon namespace</strong>. Being a completely stateless solution, Moon significantly depends on cluster DNS stability. One of the known Kubernetes issues is occasional DNS inconsistency - when somew browser pods are not accessible using domain name (it does not resolve). Such inconsistency can lead to frozen browser pods and cluster exhaustion. Possible way to turn off DNS cache is described in <a href="#faq-browser-pods-freezing">Browser pods are freezing</a> section.</p>
 </li>
 <li>
 <p><strong>Use more than 1 Kubernetes API replica if needed</strong>. Moon is using Kubernetes API to create and delete browser pods. If you plan to run hundreds of browsers in parallel - take a look at Kubernetes API (Kubernetes master) host system metrics. Overloaded master can stop responding to requests properly and this can lead to frozen browser pods.</p>
@@ -1121,7 +1121,7 @@ All these permissions are normally enabled by default when running Moon and its 
 <div class="sect2">
 <h3 id="_cluster_architecture"><a class="anchor" href="#_cluster_architecture"></a>1.4. Cluster Architecture</h3>
 <div class="sect3">
-<h4 id="_moon_components"><a class="anchor" href="#_moon_components"></a>1.4.1. Moon Components</h4>
+<h4 id="moon-components"><a class="anchor" href="#moon-components"></a>1.4.1. Moon Components</h4>
 <div class="paragraph">
 <div class="title">Moon Cluster Architecture</div>
 <p><span class="image"><img src="img/architecture.png" alt="architecture"></span></p>
@@ -1147,7 +1147,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_why_moon_is_stateless"><a class="anchor" href="#_why_moon_is_stateless"></a>1.4.2. Why Moon is Stateless</h4>
+<h4 id="moon-stateless"><a class="anchor" href="#moon-stateless"></a>1.4.2. Why Moon is Stateless</h4>
 <div class="paragraph">
 <p>Moon is completely stateless and does not require any external database to run browser sessions.</p>
 </div>
@@ -1160,7 +1160,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_browser_pod_contents"><a class="anchor" href="#_browser_pod_contents"></a>1.4.3. Browser Pod Contents</h4>
+<h4 id="moon-pod-contents"><a class="anchor" href="#moon-pod-contents"></a>1.4.3. Browser Pod Contents</h4>
 <div class="paragraph">
 <p>In addition to container with browser every pod created by Moon contains one or more service images.</p>
 </div>
@@ -1232,7 +1232,7 @@ All these permissions are normally enabled by default when running Moon and its 
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>$ cat users.htpasswd
+<pre class="CodeRay highlight"><code data-lang="bash">$ cat users.htpasswd
 test:$apr1$.dZyHlKN$jdoZkin/kPviFNArx/cVL1 # User is test, password is encrypted
 alice:$apr1$mLYJAC4y$VYeJstWjWP/4iVlH/TNcD.
 bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
@@ -1373,7 +1373,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_per_user_browser_lists"><a class="anchor" href="#_per_user_browser_lists"></a>2.2.1. Per-user Browser Lists</h4>
+<h4 id="browsers-list-per-user"><a class="anchor" href="#browsers-list-per-user"></a>2.2.1. Per-user Browser Lists</h4>
 <div class="paragraph">
 <p>As you already know Moon is a multi-user application. For every user you need to create one file - <code>&lt;username&gt;.json</code>. For example for user <code>alice</code> from <code>users.htpasswd</code> you should create <code>alice.json</code>. All JSON files should be stored in the same directory specified by <code>-quota-dir</code> flag:</p>
 </div>
@@ -1392,7 +1392,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_guest_quota"><a class="anchor" href="#_guest_quota"></a>2.2.2. Guest Quota</h4>
+<h4 id="browsers-list-guest-quota"><a class="anchor" href="#browsers-list-guest-quota"></a>2.2.2. Guest Quota</h4>
 <div class="paragraph">
 <p>In some cases you may need anonymous Selenium access - without username and password. In terms of Moon this is called <code>guest quota</code> and is configured with <code>-guest-user</code> flag (default value is <code>browsers</code>). Any browser versions specified in <code>&lt;guest-user&gt;.json</code> file will be available without username and password:</p>
 </div>
@@ -1405,7 +1405,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_updating_browsers_list"><a class="anchor" href="#_updating_browsers_list"></a>2.2.3. Updating Browsers List</h4>
+<h4 id="browsers-list-updating"><a class="anchor" href="#browsers-list-updating"></a>2.2.3. Updating Browsers List</h4>
 <div class="paragraph">
 <p>To add or remove browsers:</p>
 </div>
@@ -1429,7 +1429,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_external_selenium"><a class="anchor" href="#_using_external_selenium"></a>2.2.4. Using External Selenium</h4>
+<h4 id="external-selenium"><a class="anchor" href="#external-selenium"></a>2.2.4. Using External Selenium</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -1444,7 +1444,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </ol>
 </div>
 <div class="sect4">
-<h5 id="_using_external_hosts"><a class="anchor" href="#_using_external_hosts"></a>Using External Hosts</h5>
+<h5 id="external-selenium-hosts"><a class="anchor" href="#external-selenium-hosts"></a>Using External Hosts</h5>
 <div class="paragraph">
 <p>For this case you should have the following:</p>
 </div>
@@ -1706,7 +1706,7 @@ Every VNC server should be password protected with the same password having 8+ c
 <div class="sect2">
 <h3 id="_devices_file"><a class="anchor" href="#_devices_file"></a>2.4. Devices File</h3>
 <div class="paragraph">
-<p>Moon load information about available mobile devices for <a href="#_mobile_emulation">Mobile Emulation</a> from a special file usually called <code>devices.json</code>:</p>
+<p>Moon load information about available mobile devices for <a href="#">Mobile Emulation</a> from a special file usually called <code>devices.json</code>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Typical <code>devices.json</code> file</div>
@@ -1856,7 +1856,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_option_1_you_are_using_official_yaml_manifests"><a class="anchor" href="#_option_1_you_are_using_official_yaml_manifests"></a>2.6.1. Option 1: you are using official YAML manifests</h4>
+<h4 id="license-yaml-manifests"><a class="anchor" href="#license-yaml-manifests"></a>2.6.1. Option 1: you are using official YAML manifests</h4>
 <div class="paragraph">
 <p>Our <a href="https://github.com/aerokube/moon-deploy">official YAML manifests</a> already contain everything needed to install a license key and by default have the following definition:</p>
 </div>
@@ -1877,7 +1877,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_option_2_you_are_using_helm_2"><a class="anchor" href="#_option_2_you_are_using_helm_2"></a>2.6.2. Option 2: you are using Helm</h4>
+<h4 id="license-helm"><a class="anchor" href="#license-helm"></a>2.6.2. Option 2: you are using Helm</h4>
 <div class="paragraph">
 <p>In our <a href="https://github.com/aerokube/charts">Helm charts</a> license key is exposed as <code>moon.licenseKey</code> parameter that could be set as follows:</p>
 </div>
@@ -1896,7 +1896,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_option_3_doing_everything_manually"><a class="anchor" href="#_option_3_doing_everything_manually"></a>2.6.3. Option 3: doing everything manually</h4>
+<h4 id="license-manually"><a class="anchor" href="#license-manually"></a>2.6.3. Option 3: doing everything manually</h4>
 <div class="paragraph">
 <p>Moon container is expecting to find license key file in the path specified by <code>-license-file</code> parameter. You need to mount license key file as a volume to every Moon container.</p>
 </div>
@@ -1994,7 +1994,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_how_licenses_work"><a class="anchor" href="#_how_licenses_work"></a>2.6.4. How Licenses Work</h4>
+<h4 id="license-how-it-works"><a class="anchor" href="#license-how-it-works"></a>2.6.4. How Licenses Work</h4>
 <div class="paragraph">
 <p>Every license key gives you an ability to run <strong>fixed number of parallel browser sessions</strong>. To limit maximum number of browser sessions Moon is using built-in Kubernetes <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">resource quota</a> feature. Every browser session in Moon is a separate Kubernetes <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pod</a>. When started Moon checks that respective pod resource quota exists (that is to say total number of pods is limited). If not found such resource quota is automatically created. You can have any desired number of Moon, Moon API and Moon UI replicas (i.e. pods) in your cluster. These pods are added to total number of parallel browser sessions from license key. For example:</p>
 </div>
@@ -2024,7 +2024,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect3">
-<h4 id="_installing_license_to_restricted_cluster"><a class="anchor" href="#_installing_license_to_restricted_cluster"></a>2.6.5. Installing License to Restricted Cluster</h4>
+<h4 id="license-restricted-cluster"><a class="anchor" href="#license-restricted-cluster"></a>2.6.5. Installing License to Restricted Cluster</h4>
 <div class="paragraph">
 <p>In some environments Moon has no permission to automatically create resource quota for its namespace. In that case you need to ask your Kubernetes administrator to create resource quota manually:</p>
 </div>
@@ -2195,7 +2195,7 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 <p>To fetch browser consumption information from Prometheus, query it like the following:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>sum(moon_browser_count{browserName=&quot;chrome&quot;}) by (version)</code></pre>
+<pre>sum(moon_browser_count{browserName="chrome"}) by (version)</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2208,9 +2208,9 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 <div class="sect2">
 <h3 id="_advanced_configuration"><a class="anchor" href="#_advanced_configuration"></a>2.8. Advanced Configuration</h3>
 <div class="sect3">
-<h4 id="_uploading_files_to_s3"><a class="anchor" href="#_uploading_files_to_s3"></a>2.8.1. Uploading Files to S3</h4>
+<h4 id="s3"><a class="anchor" href="#s3"></a>2.8.1. Uploading Files to S3</h4>
 <div class="sect4">
-<h5 id="_how_to_configure_s3_support"><a class="anchor" href="#_how_to_configure_s3_support"></a>How to Configure S3 Support</h5>
+<h5 id="s3-configuration"><a class="anchor" href="#s3-configuration"></a>How to Configure S3 Support</h5>
 <div class="paragraph">
 <p>You can configure Moon to send sessions logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a>-compatible storage. Such type of storage is supported by <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://azure.microsoft.com/">Microsoft Azure</a>, <a href="https://digitalocean.com/">Digital Ocean</a> and many other cloud providers. To deploy a private S3-compatible storage you can use <a href="https://minio.io/">Minio</a>. To enable S3 support in Moon:</p>
 </div>
@@ -2281,10 +2281,10 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 </table>
 </li>
 <li>
-<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section.</p>
+<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#">Configuration File</a> section.</p>
 </li>
 <li>
-<p>Create a Kubernetes credentials secret, mount it as a directory to Moon container and then specify path to this directory using <code>-credentials-dir</code> flag as shown in <a href="#_credentials_secret">Credentials Secret</a> section.</p>
+<p>Create a Kubernetes credentials secret, mount it as a directory to Moon container and then specify path to this directory using <code>-credentials-dir</code> flag as shown in <a href="#">Credentials Secret</a> section.</p>
 <div class="listingblock">
 <div class="title">S3 credentials secret</div>
 <div class="content">
@@ -2306,7 +2306,7 @@ $ helm install prometheus-operator stable/prometheus-operator --create-namespace
 </div>
 </div>
 <div class="sect4">
-<h5 id="_custom_s3_layout"><a class="anchor" href="#_custom_s3_layout"></a>Custom S3 Layout</h5>
+<h5 id="s3-custom-layout"><a class="anchor" href="#s3-custom-layout"></a>Custom S3 Layout</h5>
 <div class="paragraph">
 <p>By default files are uploaded to S3 bucket as follows:</p>
 </div>
@@ -2409,12 +2409,12 @@ my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/session.log</pre>
 </table>
 </div>
 <div class="paragraph">
-<p>To define S3 key pattern for every browser session independently - use <code>s3KeyPattern</code> capability described in <a href="#_special_capabilities">Special Capabilities</a> section.</p>
+<p>To define S3 key pattern for every browser session independently - use <code>s3KeyPattern</code> capability described in <a href="#">Special Capabilities</a> section.</p>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_docker_registry"><a class="anchor" href="#_using_custom_docker_registry"></a>2.8.2. Using Custom Docker Registry</h4>
+<h4 id="custom-docker-registry"><a class="anchor" href="#custom-docker-registry"></a>2.8.2. Using Custom Docker Registry</h4>
 <div class="paragraph">
 <p>By default Moon downloads all images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) from public Docker registry. If in your environment due to security restrictions Docker images can only be downloaded from private registry you need to configure Moon to work with this registry. To do this:</p>
 </div>
@@ -2447,7 +2447,7 @@ $ oc secrets link default my-registry.example.com --for=pull</pre>
 </div>
 </li>
 <li>
-<p>Update <a href="#_browsers_list">Browsers List</a> file (<code>browsers.json</code>) to use new browser images:</p>
+<p>Update <a href="#">Browsers List</a> file (<code>browsers.json</code>) to use new browser images:</p>
 <div class="listingblock">
 <div class="title">Browsers List File with Custom Images</div>
 <div class="content">
@@ -2504,7 +2504,7 @@ aerokube/logger =&gt; my-registry.example.com/moon/logger:1.3.4</pre>
 </div>
 </li>
 <li>
-<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#_configuration_file">Configuration File</a> section. When you update a config map with <code>service.json</code> - settings are applied immediately without Moon restart.</p>
+<p>Save <code>service.json</code> to a Kubernetes config map, mount it as a file to Moon container and then specify path to the file using <code>-config-file</code> flag as shown in <a href="#">Configuration File</a> section. When you update a config map with <code>service.json</code> - settings are applied immediately without Moon restart.</p>
 </li>
 <li>
 <p>Copy desired version of Moon main images to your registry:</p>
@@ -2532,9 +2532,9 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_timeouts"><a class="anchor" href="#_adjusting_timeouts"></a>2.8.3. Adjusting Timeouts</h4>
+<h4 id="timeouts"><a class="anchor" href="#timeouts"></a>2.8.3. Adjusting Timeouts</h4>
 <div class="sect4">
-<h5 id="_adjusting_moon_timeouts"><a class="anchor" href="#_adjusting_moon_timeouts"></a>Adjusting Moon Timeouts</h5>
+<h5 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>Adjusting Moon Timeouts</h5>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several flags allow to adjust timeout settings:</p>
 </div>
@@ -2571,7 +2571,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </table>
 </div>
 <div class="sect4">
-<h5 id="_adjusting_other_timeouts"><a class="anchor" href="#_adjusting_other_timeouts"></a>Adjusting Other Timeouts</h5>
+<h5 id="timeouts-other"><a class="anchor" href="#timeouts-other"></a>Adjusting Other Timeouts</h5>
 <div class="paragraph">
 <p>Not only Moon timeout settings can cause your tests to break. A typical Moon installation looks like the following:</p>
 </div>
@@ -2588,7 +2588,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p><strong>Client-side Timeout.</strong> Every Selenium library is internally using an HTTP client having default request timeout settings. If you are frequently seeing <code>CLIENT_DISCONNECTED</code> messages (meaning that client disconnected before request handling completed) in Moon log - this could be a sign to increase HTTP client timeouts in your code.</p>
 </li>
 <li>
-<p><strong>Load Balancer Timeout.</strong> Usually Moon is running behind load balancer (<code>LoadBalancer</code>, <code>Ingress</code> or <code>Router</code>) and it also has a default request proxy timeout. A frequent value is <code>60 seconds</code>, so if you are often seeing test fails with <code>502 Bad Gateway</code> or <code>504 Gateway Timeout</code> errors - this could be a sign to increase load balancer timeout. How to do this depends on your cloud platform and load balancer type being used. So refer to their documentation for more details. An example of doing this for AWS cloud is shown in <a href="#_connection_was_closed_unexpectedly">Connection was closed unexpectedly</a> section.</p>
+<p><strong>Load Balancer Timeout.</strong> Usually Moon is running behind load balancer (<code>LoadBalancer</code>, <code>Ingress</code> or <code>Router</code>) and it also has a default request proxy timeout. A frequent value is <code>60 seconds</code>, so if you are often seeing test fails with <code>502 Bad Gateway</code> or <code>504 Gateway Timeout</code> errors - this could be a sign to increase load balancer timeout. How to do this depends on your cloud platform and load balancer type being used. So refer to their documentation for more details. An example of doing this for AWS cloud is shown in <a href="#faq-connection-closed-unexpectedly">Connection was closed unexpectedly</a> section.</p>
 </li>
 <li>
 <p><strong>Cluster Capacity Reached.</strong> When you have already started the maximum number of browser pods allowed by your license, all new browser requests on top of this number will be waiting in queue for already running pods to stop. Waiting too much in queue will lead to user timeout described above. So if you are seeing a lot of <code>FORBIDDEN_TO_CREATE_POD</code> messages in the log that can signalize that you used all available browsers or all available computing resources (CPUs and memory) assigned to Moon namespace.</p>
@@ -2601,9 +2601,9 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_adjusting_resources_consumption"><a class="anchor" href="#_adjusting_resources_consumption"></a>2.8.4. Adjusting Resources Consumption</h4>
+<h4 id="resources"><a class="anchor" href="#resources"></a>2.8.4. Adjusting Resources Consumption</h4>
 <div class="sect4">
-<h5 id="_browser_resources_consumption"><a class="anchor" href="#_browser_resources_consumption"></a>Browser Resources Consumption</h5>
+<h5 id="resources-browser"><a class="anchor" href="#resources-browser"></a>Browser Resources Consumption</h5>
 <div class="paragraph">
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following flags:</p>
 </div>
@@ -2734,7 +2734,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </table>
 </div>
 <div class="sect4">
-<h5 id="_service_images_resources_consumption"><a class="anchor" href="#_service_images_resources_consumption"></a>Service Images Resources Consumption</h5>
+<h5 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>Service Images Resources Consumption</h5>
 <div class="paragraph">
 <p>By default service images have the following resources requirements:</p>
 </div>
@@ -2797,7 +2797,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect4">
-<h5 id="_pods_quality_of_service"><a class="anchor" href="#_pods_quality_of_service"></a>Pods Quality of Service</h5>
+<h5 id="qos"><a class="anchor" href="#qos"></a>Pods Quality of Service</h5>
 <div class="paragraph">
 <p>Browser automation stability and speed highly depends on how many computing resources are actually available to browser pods. Kubernetes has so-called <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service (QoS)</a> defining how many resources are assigned to pods being started. For stable browser automation we recommend always setting <code>Guaranteed</code> QoS class to Moon browser pods. To deliver this you have to make sure that <code>requests</code> and <code>limits</code> values for CPU and memory have equal values:</p>
 </div>
@@ -2814,7 +2814,7 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_volumes"><a class="anchor" href="#_using_volumes"></a>2.8.5. Using Volumes</h4>
+<h4 id="volumes"><a class="anchor" href="#volumes"></a>2.8.5. Using Volumes</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2858,7 +2858,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_running_browser_pods_in_privileged_mode"><a class="anchor" href="#_running_browser_pods_in_privileged_mode"></a>2.8.6. Running Browser Pods in Privileged Mode</h4>
+<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>2.8.6. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>In some cases like running Android emulators browser container should be run in <code>privileged</code> mode. This setting can be applied separately to each browser version in browsers list file as follows:</p>
 </div>
@@ -2890,7 +2890,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_node_selectors"><a class="anchor" href="#_using_node_selectors"></a>2.8.7. Using Node Selectors</h4>
+<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>2.8.7. Using Node Selectors</h4>
 <div class="paragraph">
 <p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers list as shown below:</p>
 </div>
@@ -2924,7 +2924,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_tolerations"><a class="anchor" href="#_using_tolerations"></a>2.8.8. Using Tolerations</h4>
+<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>2.8.8. Using Tolerations</h4>
 <div class="paragraph">
 <p>Kubernetes has a cool feature called <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">Taints</a> allowing to fine tune pods scheduling across nodes. If you wish to run browser pods on tainted nodes - you have to adjust so-called <code>tolerations</code>, that is to say a number of conditions to match against tainted nodes. Moon is using exactly the same format as Kubernetes to define tolerations:</p>
 </div>
@@ -2964,9 +2964,9 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_annotations"><a class="anchor" href="#_using_custom_kubernetes_annotations"></a>2.8.9. Using Custom Kubernetes Annotations</h4>
+<h4 id="kubernetes-annotations"><a class="anchor" href="#kubernetes-annotations"></a>2.8.9. Using Custom Kubernetes Annotations</h4>
 <div class="paragraph">
-<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. Moon allows to configure custom annotations globally or individually for every browser version. Global annotations are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. Moon allows to configure custom annotations globally or individually for every browser version. Global annotations are configured in <a href="#">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding global annotations to <code>service.json</code> file</div>
@@ -2994,7 +2994,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="paragraph">
-<p>To configure Kubernetes annotations for single desired browser version - just add the same <code>annotations</code> section to <a href="#_browsers_list">Browsers List</a> file as follows:</p>
+<p>To configure Kubernetes annotations for single desired browser version - just add the same <code>annotations</code> section to <a href="#">Browsers List</a> file as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding annotations to browser version</div>
@@ -3053,9 +3053,9 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_kubernetes_labels"><a class="anchor" href="#_using_custom_kubernetes_labels"></a>2.8.10. Using Custom Kubernetes Labels</h4>
+<h4 id="kubernetes-labels"><a class="anchor" href="#kubernetes-labels"></a>2.8.10. Using Custom Kubernetes Labels</h4>
 <div class="paragraph">
-<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. Moon allows to configure custom labels globally or individually for every browser version. Similarly to annotations global labels are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. Moon allows to configure custom labels globally or individually for every browser version. Similarly to annotations global labels are configured in <a href="#">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding global labels to <code>service.json</code> file</div>
@@ -3083,7 +3083,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="paragraph">
-<p>To configure Kubernetes labels for single desired browser version - just add the same <code>labels</code> section to <a href="#_browsers_list">Browsers List</a> file as follows:</p>
+<p>To configure Kubernetes labels for single desired browser version - just add the same <code>labels</code> section to <a href="#">Browsers List</a> file as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding labels to browser version</div>
@@ -3165,9 +3165,9 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_linux_kernel_capabilities"><a class="anchor" href="#_using_custom_linux_kernel_capabilities"></a>2.8.11. Using Custom Linux Kernel Capabilities</h4>
+<h4 id="kernel-caps"><a class="anchor" href="#kernel-caps"></a>2.8.11. Using Custom Linux Kernel Capabilities</h4>
 <div class="paragraph">
-<p>By default Moon starts all browser pods without any explicit <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capabilities</a>. In some cases you may need to set custom Linux capabilities to started browser pods (e.g. <code>SYS_ADMIN</code>). Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#_configuration_file">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
+<p>By default Moon starts all browser pods without any explicit <a href="http://man7.org/linux/man-pages/man7/capabilities.7.html">Linux kernel capabilities</a>. In some cases you may need to set custom Linux capabilities to started browser pods (e.g. <code>SYS_ADMIN</code>). Full list of such capabilities is available in Linux kernel <a href="https://github.com/torvalds/linux/blob/master/include/uapi/linux/capability.h">source</a>. Linux capabilities are configured in <a href="#">Configuration File</a> (aka <code>service.json</code>) as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding global Linux capabilities to <code>service.json</code> file</div>
@@ -3193,7 +3193,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_using_custom_service_account"><a class="anchor" href="#_using_custom_service_account"></a>2.8.12. Using Custom Service Account</h4>
+<h4 id="service-account"><a class="anchor" href="#service-account"></a>2.8.12. Using Custom Service Account</h4>
 <div class="paragraph">
 <p>By default Moon is using service account named <code>default</code> to access Kubernetes API. In some cases you only have permissions for another service account, e.g. named <code>moon</code>. To use this service account with Moon you need to change deployment as follows:</p>
 </div>
@@ -3275,9 +3275,9 @@ This was initially created for mounting really big files cached on Kubernetes no
 </div>
 </div>
 <div class="sect3">
-<h4 id="_setting_custom_user_and_group_identifier_to_browser_pods"><a class="anchor" href="#_setting_custom_user_and_group_identifier_to_browser_pods"></a>2.8.13. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="user-group"><a class="anchor" href="#user-group"></a>2.8.13. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
-<p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#_configuration_file">Configuration File</a>:</p>
+<p>Starting from release 1.4.2 by default Moon starts all browser pods with fixed <a href="https://en.wikipedia.org/wiki/User_identifier">UID</a> <code>106 (selenium)</code> and <a href="https://en.wikipedia.org/wiki/Group_identifier">GID</a> <code>65534 (nogroup)</code>. This allows to run browser pods even in restricted clusters without root permissions allowed. In order to change UID and GID values being set - use the following syntax in <a href="#">Configuration File</a>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Setting custom UID and GID globally in <code>service.json</code></div>
@@ -3303,7 +3303,7 @@ This was initially created for mounting really big files cached on Kubernetes no
 </table>
 </div>
 <div class="paragraph">
-<p>To set custom UID and GID values for selected browser versions - use <a href="#_browsers_list">Browsers List</a> file:</p>
+<p>To set custom UID and GID values for selected browser versions - use <a href="#">Browsers List</a> file:</p>
 </div>
 <div class="listingblock">
 <div class="title">Setting custom UID and GID for selected browser version</div>
@@ -3626,90 +3626,90 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="_moon_container_flags"><a class="anchor" href="#_moon_container_flags"></a>2.10.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>2.10.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>-browser-timeout duration
+<pre>-browser-timeout duration
     awaiting browser timeout (default 30s)
 -chrome-devtools-repository string
-    repository to pull chrome devtools images (default &quot;cdtp&quot;)
+    repository to pull chrome devtools images (default "cdtp")
 -config-file string
-    optional configuration file (default &quot;config/service.json&quot;)
+    optional configuration file (default "config/service.json")
 -cpu-limit string
-    browser container cpu limit (default &quot;1&quot;)
+    browser container cpu limit (default "1")
 -cpu-request string
-    browser container cpu request (default &quot;0.5&quot;)
+    browser container cpu request (default "0.5")
 -credentials-dir string
-    directory where credentials are mounted (default &quot;credentials&quot;)
+    directory where credentials are mounted (default "credentials")
 -device-file string
-    mobile devices configuration file (default &quot;config/devices.json&quot;)
+    mobile devices configuration file (default "config/devices.json")
 -disable-cpu-limits
     disable cpu limits for pods
 -disable-memory-limits
     disable memory limits for pods
 -domain-name string
-    browsers service domain name (default &quot;browsers&quot;)
+    browsers service domain name (default "browsers")
 -grace-period duration
     graceful shutdown (default 30s)
 -guest-user string
-    guest quota user name (default &quot;browsers&quot;)
+    guest quota user name (default "browsers")
 -license-file string
-    path to license file (default &quot;license/license.key&quot;)
+    path to license file (default "license/license.key")
 -listen string
-    address to bind (default &quot;:4444&quot;)
+    address to bind (default ":4444")
 -memory-limit string
-    browser container memory limit (default &quot;1Gi&quot;)
+    browser container memory limit (default "1Gi")
 -memory-request string
-    browser container memory request (default &quot;512Mi&quot;)
+    browser container memory request (default "512Mi")
 -moon-url string
-    moon service url (default &quot;http://moon:4444/wd/hub&quot;)
+    moon service url (default "http://moon:4444/wd/hub")
 -namespace string
     namespace
 -playwright-repository string
-    repository to pull playwright images (default &quot;playwright&quot;)
+    repository to pull playwright images (default "playwright")
 -quota-dir string
-    quota directory (default &quot;quota&quot;)
+    quota directory (default "quota")
 -service-account-name string
-    service account name (default &quot;default&quot;)
+    service account name (default "default")
 -session-attempt-timeout duration
     new session attempt timeout (default 30m0s)
 -timeout duration
     override session timeout (default 1m0s)
 -users-file string
-    path to users file (default &quot;users/users.htpasswd&quot;)
+    path to users file (default "users/users.htpasswd")
 -version
-    show version and exit</code></pre>
+    show version and exit</pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_moon_api_container_flags"><a class="anchor" href="#_moon_api_container_flags"></a>2.10.2. Moon API Container Flags</h4>
+<h4 id="cli-flags-moon-api"><a class="anchor" href="#cli-flags-moon-api"></a>2.10.2. Moon API Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>-domain-name string
-    browsers service domain name (default &quot;browsers&quot;)
+<pre>-domain-name string
+    browsers service domain name (default "browsers")
 -grace-period duration
     graceful shutdown period (default 30s)
 -guest-user string
-    guest quota user name (default &quot;browsers&quot;)
+    guest quota user name (default "browsers")
 -license-file string
-    path to license file (default &quot;license/license.key&quot;)
+    path to license file (default "license/license.key")
 -listen string
-    address to bind (default &quot;:8080&quot;)
+    address to bind (default ":8080")
 -namespace string
     namespace
 -quota-dir string
-    quota directory (default &quot;quota&quot;)
+    quota directory (default "quota")
 -sse-period duration
     sse refresh period (default 5s)
 -version
-    Show version and exit</code></pre>
+    Show version and exit</pre>
 </div>
 </div>
 </div>
@@ -3725,7 +3725,7 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 <p>Moon supports a set of custom capabilities. You can pass them in tests to enable or disable some features.</p>
 </div>
 <div class="sect3">
-<h4 id="_live_browser_screen_enablevnc"><a class="anchor" href="#_live_browser_screen_enablevnc"></a>3.1.1. Live Browser Screen: enableVNC</h4>
+<h4 id="capability-enableVNC"><a class="anchor" href="#capability-enableVNC"></a>3.1.1. Live Browser Screen: enableVNC</h4>
 <div class="paragraph">
 <p>Moon supports showing browser screen during test execution. To see browser screen add capability:</p>
 </div>
@@ -3740,7 +3740,7 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_screen_resolution_screenresolution"><a class="anchor" href="#_custom_screen_resolution_screenresolution"></a>3.1.2. Custom Screen Resolution: screenResolution</h4>
+<h4 id="capability-screenResolution"><a class="anchor" href="#capability-screenResolution"></a>3.1.2. Custom Screen Resolution: screenResolution</h4>
 <div class="paragraph">
 <p>Moon allows you to set custom screen resolution in containers being run:</p>
 </div>
@@ -3777,7 +3777,7 @@ You should manually resize window to desired width and height or use Selenium <c
 </div>
 </div>
 <div class="sect3">
-<h4 id="_android_skin_skin"><a class="anchor" href="#_android_skin_skin"></a>3.1.3. Android Skin: skin</h4>
+<h4 id="capability-skin"><a class="anchor" href="#capability-skin"></a>3.1.3. Android Skin: skin</h4>
 <div class="paragraph">
 <p>When testing for Android platform you can select emulator skin with capabilities. List of available skins:</p>
 </div>
@@ -3868,7 +3868,7 @@ You should manually resize window to desired width and height or use Selenium <c
 </div>
 </div>
 <div class="sect3">
-<h4 id="_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"><a class="anchor" href="#_video_recording_enablevideo_videoname_videoscreensize_videoframerate_videocodec"></a>3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</h4>
+<h4 id="capability-video-recording"><a class="anchor" href="#capability-video-recording"></a>3.1.4. Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec</h4>
 <div class="paragraph">
 <p>To enable video recording for session, add:</p>
 </div>
@@ -3935,7 +3935,7 @@ resolution is less than actual, screen on video will be trimmed starting from to
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_log_name_logname"><a class="anchor" href="#_custom_log_name_logname"></a>3.1.5. Custom Log Name: logName</h4>
+<h4 id="capability-logName"><a class="anchor" href="#capability-logName"></a>3.1.5. Custom Log Name: logName</h4>
 <div class="paragraph">
 <p>By default saved log files are named <code>session.log</code>. To provide custom log name specify:</p>
 </div>
@@ -3959,7 +3959,7 @@ It is important to add <code>log</code> file extension.
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_test_name_name"><a class="anchor" href="#_custom_test_name_name"></a>3.1.6. Custom Test Name: name</h4>
+<h4 id="capability-name"><a class="anchor" href="#capability-name"></a>3.1.6. Custom Test Name: name</h4>
 <div class="paragraph">
 <p>For debugging purposes it is often useful to give a distinct name to every test case. You can set test case name by passing the following capability:</p>
 </div>
@@ -3974,7 +3974,7 @@ It is important to add <code>log</code> file extension.
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_time_zone_timezone"><a class="anchor" href="#_per_session_time_zone_timezone"></a>3.1.7. Per-session Time Zone: timeZone</h4>
+<h4 id="capability-timeZone"><a class="anchor" href="#capability-timeZone"></a>3.1.7. Per-session Time Zone: timeZone</h4>
 <div class="paragraph">
 <p>Some tests require particular time zone to be set in operating system.</p>
 </div>
@@ -4005,9 +4005,9 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_hosts_entries_hostsentries"><a class="anchor" href="#_hosts_entries_hostsentries"></a>3.1.9. Hosts Entries: hostsEntries</h4>
+<h4 id="capability-hostsEntries"><a class="anchor" href="#capability-hostsEntries"></a>3.1.9. Hosts Entries: hostsEntries</h4>
 <div class="paragraph">
-<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#_browsers_list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
+<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: array, format: &lt;hostname&gt;:&lt;ip-address&gt;</div>
@@ -4020,7 +4020,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_dns_servers_nameservers"><a class="anchor" href="#_custom_dns_servers_nameservers"></a>3.1.10. Custom DNS Servers: nameservers</h4>
+<h4 id="capability-nameservers"><a class="anchor" href="#capability-nameservers"></a>3.1.10. Custom DNS Servers: nameservers</h4>
 <div class="paragraph">
 <p>By default browser pods are using global Kubernetes DNS settings. Sometimes you may need to override used DNS servers list for particular test cases. This can be easily achieved with:</p>
 </div>
@@ -4032,7 +4032,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_custom_session_timeout_sessiontimeout"><a class="anchor" href="#_custom_session_timeout_sessiontimeout"></a>3.1.11. Custom Session Timeout: sessionTimeout</h4>
+<h4 id="capability-sessionTimeout"><a class="anchor" href="#capability-sessionTimeout"></a>3.1.11. Custom Session Timeout: sessionTimeout</h4>
 <div class="paragraph">
 <p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
 </div>
@@ -4047,7 +4047,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_s3_key_pattern_s3keypattern"><a class="anchor" href="#_s3_key_pattern_s3keypattern"></a>3.1.12. S3 Key Pattern: s3KeyPattern</h4>
+<h4 id="capability-s3KeyPattern"><a class="anchor" href="#capability-s3KeyPattern"></a>3.1.12. S3 Key Pattern: s3KeyPattern</h4>
 <div class="paragraph">
 <p>This capability allows to override S3 key pattern (specified by <code>s3 &gt; keyPattern</code> key in <code>service.json</code>) used when uploading files to S3.</p>
 </div>
@@ -4058,13 +4058,13 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The same key placeholders are supported. Please refer to <a href="#Uploading Files To S3">[Uploading Files To S3]</a> section for more details.</p>
+<p>The same key placeholders are supported. Please refer to <a href="#s3">Uploading Files To S3</a> section for more details.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_mobile_emulation_mobiledevice"><a class="anchor" href="#_mobile_emulation_mobiledevice"></a>3.1.13. Mobile Emulation: mobileDevice</h4>
+<h4 id="capability-mobile-emulation"><a class="anchor" href="#capability-mobile-emulation"></a>3.1.13. Mobile Emulation: mobileDevice</h4>
 <div class="paragraph">
-<p>This capability configures desired mobile device <a href="#_mobile_emulation">Mobile Emulation</a>:</p>
+<p>This capability configures desired mobile device <a href="#">Mobile Emulation</a>:</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: object</div>
@@ -4098,7 +4098,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_capabilities_via_protocol_extensions"><a class="anchor" href="#_specifying_capabilities_via_protocol_extensions"></a>3.1.14. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="capability-protocol-extensions"><a class="anchor" href="#capability-protocol-extensions"></a>3.1.14. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -4238,7 +4238,7 @@ some-clipboard-value</code></pre>
 <p>You can see that the only difference from standard Playwright example is a web socket endpoint URL. Playwright compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser version or e.g. enable video recording is passing all these requirements in websocket endpoint URL. Next section describe supported URL naming conventions.</p>
 </div>
 <div class="sect3">
-<h4 id="_selecting_requested_browser"><a class="anchor" href="#_selecting_requested_browser"></a>3.4.1. Selecting Requested Browser</h4>
+<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>3.4.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -4262,7 +4262,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_selecting_exact_browser_version"><a class="anchor" href="#_selecting_exact_browser_version"></a>3.4.2. Selecting Exact Browser Version</h4>
+<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>3.4.2. Selecting Exact Browser Version</h4>
 <div class="paragraph">
 <p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
 </div>
@@ -4277,7 +4277,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_selecting_exact_playwright_version"><a class="anchor" href="#_selecting_exact_playwright_version"></a>3.4.3. Selecting Exact Playwright Version</h4>
+<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>3.4.3. Selecting Exact Playwright Version</h4>
 <div class="paragraph">
 <p>Currently Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
 </div>
@@ -4289,7 +4289,7 @@ some-clipboard-value</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_enabling_additional_features"><a class="anchor" href="#_enabling_additional_features"></a>3.4.4. Enabling Additional Features</h4>
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>3.4.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, enabling video recording and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -4636,9 +4636,9 @@ driver = selenium.webdriver.remote.webdriver.WebDriver(
 </div>
 </div>
 <div class="sect3">
-<h4 id="_supported_mobile_devices"><a class="anchor" href="#_supported_mobile_devices"></a>3.6.1. Supported Mobile Devices</h4>
+<h4 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>3.6.1. Supported Mobile Devices</h4>
 <div class="paragraph">
-<p>Moon comes with a preconfigured list of supported devices stored in <a href="#_devices_file">Devices File</a>. In order to add your own mobile devices definitions - simply update this file and wait for Moon to reload it.</p>
+<p>Moon comes with a preconfigured list of supported devices stored in <a href="#">Devices File</a>. In order to add your own mobile devices definitions - simply update this file and wait for Moon to reload it.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 17. Supported Mobile Devices</caption>
@@ -4951,7 +4951,7 @@ driver = selenium.webdriver.remote.webdriver.WebDriver(
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
 <div class="sect3">
-<h4 id="_firefox"><a class="anchor" href="#_firefox"></a>3.7.1. Firefox</h4>
+<h4 id="locale-firefox"><a class="anchor" href="#locale-firefox"></a>3.7.1. Firefox</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Firefox</div>
 <div class="content">
@@ -4963,7 +4963,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="_chromium_based_browsers"><a class="anchor" href="#_chromium_based_browsers"></a>3.7.2. Chromium-based Browsers</h4>
+<h4 id="locale-chromium"><a class="anchor" href="#locale-chromium"></a>3.7.2. Chromium-based Browsers</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Chromium-base Browsers</div>
 <div class="content">
@@ -5110,19 +5110,19 @@ driver = selenium.webdriver.remote.webdriver.WebDriver(
 <h2 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>4. Frequently Asked Questions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_where_are_moon_logs"><a class="anchor" href="#_where_are_moon_logs"></a>4.1. Where are Moon logs?</h3>
+<h3 id="faq-moon-logs"><a class="anchor" href="#faq-moon-logs"></a>4.1. Where are Moon logs?</h3>
 <div class="paragraph">
-<p>See <a href="#_log_files">Log Files</a> section.</p>
+<p>See <a href="#">Log Files</a> section.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_where_are_recorded_videos_stored"><a class="anchor" href="#_where_are_recorded_videos_stored"></a>4.2. Where are recorded videos stored?</h3>
+<h3 id="faq-recorded-videos"><a class="anchor" href="#faq-recorded-videos"></a>4.2. Where are recorded videos stored?</h3>
 <div class="paragraph">
 <p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_update_configuration_of_a_running_moon_cluster"><a class="anchor" href="#_how_to_update_configuration_of_a_running_moon_cluster"></a>4.3. How to update configuration of a running Moon cluster?</h3>
+<h3 id="faq-update-configuration"><a class="anchor" href="#faq-update-configuration"></a>4.3. How to update configuration of a running Moon cluster?</h3>
 <div class="paragraph">
 <p>Just update respective config maps (<code>config</code>, <code>quota</code>) or secrets (<code>users</code>, <code>credentials</code>) with standard Kubernetes commands (<code>kubectl edit</code> or <code>kubectl replace</code>). For example:</p>
 </div>
@@ -5139,19 +5139,19 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_is_it_possible_to_configure_kubernetes_service_account_for_moon"><a class="anchor" href="#_is_it_possible_to_configure_kubernetes_service_account_for_moon"></a>4.4. Is it possible to configure Kubernetes service account for Moon?</h3>
+<h3 id="faq-kubernetes-service-account"><a class="anchor" href="#faq-kubernetes-service-account"></a>4.4. Is it possible to configure Kubernetes service account for Moon?</h3>
 <div class="paragraph">
-<p>Yes, Moon has <code>-service-account-name</code> flag described in <a href="#_moon_container_flags">Moon Container Flags</a> section.</p>
+<p>Yes, Moon has <code>-service-account-name</code> flag described in <a href="#cli-flags-moon">Moon Container Flags</a> section.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"><a class="anchor" href="#_is_it_possible_to_assign_custom_firewall_rules_to_browser_pods"></a>4.5. Is it possible to assign custom firewall rules to browser pods?</h3>
+<h3 id="faq-custom-firewall-rules"><a class="anchor" href="#faq-custom-firewall-rules"></a>4.5. Is it possible to assign custom firewall rules to browser pods?</h3>
 <div class="paragraph">
-<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. How to do this is described in <a href="#_using_custom_kubernetes_labels">Using Custom Kubernetes Labels</a> section. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
+<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. How to do this is described in <a href="#kubernetes-labels">Using Custom Kubernetes Labels</a> section. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_sessions_are_not_starting"><a class="anchor" href="#_sessions_are_not_starting"></a>4.6. Sessions are not starting</h3>
+<h3 id="faq-sessions-not-starting"><a class="anchor" href="#faq-sessions-not-starting"></a>4.6. Sessions are not starting</h3>
 <div class="paragraph">
 <p>In recent Moon versions (1.4.0+) you may encounter an issue when browser sessions are not starting at all. Moon logs will show something like this:</p>
 </div>
@@ -5215,7 +5215,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_connection_was_closed_unexpectedly"><a class="anchor" href="#_connection_was_closed_unexpectedly"></a>4.7. Connection was closed unexpectedly</h3>
+<h3 id="faq-connection-closed-unexpectedly"><a class="anchor" href="#faq-connection-closed-unexpectedly"></a>4.7. Connection was closed unexpectedly</h3>
 <div class="paragraph">
 <p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
 </div>
@@ -5235,7 +5235,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_browser_pods_are_freezing"><a class="anchor" href="#_browser_pods_are_freezing"></a>4.8. Browser pods are freezing</h3>
+<h3 id="faq-browser-pods-freezing"><a class="anchor" href="#faq-browser-pods-freezing"></a>4.8. Browser pods are freezing</h3>
 <div class="paragraph">
 <p>This is a known issue in Kubernetes CoreDNS server settings. Current fix is to turn off DNS caching for Moon namespace. To do this:</p>
 </div>
@@ -5322,7 +5322,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_no_space_left_on_device"><a class="anchor" href="#_no_space_left_on_device"></a>4.9. No space left on device</h3>
+<h3 id="faq-no-space-left"><a class="anchor" href="#faq-no-space-left"></a>4.9. No space left on device</h3>
 <div class="paragraph">
 <p>If you are getting the following error&#8230;&#8203;</p>
 </div>
@@ -5341,7 +5341,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_dns_lookup_timeouts"><a class="anchor" href="#_dns_lookup_timeouts"></a>4.10. DNS lookup timeouts</h3>
+<h3 id="faq-dns-lookup-timeouts"><a class="anchor" href="#faq-dns-lookup-timeouts"></a>4.10. DNS lookup timeouts</h3>
 <div class="paragraph">
 <p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
 </div>
@@ -5360,7 +5360,7 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_no_such_host_messages"><a class="anchor" href="#_no_such_host_messages"></a>4.11. No such host messages</h3>
+<h3 id="faq-no-such-host"><a class="anchor" href="#faq-no-such-host"></a>4.11. No such host messages</h3>
 <div class="paragraph">
 <p>If you are seeing messages like this&#8230;&#8203;</p>
 </div>
@@ -5372,19 +5372,19 @@ $ kubectl edit secret credentials -n moon # Updating Moon credentials (e.g. S3 a
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
-<p>then check that you disabled DNS cache for Moon namespace as shown in <a href="#_browser_pods_are_freezing">Browser pods are freezing</a> section.</p>
+<p>then check that you disabled DNS cache for Moon namespace as shown in <a href="#faq-browser-pods-freezing">Browser pods are freezing</a> section.</p>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_browser_session_timeouts_do_not_work"><a class="anchor" href="#_browser_session_timeouts_do_not_work"></a>4.12. Browser session timeouts do not work</h3>
+<h3 id="faq-session-timeouts-do-no-work"><a class="anchor" href="#faq-session-timeouts-do-no-work"></a>4.12. Browser session timeouts do not work</h3>
 <div class="paragraph">
 <p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_json_processing_errors_in_tests"><a class="anchor" href="#_json_processing_errors_in_tests"></a>4.13. JSON processing errors in tests</h3>
+<h3 id="faq-json-errors"><a class="anchor" href="#faq-json-errors"></a>4.13. JSON processing errors in tests</h3>
 <div class="paragraph">
 <p>In some environments your Selenium tests could from time to time start getting JSON processing errors like this:</p>
 </div>
@@ -5866,9 +5866,9 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <p>We recommend that you read this Privacy Policy in full to ensure you are fully informed. If you have any questions about this Privacy Policy or Aerokube&#8217;s data collection, use, and disclosure practices, please contact us at <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>. The data controller of your personal information is Aerokube Software OÜ.</p>
 </div>
 <div class="sect2">
-<h3 id="_information_we_collect"><a class="anchor" href="#_information_we_collect"></a>6.1. Information We Collect</h3>
+<h3 id="privacy-information-we-collect"><a class="anchor" href="#privacy-information-we-collect"></a>6.1. Information We Collect</h3>
 <div class="sect3">
-<h4 id="_information_you_provide"><a class="anchor" href="#_information_you_provide"></a>6.1.1. Information You Provide</h4>
+<h4 id="privacy-information-you-provide"><a class="anchor" href="#privacy-information-you-provide"></a>6.1.1. Information You Provide</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5881,7 +5881,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect3">
-<h4 id="_information_we_collect_when_you_use_our_services"><a class="anchor" href="#_information_we_collect_when_you_use_our_services"></a>6.1.2. Information We Collect When You Use Our Services</h4>
+<h4 id="privacy-information-we-collect-you-use"><a class="anchor" href="#privacy-information-we-collect-you-use"></a>6.1.2. Information We Collect When You Use Our Services</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5897,7 +5897,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect3">
-<h4 id="_information_we_receive_from_third_parties"><a class="anchor" href="#_information_we_receive_from_third_parties"></a>6.1.3. Information We Receive from Third Parties</h4>
+<h4 id="privacy-information-we-receive"><a class="anchor" href="#privacy-information-we-receive"></a>6.1.3. Information We Receive from Third Parties</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5908,7 +5908,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_use_information"><a class="anchor" href="#_how_we_use_information"></a>6.2. How We Use Information</h3>
+<h3 id="privacy-how-we-use-information"><a class="anchor" href="#privacy-how-we-use-information"></a>6.2. How We Use Information</h3>
 <div class="paragraph">
 <p>We use the information we collect in various ways:</p>
 </div>
@@ -5948,7 +5948,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_share_information"><a class="anchor" href="#_how_we_share_information"></a>6.3. How We Share Information</h3>
+<h3 id="privacy-how-we-share-information"><a class="anchor" href="#privacy-how-we-share-information"></a>6.3. How We Share Information</h3>
 <div class="paragraph">
 <p>We may share the information we collect in various ways:</p>
 </div>
@@ -6004,7 +6004,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_access"><a class="anchor" href="#_access"></a>6.4. Access</h3>
+<h3 id="privacy-access"><a class="anchor" href="#privacy-access"></a>6.4. Access</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6039,7 +6039,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_data_retention"><a class="anchor" href="#_data_retention"></a>6.5. Data Retention</h3>
+<h3 id="privacy-data-retention"><a class="anchor" href="#privacy-data-retention"></a>6.5. Data Retention</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6055,7 +6055,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_we_protect_information"><a class="anchor" href="#_how_we_protect_information"></a>6.6. How We Protect Information</h3>
+<h3 id="privacy-how-we-protect-information"><a class="anchor" href="#privacy-how-we-protect-information"></a>6.6. How We Protect Information</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6080,13 +6080,13 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_childrens_privacy"><a class="anchor" href="#_childrens_privacy"></a>6.7. Children&#8217;s Privacy</h3>
+<h3 id="privacy-children"><a class="anchor" href="#privacy-children"></a>6.7. Children&#8217;s Privacy</h3>
 <div class="paragraph">
 <p>We do not knowingly collect information from children under the age of 13. Children under 13 are prohibited from using our Services. If you learn that a child has provided us with personal information in violation of this Privacy Policy, you can alert us at <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_general_data_protection_regulation_gdpr"><a class="anchor" href="#_general_data_protection_regulation_gdpr"></a>6.8. General Data Protection Regulation (GDPR)</h3>
+<h3 id="privacy-gdpr"><a class="anchor" href="#privacy-gdpr"></a>6.8. General Data Protection Regulation (GDPR)</h3>
 <div class="paragraph">
 <p>If you are a resident of the European Economic Area (EEA), you have the following data protection rights:</p>
 </div>
@@ -6114,13 +6114,13 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_changes_to_this_privacy_policy"><a class="anchor" href="#_changes_to_this_privacy_policy"></a>6.9. Changes To This Privacy Policy</h3>
+<h3 id="privacy-changes"><a class="anchor" href="#privacy-changes"></a>6.9. Changes To This Privacy Policy</h3>
 <div class="paragraph">
 <p>This Privacy Policy may be modified from time to time, so please review it frequently. Changes to this Privacy Policy will be posted on our websites. If we materially change the ways in which we use or share personal information previously collected from you through our Services, we will notify you through our Services, by email, or other communication.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_how_to_contact_us"><a class="anchor" href="#_how_to_contact_us"></a>6.10. How to Contact Us</h3>
+<h3 id="privacy-contact"><a class="anchor" href="#privacy-contact"></a>6.10. How to Contact Us</h3>
 <div class="paragraph">
 <p>If you need to contact us with regard to any of your rights as set out in this Policy, all such requests should be made in writing by email to <a href="mailto:privacy@aerokube.com">privacy@aerokube.com</a>.</p>
 </div>
@@ -6258,7 +6258,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <p>Moon ready-to-use configurations are present in popular cloud platforms and can be run in a few clicks. This section contains step-by-step instructions on launching Moon in these platforms.</p>
 </div>
 <div class="sect2">
-<h3 id="_digitalocean"><a class="anchor" href="#_digitalocean"></a>B.1. DigitalOcean</h3>
+<h3 id="cloud-digital-ocean"><a class="anchor" href="#cloud-digital-ocean"></a>B.1. DigitalOcean</h3>
 <div class="paragraph">
 <p>Moon can be run from <a href="https://marketplace.digitalocean.com/">DigitalOcean Marketplace</a> as follows:</p>
 </div>
@@ -6304,7 +6304,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 <div class="sect2">
-<h3 id="_google_cloud"><a class="anchor" href="#_google_cloud"></a>B.2. Google Cloud</h3>
+<h3 id="cloud-google-cloud"><a class="anchor" href="#cloud-google-cloud"></a>B.2. Google Cloud</h3>
 <div class="paragraph">
 <p>Moon can be run from <a href="https://console.cloud.google.com/marketplace">Google Cloud Marketplace</a> as follows:</p>
 </div>
@@ -6343,7 +6343,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-02-17 07:30:58 UTC
+Last updated 2021-02-17 08:25:15 UTC
 </div>
 </div>
 <style>
