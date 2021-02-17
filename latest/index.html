@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-02-10</span>
+<span id="revdate">2021-02-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -545,7 +545,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_custom_log_name_logname">3.1.5. Custom Log Name: logName</a></li>
 <li><a href="#_custom_test_name_name">3.1.6. Custom Test Name: name</a></li>
 <li><a href="#_per_session_time_zone_timezone">3.1.7. Per-session Time Zone: timeZone</a></li>
-<li><a href="#_per_session_environment_variables_env">3.1.8. Per-session Environment Variables: env</a></li>
+<li><a href="#capability-env">3.1.8. Per-session Environment Variables: env</a></li>
 <li><a href="#_hosts_entries_hostsentries">3.1.9. Hosts Entries: hostsEntries</a></li>
 <li><a href="#_custom_dns_servers_nameservers">3.1.10. Custom DNS Servers: nameservers</a></li>
 <li><a href="#_custom_session_timeout_sessiontimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
@@ -576,6 +576,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_chromium_based_browsers">3.7.2. Chromium-based Browsers</a></li>
 </ul>
 </li>
+<li><a href="#_using_self_signed_tls_certificates">3.8. Using self-signed TLS certificates</a></li>
 </ul>
 </li>
 <li><a href="#_frequently_asked_questions">4. Frequently Asked Questions</a>
@@ -3989,7 +3990,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_per_session_environment_variables_env"><a class="anchor" href="#_per_session_environment_variables_env"></a>3.1.8. Per-session Environment Variables: env</h4>
+<h4 id="capability-env"><a class="anchor" href="#capability-env"></a>3.1.8. Per-session Environment Variables: env</h4>
 <div class="paragraph">
 <p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
 </div>
@@ -4972,6 +4973,135 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://moon.example.com:4444/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
 </div>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_self_signed_tls_certificates"><a class="anchor" href="#_using_self_signed_tls_certificates"></a>3.8. Using self-signed TLS certificates</h3>
+<div class="paragraph">
+<p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using a self-signed certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>.</p>
+</div>
+<div class="paragraph">
+<p>In order to work properly with self-signed certificates, you have to add your root certification authority certificate to a list of trusted certificates:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find root certificate for certification authority being used to secure your tested environment. Usually such certificates are being issued by IT security team or systems administrators and are publicly available. For example your root certificate can look like this:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt
+-----BEGIN CERTIFICATE-----
+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
+ejbh
+-----END CERTIFICATE-----</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Encode certificate data with <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> algorithm:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt | base64
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNvTUEwR0NTcUdTSWIzRFFFQkN3VUFNSUdMTVFzd0NRWUQKVlFRR0V3SkZSVEVRTUE0R0ExVUVDQk1IUlhOMGIyNXBZVEVRTUE0R0ExVUVCeE1IVkdGc2JHbHViakVlTUJ3RwpBMVVFQ2hRVlFXVnliMnQxWW1VZ1UyOW1kSGRoY21VZ1Q4T2NNUlV3RXdZRFZRUURFd3hoWlhKdmEzVmlaUzVqCmIyMHhJVEFmQmdrcWhraUc5dzBCQ1FFV0VtRmtiV2x1UUdGbGNtOXJkV0psTG1OdmJUQWVGdzB5TVRBeU1UY3cKTmpRNU5ESmFGdzB5TXpFeU1EZ3dOalE1TkRKYU1JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFQ0JNSApSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWdVMjltCmRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQkNRRVcKRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YlRDQ0FpSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnSVBBRENDQWdvQwpnZ0lCQUtkaDU0eDlXWnNTeElNZnoxckZFSHVKOCszbWVVdWEwUThjcGdDLzcwRjBHNlg2QlhPa2kwQ3U3aUVUCjZFVGZpcld1VWRSS0tHS1hITEY4RmR2NldUcW5MbERxZ3p5MVdwOUR1UElnZUorenRLWnQrdUpGa1dqZlFiOVIKbW43UXM0dnAvRjlIVHdxbFRabDVqTVErL25yY05BUWVORVoxSDFBZlpXQXVTdnJxcDNyVzMzd2w2SUJaY3FmRApWc01Ca25CS20vWmM4R3BnZ1k4Tll4a2ZqN0pvMml6d24vdFYrREZnd0YwcEprVXJEWlBQVGlOVzdxOFNlMlZiCjd0QzZJeTlaVmdrSDhoa3JXclB6d1c0enh6L2QvU2k3L2NubjlBOStiRitwS3JzSGt0blEwU2NERUFSNSs1MkoKWEFYa0VTLzRwSU5wQmN4dk5VSEdPNktYS0g0ckpWZjNRdlhYYW55MHVnd1ZRK1FYaXJBNnlPb1kzWEZnQnhnVQpQN1FkNXB5UWRWZi9Td0o1VWs1WjliMkhYazhrLzZqTnhlMUE2V2lvalRPbm4xZkQvVnpPVG40eGlvYnFOSXBFCnc1ZFVobGovVGlOK2czdUdCSDRCUG82SVlIQ21mc1hGRWNTWlc3NWs3ZFJsWjNaTUk0azB1dFVWbTNZOEIrVEMKc2o0V213blhldEZQMkVNblJmdDdCblIxM29MeXpyRkI4dGtGYWZzdGNWb0U2b1IyMHBJQnRBRnhyU0RXSjVkQQpYZFgyTkdQTlVDbmQxUnFKeHUyU0dBL3hISHN5UFQwNmlKZUlaR1V5UlhtdjZ2QnZ5Q2t5ZUx0TUVkcTJHemZpCk1UMEd0RGtHNVIrYWwvQStPdDN3M0NNYk1nVUZyeHZFaGx4TTFzRWl0Y2xYSmM0dEFnTUJBQUdqZ2ZNd2dmQXcKSFFZRFZSME9CQllFRkJiOW1DRkFxVi9KZ21NeHR3UTZVS3pvTElRUU1JSEFCZ05WSFNNRWdiZ3dnYldBRkJiOQptQ0ZBcVYvSmdtTXh0d1E2VUt6b0xJUVFvWUdScElHT01JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFCkNCTUhSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWcKVTI5bWRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQgpDUUVXRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YllJSkFLMWxXLzV6OFpTb01Bd0dBMVVkRXdRRk1BTUJBZjh3CkRRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFJVW1Kc3hkclQ4QU4yeVpxekk2OXFRS2pMbkRodW9qZGdNM1hHTDMKZ0pUbGRYUjVPSU1udy9uYThXY0lDM29uSGpnaWpVZUVmc2xUSUlIbU5jcU9kM2hUZk9xNFFxMi9RbXBwK2gxZAo1ZEN6U2NyTEZpRGdqbnprWDBWY3pPai9CdG5aTWd4eDV4OFlPODBNTVVXVkVtVkNrK2kyYkZWVHlwVjllNHF3CjFFSkxtR1RuS29vN2wyalBITFVCNWxMMkx2U080S0hEaG1XRzV3dEZnNy9uZDA5N3lHNXVCSGRhNXl0YmM2UzgKQ0lTOElCSnpkN1RBNGZyM3FPaEMyOThMTUQ5Nm5KZGNjSHFLWXRsRnZmOVlaWjUwMG5yQStwSDZLcG84UEQ2Nwo4V2lJVy9DTXRPMFg5cHh3K0tSbG1hRG1DR0dnUmh2UHlIb1lxYlg0c3ZyY2E4dXZFcmVQdFhJUUlMZS9JSVNKClRYTGtpVnNlajhrM1VEdTc3cS93WDNaZHprbldha1p5UGorQ3RZa2taTDR2cWtJRElGU1VjWGZ5bnlEWk5aRW8KMmQrbnBBQnpQQjQyKzR4R1pHR25GSXNmdVRNQWdwYks4VEFnUFFOTUlhd2ZXVHEyS2haOE1ZSGZQZGtVM0ZCbwpNYUV4cjY4NHN2aUFJbXFPb3Rjb05RVjJpTU9LZHd6QTA5N2pSQnJmYTQzTGhwZG9XTTB2N1JWeEI4cytrRzBQCjhuSE9HbXA2cjZjSUFrNWhqSFlBd1FZaVpqWHV6dm5GVHREOUlseTYzaSt5Vmg4blJTWTlOU0xocEZwbDRlem8KaG4rc2F2TzRubS9IdWVBQVRuR1IxaVBsS25mWE5WcVFZZGwrd3d6cUsxLzNpSGp6VVVqeVFrazBvVEJrNEJlegplamJoCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Output should be a single string, so under Linux correct command would be:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt | base64 -w0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>On Windows there is no built-in command, so you can use an online Base64 encoder.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Set an environment variable starting with <code>ROOT_CA_</code> to browser image. How to do this depends on used automation technology. When using Selenium you have to set <a href="#capability-env">env</a> capability:</p>
+<div class="listingblock">
+<div class="title">Adding root certification authority</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">import</span> <span class="include">selenium.webdriver</span>
+
+capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">87.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: {
+            <span class="comment"># You can add as many certification authorities as needed</span>
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">ROOT_CA_MY-CA-1</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">LS0tLS1CRUdJTiBDRVJUSU.....</span><span class="delimiter">&quot;</span></span>,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">ROOT_CA_MY-CA-2</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">...</span><span class="delimiter">&quot;</span></span>,
+        }
+    }
+}
+
+driver = selenium.webdriver.remote.webdriver.WebDriver(
+    command_executor=<span class="string"><span class="delimiter">'</span><span class="content">http://moon.example.com:4444/wd/hub</span><span class="delimiter">'</span></span>,
+    desired_capabilities = capabilities,
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using <a href="#">Playwright</a> and <a href="#">Puppeteer</a> - add the same environment variables in connection URL using <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoding</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding root certification authority to Playwright or Puppeteer</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chrome?headless=false&amp;enableVideo=true&amp;env=ROOT_CA_MY-CA-1%3DLS0tLS1CRUdJ...&amp;env=ROOT_CA_MY-CA-2%3DLS0tLS1CRUdJ...</code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -6213,7 +6343,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-02-10 13:45:12 UTC
+Last updated 2021-02-17 07:30:58 UTC
 </div>
 </div>
 <style>
