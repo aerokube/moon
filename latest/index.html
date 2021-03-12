@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-03-04</span>
+<span id="revdate">2021-03-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -530,6 +530,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel3">
 <li><a href="#cli-flags-moon">2.10.1. Moon Container Flags</a></li>
 <li><a href="#cli-flags-moon-api">2.10.2. Moon API Container Flags</a></li>
+<li><a href="#cli-flags-moon-auth">2.10.3. Moon Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -3713,6 +3714,36 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>2.10.3. Moon Auth Container Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-ca-cert string
+    ca certificate to verify discovery cert (optional)
+-client-id string
+    client id (required)
+-client-secret string
+    client secret (required)
+-discovery-url value
+    oidc discovery url (required)
+-fail-login-timeout duration
+    request timeout (default 30s)
+-grace-period duration
+    graceful shutdown period (default 30s)
+-listen string
+    address to bind (default ":4545")
+-request-timeout duration
+    request timeout (default 30s)
+-upstream-url value
+    upstream url (default http://127.0.0.1:4444/)
+-version
+    show version and exit</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -6343,7 +6374,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-03-04 14:15:41 UTC
+Last updated 2021-03-12 11:35:39 UTC
 </div>
 </div>
 <style>
