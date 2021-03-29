@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-03-24</span>
+<span id="revdate">2021-03-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2056,7 +2056,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 <div class="paragraph">
 <p><code>moon-monitor</code> (distributed as <code>aerokube/moon-monitor</code> image) exposes browsers consumption information in <a href="https://prometheus.io/docs/instrumenting/exposition_formats/#text-format-example">Prometheus text format</a> via <code>/metrics</code> HTTP API.
-One of the most simple ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>. When using it monitoring solution could work like the following:</p>
+One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>. When using it monitoring solution could work like the following:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -2073,12 +2073,13 @@ One of the most simple ways of deploying Prometheus in Kubernetes is using <a hr
 </td>
 <td class="content">
 <div class="paragraph">
-<p>An example Prometheus Operator installation command using Helm 3 is:</p>
+<p>An example installation command using Helm 3 is:</p>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
-$ helm install prometheus-operator stable/prometheus-operator --create-namespace --namespace monitoring</pre>
+<pre>$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo update
+$ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --create-namespace --namespace monitoring</pre>
 </div>
 </div>
 </td>
@@ -6374,7 +6375,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-03-24 14:17:32 UTC
+Last updated 2021-03-29 11:40:44 UTC
 </div>
 </div>
 <style>
