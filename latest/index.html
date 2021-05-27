@@ -5,10 +5,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="description" content="A Selenium, Playwright and Puppeteer testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
+<meta name="description" content="A Selenium, Cypress, Playwright and Puppeteer testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
 <meta name="author" content="Aerokube Software OÜ">
 <link rel="icon" type="image/png" href="img/favicon.png">
-<title>Moon - A cross browser Selenium, Playwright and Puppeteer solution for Kubernetes or Openshift cluster</title>
+<title>Moon - A cross browser Selenium, Cypress, Playwright and Puppeteer solution for Kubernetes or Openshift cluster</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-05-26</span>
+<span id="revdate">2021-05-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -566,18 +566,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#_accessing_chrome_developer_tools">3.5. Accessing Chrome Developer Tools</a></li>
-<li><a href="#_mobile_emulation">3.6. Mobile Emulation</a>
+<li><a href="#_using_cypress">3.6. Using Cypress</a>
 <ul class="sectlevel3">
-<li><a href="#mobile-emulation-devices">3.6.1. Supported Mobile Devices</a></li>
+<li><a href="#cypress-select-browser">3.6.1. Selecting Requested Browser</a></li>
+<li><a href="#cypress-select-cypress-version">3.6.2. Selecting Exact Cypress Version</a></li>
+<li><a href="#cypress-additional-features">3.6.3. Enabling Additional Features</a></li>
 </ul>
 </li>
-<li><a href="#_changing_browser_locale">3.7. Changing Browser Locale</a>
+<li><a href="#_mobile_emulation">3.7. Mobile Emulation</a>
 <ul class="sectlevel3">
-<li><a href="#locale-firefox">3.7.1. Firefox</a></li>
-<li><a href="#locale-chromium">3.7.2. Chromium-based Browsers</a></li>
+<li><a href="#mobile-emulation-devices">3.7.1. Supported Mobile Devices</a></li>
 </ul>
 </li>
-<li><a href="#_using_self_signed_tls_certificates">3.8. Using self-signed TLS certificates</a></li>
+<li><a href="#_changing_browser_locale">3.8. Changing Browser Locale</a>
+<ul class="sectlevel3">
+<li><a href="#locale-firefox">3.8.1. Firefox</a></li>
+<li><a href="#locale-chromium">3.8.2. Chromium-based Browsers</a></li>
+</ul>
+</li>
+<li><a href="#_using_self_signed_tls_certificates">3.9. Using self-signed TLS certificates</a></li>
 </ul>
 </li>
 <li><a href="#_frequently_asked_questions">4. Frequently Asked Questions</a>
@@ -636,7 +643,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>This reference for version: <em>latest</em></p>
 </div>
 <div class="paragraph">
-<p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium</a>, <a href="https://playwright.dev/">Playwright</a> and <a href="https://pptr.dev/">Puppeteer</a> using <a href="https://kubernetes.io/">Kubernetes</a> to launch browsers.</p>
+<p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium</a>, <a href="https://www.cypress.io/">Cypress</a>, <a href="https://playwright.dev/">Playwright</a> and <a href="https://pptr.dev/">Puppeteer</a> using <a href="https://kubernetes.io/">Kubernetes</a> or <a href="https://openshift.com/">Openshift</a> to launch browsers.</p>
 </div>
 </div>
 </div>
@@ -1104,6 +1111,10 @@ $ cd moon-deploy</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>create</strong> and <strong>delete</strong> <a href="https://kubernetes.io/docs/concepts/configuration/secret/">secrets</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Optional.</strong> Used only in case when no resource quota was configured</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>create</strong> and <strong>delete</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">configmaps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Optional.</strong> Used only for Cypress tests.</p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -1194,6 +1205,11 @@ All these permissions are normally enabled by default when running Moon and its 
 <td class="tableblock halign-left valign-top"><p class="tableblock">video-recorder</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Captures running browser session video and uploads it to S3 storage</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">When S3 storage is configured and video recording is requested by test</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vnc-server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delivers <a href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">VNC</a> connectivity to browser images</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x-server</p></td>
 </tr>
 </tbody>
 </table>
@@ -2182,7 +2198,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
   <span class="key">name</span>: <span class="string"><span class="content">moon-monitor</span></span>
   <span class="key">namespace</span>: <span class="string"><span class="content">monitoring</span></span>
   <span class="key">labels</span>:
-    <span class="key">release</span>: <span class="string"><span class="content">prometheus-operator</span></span>
+    <span class="key">release</span>: <span class="string"><span class="content">kube-prometheus-stack</span></span>
 <span class="key">spec</span>:
   <span class="key">selector</span>:
     <span class="key">matchLabels</span>:
@@ -2522,10 +2538,11 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <p>Use new main Moon images from the previous step in Kubernetes YAML definitions to start Moon, Moon API and Moon UI.</p>
 </li>
 <li>
-<p>If you are using Playwright or Chrome Developer Tools feature - to override repository you have to set the following flags to <code>moon</code> container:</p>
+<p>If you are using Playwright, Cypress or Chrome Developer Tools feature - to override repository you have to set the following flags to <code>moon</code> container:</p>
 <div class="literalblock">
 <div class="content">
 <pre>-chrome-devtools-repository my-registry.example.com/cdtp
+-cypress-repository my-registry.example.com/browsers
 -playwright-repository my-registry.example.com/playwright</pre>
 </div>
 </div>
@@ -2757,18 +2774,28 @@ aerokube/selenoid-ui:1.6.5 =&gt; my-registry.example.com/moon/selenoid-ui:1.6.5<
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">defender</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">128Mi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64Mi</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">logger</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">128Mi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">64Mi</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">videoRecorder</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1.0</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1024Mi</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vnc-server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">128Mi</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x-server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">128Mi</p></td>
 </tr>
 </tbody>
 </table>
@@ -3646,6 +3673,8 @@ $ kubectl logs -f moon-58f8b57966-s648q -c moon-ui -n moon</pre>
     browser container cpu request (default "0.5")
 -credentials-dir string
     directory where credentials are mounted (default "credentials")
+-cypress-repository string
+    repository to pull cypress images (default "browsers")
 -device-file string
     mobile devices configuration file (default "config/devices.json")
 -disable-cpu-limits
@@ -4582,7 +4611,193 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </table>
 </div>
 <div class="sect2">
-<h3 id="_mobile_emulation"><a class="anchor" href="#_mobile_emulation"></a>3.6. Mobile Emulation</h3>
+<h3 id="_using_cypress"><a class="anchor" href="#_using_cypress"></a>3.6. Using Cypress</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is supported in Moon 1.9.0 and above.</p>
+</li>
+<li>
+<p>No changes in Cypress project are required.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon is able to run <a href="https://github.com/cypress-io/cypress/">Cypress</a> tests out of the box. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install a tool allowing to execute Cypress tests remotely:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ npm install @aerokube/cypress-moon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run your tests against Moon cluster:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cd /path/to/my-test-project
+my-test-project$ cypress-moon http://moon.example.com:4444/cypress/chrome</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each call of <code>cypress-moon</code> command will start a new browser in Moon.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If your Moon instance is running behind <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a> then correct URL would usually be: <code><a href="https://moon.example.com/cypress/chrome" class="bare">https://moon.example.com/cypress/chrome</a></code>.</p>
+</li>
+<li>
+<p>Running Cypress tests requires sending compressed project to Moon. If your Cypress project is big and Moon is running behind Ingress you may need to increase maximum HTTP request body size. For example <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a> requires the following annotation to be added:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">nginx.ingress.kubernetes.io/proxy-body-size</span>: <span class="string"><span class="content">128m</span></span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Cypress compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser type or additional features is passing all these requirements in HTTP endpoint URL. Next section describes supported URL naming conventions.</p>
+</div>
+<div class="sect3">
+<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>3.6.1. Selecting Requested Browser</h4>
+<div class="paragraph">
+<p>You can request one of browsers supported by Cypress (<code>chrome</code>, <code>chromium</code>, <code>edge</code>, <code>electron</code> or <code>firefox</code>) by specifying its name in URL. By default Moon will use <code>browsers/cypress-&lt;browser-name&gt;:latest</code> public image.</p>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chrome (<code>browsers/cypress-chrome:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/chrome</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chromium (<code>browsers/cypress-chromium:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/chromium</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Electron (<code>browsers/cypress-electron:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/electron</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Microsoft Edge (<code>browsers/cypress-edge:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/edge</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Firefox (<code>browsers/cypress-firefox:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/firefox</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>3.6.2. Selecting Exact Cypress Version</h4>
+<div class="paragraph">
+<p>Cypress API can change from version to version. Because of that it is recommended to make sure that Cypress version being used in your project corresponds to Cypress version in browser image. To use an image compatible with exact Cypress version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting an image compatible to Cypress 7.3.0 (<code>browsers/cypress-electron:cypress-7.3.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/electron/cypress-7.3.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>3.6.3. Enabling Additional Features</h4>
+<div class="paragraph">
+<p>In addition to selecting Cypress version - you can enable additional features like changing screen resolution, passing custom test name and so on. All these optional features are set by adding parameters to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/electron/cypress-7.3.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of supported parameters and their meaning is shown below.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 17. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. This parameter can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">noExit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to leave container running after executing all tests. Mainly needed for debugging purposes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mobile_emulation"><a class="anchor" href="#_mobile_emulation"></a>3.7. Mobile Emulation</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -4670,12 +4885,12 @@ driver = selenium.webdriver.remote.webdriver.WebDriver(
 </div>
 </div>
 <div class="sect3">
-<h4 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>3.6.1. Supported Mobile Devices</h4>
+<h4 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>3.7.1. Supported Mobile Devices</h4>
 <div class="paragraph">
 <p>Moon comes with a preconfigured list of supported devices stored in <a href="#">Devices File</a>. In order to add your own mobile devices definitions - simply update this file and wait for Moon to reload it.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. Supported Mobile Devices</caption>
+<caption class="title">Table 18. Supported Mobile Devices</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4980,12 +5195,12 @@ driver = selenium.webdriver.remote.webdriver.WebDriver(
 </div>
 </div>
 <div class="sect2">
-<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.7. Changing Browser Locale</h3>
+<h3 id="_changing_browser_locale"><a class="anchor" href="#_changing_browser_locale"></a>3.8. Changing Browser Locale</h3>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
 <div class="sect3">
-<h4 id="locale-firefox"><a class="anchor" href="#locale-firefox"></a>3.7.1. Firefox</h4>
+<h4 id="locale-firefox"><a class="anchor" href="#locale-firefox"></a>3.8.1. Firefox</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Firefox</div>
 <div class="content">
@@ -4997,7 +5212,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="locale-chromium"><a class="anchor" href="#locale-chromium"></a>3.7.2. Chromium-based Browsers</h4>
+<h4 id="locale-chromium"><a class="anchor" href="#locale-chromium"></a>3.8.2. Chromium-based Browsers</h4>
 <div class="listingblock">
 <div class="title">Overriding Browser Locale in Chromium-base Browsers</div>
 <div class="content">
@@ -5010,7 +5225,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect2">
-<h3 id="_using_self_signed_tls_certificates"><a class="anchor" href="#_using_self_signed_tls_certificates"></a>3.8. Using self-signed TLS certificates</h3>
+<h3 id="_using_self_signed_tls_certificates"><a class="anchor" href="#_using_self_signed_tls_certificates"></a>3.9. Using self-signed TLS certificates</h3>
 <div class="paragraph">
 <p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using a self-signed certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>.</p>
 </div>
@@ -6190,7 +6405,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <li>
 <p>For simplicity we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 18. Moon License Pricing</caption>
+<caption class="title">Table 19. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -6377,7 +6592,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-05-26 17:56:07 UTC
+Last updated 2021-05-27 11:01:52 UTC
 </div>
 </div>
 <style>
