@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-06-14</span>
+<span id="revdate">2021-06-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4300,6 +4300,20 @@ some-clipboard-value</code></pre>
 <div class="paragraph">
 <p>You can see that the only difference from standard Playwright example is a web socket endpoint URL. Playwright compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser version or e.g. enable video recording is passing all these requirements in websocket endpoint URL. Next section describe supported URL naming conventions.</p>
 </div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If your Moon instance is accessible over <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a> connection (e.g. <code><a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code> instead of <code><a href="http://moon.example.com/" class="bare">http://moon.example.com/</a></code>) then endpoint URL should start with <code>wss://</code> instead of <code>ws://</code> (e.g. <code>wss://moon.example.com/</code>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="sect3">
 <h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>3.4.1. Selecting Requested Browser</h4>
 <div class="paragraph">
@@ -4491,6 +4505,20 @@ some-clipboard-value</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/cdtp/chrome</code></pre>
 </div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If your Moon instance is accessible over <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a> connection (e.g. <code><a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code> instead of <code><a href="http://moon.example.com/" class="bare">http://moon.example.com/</a></code>) then URL should start with <code>wss://</code> instead of <code>ws://</code> (e.g. <code>wss://moon.example.com/</code>).</p>
+</div>
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>An example Puppeteer test is shown below:</p>
@@ -6592,7 +6620,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-06-14 13:59:20 UTC
+Last updated 2021-06-17 07:00:28 UTC
 </div>
 </div>
 <style>
