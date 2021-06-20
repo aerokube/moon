@@ -4773,7 +4773,7 @@ my-test-project$ cypress-moon http://moon.example.com:4444/cypress/chrome</code>
 <div class="listingblock">
 <div class="title">Adding parameters to enable additional features</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/electron/cypress-7.3.0</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon http://moon.example.com:4444/cypress/electron/cypress-7.3.0?noExit=true&amp;headless=false&amp;env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4816,9 +4816,15 @@ my-test-project$ cypress-moon http://moon.example.com:4444/cypress/chrome</code>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">noExit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to leave container running after executing all tests. Mainly needed for debugging purposes.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Cypress methods to set browser window size.</strong></p></td>
 </tr>
 </tbody>
 </table>
@@ -6620,7 +6626,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-06-20 06:30:52 UTC
+Last updated 2021-06-20 16:55:14 UTC
 </div>
 </div>
 <style>
