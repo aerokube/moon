@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-06-24</span>
+<span id="revdate">2021-06-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4273,8 +4273,15 @@ some-clipboard-value</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-<div class="paragraph">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
 <p>This feature is supported in Moon 1.6.0 and above.</p>
+</li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-playwright-example">here</a>.</p>
+</li>
+</ol>
 </div>
 </td>
 </tr>
@@ -4289,7 +4296,7 @@ some-clipboard-value</code></pre>
 <pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
 
 (async () =&gt; {
-  <span class="keyword">var</span> browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
+  const browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">ws://moon.example.com:4444/playwright/firefox</span><span class="delimiter">'</span></span> });
   const page = await browser.newPage();
   await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
   await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
@@ -4492,6 +4499,9 @@ some-clipboard-value</code></pre>
 <li>
 <p>We recommend using the most recent Chrome version possible.</p>
 </li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-puppeteer-example">here</a>.</p>
+</li>
 </ol>
 </div>
 </td>
@@ -4654,6 +4664,9 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </li>
 <li>
 <p>No changes in Cypress project are required.</p>
+</li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-cypress-example">here</a>.</p>
 </li>
 </ol>
 </div>
@@ -6626,7 +6639,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-06-24 08:00:16 UTC
+Last updated 2021-06-27 10:36:07 UTC
 </div>
 </div>
 <style>
