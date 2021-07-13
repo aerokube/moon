@@ -454,7 +454,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-07-08</span>
+<span id="revdate">2021-07-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -627,12 +627,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_pricing">7. Pricing</a></li>
 <li><a href="#_browser_image_information">Appendix A: Browser Image information</a></li>
-<li><a href="#_cloud_platforms">Appendix B: Cloud Platforms</a>
-<ul class="sectlevel2">
-<li><a href="#cloud-digital-ocean">B.1. DigitalOcean</a></li>
-<li><a href="#cloud-google-cloud">B.2. Google Cloud</a></li>
-</ul>
-</li>
 </ul>
 </div>
 </div>
@@ -957,12 +951,6 @@ http://127.0.0.1:8080/</pre>
 </div>
 </li>
 </ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="install-cloud"><a class="anchor" href="#install-cloud"></a>Option 4: you have DigitalOcean or Google Cloud</h5>
-<div class="paragraph">
-<p>We deliver ready to use configurations for these cloud platforms. Take a look at <a href="#">Cloud Platforms</a> section for more details.</p>
 </div>
 </div>
 </div>
@@ -1955,9 +1943,6 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </li>
 <li>
 <p>When using YAML with <code>stringData</code> field - you don&#8217;t need to <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encode license key one more time.</p>
-</li>
-<li>
-<p>If you are using Moon started from Google Cloud Marketplace then secret name can differ, e.g. <code>moon-marketplace-license-key</code> instead of <code>license-key</code>.</p>
 </li>
 </ol>
 </div>
@@ -6547,99 +6532,11 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 </div>
 </div>
 </div>
-<div class="sect1">
-<h2 id="_cloud_platforms"><a class="anchor" href="#_cloud_platforms"></a>Appendix B: Cloud Platforms</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Moon ready-to-use configurations are present in popular cloud platforms and can be run in a few clicks. This section contains step-by-step instructions on launching Moon in these platforms.</p>
-</div>
-<div class="sect2">
-<h3 id="cloud-digital-ocean"><a class="anchor" href="#cloud-digital-ocean"></a>B.1. DigitalOcean</h3>
-<div class="paragraph">
-<p>Moon can be run from <a href="https://marketplace.digitalocean.com/">DigitalOcean Marketplace</a> as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Go to <a href="https://marketplace.digitalocean.com/apps/moon">Moon page</a>:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/digitalocean-marketplace-page.png" alt="digitalocean-marketplace"></span></p>
-</div>
-</li>
-<li>
-<p>Click on <strong>Create Moon</strong> button.</p>
-</li>
-<li>
-<p>Choose a data center region near you:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/digitalocean-cluster-datacenter.png" alt="digitalocean-cluster-datacenter"></span></p>
-</div>
-</li>
-<li>
-<p>Select a name for your cluster:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/digitalocean-cluster-name.png" alt="digitalocean-cluster-name"></span></p>
-</div>
-</li>
-<li>
-<p>Click on <strong>Create Cluster</strong> button.</p>
-</li>
-<li>
-<p>Wait for Kubernetes cluster to start. Follow instructions on the screen to configure access to cluster.</p>
-</li>
-<li>
-<p>Go to <strong>Manage &gt; Networking &gt; Load Balancers</strong> and find IP address of Moon load balancer:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/digitalocean-cluster-load-balancer.png" alt="digitalocean-cluster-load-balancer"></span></p>
-</div>
-</li>
-<li>
-<p>Moon user interface is available at <code><a href="http://&lt;load-balancer-ip-address&gt;:8080/" class="bare">http://&lt;load-balancer-ip-address&gt;:8080/</a></code>. Selenium tests should be run against <code><a href="http://&lt;load-balancer-ip-address&gt;:4444/wd/hub" class="bare">http://&lt;load-balancer-ip-address&gt;:4444/wd/hub</a></code>.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="cloud-google-cloud"><a class="anchor" href="#cloud-google-cloud"></a>B.2. Google Cloud</h3>
-<div class="paragraph">
-<p>Moon can be run from <a href="https://console.cloud.google.com/marketplace">Google Cloud Marketplace</a> as follows:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Go to <a href="https://console.cloud.google.com/marketplace/details/aerokube/moon">Moon page</a> and click the <strong>Configure</strong> button:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/google-cloud-marketplace-page.png" alt="google-cloud-marketplace"></span></p>
-</div>
-</li>
-<li>
-<p>Select a zone near you for a new Kubernetes cluster to be created and click on <strong>Create cluster</strong> button:</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/google-cloud-cluster-settings.png" alt="google-cloud-cluster-settings"></span></p>
-</div>
-</li>
-<li>
-<p>Wait for cluster to be created and click on <strong>Deploy button</strong>.</p>
-</li>
-<li>
-<p>Wait for Moon to start (mainly you are waiting for the load balancer to initialize). You may need to refresh the page several times until correct URLs appear in <strong>Moon info</strong> section.</p>
-<div class="paragraph">
-<p><span class="image"><img src="img/google-cloud-app-details.png" alt="google-cloud-app-details"></span></p>
-</div>
-</li>
-<li>
-<p>Click on <strong>Moon UI access URL</strong> to open Moon user interface. Use <strong>Moon Selenium access URL</strong> in your tests.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-07-08 15:55:14 UTC
+Last updated 2021-07-13 04:26:21 UTC
 </div>
 </div>
 <style>
