@@ -595,7 +595,12 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#license-restricted-cluster">2.6.5. Installing License to Restricted Cluster</a></li>
 </ul>
 </li>
-<li><a href="#_monitoring">2.7. Monitoring</a></li>
+<li><a href="#_monitoring">2.7. Monitoring</a>
+<ul class="sectlevel3">
+<li><a href="#browsers-consumption">2.7.1. Browsers Consumption</a></li>
+<li><a href="#filter-by-labels">2.7.2. Filter by Labels</a></li>
+</ul>
+</li>
 <li><a href="#_advanced_configuration">2.8. Advanced Configuration</a>
 <ul class="sectlevel3">
 <li><a href="#s3">2.8.1. Uploading Files to S3</a></li>
@@ -640,7 +645,8 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#capability-sessionTimeout">3.1.11. Custom Session Timeout: sessionTimeout</a></li>
 <li><a href="#capability-s3KeyPattern">3.1.12. S3 Key Pattern: s3KeyPattern</a></li>
 <li><a href="#capability-mobile-emulation">3.1.13. Mobile Emulation: mobileDevice</a></li>
-<li><a href="#capability-protocol-extensions">3.1.14. Specifying Capabilities via Protocol Extensions</a></li>
+<li><a href="#capability-labels">3.1.14. Pod Labels: labels</a></li>
+<li><a href="#capability-protocol-extensions">3.1.15. Specifying Capabilities via Protocol Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_accessing_files_downloaded_with_browser">3.2. Accessing Files Downloaded with Browser</a></li>
@@ -2136,6 +2142,8 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 <div class="sect2">
 <h3 id="_monitoring"><a class="anchor" href="#_monitoring"></a>2.7. Monitoring</h3>
+<div class="sect3">
+<h4 id="browsers-consumption"><a class="anchor" href="#browsers-consumption"></a>2.7.1. Browsers Consumption</h4>
 <div class="paragraph">
 <p>Moon has a dedicated microservice <code>moon-monitor</code> allowing to easily visualize browsers consumption with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>.</p>
 </div>
@@ -2294,6 +2302,34 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>2.7.2. Filter by Labels</h4>
+<div class="paragraph">
+<p>A common use case is getting browser consumption information for an exact project or product. This can be for example achieved as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add <code>labels</code> to browser pods using <a href="#kubernetes-labels">browsers list file</a> or <a href="#capability-labels">capabilities</a>.</p>
+</li>
+<li>
+<p>Configure <a href="https://prometheus.io/">Prometheus</a> as shown above. This will also install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component.</p>
+</li>
+<li>
+<p>Use the following Prometheus query to fetch information about browser pods with some labels set:</p>
+<div class="listingblock">
+<div class="content">
+<pre>kube_pod_labels{label_moon="browser", label_project="MyCoolProject", label_browserName="chrome"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of available expressions can be found <a href="https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md">here</a>.</p>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -4234,7 +4270,22 @@ Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="capability-protocol-extensions"><a class="anchor" href="#capability-protocol-extensions"></a>3.1.14. Specifying Capabilities via Protocol Extensions</h4>
+<h4 id="capability-labels"><a class="anchor" href="#capability-labels"></a>3.1.14. Pod Labels: labels</h4>
+<div class="paragraph">
+<p>Sometimes you may want to pass additional metadata to every browser session: environment, VCS revision, build number, project name and so on. These labels can be then used to get various browser usage statistics.</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: map, format: "&lt;key&gt;": "&lt;value&gt;"</div>
+<div class="content">
+<pre>labels: {"project": "MyCoolProject", "build-number": "14353"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Labels from this capability override labels from browsers configuration file. More information about labels is described in <a href="#kubernetes-labels">Using Custom Kubernetes Labels</a> section.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="capability-protocol-extensions"><a class="anchor" href="#capability-protocol-extensions"></a>3.1.15. Specifying Capabilities via Protocol Extensions</h4>
 <div class="paragraph">
 <p>Some Selenium clients allow passing only a limited number of capabilities specified in <a href="https://w3c.github.io/webdriver/webdriver-spec.html">WebDriver specification</a>. For such cases Moon supports reading capabilities using <a href="https://w3c.github.io/webdriver/webdriver-spec.html#protocol-extensions">WebDriver protocol extensions</a> feature. The following two examples deliver the same result. Usually capabilities are passed like this:</p>
 </div>
@@ -6624,7 +6675,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-07-24 14:39:36 UTC
+Last updated 2021-07-24 16:55:30 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
