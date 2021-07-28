@@ -542,7 +542,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-07-26</span>
+<span id="revdate">2021-07-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -4549,7 +4549,7 @@ some-clipboard-value</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. This parameter can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
@@ -4558,10 +4558,22 @@ some-clipboard-value</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
@@ -4722,16 +4734,34 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to record video of running browser session.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
@@ -4937,7 +4967,7 @@ my-test-project$ cypress-moon http://moon.example.com:4444/cypress/chrome</code>
 <td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. This parameter can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
@@ -4946,10 +4976,22 @@ my-test-project$ cypress-moon http://moon.example.com:4444/cypress/chrome</code>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">noExit</p></td>
@@ -6675,7 +6717,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-07-26 17:28:29 UTC
+Last updated 2021-07-28 04:30:42 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
