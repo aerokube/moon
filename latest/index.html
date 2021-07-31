@@ -542,7 +542,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-07-30</span>
+<span id="revdate">2021-07-31</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1659,6 +1659,9 @@ Every VNC server should be password protected with the same password having 8+ c
   <span class="key"><span class="delimiter">&quot;</span><span class="content">runAs</span><span class="delimiter">&quot;</span></span>: {                                       <i class="conum" data-value="20"></i><b>(20)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">user</span><span class="delimiter">&quot;</span></span>: <span class="integer">1000</span>,                                  <i class="conum" data-value="21"></i><b>(21)</b>
     <span class="key"><span class="delimiter">&quot;</span><span class="content">group</span><span class="delimiter">&quot;</span></span>: <span class="integer">2000</span>                                  <i class="conum" data-value="22"></i><b>(22)</b>
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">nodeSelector</span><span class="delimiter">&quot;</span></span>: {                                <i class="conum" data-value="23"></i><b>(23)</b>
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">node-type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hardware</span><span class="delimiter">&quot;</span></span>
   }
 }</code></pre>
 </div>
@@ -1752,6 +1755,10 @@ Every VNC server should be password protected with the same password having 8+ c
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
 <td>Custom pod group id</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
+<td>Global node selector for browser pods</td>
 </tr>
 </table>
 </div>
@@ -3057,6 +3064,27 @@ This was initially created for mounting really big files cached on Kubernetes no
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>Node selector for this browser version</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Since Moon 1.9.1 you can also set a global node selector to all browser pods in <a href="#">Configuration File</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting global node selector in <code>service.json</code></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">nodeSelector</span><span class="delimiter">&quot;</span></span>: {                    <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">node-type</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">hardware</span><span class="delimiter">&quot;</span></span>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Global node selector</td>
 </tr>
 </table>
 </div>
@@ -6723,7 +6751,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-07-30 18:05:46 UTC
+Last updated 2021-07-31 08:11:40 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
