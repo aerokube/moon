@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2021-10-07</span>
+<span id="revdate">2021-10-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -582,7 +582,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#browsers-list-per-user">2.2.1. Per-user Browser Lists</a></li>
 <li><a href="#browsers-list-guest-quota">2.2.2. Guest Quota</a></li>
 <li><a href="#browsers-list-updating">2.2.3. Updating Browsers List</a></li>
-<li><a href="#external-selenium">2.2.4. Using External Selenium</a></li>
+<li><a href="#external-webdriver">2.2.4. Using External WebDriver</a></li>
 </ul>
 </li>
 <li><a href="#_configuration_file">2.3. Configuration File</a></li>
@@ -1535,7 +1535,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="external-selenium"><a class="anchor" href="#external-selenium"></a>2.2.4. Using External Selenium</h4>
+<h4 id="external-webdriver"><a class="anchor" href="#external-webdriver"></a>2.2.4. Using External WebDriver</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -1545,7 +1545,7 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</pre>
 <p>Running Selenium tests on some complicated platforms such as MacOS or iOS. According to license agreement these platforms require Apple hardware devices and it is complicated to run Kubernetes on top of these devices.</p>
 </li>
 <li>
-<p>Using Selenium online platforms (e.g. <a href="https://browsers.aerokube.com/">Aerokube Browsers</a>) for some browsers. In that case you can run the majority of browsers (e.g. Firefox, Chrome, Opera) in Moon and complicated browsers (don&#8217;t work on standard virtual machines) such as Chrome Mobile in external Selenium platform.</p>
+<p>Using Selenium online platforms for some browsers. In that case you can run the majority of browsers (e.g. Firefox, Chrome, Opera) in Moon and complicated browsers (don&#8217;t work on standard virtual machines) such as Chrome Mobile in external Selenium platform.</p>
 </li>
 </ol>
 </div>
@@ -1582,20 +1582,22 @@ Every VNC server should be password protected with the same password having 8+ c
 <div class="listingblock">
 <div class="title">Typical Browsers List File</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="json"><span class="key"><span class="delimiter">&quot;</span><span class="content">safari</span><span class="delimiter">&quot;</span></span>: {
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>: {
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/moon-external-host:1.0.0</span><span class="delimiter">&quot;</span></span>,                                         <i class="conum" data-value="1"></i><b>(1)</b>
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>,
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">http://host1.example.com:4444/</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">http://host2.example.com:4444/</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>,    <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span>, <span class="error">/</span><span class="error">/</span> <span class="error">A</span><span class="error">t</span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">s</span><span class="error">t</span> <span class="integer">8</span> <span class="error">s</span><span class="error">y</span><span class="error">m</span><span class="error">b</span><span class="error">o</span><span class="error">l</span><span class="error">s</span>                                 <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">SCREEN_RESOLUTION=1921x1080x24</span><span class="delimiter">&quot;</span></span> <span class="error">/</span><span class="error">/</span> <span class="error">T</span><span class="error">h</span><span class="error">i</span><span class="error">s</span> <span class="error">i</span><span class="error">s</span> <span class="error">o</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">a</span><span class="error">l</span>                                <i class="conum" data-value="4"></i><b>(4)</b>
-      ]
+<pre class="CodeRay highlight"><code data-lang="json">{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">safari</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>,
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">13.0</span><span class="delimiter">&quot;</span></span>: {
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube/moon-external-host:1.0.0</span><span class="delimiter">&quot;</span></span>,                                         <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>,
+          <span class="key"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">http://host1.example.com:4444/</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">, </span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">http://host2.example.com:4444/</span><span class="char">\\</span><span class="char">\&quot;</span><span class="content">]</span><span class="delimiter">&quot;</span></span>,    <i class="conum" data-value="2"></i><b>(2)</b>
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span>, <span class="error">/</span><span class="error">/</span> <span class="error">A</span><span class="error">t</span> <span class="error">l</span><span class="error">e</span><span class="error">a</span><span class="error">s</span><span class="error">t</span> <span class="integer">8</span> <span class="error">s</span><span class="error">y</span><span class="error">m</span><span class="error">b</span><span class="error">o</span><span class="error">l</span><span class="error">s</span>                                 <i class="conum" data-value="3"></i><b>(3)</b>
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">SCREEN_RESOLUTION=1921x1080x24</span><span class="delimiter">&quot;</span></span> <span class="error">/</span><span class="error">/</span> <span class="error">T</span><span class="error">h</span><span class="error">i</span><span class="error">s</span> <span class="error">i</span><span class="error">s</span> <span class="error">o</span><span class="error">p</span><span class="error">t</span><span class="error">i</span><span class="error">o</span><span class="error">n</span><span class="error">a</span><span class="error">l</span>                                <i class="conum" data-value="4"></i><b>(4)</b>
+          ]
+        }
+      }
     }
-  }
 }</code></pre>
 </div>
 </div>
@@ -6772,7 +6774,7 @@ This privacy policy is applicable to <a href="https://aerokube.com/moon/#cloud">
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2021-10-07 15:34:22 UTC
+Last updated 2021-10-20 10:52:58 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
