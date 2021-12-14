@@ -455,13 +455,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-13</span>
+<span id="revdate">2021-12-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_getting_started">1. Getting Started</a></li>
-<li><a href="#_configuration">2. Configuration</a></li>
+<li><a href="#_getting_started">1. Getting Started</a>
+<ul class="sectlevel2">
+<li><a href="#_quick_start_guide">1.1. Quick Start Guide</a>
+<ul class="sectlevel3">
+<li><a href="#install-kubernetes">1.1.1. Installing to Kubernetes</a></li>
+<li><a href="#install-openshift">1.1.2. Installing to Openshift</a></li>
+</ul>
+</li>
+<li><a href="#_recommended_cluster_settings">1.2. Recommended Cluster Settings</a></li>
+<li><a href="#_required_permissions">1.3. Required Permissions</a>
+<ul class="sectlevel3">
+<li><a href="#permissions-single-user">1.3.1. Single-User Mode</a></li>
+<li><a href="#permissions-multiple-users">1.3.2. Multiple-Users Mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_configuration">2. Configuration</a>
+<ul class="sectlevel2">
+<li><a href="#_installing_license">2.1. Installing License</a></li>
+</ul>
+</li>
 <li><a href="#_main_features">3. Main Features</a></li>
 </ul>
 </div>
@@ -480,13 +500,524 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>1. Getting Started</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_quick_start_guide"><a class="anchor" href="#_quick_start_guide"></a>1.1. Quick Start Guide</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#">Installing License</a> section.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="install-kubernetes"><a class="anchor" href="#install-kubernetes"></a>1.1.1. Installing to Kubernetes</h4>
+<div class="sect4">
+<h5 id="install-prerequisites"><a class="anchor" href="#install-prerequisites"></a>Prerequisites</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Running <a href="https://kubernetes.io/">Kubernetes</a> cluster</p>
+</li>
+<li>
+<p><code>kubectl</code> client installed and pointing to the cluster</p>
+</li>
+<li>
+<p>If you are running Kubernetes cluster on virtual machines, we usually recommend having bigger VMs instead of smaller ones. This allows to avoid available CPUs and memory fragmentation issues. For example having 24 CPU cores overall it is better to start 3 x 8 CPU core VMs instead of 12 x 2 CPU core.</p>
+</li>
+<li>
+<p>If you are starting Moon in Kubernetes cluster deployed on workstation with <a href="https://github.com/kubernetes/minikube/">minikube</a> tool - see <a href="#install-minikube">Option 3: you have Minikube</a>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="install-helm"><a class="anchor" href="#install-helm"></a>Option 1: use Helm chart</h5>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+Helm chart is the recommended Moon installation way. Steps below require Helm 3 and will not work with older releases.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>We deliver already packed and published <a href="https://helm.sh/">Helm</a> charts, so installing Moon with Helm is straightforward:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To list available Moon versions type:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm search repo aerokube --versions</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a namespace:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl create namespace moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To install or upgrade Moon type:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm upgrade --install -n moon moon aerokube/moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Moon chart has a lot of various configuration parameters that can be listed as follows:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm show values aerokube/moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To change one of these parameters - use <code>--set</code> flag:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm upgrade --install --set=moon.enabled.resources=false -n moon moon aerokube/moon</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="install-moon-deploy"><a class="anchor" href="#install-moon-deploy"></a>Option 2: use raw YAML manifests</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Although we maintain raw YAML manifests up-to-date, we recommend using Helm where possible.
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clone YAML manifests repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run one command to start Moon and Moon API:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl apply -f moon.yaml</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have only several CPUs available in your cluster - use <code>moon-local.yaml</code> file instead. By default, Moon is started in a separate namespace called <code>moon</code>, so we append <code>-n moon</code> to the next commands.</p>
+</div>
+</li>
+<li>
+<p>Wait for LoadBalancer IP to allocate:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get svc -n moon
+NAME      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
+browsers  ClusterIP      None            &lt;none&gt;        &lt;none&gt;                          51s
+moon      LoadBalancer   10.63.242.109   &lt;pending&gt;     4444:31894/TCP,8080:30625/TCP   17s</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It will look like this when finished:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get svc -n moon
+NAME      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
+browsers  ClusterIP      None            &lt;none&gt;           &lt;none&gt;                          51s
+moon      LoadBalancer   10.63.242.109   104.154.161.58   4444:31894/TCP,8080:30625/TCP   1m</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now you can optionally point a domain name to this IP address:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ host moon.example.com
+moon.example.com has address 104.154.161.58</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run your tests against <code>moon</code> like you do with regular Selenium:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://104.154.161.58:4444/wd/hub</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+When running your tests for the first time for every browser version Kubernetes will download and cache requested browser image. This can take several minutes depending on your network connection.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Same address using domain name:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://moon.example.com:4444/wd/hub</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Moon web interface is available at:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://104.154.161.58:8080/</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="install-minikube"><a class="anchor" href="#install-minikube"></a>Option 3: you have Minikube</h5>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clone an example configuration repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run one command to start Moon and Moon API:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube kubectl -- apply -f moon-local.yaml</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Minikube does not automatically assign IP address to LoadBalancer, so let&#8217;s do this manually:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube kubectl -- patch svc moon -n moon --patch "{\"spec\":{\"externalIPs\":[\"$(minikube ip)\"]}}"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>The last step is to get Selenium URL:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube ip
+192.168.99.100</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use the following as Selenium URL:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://192.168.99.100:4444/wd/hub</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon web interface is available at:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>http://192.168.99.100:8080/</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>When Minikube is using <a href="https://minikube.sigs.k8s.io/docs/drivers/docker/">Docker driver</a> to access Moon you can use <a href="https://minikube.sigs.k8s.io/docs/commands/tunnel/">minikube tunnel</a> command instead:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>In a separate terminal run command to start Minikube tunnel:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ minikube tunnel</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use <code>127.0.0.1</code> to access Moon:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://127.0.0.1:4444/wd/hub
+http://127.0.0.1:8080/</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="install-openshift"><a class="anchor" href="#install-openshift"></a>1.1.2. Installing to Openshift</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Prerequisites:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Running <a href="https://www.openshift.com/">Openshift</a> cluster</p>
+</li>
+<li>
+<p><code>oc</code> client installed and pointing to the cluster</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Clone an example configuration repository:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ git clone https://github.com/aerokube/moon-deploy.git
+$ cd moon-deploy</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add <code>edit</code> policy to <code>default</code> account so Moon could read project pod quota:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc policy add-role-to-user edit system:serviceaccount:moon:default</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we assume that Openshift project for Moon is called <code>moon</code>.</p>
+</div>
+</li>
+<li>
+<p>Start Moon with Openshift UI or <code>oc</code> client using <code>moon-openshift.yaml</code> file:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ oc create -f moon-openshift.yaml -n moon</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run Selenium tests against <code>moon</code> service listening on port <code>4444</code>:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://&lt;moon-ip-or-hostname&gt;:4444/wd/hub</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_recommended_cluster_settings"><a class="anchor" href="#_recommended_cluster_settings"></a>1.2. Recommended Cluster Settings</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Use the biggest possible cluster node sizes</strong>. For example having 100 CPUs overall it is better to launch 5 nodes with 20 CPUs each than 50 nodes with 2 CPUs each. Browser pods can in some cases require more than 2 CPUs and this can lead to preliminary cluster fragmentation.</p>
+</li>
+<li>
+<p><strong>Avoid cluster nodes with RedHat \ CentOS if possible.</strong> Nodes using these distributions are known to suffer from issues related to firewall \ SeLinux and can be more complicated to configure correctly.</p>
+</li>
+<li>
+<p><strong>Use Calico container network interface instead of Flannel if possible</strong>. Calico has better performance than Flannel especially on big clusters.</p>
+</li>
+<li>
+<p><strong>Use more than 1 Kubernetes API replica if needed</strong>. Moon is using Kubernetes API to create and delete browser pods. If you plan to run hundreds of browsers in parallel - take a look at Kubernetes API (Kubernetes master) host system metrics. Overloaded master can stop responding to requests properly and this can lead to frozen browser pods.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.3. Required Permissions</h3>
+<div class="paragraph">
+<p>Moon requires a limited set of permissions and should work with default Kubernetes settings. By default, Moon runs browsers in the same <code>moon</code> namespace where it runs (<strong>single-user mode</strong>). Moon 2.0.0 and above supports multiple Kubernetes <a href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/">namespaces</a>. This allows you to have one Moon instance running in <code>moon</code> namespace and an arbitrary number of namespaces for running browsers of different users (<strong>multiple-users mode</strong>). This allows you to easily set maximum number of browsers allowed to run by every team.</p>
+</div>
+<div class="sect3">
+<h4 id="permissions-single-user"><a class="anchor" href="#permissions-single-user"></a>1.3.1. Single-User Mode</h4>
+<div class="paragraph">
+<p>The following table summarizes what needs to be accessible for Moon in single-user mode:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Required Moon Permissions In Single-User Mode</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Permission</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to manipulate pods with browsers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to pass users and groups to browser pods</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used in license functionality</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">These custom resources store Moon configuration</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="permissions-multiple-users"><a class="anchor" href="#permissions-multiple-users"></a>1.3.2. Multiple-Users Mode</h4>
+<div class="paragraph">
+<p>When running browsers in multiple namespaces required permissions differ. The following table shows Moon permissions in the namespace where it is running:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Required Moon Permissions For Own Namespace</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Permission</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> information about <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">namespaces</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Needed to control how many browsers are running in every user namespace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to analyze pods in Moon namespace</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used in license functionality</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">These custom resources store Moon configuration</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For every user namespace Moon needs the following permissions:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Required Moon Permissions For User Namespace</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Permission</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to manipulate pods with browsers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Used to pass users and groups to browser pods</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_configuration"><a class="anchor" href="#_configuration"></a>2. Configuration</h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.1. Installing License</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>According to license agreement you can use <strong>up to 4 parallel sessions without a license</strong>. If you wish to have more parallel sessions - order a license and follow this section steps to install the license. A trial license key with more parallel sessions can be generated on <a href="https://aerokube.com/moon/">Moon website</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To install a license you should have a license key file. A typical license file looks like this:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat license.key
+Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhWTnRhZVBEQmx5cm1SM0dFWlVpbGIwOWhBSUpvWmlQMnNtYmtoZVRDbnJ3UTlIV3grMUMzaXFJalU3L0NIZDJuSzN3QUpIS0lyV2VoVjlRVUh5NzNCMFg0NEV5KzFSVXg1elhvaC9RUkNjTlBIOHR4WWtrRFBmTFhxYTFESlI0aXNObGtobWpXY2VJNVdna1lsWHFFOUp0OUxValZPN05hb2pCcHJzY0pvZjBrZys2YkhWUDR3cUJvYVFoSFJTYzMzZzNRSTkrWVd4dlZCeExmdTVxM2k2ZnluMDRHSEhGc21Fd2owVHdVa1Z3MmI5Z2FyVXlaVFF4RDdCRjVSVjBmSUVrU1pEQ0ZQdmIvMHZoKythY1V4OVRrR2FBREZzbWR3dExxRlU4NHF3MzBVdE5nTGhnNWYxRXRCQ215R1BHR0wyK2NpR0RDZDBTSXg4K1RsRGNWVzUyVVY4MUt6bkdOanJhTklOeXVtYjVPVXF6aVVpdmJZeVJNVVBSMWF3NUJRVGJDaHVycWVVdGtMMWFRZDgwOCtoWGRxODFOakxRNEJlVENNQTdPL2FneHBTUE1nL0J2QmVQKy84ZGhJeXd5Y0lxQVJhVWxocUdmUko2K05tbkFYV0hzZ2RjTng1dUVHU0w5VWF5TU1rR3RkZEZKQ1FiWmF0RnJMaDFHbHhKTndBRHFWcXIvQ0oxSzBQL2p6K2NFSWpsSG82TktvM3pudVFlanhYT2tGU1p1bWZrS1krZmF3VkVRZWlvcFlmZFk0TU9tc3U5TThsbng3T2VXQXZmOTFUQ2w1NUhBK1ZsQTMzN3VFOG1WV3ZlS0E1Tlk9O2V5SnNhV05sYm5ObFpTSTZJa0ZqYldVZ1RFeERJaXdpY0hKdlpIVmpkQ0k2SWsxdmIyNGlMQ0p0WVhoVFpYTnphVzl1Y3lJNk1qQXNJblJ2SWpveE5UTTRNelV5TURBd2ZRPT0=</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -499,7 +1030,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-13 14:23:52 UTC
+Last updated 2021-12-14 08:34:43 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
