@@ -440,6 +440,95 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
+pre.CodeRay{background:#f7f7f8}
+.CodeRay .line-numbers{border-right:1px solid currentColor;opacity:.35;padding:0 .5em 0 0}
+.CodeRay span.line-numbers{display:inline-block;margin-right:.75em}
+.CodeRay .line-numbers strong{color:#000}
+table.CodeRay{border-collapse:separate;border:0;margin-bottom:0;background:none}
+table.CodeRay td{vertical-align:top;line-height:inherit}
+table.CodeRay td.line-numbers{text-align:right}
+table.CodeRay td.code{padding:0 0 0 .75em}
+.CodeRay .debug{color:#fff !important;background:#000080 !important}
+.CodeRay .annotation{color:#007}
+.CodeRay .attribute-name{color:#000080}
+.CodeRay .attribute-value{color:#700}
+.CodeRay .binary{color:#509}
+.CodeRay .comment{color:#998;font-style:italic}
+.CodeRay .char{color:#04d}
+.CodeRay .char .content{color:#04d}
+.CodeRay .char .delimiter{color:#039}
+.CodeRay .class{color:#458;font-weight:bold}
+.CodeRay .complex{color:#a08}
+.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
+.CodeRay .color{color:#099}
+.CodeRay .class-variable{color:#369}
+.CodeRay .decorator{color:#b0b}
+.CodeRay .definition{color:#099}
+.CodeRay .delimiter{color:#000}
+.CodeRay .doc{color:#970}
+.CodeRay .doctype{color:#34b}
+.CodeRay .doc-string{color:#d42}
+.CodeRay .escape{color:#666}
+.CodeRay .entity{color:#800}
+.CodeRay .error{color:#808}
+.CodeRay .exception{color:inherit}
+.CodeRay .filename{color:#099}
+.CodeRay .function{color:#900;font-weight:bold}
+.CodeRay .global-variable{color:#008080}
+.CodeRay .hex{color:#058}
+.CodeRay .integer,.CodeRay .float{color:#099}
+.CodeRay .include{color:#555}
+.CodeRay .inline{color:#000}
+.CodeRay .inline .inline{background:#ccc}
+.CodeRay .inline .inline .inline{background:#bbb}
+.CodeRay .inline .inline-delimiter{color:#d14}
+.CodeRay .inline-delimiter{color:#d14}
+.CodeRay .important{color:#555;font-weight:bold}
+.CodeRay .interpreted{color:#b2b}
+.CodeRay .instance-variable{color:#008080}
+.CodeRay .label{color:#970}
+.CodeRay .local-variable{color:#963}
+.CodeRay .octal{color:#40e}
+.CodeRay .predefined{color:#369}
+.CodeRay .preprocessor{color:#579}
+.CodeRay .pseudo-class{color:#555}
+.CodeRay .directive{font-weight:bold}
+.CodeRay .type{font-weight:bold}
+.CodeRay .predefined-type{color:inherit}
+.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
+.CodeRay .key{color:#808}
+.CodeRay .key .delimiter{color:#606}
+.CodeRay .key .char{color:#80f}
+.CodeRay .value{color:#088}
+.CodeRay .regexp .delimiter{color:#808}
+.CodeRay .regexp .content{color:#808}
+.CodeRay .regexp .modifier{color:#808}
+.CodeRay .regexp .char{color:#d14}
+.CodeRay .regexp .function{color:#404;font-weight:bold}
+.CodeRay .string{color:#d20}
+.CodeRay .string .string .string{background:#ffd0d0}
+.CodeRay .string .content{color:#d14}
+.CodeRay .string .char{color:#d14}
+.CodeRay .string .delimiter{color:#d14}
+.CodeRay .shell{color:#d14}
+.CodeRay .shell .delimiter{color:#d14}
+.CodeRay .symbol{color:#990073}
+.CodeRay .symbol .content{color:#a60}
+.CodeRay .symbol .delimiter{color:#630}
+.CodeRay .tag{color:#008080}
+.CodeRay .tag-special{color:#d70}
+.CodeRay .variable{color:#036}
+.CodeRay .insert{background:#afa}
+.CodeRay .delete{background:#faa}
+.CodeRay .change{color:#aaf;background:#007}
+.CodeRay .head{color:#f8f;background:#505}
+.CodeRay .insert .insert{color:#080}
+.CodeRay .delete .delete{color:#800}
+.CodeRay .change .change{color:#66f}
+.CodeRay .head .head{color:#f4f}
+</style>
 <base href="https://aerokube.com/moon/dev-latest/">
 <meta property="og:image:height" content="1106">
 <meta property="og:image:width" content="2113">
@@ -455,34 +544,36 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-14</span>
+<span id="revdate">2021-12-16</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_getting_started">1. Getting Started</a>
+<li><a href="#getting-started">1. Getting Started</a>
 <ul class="sectlevel2">
-<li><a href="#_quick_start_guide">1.1. Quick Start Guide</a>
+<li><a href="#install">1.1. Quick Start Guide</a>
 <ul class="sectlevel3">
 <li><a href="#install-kubernetes">1.1.1. Installing to Kubernetes</a></li>
 <li><a href="#install-openshift">1.1.2. Installing to Openshift</a></li>
 </ul>
 </li>
-<li><a href="#_recommended_cluster_settings">1.2. Recommended Cluster Settings</a></li>
-<li><a href="#_required_permissions">1.3. Required Permissions</a>
+<li><a href="#recommended-cluster-settings">1.2. Recommended Cluster Settings</a></li>
+<li><a href="#permissions">1.3. Required Permissions</a>
 <ul class="sectlevel3">
 <li><a href="#permissions-single-user">1.3.1. Single-User Mode</a></li>
 <li><a href="#permissions-multiple-users">1.3.2. Multiple-Users Mode</a></li>
 </ul>
 </li>
+<li><a href="#architecture">1.4. Architecture</a></li>
+<li><a href="#moon2-vs-moon1">1.5. Difference between Moon 2.x and Moon 1.x</a></li>
 </ul>
 </li>
-<li><a href="#_configuration">2. Configuration</a>
+<li><a href="#configuration">2. Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#_installing_license">2.1. Installing License</a></li>
+<li><a href="#license">2.1. Installing License</a></li>
 </ul>
 </li>
-<li><a href="#_main_features">3. Main Features</a></li>
+<li><a href="#main-features">3. Main Features</a></li>
 </ul>
 </div>
 </div>
@@ -498,10 +589,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>1. Getting Started</h2>
+<h2 id="getting-started"><a class="anchor" href="#getting-started"></a>1. Getting Started</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_quick_start_guide"><a class="anchor" href="#_quick_start_guide"></a>1.1. Quick Start Guide</h3>
+<h3 id="install"><a class="anchor" href="#install"></a>1.1. Quick Start Guide</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -865,7 +956,7 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_recommended_cluster_settings"><a class="anchor" href="#_recommended_cluster_settings"></a>1.2. Recommended Cluster Settings</h3>
+<h3 id="recommended-cluster-settings"><a class="anchor" href="#recommended-cluster-settings"></a>1.2. Recommended Cluster Settings</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -884,7 +975,7 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_required_permissions"><a class="anchor" href="#_required_permissions"></a>1.3. Required Permissions</h3>
+<h3 id="permissions"><a class="anchor" href="#permissions"></a>1.3. Required Permissions</h3>
 <div class="paragraph">
 <p>Moon requires a limited set of permissions and should work with default Kubernetes settings. By default, Moon runs browsers in the same <code>moon</code> namespace where it runs (<strong>single-user mode</strong>). Moon 2.0.0 and above supports multiple Kubernetes <a href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/">namespaces</a>. This allows you to have one Moon instance running in <code>moon</code> namespace and an arbitrary number of namespaces for running browsers of different users (<strong>multiple-users mode</strong>). This allows you to easily set maximum number of browsers allowed to run by every team.</p>
 </div>
@@ -983,13 +1074,112 @@ $ cd moon-deploy</pre>
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="architecture"><a class="anchor" href="#architecture"></a>1.4. Architecture</h3>
+
+</div>
+<div class="sect2">
+<h3 id="moon2-vs-moon1"><a class="anchor" href="#moon2-vs-moon1"></a>1.5. Difference between Moon 2.x and Moon 1.x</h3>
+<div class="paragraph">
+<p>Moon 2.x is the new major Moon version adding a lot of improvements. This section summarizes the most notable changes.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption of every team. From the license key perspective - you are still using one license key but available licenses are distributed across all browser namespaces automatically depending on the load. Detailed description of how it looks like is provided in <a href="#">Architecture</a> section.</p>
+</li>
+<li>
+<p><strong>Improved configuration</strong>. Moon 1.x is using <a href="https://json.org/">JSON</a> configuration files. For example Moon 1.x browsers list file is stored in Kubernetes config map and looks like this:</p>
+<div class="listingblock">
+<div class="title">Typical Moon 1.x Browsers List File</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">95.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">95.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">browsers/firefox:95.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
+      },
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">94.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
+      }
+    }
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon 2.x instead if providing custom resources for configuration. For example browsers list file is now called a <strong>browser set</strong> and is a native Kubernetes citizen:</p>
+</div>
+<div class="listingblock">
+<div class="title">Moon 2.x Browser Set</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">BrowserSet</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">spec</span>:
+  <span class="key">selenium</span>:
+    <span class="key">firefox</span>:
+      <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/firefox</span></span>
+    <span class="key">chrome</span>:
+      <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/chrome</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can easily inspect and update such objects with any compatible Kubernetes client, e.g.:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get browsersets -n moon -o yaml # Show all available browser sets
+$ kubectl edit browserset default -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same applies to other configuration files and even to Moon license key manipulation:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl get license -n moon
+NAME      LICENSEE          SESSIONS   EXPIRES
+default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>New browser versions are available automatically</strong>. Moon 1.x requires to add an image for every new browser version to browsers list file manually. If a browser version is missing, then Moon 1.x will not be able to start this browser. Moon 2.x contrarily only needs to configure a browser image repository for every browser type. Once configured - new browser versions are detected automatically.</p>
+</li>
+<li>
+<p><strong>Improved browser performance</strong>. Moon 2.x is using completely new browser startup architecture that starts only required operating system components for current set of requested browser features. This leads to smaller browser images, faster startup and browser commands execution.</p>
+</li>
+<li>
+<p><strong>Lower cloud resources consumption</strong>. Reworked browser startup architecture leads to at least 20% lower average cloud resources (CPU, memory, network traffic) consumption.</p>
+</li>
+<li>
+<p><strong>Improved network communication</strong>. Moon 1.x relies on Kubernetes DNS implementation (e.g. <a href="https://github.com/coredns/coredns">CoreDNS</a>) for communicating with browser pods. DNS service is known to suffer from caching and cloud-specific networking issues which can in rare cases lead to broken browser sessions. Moon 2.x relies on pod IP addresses instead and does not depend on DNS at all.</p>
+</li>
+<li>
+<p><strong>No built-in authentication</strong>. Moon 1.x supports only <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. Moon 2.x instead does not provide built-in authentication mechanism by default. Instead, you can use existing Kubernetes-compatible software (e.g. <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a>) to provide any authentication mechanism (e.g. <a href="https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/">mutual TLS authentication</a>) you need. Moon derives user name from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers.</p>
+</li>
+<li>
+<p><strong>OpenID Connect support</strong>. Moon 2.x comes with a ready-to-use sidecar container for using <a href="https://openid.net/connect/">OpenID Connect</a> authentication. This allows for example to easily use an existing private or public <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> service. For example, you can easily load existing <a href="https://github.com/">Github</a> users like this.</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>2. Configuration</h2>
+<h2 id="configuration"><a class="anchor" href="#configuration"></a>2. Configuration</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_installing_license"><a class="anchor" href="#_installing_license"></a>2.1. Installing License</h3>
+<h3 id="license"><a class="anchor" href="#license"></a>2.1. Installing License</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1021,7 +1211,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect1">
-<h2 id="_main_features"><a class="anchor" href="#_main_features"></a>3. Main Features</h2>
+<h2 id="main-features"><a class="anchor" href="#main-features"></a>3. Main Features</h2>
 <div class="sectionbody">
 
 </div>
@@ -1030,7 +1220,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-14 08:34:43 UTC
+Last updated 2021-12-16 15:02:52 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
