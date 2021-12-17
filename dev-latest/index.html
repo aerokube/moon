@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-16</span>
+<span id="revdate">2021-12-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -557,15 +557,22 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#install-openshift">1.1.2. Installing to Openshift</a></li>
 </ul>
 </li>
-<li><a href="#recommended-cluster-settings">1.2. Recommended Cluster Settings</a></li>
-<li><a href="#permissions">1.3. Required Permissions</a>
+<li><a href="#architecture">1.2. Architecture</a>
 <ul class="sectlevel3">
-<li><a href="#permissions-single-user">1.3.1. Single-User Mode</a></li>
-<li><a href="#permissions-multiple-users">1.3.2. Multiple-Users Mode</a></li>
+<li><a href="#moon-components">1.2.1. Moon Components</a></li>
+<li><a href="#moon-operation-modes">1.2.2. Moon Operation Modes</a></li>
+<li><a href="#moon-pod-contents">1.2.3. Browser Pod Contents</a></li>
 </ul>
 </li>
-<li><a href="#architecture">1.4. Architecture</a></li>
+<li><a href="#recommended-cluster-settings">1.3. Recommended Cluster Settings</a></li>
+<li><a href="#permissions">1.4. Required Permissions</a>
+<ul class="sectlevel3">
+<li><a href="#permissions-single-namespace">1.4.1. Single Namespace Mode</a></li>
+<li><a href="#permissions-multiple-namespaces">1.4.2. Multiple Namespaces Mode</a></li>
+</ul>
+</li>
 <li><a href="#moon2-vs-moon1">1.5. Difference between Moon 2.x and Moon 1.x</a></li>
+<li><a href="#advantages">1.6. Moon vs other solutions</a></li>
 </ul>
 </li>
 <li><a href="#configuration">2. Configuration</a>
@@ -582,6 +589,18 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="sectionbody">
 <div class="paragraph">
 <p>This reference for version: <em>dev-latest</em></p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This documentation is the work in progress for the new development Moon 2.x version. Moon 1.x (stable version) documentation is published <a href="https://aerokube.com/moon/latest">here</a>.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Moon is a browser automation solution compatible with <a href="https://www.w3.org/TR/webdriver/">Selenium</a>, <a href="https://www.cypress.io/">Cypress</a>, <a href="https://playwright.dev/">Playwright</a> and <a href="https://pptr.dev/">Puppeteer</a> using <a href="https://kubernetes.io/">Kubernetes</a> or <a href="https://openshift.com/">Openshift</a> to launch browsers.</p>
@@ -956,7 +975,94 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="recommended-cluster-settings"><a class="anchor" href="#recommended-cluster-settings"></a>1.2. Recommended Cluster Settings</h3>
+<h3 id="architecture"><a class="anchor" href="#architecture"></a>1.2. Architecture</h3>
+<div class="sect3">
+<h4 id="moon-components"><a class="anchor" href="#moon-components"></a>1.2.1. Moon Components</h4>
+<div class="paragraph">
+<div class="title">Moon Components</div>
+<p><span class="image"><img src="img/moon-components.png" alt="moon components"></span></p>
+</div>
+<div class="paragraph">
+<p>Moon cluster consists of several components:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>One or more <code>Moon</code> application instances. Their main purpose is to start and stop browser containers. These replicas are usually exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on standard Selenium port <code>4444</code>. You should run all the tests against this service. Also, this application provides an API to get information about running browser instances (in Moon 1.x this was a separate application called <code>Moon API</code>).</p>
+</li>
+<li>
+<p>One or more <code>Moon Conf</code> application instances. This application is watching all configured Kubernetes namespaces and controls correct distribution of licenses among all these namespaces.</p>
+</li>
+<li>
+<p>One or more <code>Moon UI</code> application instances. <code>Moon UI</code> collects information from Moon and visualizes it. It is usually available on HTTP port <code>8080</code>.</p>
+</li>
+<li>
+<p>Running browser pods.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="moon-operation-modes"><a class="anchor" href="#moon-operation-modes"></a>1.2.2. Moon Operation Modes</h4>
+<div class="paragraph">
+<p>Moon 2.x has two different operation modes: <strong>single namespace mode</strong> and <strong>multiple namespaces mode</strong>.</p>
+</div>
+<div class="paragraph">
+<div class="title">Single Namespace Mode</div>
+<p><span class="image"><img src="img/single-namespace-mode.png" alt="single-namespace-mode"></span></p>
+</div>
+<div class="paragraph">
+<p>In single namespace mode Moon itself and all launched browser pods are running in the one Kubernetes namespace. Moon 1.x was only able to work like this. This is still suitable if only one team is using Moon or you don&#8217;t need to limit browser consumption of different Moon users.</p>
+</div>
+<div class="paragraph">
+<div class="title">Multiple Namespaces Mode</div>
+<p><span class="image"><img src="img/multiple-namespaces-mode.png" alt="multiple-namespaces-mode"></span></p>
+</div>
+<div class="paragraph">
+<p>In multiple namespaces mode Moon is running in one namespace and browsers are launched in separate namespaces. The total number of such namespaces is unlimited. This mode is mainly needed when you want to control computing resources, browsers or network access rules (<a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">network policies</a>) available for every team.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="moon-pod-contents"><a class="anchor" href="#moon-pod-contents"></a>1.2.3. Browser Pod Contents</h4>
+<div class="paragraph">
+<p>In addition to container with browser every pod created by Moon contains one or more service images.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Service Images</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+<th class="tableblock halign-left valign-top">Started</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">defender</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows only one browser session to be created in the pod, handles session timeouts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">vnc-server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delivers <a href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">VNC</a> connectivity to browser images</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">When VNC is requested by user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">x-server</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Delivers an <a href="https://en.wikipedia.org/wiki/X_Window_System_core_protocol">X</a> server for running non-headless browsers</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">When browser window is visible</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="recommended-cluster-settings"><a class="anchor" href="#recommended-cluster-settings"></a>1.3. Recommended Cluster Settings</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -975,17 +1081,17 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="permissions"><a class="anchor" href="#permissions"></a>1.3. Required Permissions</h3>
+<h3 id="permissions"><a class="anchor" href="#permissions"></a>1.4. Required Permissions</h3>
 <div class="paragraph">
-<p>Moon requires a limited set of permissions and should work with default Kubernetes settings. By default, Moon runs browsers in the same <code>moon</code> namespace where it runs (<strong>single-user mode</strong>). Moon 2.0.0 and above supports multiple Kubernetes <a href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/">namespaces</a>. This allows you to have one Moon instance running in <code>moon</code> namespace and an arbitrary number of namespaces for running browsers of different users (<strong>multiple-users mode</strong>). This allows you to easily set maximum number of browsers allowed to run by every team.</p>
+<p>Moon requires a limited set of permissions and should work with default Kubernetes settings. By default, Moon runs browsers in the same <code>moon</code> namespace where it runs (<strong>single namespace mode</strong>). Moon 2.0.0 and above supports multiple Kubernetes <a href="https://kubernetes.io/docs/tasks/administer-cluster/namespaces-walkthrough/">namespaces</a>. This allows you to have one Moon instance running in <code>moon</code> namespace and an arbitrary number of namespaces for running browsers of different users (<strong>multiple namespaces mode</strong>). This allows you to easily set maximum number of browsers allowed to run by every team.</p>
 </div>
 <div class="sect3">
-<h4 id="permissions-single-user"><a class="anchor" href="#permissions-single-user"></a>1.3.1. Single-User Mode</h4>
+<h4 id="permissions-single-namespace"><a class="anchor" href="#permissions-single-namespace"></a>1.4.1. Single Namespace Mode</h4>
 <div class="paragraph">
-<p>The following table summarizes what needs to be accessible for Moon in single-user mode:</p>
+<p>The following table summarizes what needs to be accessible for Moon in single namespace mode:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Required Moon Permissions In Single-User Mode</caption>
+<caption class="title">Table 2. Required Moon Permissions In Single Namespace Mode</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -996,31 +1102,31 @@ $ cd moon-deploy</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to manipulate pods with browsers</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to pass users and groups to browser pods</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used in license functionality</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">These custom resources store Moon configuration</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect3">
-<h4 id="permissions-multiple-users"><a class="anchor" href="#permissions-multiple-users"></a>1.3.2. Multiple-Users Mode</h4>
+<h4 id="permissions-multiple-namespaces"><a class="anchor" href="#permissions-multiple-namespaces"></a>1.4.2. Multiple Namespaces Mode</h4>
 <div class="paragraph">
 <p>When running browsers in multiple namespaces required permissions differ. The following table shows Moon permissions in the namespace where it is running:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. Required Moon Permissions For Own Namespace</caption>
+<caption class="title">Table 3. Required Permissions for the Namespace where Moon runs</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1031,19 +1137,19 @@ $ cd moon-deploy</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> information about <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">namespaces</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong> and <strong>list</strong> information about <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">namespaces</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Needed to control how many browsers are running in every user namespace</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong> and <strong>list</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to analyze pods in Moon namespace</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployments</a> and <a href="https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/">replica sets</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used in license functionality</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong> and <strong>list</strong> Moon <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> in <code>moon.aerokube.com</code> API group</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">These custom resources store Moon configuration</p></td>
 </tr>
 </tbody>
@@ -1052,7 +1158,7 @@ $ cd moon-deploy</pre>
 <p>For every user namespace Moon needs the following permissions:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. Required Moon Permissions For User Namespace</caption>
+<caption class="title">Table 4. Required Moon Permissions For User Namespace</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1063,20 +1169,16 @@ $ cd moon-deploy</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Purpose</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">pods</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to manipulate pods with browsers</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>read</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>start</strong>, <strong>stop</strong> and <strong>update</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">To <strong>get</strong>, <strong>watch</strong>, <strong>list</strong>, <strong>create</strong>, <strong>delete</strong>, <strong>update</strong> and <strong>patch</strong> <a href="https://kubernetes.io/docs/concepts/configuration/configmap/">config maps</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Used to pass users and groups to browser pods</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-<div class="sect2">
-<h3 id="architecture"><a class="anchor" href="#architecture"></a>1.4. Architecture</h3>
-
 </div>
 <div class="sect2">
 <h3 id="moon2-vs-moon1"><a class="anchor" href="#moon2-vs-moon1"></a>1.5. Difference between Moon 2.x and Moon 1.x</h3>
@@ -1086,7 +1188,7 @@ $ cd moon-deploy</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption of every team. From the license key perspective - you are still using one license key but available licenses are distributed across all browser namespaces automatically depending on the load. Detailed description of how it looks like is provided in <a href="#">Architecture</a> section.</p>
+<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption for every team. From the license key perspective - you are still using one license key but available licenses are automatically distributed across all browser namespaces depending on the load. In Moon 1.x in order to use separate namespaces for different teams you had to install a separate Moon instance to every namespace and use a different license key for every such instance. This sometimes prevented teams from requesting more browsers during the peak load. In Moon 2.x one big license key is automatically shared between namespaces and thus if licenses are available, every team during the peak load can request more browsers than it usually needs. Detailed description of how it looks like is provided in <a href="#">Architecture</a> section.</p>
 </li>
 <li>
 <p><strong>Improved configuration</strong>. Moon 1.x is using <a href="https://json.org/">JSON</a> configuration files. For example Moon 1.x browsers list file is stored in Kubernetes config map and looks like this:</p>
@@ -1101,14 +1203,8 @@ $ cd moon-deploy</pre>
         <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">browsers/firefox:95.0</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>,
         <span class="key"><span class="delimiter">&quot;</span><span class="content">path</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/wd/hub</span><span class="delimiter">&quot;</span></span>
-      },
-      <span class="key"><span class="delimiter">&quot;</span><span class="content">94.0</span><span class="delimiter">&quot;</span></span>: {
-        <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
       }
     }
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
-    <span class="error">/</span><span class="error">/</span><span class="error">.</span><span class="error">.</span><span class="error">.</span>
   }
 }</code></pre>
 </div>
@@ -1151,6 +1247,9 @@ NAME      LICENSEE          SESSIONS   EXPIRES
 default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Every modification in such configuration objects is automatically validated by Kubernetes before saving, so it&#8217;s less error-prone.</p>
+</div>
 </li>
 <li>
 <p><strong>New browser versions are available automatically</strong>. Moon 1.x requires to add an image for every new browser version to browsers list file manually. If a browser version is missing, then Moon 1.x will not be able to start this browser. Moon 2.x contrarily only needs to configure a browser image repository for every browser type. Once configured - new browser versions are detected automatically.</p>
@@ -1171,6 +1270,31 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <p><strong>OpenID Connect support</strong>. Moon 2.x comes with a ready-to-use sidecar container for using <a href="https://openid.net/connect/">OpenID Connect</a> authentication. This allows for example to easily use an existing private or public <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> service. For example, you can easily load existing <a href="https://github.com/">Github</a> users like this.</p>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="advantages"><a class="anchor" href="#advantages"></a>1.6. Moon vs other solutions</h3>
+<div class="paragraph">
+<p>Moon takes all the best practices and features from existing browser automation solutions and adds many more:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Browser automation Swiss army knife</strong>. Moon supports all the most popular browser automation tools (<a href="https://selenium.dev/">Selenium</a>, <a href="https://playwright.dev/">Playwright</a>, <a href="https://cypress.io/">Cypress</a>, <a href="https://pptr.dev/">Puppeteer</a>) out of the box. We automatically build and publish <a href="https://aerokube.com/images/latest/">images</a> for all new browser releases.</p>
+</li>
+<li>
+<p><strong>Unlimited automatic scalability.</strong> You always have enough browsers of any desired version available in the cluster. When running the cluster in cloud platforms such as <a href="https://aws.amazon.com/">Amazon Web Services</a> or <a href="http://cloud.google.com/">Google Cloud</a> you can adjust settings to automatically scale depending on current load. This allows to combine efficiency with competitive cost.</p>
+</li>
+<li>
+<p><strong>Completely stateless</strong>. Selenoid and Selenium Grid 3.x store in memory information about currently running browser sessions. Selenium Grid 4.x is using a key-value storage (e.g. <a href="https://redis.io/">Redis</a>) for the same purpose. If for some reason process that stores sessions list crashes then all running sessions are lost. Moon contrarily has no internal state and can be replicated across datacenters. Browser sessions remain alive even if one or more replicas go down.</p>
+</li>
+<li>
+<p><strong>Fine-grained resources control</strong>. Moon allows to easily configure computing resources available for every used component. This leads to predictable computing resources consumption and overall cluster cost.</p>
+</li>
+<li>
+<p><strong>Fully graceful</strong>. Any maintenance operations with the cluster do not interrupt running browser sessions. Every cluster component shuts down gracefully.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1220,7 +1344,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-16 15:02:52 UTC
+Last updated 2021-12-17 13:37:16 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
