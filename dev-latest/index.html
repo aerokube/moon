@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-17</span>
+<span id="revdate">2021-12-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -579,10 +579,30 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#configuration">3. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#license">3.1. Installing a License</a></li>
+<li><a href="#_log_files">3.2. Log Files</a></li>
+<li><a href="#_cli_flags">3.3. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#cli-flags-moon">3.3.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-conf">3.3.2. Moon Conf Container Flags</a></li>
 </ul>
 </li>
-<li><a href="#_license_agreement">4. License Agreement</a></li>
-<li><a href="#_pricing">5. Pricing</a></li>
+</ul>
+</li>
+<li><a href="#_frequently_asked_questions">4. Frequently Asked Questions</a>
+<ul class="sectlevel2">
+<li><a href="#faq-moon-logs">4.1. Where are Moon logs?</a></li>
+<li><a href="#faq-recorded-videos">4.2. Where are recorded videos stored?</a></li>
+<li><a href="#faq-update-configuration">4.3. How to update configuration of a running Moon cluster?</a></li>
+<li><a href="#faq-kubernetes-service-account">4.4. Is it possible to configure Kubernetes service account for Moon?</a></li>
+<li><a href="#faq-custom-firewall-rules">4.5. Is it possible to assign custom firewall rules to browser pods?</a></li>
+<li><a href="#faq-connection-closed-unexpectedly">4.6. Connection was closed unexpectedly</a></li>
+<li><a href="#faq-dns-lookup-timeouts">4.7. DNS lookup timeouts</a></li>
+<li><a href="#faq-session-timeouts-do-no-work">4.8. Browser session timeouts do not work</a></li>
+<li><a href="#faq-json-errors">4.9. JSON processing errors in tests</a></li>
+</ul>
+</li>
+<li><a href="#_license_agreement">5. License Agreement</a></li>
+<li><a href="#_pricing">6. Pricing</a></li>
 </ul>
 </div>
 </div>
@@ -1340,10 +1360,212 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>3.2. Log Files</h3>
+<div class="paragraph">
+<p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs -lapp=moon -c moon -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To follow the logs while running the tests add <code>-f</code> flag:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs -f -lapp=moon -c moon -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also take a look at <code>moon-conf</code> and <code>moon-ui</code> logs as follows:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs -f -lapp=moon -c moon-api -n moon
+$ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are encountering browser pods not being deleted - then take a look at <code>defender</code> container logs for every frozen browser pod:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl logs chrome-73-0-ac15ffaa-e641-4c7f-a54c-f25b5be1f135 -c defender -n moon</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here <code>chrome-73-0-ac15ffaa-e641-4c7f-a54c-f25b5be1f135</code> is the browser session ID equal to browser pod name.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.3. CLI Flags</h3>
+<div class="paragraph">
+<p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
+</div>
+<div class="sect3">
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.3.1. Moon Container Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-browser-service-account string
+    browser service account name (default "default")
+-cpu-limit value
+    browser container cpu limit (default 2)
+-cpu-request value
+    browser container cpu request (default 1)
+-delete-timeout duration
+    timeout to delete Kubernetes resources (default 10m0s)
+-disable-cpu-limits
+    disable cpu limits for pods
+-disable-memory-limits
+    disable memory limits for pods
+-grace-period duration
+    graceful shutdown period (default 5m0s)
+-license-key string
+    path to license file
+-listen string
+    host and port to listen to (default ":4444")
+-memory-limit value
+    browser container memory limit (default 2Gi)
+-memory-request value
+    browser container memory request (default 2Gi)
+-moon-url value
+    moon service url (default http://moon.moon:4444/wd/hub)
+-session-attempt-timeout duration
+    new session attempt timeout (default 30m0s)
+-timeout duration
+    override session timeout (default 1m0s)
+-version
+    show version and exit</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cli-flags-moon-conf"><a class="anchor" href="#cli-flags-moon-conf"></a>3.3.2. Moon Conf Container Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-license-key string
+    path to license file (default "license/license.key")</pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>4. License Agreement</h2>
+<h2 id="_frequently_asked_questions"><a class="anchor" href="#_frequently_asked_questions"></a>4. Frequently Asked Questions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="faq-moon-logs"><a class="anchor" href="#faq-moon-logs"></a>4.1. Where are Moon logs?</h3>
+<div class="paragraph">
+<p>See <a href="#">Log Files</a> section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-recorded-videos"><a class="anchor" href="#faq-recorded-videos"></a>4.2. Where are recorded videos stored?</h3>
+<div class="paragraph">
+<p>Moon automatically saves session logs and recorded video files to <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a> compatible storage. If S3 storage is not configured - then video recording will not work.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-update-configuration"><a class="anchor" href="#faq-update-configuration"></a>4.3. How to update configuration of a running Moon cluster?</h3>
+<div class="paragraph">
+<p>Just update respective custom resources (<code>config</code>, <code>browserset</code>, <code>deviceset</code>, <code>quota</code>) with standard Kubernetes commands (<code>kubectl edit</code> or <code>kubectl replace</code>). For example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ kubectl edit config default -n moon # Updating global Moon configuration
+$ kubectl edit browserset default -n moon # Updating Moon browsers list
+$ kubectl edit deviceset users -n moon # Updating Moon devices list
+$ kubectl edit quota default -n moon # Updating Moon quota</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>These commands will open your preferred editor with respective data: do any desired modifications, save and exit. Changes are applied immediately.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-kubernetes-service-account"><a class="anchor" href="#faq-kubernetes-service-account"></a>4.4. Is it possible to configure Kubernetes service account for Moon?</h3>
+<div class="paragraph">
+<p>Yes, Moon has <code>-browser-service-account</code> flag described in <a href="#cli-flags-moon">Moon Container Flags</a> section.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-custom-firewall-rules"><a class="anchor" href="#faq-custom-firewall-rules"></a>4.5. Is it possible to assign custom firewall rules to browser pods?</h3>
+<div class="paragraph">
+<p>Yes, using built-in <a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Kubernetes Network Policies</a> feature. Moon already can assign custom labels to running browser pods. To apply a firewall rule to browser pods you need to assign a set of custom labels to these pods and then create a <code>NetworkPolicy</code> matching pods with <code>podSelector</code> using these labels.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-connection-closed-unexpectedly"><a class="anchor" href="#faq-connection-closed-unexpectedly"></a>4.6. Connection was closed unexpectedly</h3>
+<div class="paragraph">
+<p>If your HTTP requests are randomly hanging - this can mean that you can have too low HTTP request timeout value on your network load balancer (<code>LoadBalancer</code>, <code>Ingress</code>, Openshift <code>Route</code>). Very often default value is about <code>30 seconds</code> and this can lead to closed connections when a lot of new Selenium session requests are being sent to Moon. How to set timeout setting usually depends on cloud platform you are using. For example in AWS this can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">kind</span>: <span class="string"><span class="content">Service</span></span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">60</span><span class="delimiter">&quot;</span></span> <span class="comment"># AWS load balancer timeout setting</span>
+<span class="key">spec</span>:
+  <span class="key">type</span>: <span class="string"><span class="content">LoadBalancer</span></span>
+  <span class="comment"># The rest of spec goes here...</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-dns-lookup-timeouts"><a class="anchor" href="#faq-dns-lookup-timeouts"></a>4.7. DNS lookup timeouts</h3>
+<div class="paragraph">
+<p>If you are using <a href="https://github.com/coreos/flannel">Flannel</a> as Kubernetes networking engine and receiving DNS lookup timeouts like the following&#8230;&#8203;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>2019/02/21 08:37:32 [VNC_ERROR] [10.244.1.1] [dial tcp: lookup chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b on 10.96.0.10:53: read udp 10.244.1.11:40603-&gt;10.96.0.10:53: i/o timeout]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>&#8230;&#8203;then you may need to set the following kernel property on Kubernetes nodes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>$ sysctl net.bridge.bridge-nf-call-iptables=1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-session-timeouts-do-no-work"><a class="anchor" href="#faq-session-timeouts-do-no-work"></a>4.8. Browser session timeouts do not work</h3>
+<div class="paragraph">
+<p>This could because of incorrectly set <code>-moon-url</code> flag value. By default Moon is being exposed using Kubernetes service named <code>moon</code> and is available on port <code>4444</code>. In that case everything works out of the box with default <code>-moon-url</code> flag value. In customized deployment your Moon service name can differ and you have to set <code>-moon-url</code> value flag explicitly. For example, having Moon being exposed with service named <code>my-custom-moon-service</code> on port <code>3333</code>, you have to explicitly add flag <code>-moon-url <a href="http://my-custom-moon-service:3333/wd/hub" class="bare">http://my-custom-moon-service:3333/wd/hub</a></code> to your deployment manifests.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="faq-json-errors"><a class="anchor" href="#faq-json-errors"></a>4.9. JSON processing errors in tests</h3>
+<div class="paragraph">
+<p>In some environments your Selenium tests could from time to time start getting JSON processing errors like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>Json exception: Expected to read a START_MAP but instead have: END. Last 0 characters read</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main reason of such behavior usually is incorrectly configured request proxy timeout on <code>LoadBalancer</code> or <code>Ingress</code> time. Very frequently default timeout value is <code>60 seconds</code> and in cases when some Selenium operation takes more time, load balancer will abort request and send 502 error with no body or with HTML body. However Selenium clients always expect to have JSON in Selenium response body and anything else leads to JSON processing exceptions. To solve this - increase request timeout on load balancer side. How to do this should be described in load balancer documentation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>5. License Agreement</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated December 17th, 2021. Replaces the prior version in its entirety.</p>
@@ -1754,7 +1976,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>5. Pricing</h2>
+<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>6. Pricing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated December 17th, 2021. Replaces the prior version in its entirety.</p>
@@ -1873,7 +2095,7 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-17 14:57:59 UTC
+Last updated 2021-12-20 04:31:49 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
