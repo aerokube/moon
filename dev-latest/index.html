@@ -577,12 +577,25 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#main-features">2. Main Features</a>
 <ul class="sectlevel2">
-<li><a href="#playwright">2.1. Using Playwright</a>
+<li><a href="#cypress">2.1. Using Cypress</a>
 <ul class="sectlevel3">
-<li><a href="#playwright-select-browser">2.1.1. Selecting Requested Browser</a></li>
-<li><a href="#playwright-select-browser-version">2.1.2. Selecting Exact Browser Version</a></li>
-<li><a href="#playwright-select-playwright-version">2.1.3. Selecting Exact Playwright Version</a></li>
-<li><a href="#playwright-additional-features">2.1.4. Enabling Additional Features</a></li>
+<li><a href="#cypress-select-browser">2.1.1. Selecting Requested Browser</a></li>
+<li><a href="#cypress-select-cypress-version">2.1.2. Selecting Exact Cypress Version</a></li>
+<li><a href="#cypress-additional-features">2.1.3. Enabling Additional Features</a></li>
+</ul>
+</li>
+<li><a href="#playwright">2.2. Using Playwright</a>
+<ul class="sectlevel3">
+<li><a href="#playwright-select-browser">2.2.1. Selecting Requested Browser</a></li>
+<li><a href="#playwright-select-browser-version">2.2.2. Selecting Exact Browser Version</a></li>
+<li><a href="#playwright-select-playwright-version">2.2.3. Selecting Exact Playwright Version</a></li>
+<li><a href="#playwright-additional-features">2.2.4. Enabling Additional Features</a></li>
+</ul>
+</li>
+<li><a href="#devtools">2.3. Accessing Chrome Developer Tools</a>
+<ul class="sectlevel3">
+<li><a href="#devtools-select-browser">2.3.1. Selecting Requested Browser</a></li>
+<li><a href="#devtools-additional-features">2.3.2. Enabling Additional Features</a></li>
 </ul>
 </li>
 </ul>
@@ -1343,7 +1356,226 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <h2 id="main-features"><a class="anchor" href="#main-features"></a>2. Main Features</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.1. Using Playwright</h3>
+<h3 id="cypress"><a class="anchor" href="#cypress"></a>2.1. Using Cypress</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is supported in Moon 1.9.0 and above.</p>
+</li>
+<li>
+<p>No changes in Cypress project are required.</p>
+</li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-cypress-example">here</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon is able to run <a href="https://github.com/cypress-io/cypress/">Cypress</a> tests out of the box. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install a tool allowing to execute Cypress tests remotely:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ npm install @aerokube/cypress-moon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Run your tests against Moon cluster:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cd /path/to/my-test-project
+my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each call of <code>cypress-moon</code> command will start a new browser in Moon.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If your Moon instance is running behind <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Ingress</a> then correct URL would usually be: <code><a href="https://moon.example.com/cypress/chrome" class="bare">https://moon.example.com/cypress/chrome</a></code>.</p>
+</li>
+<li>
+<p>Running Cypress tests requires sending compressed project to Moon. If your Cypress project is big and Moon is running behind Ingress you may need to increase maximum HTTP request body size. For example <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a> requires the following annotation to be added:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">nginx.ingress.kubernetes.io/proxy-body-size</span>: <span class="string"><span class="content">128m</span></span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Cypress compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser type or additional features is passing all these requirements in HTTP endpoint URL. Next section describes supported URL naming conventions.</p>
+</div>
+<div class="sect3">
+<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>2.1.1. Selecting Requested Browser</h4>
+<div class="paragraph">
+<p>You can request one of browsers supported by Cypress (<code>chrome</code>, <code>chromium</code>, <code>edge</code>, <code>electron</code> or <code>firefox</code>) by specifying its name in URL. By default, Moon will use <code>browsers/cypress-&lt;browser-name&gt;:latest</code> public image.</p>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chrome (<code>browsers/cypress-chrome:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/chrome</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chromium (<code>browsers/cypress-chromium:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/chromium</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Electron (<code>browsers/cypress-electron:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Microsoft Edge (<code>browsers/cypress-edge:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/edge</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Firefox (<code>browsers/cypress-firefox:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/firefox</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>2.1.2. Selecting Exact Cypress Version</h4>
+<div class="paragraph">
+<p>Cypress API can change from version to version. Because of that it is recommended to make sure that Cypress version being used in your project corresponds to Cypress version in browser image. To use an image compatible with exact Cypress version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting an image compatible to Cypress 7.3.0 (<code>browsers/cypress-electron:cypress-7.3.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron/cypress-7.3.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.1.3. Enabling Additional Features</h4>
+<div class="paragraph">
+<p>In addition to selecting Cypress version - you can enable additional features like changing screen resolution, passing custom test name and so on. All these optional features are set by adding parameters to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron/cypress-7.3.0?noExit=true&amp;headless=false&amp;env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of supported parameters and their meaning is shown below.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">configFile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom Cypress configuration file</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to custom Cypress <a href="https://docs.cypress.io/guides/references/configuration">configuration file</a>. <strong>Supported for Cypress 9.0.0 and above.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">noExit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to leave container running after executing all tests. Mainly needed for debugging purposes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Cypress methods to set browser window size.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">spec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cypress test spec file name (e.g. <code>cypress/integration/my-spec.js</code>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to run one or more concrete test files. Can be passed multiple times.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.2. Using Playwright</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1400,7 +1632,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.1.1. Selecting Requested Browser</h4>
+<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.2.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default, Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -1424,7 +1656,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>2.1.2. Selecting Exact Browser Version</h4>
+<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>2.2.2. Selecting Exact Browser Version</h4>
 <div class="paragraph">
 <p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
 </div>
@@ -1439,7 +1671,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>2.1.3. Selecting Exact Playwright Version</h4>
+<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>2.2.3. Selecting Exact Playwright Version</h4>
 <div class="paragraph">
 <p>Currently, Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
 </div>
@@ -1451,7 +1683,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.1.4. Enabling Additional Features</h4>
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.2.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -1465,7 +1697,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <p>Full list of supported parameters and their meaning is shown below.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Supported parameters for enabling additional features</caption>
+<caption class="title">Table 6. Supported parameters for enabling additional features</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1528,6 +1760,178 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Playwright methods to set browser window size.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="devtools"><a class="anchor" href="#devtools"></a>2.3. Accessing Chrome Developer Tools</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This is feature is supported in Moon 1.7.0 and above.</p>
+</li>
+<li>
+<p>This feature will work only for Chrome 63+.</p>
+</li>
+<li>
+<p>We recommend using the most recent Chrome version possible.</p>
+</li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-puppeteer-example">here</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon can automate browsers using <a href="https://chromedevtools.github.io/devtools-protocol/">Chrome Developer Tools Protocol</a>. This allows you to run tests in parallel using libraries like <a href="https://github.com/puppeteer/puppeteer">Puppeteer</a> or <a href="https://github.com/getgauge/taiko">Taiko</a>. In order to start a new browser with these tools - simply use the following URL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome</code></pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If your Moon instance is accessible over <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a> connection (e.g. <code><a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code> instead of <code><a href="http://moon.example.com/" class="bare">http://moon.example.com/</a></code>) then URL should start with <code>wss://</code> instead of <code>ws://</code> (e.g. <code>wss://moon.example.com/</code>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>An example Puppeteer test is shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Accessing Developer Tools API with Puppeteer</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">const puppeteer = require(<span class="string"><span class="delimiter">'</span><span class="content">puppeteer-core</span><span class="delimiter">'</span></span>);
+const host = <span class="string"><span class="delimiter">'</span><span class="content">moon.example.com</span><span class="delimiter">'</span></span>;
+(async () =&gt; {
+    const devtools = await puppeteer.connect(
+        { <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">browserWSEndpoint</span>: <span class="error">`</span>wss:<span class="comment">//${host}/cdtp/chrome` }</span>
+    ); <span class="comment">// For every call of this method a new browser is started</span>
+    const page = await devtools.newPage();
+    await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com</span><span class="delimiter">'</span></span>);
+    await page.screenshot({<span class="key">path</span>: <span class="string"><span class="delimiter">'</span><span class="content">screenshot.png</span><span class="delimiter">'</span></span>});
+    const title = await page.title();
+
+    console.log(title);
+
+    await devtools.close();
+})();</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="devtools-select-browser"><a class="anchor" href="#devtools-select-browser"></a>2.3.1. Selecting Requested Browser</h4>
+<div class="paragraph">
+<p>You can choose desired browser version by changing connection URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting Chrome version (<code>cdtp/chrome:85.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome/85.0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.3.2. Enabling Additional Features</h4>
+<div class="paragraph">
+<p>You can enable additional features by changing connection URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome?headless=false&amp;nameserver=ns1.example.com</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more additional command-line arguments to be passed to browser. This parameter can be passed multiple times: <code>arg=--use-fake-ui-for-media-stream&amp;arg=--use-gl</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
@@ -1622,7 +2026,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod). The following metrics are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Moon Built-in Prometheus Metrics</caption>
+<caption class="title">Table 8. Moon Built-in Prometheus Metrics</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2338,7 +2742,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Moon License Pricing</caption>
+<caption class="title">Table 9. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2429,7 +2833,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-21 08:57:44 UTC
+Last updated 2021-12-21 14:47:13 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
