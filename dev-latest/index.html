@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-20</span>
+<span id="revdate">2021-12-21</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -575,15 +575,33 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#advantages">1.6. Moon vs other solutions</a></li>
 </ul>
 </li>
-<li><a href="#main-features">2. Main Features</a></li>
+<li><a href="#main-features">2. Main Features</a>
+<ul class="sectlevel2">
+<li><a href="#playwright">2.1. Using Playwright</a>
+<ul class="sectlevel3">
+<li><a href="#playwright-select-browser">2.1.1. Selecting Requested Browser</a></li>
+<li><a href="#playwright-select-browser-version">2.1.2. Selecting Exact Browser Version</a></li>
+<li><a href="#playwright-select-playwright-version">2.1.3. Selecting Exact Playwright Version</a></li>
+<li><a href="#playwright-additional-features">2.1.4. Enabling Additional Features</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#configuration">3. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#license">3.1. Installing a License</a></li>
-<li><a href="#_log_files">3.2. Log Files</a></li>
-<li><a href="#_cli_flags">3.3. CLI Flags</a>
+<li><a href="#monitoring">3.2. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.3.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-conf">3.3.2. Moon Conf Container Flags</a></li>
+<li><a href="#monitoring-setup">3.2.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.2.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.2.3. Filtering Browser Pods by Labels</a></li>
+</ul>
+</li>
+<li><a href="#_log_files">3.3. Log Files</a></li>
+<li><a href="#_cli_flags">3.4. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#cli-flags-moon">3.4.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-conf">3.4.2. Moon Conf Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -1324,7 +1342,203 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <div class="sect1">
 <h2 id="main-features"><a class="anchor" href="#main-features"></a>2. Main Features</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.1. Using Playwright</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is supported in Moon 1.6.0 and above.</p>
+</li>
+<li>
+<p>An example project demonstrating this feature can be found <a href="https://github.com/aerokube/moon-cloud-playwright-example">here</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon is able to run browser images for <a href="https://github.com/microsoft/playwright">Playwright</a> framework out of the box. An example Playwright test that will work with Moon looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">An example Playwright test working with Moon</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
 
+(async () =&gt; {
+  const browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">wss://moon.example.com/playwright/firefox/playwright-1.17.1</span><span class="delimiter">'</span></span> });
+  const page = await browser.newPage();
+  await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
+  await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
+  await browser.close();
+})();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can see that the only difference from standard Playwright example is a web socket endpoint URL. Playwright compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser version or environment variables is passing all these requirements in websocket endpoint URL. Next section describes supported URL naming conventions.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If your Moon instance is accessible over <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a> connection (e.g. <code><a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code> instead of <code><a href="http://moon.example.com/" class="bare">http://moon.example.com/</a></code>) then endpoint URL should start with <code>wss://</code> instead of <code>ws://</code> (e.g. <code>wss://moon.example.com/</code>).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.1.1. Selecting Requested Browser</h4>
+<div class="paragraph">
+<p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default, Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Chromium (<code>playwright/chromium:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chromium</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Firefox (<code>playwright/firefox:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Requesting Webkit (<code>playwright/webkit:latest</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/webkit</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>2.1.2. Selecting Exact Browser Version</h4>
+<div class="paragraph">
+<p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting Firefox 94.0 (<code>playwright/firefox:94.0</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/94.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of images can be found <a href="https://aerokube.com/images/latest/#_playwright">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>2.1.3. Selecting Exact Playwright Version</h4>
+<div class="paragraph">
+<p>Currently, Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selecting an image compatible to Playwright 1.17.1 (<code>playwright/firefox:playwright-1.17.1</code> image)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/playwright-1.17.1</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.1.4. Enabling Additional Features</h4>
+<div class="paragraph">
+<p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chrome?headless=false&amp;arg=--use-gl</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of supported parameters and their meaning is shown below.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Supported parameters for enabling additional features</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter name</th>
+<th class="tableblock halign-left valign-top">Possible values</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">arg</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more additional command-line arguments to be passed to browser. This parameter can be passed multiple times: <code>arg=--use-fake-ui-for-media-stream&amp;arg=--use-gl</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar (only applicable to <code>chromium</code> browser).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more environment variables that will be visible to the browser. Can be passed multiple times: <code>env=LANG%3Dde_AT.UTF-8&amp;env=LANGUAGE%3Dat:de</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">headless</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run browser in headless mode.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">host</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any human-readable string</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to set custom test name (same meaning as <code>name</code> Selenium capability).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">nameserver</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DNS server name, e.g. <code>ns1.example.com</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets resolution of the desktop where browser is running. <strong>Use Playwright methods to set browser window size.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">timeZone</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1361,7 +1575,127 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>3.2. Log Files</h3>
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.2. Monitoring</h3>
+<div class="paragraph">
+<p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
+</div>
+<div class="sect3">
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.2.1. Setup</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Moon should be already running (e.g. in <code>moon</code> namespace).</p>
+</li>
+<li>
+<p>Deploy Prometheus and Grafana using Prometheus Operator (e.g. to <code>monitoring</code> namespace).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>An example installation command using Helm 3 is:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo update
+$ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack --create-namespace --namespace monitoring</pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Having a configured Prometheus instance you have two ways of getting metrics: <strong>using built-in Moon metrics</strong> and <strong>filtering browser pods by labels</strong>.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.2.2. Built-in Moon metrics</h4>
+<div class="paragraph">
+<p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod). The following metrics are available:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Moon Built-in Prometheus Metrics</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Labels</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon_browser_limit</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum number of browser sessions allowed by installed license key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon_browser_running</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of currently running browser sessions</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon_browser_count</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quota, browserName, browserVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser consumption corresponding to exact browser name and version</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon_browser_queued</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total number of browser requests in queue</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon_license_expire</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gauge</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Moon license key expiration timestamp</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.2.3. Filtering Browser Pods by Labels</h4>
+<div class="paragraph">
+<p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kube_pod_labels{label_moon="browser", label_browserName="chrome", label_browserVersion="96.0"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Full list of available expressions can be found <a href="https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Moon can add custom labels to started browser pods (e.g. browser automation project name, tested feature name and so on). This can be done globally in using <a href="labels.html">browsers list</a>, <a href="special-capabilities.html#capability-labels">Selenium capabilities</a> and so on. For example, after having a label <code>project="MyCoolProject"</code> on browser pods, you can filter such pods like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>kube_pod_labels{label_moon="browser", label_project="MyCoolProject", label_browserName="chrome"}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>3.3. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -1400,12 +1734,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.3. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.4. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.3.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.4.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -1445,7 +1779,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-conf"><a class="anchor" href="#cli-flags-moon-conf"></a>3.3.2. Moon Conf Container Flags</h4>
+<h4 id="cli-flags-moon-conf"><a class="anchor" href="#cli-flags-moon-conf"></a>3.4.2. Moon Conf Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -2004,7 +2338,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Moon License Pricing</caption>
+<caption class="title">Table 7. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2095,7 +2429,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-20 04:31:49 UTC
+Last updated 2021-12-21 08:57:44 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
