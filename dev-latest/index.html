@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-21</span>
+<span id="revdate">2021-12-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -577,25 +577,37 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#main-features">2. Main Features</a>
 <ul class="sectlevel2">
-<li><a href="#cypress">2.1. Using Cypress</a>
+<li><a href="#selenium">2.1. Using Selenium</a>
 <ul class="sectlevel3">
-<li><a href="#cypress-select-browser">2.1.1. Selecting Requested Browser</a></li>
-<li><a href="#cypress-select-cypress-version">2.1.2. Selecting Exact Cypress Version</a></li>
-<li><a href="#cypress-additional-features">2.1.3. Enabling Additional Features</a></li>
+<li><a href="#selenium-moon-capabilities">2.1.1. Moon-specific Capabilities</a></li>
+<li><a href="#mobile-emulation">2.1.2. Mobile Emulation</a></li>
+<li><a href="#clipboard">2.1.3. Accessing Clipboard</a></li>
+<li><a href="#accessing-downloaded-files">2.1.4. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-locale">2.1.5. Changing Browser Locale</a></li>
+<li><a href="#selenium-root-ca">2.1.6. Using self-signed TLS certificates</a></li>
 </ul>
 </li>
-<li><a href="#playwright">2.2. Using Playwright</a>
+<li><a href="#cypress">2.2. Using Cypress</a>
 <ul class="sectlevel3">
-<li><a href="#playwright-select-browser">2.2.1. Selecting Requested Browser</a></li>
-<li><a href="#playwright-select-browser-version">2.2.2. Selecting Exact Browser Version</a></li>
-<li><a href="#playwright-select-playwright-version">2.2.3. Selecting Exact Playwright Version</a></li>
-<li><a href="#playwright-additional-features">2.2.4. Enabling Additional Features</a></li>
+<li><a href="#cypress-select-browser">2.2.1. Selecting Requested Browser</a></li>
+<li><a href="#cypress-select-cypress-version">2.2.2. Selecting Exact Cypress Version</a></li>
+<li><a href="#cypress-additional-features">2.2.3. Enabling Additional Features</a></li>
 </ul>
 </li>
-<li><a href="#devtools">2.3. Accessing Chrome Developer Tools</a>
+<li><a href="#playwright">2.3. Using Playwright</a>
 <ul class="sectlevel3">
-<li><a href="#devtools-select-browser">2.3.1. Selecting Requested Browser</a></li>
-<li><a href="#devtools-additional-features">2.3.2. Enabling Additional Features</a></li>
+<li><a href="#playwright-select-browser">2.3.1. Selecting Requested Browser</a></li>
+<li><a href="#playwright-select-browser-version">2.3.2. Selecting Exact Browser Version</a></li>
+<li><a href="#playwright-select-playwright-version">2.3.3. Selecting Exact Playwright Version</a></li>
+<li><a href="#playwright-additional-features">2.3.4. Enabling Additional Features</a></li>
+<li><a href="#playwright-root-ca">2.3.5. Using self-signed TLS certificates</a></li>
+</ul>
+</li>
+<li><a href="#devtools">2.4. Using Chrome Developer Tools</a>
+<ul class="sectlevel3">
+<li><a href="#devtools-select-browser">2.4.1. Selecting Requested Browser</a></li>
+<li><a href="#devtools-additional-features">2.4.2. Enabling Additional Features</a></li>
+<li><a href="#devtools-root-ca">2.4.3. Using self-signed TLS certificates</a></li>
 </ul>
 </li>
 </ul>
@@ -610,7 +622,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#filter-by-labels">3.2.3. Filtering Browser Pods by Labels</a></li>
 </ul>
 </li>
-<li><a href="#_log_files">3.3. Log Files</a></li>
+<li><a href="#log-files">3.3. Log Files</a></li>
 <li><a href="#_cli_flags">3.4. CLI Flags</a>
 <ul class="sectlevel3">
 <li><a href="#cli-flags-moon">3.4.1. Moon Container Flags</a></li>
@@ -634,6 +646,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#_license_agreement">5. License Agreement</a></li>
 <li><a href="#_pricing">6. Pricing</a></li>
+<li><a href="#mobile-emulation-devices">Appendix A: Supported Mobile Devices</a></li>
 </ul>
 </div>
 </div>
@@ -673,7 +686,7 @@ This documentation is the work in progress for the new development Moon 2.x vers
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#">Installing License</a> section.</p>
+<p>This section shows how to install Moon limited to 4 parallel browser sessions. Detailed information on installing a license key allowing to activate more parallel sessions is shown in <a href="#license">Installing License</a> section.</p>
 </div>
 </td>
 </tr>
@@ -1015,14 +1028,6 @@ $ cd moon-deploy</pre>
 </div>
 </div>
 </li>
-<li>
-<p>Run Selenium tests against <code>moon</code> service listening on port <code>4444</code>:</p>
-<div class="literalblock">
-<div class="content">
-<pre>http://&lt;moon-ip-or-hostname&gt;:4444/wd/hub</pre>
-</div>
-</div>
-</li>
 </ol>
 </div>
 </div>
@@ -1241,7 +1246,7 @@ $ cd moon-deploy</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption for every team. From the license key perspective - you are still using one license key but available licenses are automatically distributed across all browser namespaces depending on the load. In Moon 1.x in order to use separate namespaces for different teams you had to install a separate Moon instance to every namespace and use a different license key for every such instance. This sometimes prevented teams from requesting more browsers during the peak load. In Moon 2.x one big license key is automatically shared between namespaces and thus if licenses are available, every team during the peak load can request more browsers than it usually needs. Detailed description of how it looks like is provided in <a href="#">Architecture</a> section.</p>
+<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption for every team. From the license key perspective - you are still using one license key but available licenses are automatically distributed across all browser namespaces depending on the load. In Moon 1.x in order to use separate namespaces for different teams you had to install a separate Moon instance to every namespace and use a different license key for every such instance. This sometimes prevented teams from requesting more browsers during the peak load. In Moon 2.x one big license key is automatically shared between namespaces and thus if licenses are available, every team during the peak load can request more browsers than it usually needs. Detailed description of how it looks like is provided in <a href="#architecture">Architecture</a> section.</p>
 </li>
 <li>
 <p><strong>Improved configuration</strong>. Moon 1.x is using <a href="https://json.org/">JSON</a> configuration files. For example Moon 1.x browsers list file is stored in Kubernetes config map and looks like this:</p>
@@ -1356,7 +1361,621 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <h2 id="main-features"><a class="anchor" href="#main-features"></a>2. Main Features</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="cypress"><a class="anchor" href="#cypress"></a>2.1. Using Cypress</h3>
+<h3 id="selenium"><a class="anchor" href="#selenium"></a>2.1. Using Selenium</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>We maintain a set of minimalistic projects demonstrating how to use Moon with your Selenium tool:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/aerokube/moon-cloud-codeception-example">Codeception</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aerokube/moon-cloud-java-example">Java</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aerokube/moon-cloud-protractor-example">Protractor</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aerokube/moon-cloud-python-example">Python</a></p>
+</li>
+<li>
+<p><a href="https://github.com/aerokube/moon-cloud-webdriverio-example">Webdriver.io</a></p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Running Selenium tests in Moon is straightforward. Just use the following as Selenium URL in your tests:</p>
+</div>
+<div class="listingblock">
+<div class="title">Selenium URL</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">https://moon.example.com/wd/hub</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon is fully compatible with <a href="https://www.w3.org/TR/webdriver/">W3C WebDriver specification</a>, so all <a href="https://www.w3.org/TR/webdriver/#capabilities">standard Selenium capabilities</a> and features should just work out of the box. To request a browser - you have to provide <code>browserName</code> capability in your code, for example:</p>
+</div>
+<div class="listingblock">
+<div class="title">An example Selenium test in Python</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">selenium</span> <span class="keyword">import</span> <span class="include">webdriver</span>
+
+capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>
+}
+
+driver = webdriver.Remote(
+    command_executor=<span class="string"><span class="delimiter">'</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">'</span></span>,
+    desired_capabilities=capabilities
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Concrete browser version that will be used depends on Moon configuration, but by default this is the latest available version. To request an exact browser version - provide <code>browserVersion</code> capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Providing an exact browser version</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">96.0</span><span class="delimiter">&quot;</span></span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon provides additional features by using <a href="https://www.w3.org/TR/webdriver/#extensions-0">extension</a> commands and capabilities described in the next sections.</p>
+</div>
+<div class="sect3">
+<h4 id="selenium-moon-capabilities"><a class="anchor" href="#selenium-moon-capabilities"></a>2.1.1. Moon-specific Capabilities</h4>
+<div class="paragraph">
+<p>Moon supports a set of extension capabilities. You can pass them in your code to enable or disable some features. All these capabilities should be passed under <code>moon:options</code> key:</p>
+</div>
+<div class="listingblock">
+<div class="title">Providing Moon capabilities</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: { <span class="comment"># All Moon capabilities live under moon:options</span>
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">screenResolution</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1280x1024</span><span class="delimiter">&quot;</span></span>
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In statically-typed languages like Java or C# you should use a Map (Dictionary) to pass Moon capabilities, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="title">Passing Moon capabilities in Java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>
+));</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-enableVNC"><a class="anchor" href="#capability-enableVNC"></a>Live Browser Screen: enableVNC</h5>
+<div class="paragraph">
+<p>Moon supports showing browser screen during test execution. To see browser screen in Moon user interface add capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>enableVNC: true</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Enabling VNC in capabilities</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-screenResolution"><a class="anchor" href="#capability-screenResolution"></a>Custom Screen Resolution: screenResolution</h5>
+<div class="paragraph">
+<p>Moon allows you to set custom screen resolution in containers being run:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;width&gt;x&lt;height&gt;</div>
+<div class="content">
+<pre>screenResolution: "1280x1024"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add colors depth:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string, format: &lt;width&gt;x&lt;height&gt;x&lt;colors-depth&gt;</div>
+<div class="content">
+<pre>screenResolution: "1280x1024x24"</pre>
+</div>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This capability sets only screen resolution - not browser window size. Most of the browsers have some default window size value this is why your screenshot size can be smaller than screen resolution specified in capability. You should manually resize window to desired width and height or use Selenium <code>maximize</code> operation.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-name"><a class="anchor" href="#capability-name"></a>Custom Test Name: name</h5>
+<div class="paragraph">
+<p>For debugging purposes it is often useful to give a distinct name to every test case. You can set test case name by passing the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>name: "myCoolTestName"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The main application of this capability - is debugging tests in the UI which is showing specified name for every running session.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-timeZone"><a class="anchor" href="#capability-timeZone"></a>Per-session Time Zone: timeZone</h5>
+<div class="paragraph">
+<p>Some tests require particular time zone to be set in operating system.</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>timeZone: "Europe/Moscow"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can find most of available time zones <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">here</a>.
+Without this capability launched browser containers will have Moon timezone.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-env"><a class="anchor" href="#capability-env"></a>Per-session Environment Variables: env</h5>
+<div class="paragraph">
+<p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: array, format: &lt;key&gt;=&lt;value&gt;</div>
+<div class="content">
+<pre>env: ["LANG=ru_RU.UTF-8", "LANGUAGE=ru:en", "LC_ALL=ru_RU.UTF-8"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Environment variables from this capability are appended to variables from Moon configuration. In statically-typed languages like Java or C# you should use a List to pass this capability, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="title">Passing env in Java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=ru_RU.UTF-8</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANGUAGE=ru:en</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LC_ALL=ru_RU.UTF-8</span><span class="delimiter">&quot;</span></span>)
+));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-hosts"><a class="anchor" href="#capability-hosts"></a>Hosts Entries: hosts</h5>
+<div class="paragraph">
+<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#browsers-list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: array, format: &lt;hostname&gt;:&lt;ip-address&gt;</div>
+<div class="content">
+<pre>hosts: ["example.com:192.168.0.1", "test.com:192.168.0.2"]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Entries from this capability will be override <code>/etc/hosts</code> entries from browsers list.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-nameservers"><a class="anchor" href="#capability-nameservers"></a>Custom DNS Servers: nameservers</h5>
+<div class="paragraph">
+<p>By default browser pods are using global Kubernetes DNS settings. Sometimes you may need to override used DNS servers list for particular test cases. This can be easily achieved with:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: array, format: &lt;dns-ip-address&gt;</div>
+<div class="content">
+<pre>nameservers: ["192.168.0.1", "192.168.0.2"]</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-sessionTimeout"><a class="anchor" href="#capability-sessionTimeout"></a>Custom Session Timeout: sessionTimeout</h5>
+<div class="paragraph">
+<p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>sessionTimeout: "1m30s"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Timeout is always specified in Golang duration format, e.g. <code>30s</code> or <code>2m</code> or <code>1h2m30s</code> and so on.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-mobile-emulation"><a class="anchor" href="#capability-mobile-emulation"></a>Mobile Emulation: mobileDevice</h5>
+<div class="paragraph">
+<p>This capability configures desired mobile device <a href="#mobile-emulation">Mobile Emulation</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: object</div>
+<div class="content">
+<pre>"mobileDevice": {
+    "deviceName": "Apple iPhone XR",
+    "orientation": "landscape"
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To select which device to emulate use <code>deviceName</code> key:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>deviceName: "Apple iPhone XR"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To explicitly specify device screen orientation (portait or landscape) use <code>orientation</code> key:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>orientation: "landscape"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Possible <code>orientation</code> values are: <code>portait</code>, <code>vertical</code> (alias for <code>portrait</code>), <code>landscape</code>, <code>horizontal</code> (alias for <code>landscape</code>). In statically-typed languages like Java or C# you should use a Map to pass this capability, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="title">Passing mobileDevice in Java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">mobileDevice</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">deviceName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Apple iPhone XR</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">orientation</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">landscape</span><span class="delimiter">&quot;</span></span>
+    )
+));</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-labels"><a class="anchor" href="#capability-labels"></a>Pod Labels: labels</h5>
+<div class="paragraph">
+<p>Sometimes you may want to pass additional metadata to every browser session: environment, VCS revision, build number, project name and so on. These labels can be then used to get various browser usage statistics.</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: map, format: "&lt;key&gt;": "&lt;value&gt;"</div>
+<div class="content">
+<pre>labels: {"project": "MyCoolProject", "build-number": "14353"}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Labels from this capability override labels from browsers list. More information about labels is described in <a href="#labels">Using Custom Kubernetes Labels</a> section.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.2. Mobile Emulation</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is supported in Moon 1.8.0 and above.</p>
+</li>
+<li>
+<p>This feature works with Chrome browser only.</p>
+</li>
+<li>
+<p>Testing mobile applications is not possible.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Running automated tests in mobile platforms is nowadays very important. Using a set of real devices connected to server via USB requires too much work to deploy and maintain. Running Android Emulators requires hardware server or virtual machines with nested virtualization enabled. Running iOS Simulators requires to have Apple hardware. Even with correct computing resources tests are slower than on desktop platforms and consume slightly more CPUs and memory per browser.</p>
+</div>
+<div class="paragraph">
+<p>Your goal however is catching bugs and not deploying complicated browser automation infrastructure. There are a lot of cases when a bug related to mobile version of tested web application can be reproduced simply by having exactly the same screen size and <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent">User-Agent</a> HTTP header being sent by browser. This feature is already available in Chromium-based browsers and is called <strong>Mobile Emulation</strong>.</p>
+</div>
+<div class="paragraph">
+<p>Example capabilities to enable this functionality are shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Mobile Emulation in Java</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">96.0</span><span class="delimiter">&quot;</span></span>);
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">mobileDevice</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">deviceName</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">Apple iPhone XR</span><span class="delimiter">&quot;</span></span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">orientation</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">landscape</span><span class="delimiter">&quot;</span></span>,
+    )));</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Mobile Emulation in Python</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">96.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">mobileDevice</span><span class="delimiter">&quot;</span></span>: {
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">deviceName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Apple iPhone XR</span><span class="delimiter">&quot;</span></span>,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">orientation</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">landscape</span><span class="delimiter">&quot;</span></span>
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon comes with a preconfigured list of supported devices stored in <a href="#devices-list">Devices List</a>. Full list of available devices is available in <a href="#mobile-emulation-devices">Supported Mobile Devices</a> section. In order to add your own mobile devices definitions - simply update this list.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.3. Accessing Clipboard</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Clipboard is accessible only when browser session is running.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Sometimes you may need to interact with the clipboard to check that your application copy-paste feature works. Moon has a dedicated API to interact with the clipboard. To use it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start a new session, for example with ID <code>firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code>.</p>
+</li>
+<li>
+<p>To get clipboard value send the following HTTP request:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/clipboard/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840
+
+some-clipboard-value</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To update clipboard value:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -X POST --data 'some-clipboard-value' https://moon.example.com/clipboard/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.4. Accessing Files Downloaded with Browser</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Files are accessible only when browser session is running.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Your tests may need to download files with browsers. To analyze these files a common requirement is then to somehow extract downloaded files from browser containers. Moon provides a <code>/download</code> API dramatically simplifying downloading such files. To work with it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Start a new session, for example with ID <code>firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code>.</p>
+</li>
+<li>
+<p>In tests code save all files to <code>/home/selenium/Downloads</code> directory.</p>
+</li>
+<li>
+<p>Access all downloaded files using an URL:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">https://moon.example.com/download/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/myfile.txt</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Close the session</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.5. Changing Browser Locale</h4>
+<div class="paragraph">
+<p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
+</div>
+<div class="sect4">
+<h5 id="selenium-locale-firefox"><a class="anchor" href="#selenium-locale-firefox"></a>Firefox</h5>
+<div class="listingblock">
+<div class="title">Overriding Browser Locale in Firefox</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">FirefoxOptions options = <span class="keyword">new</span> FirefoxOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">75.0</span><span class="delimiter">&quot;</span></span>);
+options.addPreference(<span class="string"><span class="delimiter">&quot;</span><span class="content">intl.accept_languages</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">de</span><span class="delimiter">&quot;</span></span>);
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="selenium-locale-chromium"><a class="anchor" href="#selenium-locale-chromium"></a>Chromium-based Browsers</h5>
+<div class="listingblock">
+<div class="title">Overriding Browser Locale in Chromium-based Browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">81.0</span><span class="delimiter">&quot;</span></span>);
+options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANGUAGE=at:de</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LC_ALL=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>));
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-root-ca"><a class="anchor" href="#selenium-root-ca"></a>2.1.6. Using self-signed TLS certificates</h4>
+<div class="paragraph">
+<p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using a self-signed certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>.</p>
+</div>
+<div class="paragraph">
+<p>In order to work properly with self-signed certificates, you have to add your root certification authority certificate to a list of trusted certificates:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find root certificate for certification authority being used to secure your tested environment. Usually such certificates are being issued by IT security team or systems administrators and are publicly available. For example your root certificate can look like this:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt
+-----BEGIN CERTIFICATE-----
+MIIGjzCCBHegAwIBAgIJAK1lW/5z8ZSoMA0GCSqGSIb3DQEBCwUAMIGLMQswCQYD
+VQQGEwJFRTEQMA4GA1UECBMHRXN0b25pYTEQMA4GA1UEBxMHVGFsbGlubjEeMBwG
+A1UEChQVQWVyb2t1YmUgU29mdHdhcmUgT8OcMRUwEwYDVQQDEwxhZXJva3ViZS5j
+b20xITAfBgkqhkiG9w0BCQEWEmFkbWluQGFlcm9rdWJlLmNvbTAeFw0yMTAyMTcw
+NjQ5NDJaFw0yMzEyMDgwNjQ5NDJaMIGLMQswCQYDVQQGEwJFRTEQMA4GA1UECBMH
+RXN0b25pYTEQMA4GA1UEBxMHVGFsbGlubjEeMBwGA1UEChQVQWVyb2t1YmUgU29m
+dHdhcmUgT8OcMRUwEwYDVQQDEwxhZXJva3ViZS5jb20xITAfBgkqhkiG9w0BCQEW
+EmFkbWluQGFlcm9rdWJlLmNvbTCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoC
+ggIBAKdh54x9WZsSxIMfz1rFEHuJ8+3meUua0Q8cpgC/70F0G6X6BXOki0Cu7iET
+6ETfirWuUdRKKGKXHLF8Fdv6WTqnLlDqgzy1Wp9DuPIgeJ+ztKZt+uJFkWjfQb9R
+mn7Qs4vp/F9HTwqlTZl5jMQ+/nrcNAQeNEZ1H1AfZWAuSvrqp3rW33wl6IBZcqfD
+VsMBknBKm/Zc8GpggY8NYxkfj7Jo2izwn/tV+DFgwF0pJkUrDZPPTiNW7q8Se2Vb
+7tC6Iy9ZVgkH8hkrWrPzwW4zxz/d/Si7/cnn9A9+bF+pKrsHktnQ0ScDEAR5+52J
+XAXkES/4pINpBcxvNUHGO6KXKH4rJVf3QvXXany0ugwVQ+QXirA6yOoY3XFgBxgU
+P7Qd5pyQdVf/SwJ5Uk5Z9b2HXk8k/6jNxe1A6WiojTOnn1fD/VzOTn4xiobqNIpE
+w5dUhlj/TiN+g3uGBH4BPo6IYHCmfsXFEcSZW75k7dRlZ3ZMI4k0utUVm3Y8B+TC
+sj4WmwnXetFP2EMnRft7BnR13oLyzrFB8tkFafstcVoE6oR20pIBtAFxrSDWJ5dA
+XdX2NGPNUCnd1RqJxu2SGA/xHHsyPT06iJeIZGUyRXmv6vBvyCkyeLtMEdq2Gzfi
+MT0GtDkG5R+al/A+Ot3w3CMbMgUFrxvEhlxM1sEitclXJc4tAgMBAAGjgfMwgfAw
+HQYDVR0OBBYEFBb9mCFAqV/JgmMxtwQ6UKzoLIQQMIHABgNVHSMEgbgwgbWAFBb9
+mCFAqV/JgmMxtwQ6UKzoLIQQoYGRpIGOMIGLMQswCQYDVQQGEwJFRTEQMA4GA1UE
+CBMHRXN0b25pYTEQMA4GA1UEBxMHVGFsbGlubjEeMBwGA1UEChQVQWVyb2t1YmUg
+U29mdHdhcmUgT8OcMRUwEwYDVQQDEwxhZXJva3ViZS5jb20xITAfBgkqhkiG9w0B
+CQEWEmFkbWluQGFlcm9rdWJlLmNvbYIJAK1lW/5z8ZSoMAwGA1UdEwQFMAMBAf8w
+DQYJKoZIhvcNAQELBQADggIBAIUmJsxdrT8AN2yZqzI69qQKjLnDhuojdgM3XGL3
+gJTldXR5OIMnw/na8WcIC3onHjgijUeEfslTIIHmNcqOd3hTfOq4Qq2/Qmpp+h1d
+5dCzScrLFiDgjnzkX0VczOj/BtnZMgxx5x8YO80MMUWVEmVCk+i2bFVTypV9e4qw
+1EJLmGTnKoo7l2jPHLUB5lL2LvSO4KHDhmWG5wtFg7/nd097yG5uBHda5ytbc6S8
+CIS8IBJzd7TA4fr3qOhC298LMD96nJdccHqKYtlFvf9YZZ500nrA+pH6Kpo8PD67
+8WiIW/CMtO0X9pxw+KRlmaDmCGGgRhvPyHoYqbX4svrca8uvErePtXIQILe/IISJ
+TXLkiVsej8k3UDu77q/wX3ZdzknWakZyPj+CtYkkZL4vqkIDIFSUcXfynyDZNZEo
+2d+npABzPB42+4xGZGGnFIsfuTMAgpbK8TAgPQNMIawfWTq2KhZ8MYHfPdkU3FBo
+MaExr684sviAImqOotcoNQV2iMOKdwzA097jRBrfa43LhpdoWM0v7RVxB8s+kG0P
+8nHOGmp6r6cIAk5hjHYAwQYiZjXuzvnFTtD9Ily63i+yVh8nRSY9NSLhpFpl4ezo
+hn+savO4nm/HueAATnGR1iPlKnfXNVqQYdl+wwzqK1/3iHjzUUjyQkk0oTBk4Bez
+ejbh
+-----END CERTIFICATE-----</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Encode certificate data with <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> algorithm:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt | base64
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNvTUEwR0NTcUdTSWIzRFFFQkN3VUFNSUdMTVFzd0NRWUQKVlFRR0V3SkZSVEVRTUE0R0ExVUVDQk1IUlhOMGIyNXBZVEVRTUE0R0ExVUVCeE1IVkdGc2JHbHViakVlTUJ3RwpBMVVFQ2hRVlFXVnliMnQxWW1VZ1UyOW1kSGRoY21VZ1Q4T2NNUlV3RXdZRFZRUURFd3hoWlhKdmEzVmlaUzVqCmIyMHhJVEFmQmdrcWhraUc5dzBCQ1FFV0VtRmtiV2x1UUdGbGNtOXJkV0psTG1OdmJUQWVGdzB5TVRBeU1UY3cKTmpRNU5ESmFGdzB5TXpFeU1EZ3dOalE1TkRKYU1JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFQ0JNSApSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWdVMjltCmRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQkNRRVcKRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YlRDQ0FpSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnSVBBRENDQWdvQwpnZ0lCQUtkaDU0eDlXWnNTeElNZnoxckZFSHVKOCszbWVVdWEwUThjcGdDLzcwRjBHNlg2QlhPa2kwQ3U3aUVUCjZFVGZpcld1VWRSS0tHS1hITEY4RmR2NldUcW5MbERxZ3p5MVdwOUR1UElnZUorenRLWnQrdUpGa1dqZlFiOVIKbW43UXM0dnAvRjlIVHdxbFRabDVqTVErL25yY05BUWVORVoxSDFBZlpXQXVTdnJxcDNyVzMzd2w2SUJaY3FmRApWc01Ca25CS20vWmM4R3BnZ1k4Tll4a2ZqN0pvMml6d24vdFYrREZnd0YwcEprVXJEWlBQVGlOVzdxOFNlMlZiCjd0QzZJeTlaVmdrSDhoa3JXclB6d1c0enh6L2QvU2k3L2NubjlBOStiRitwS3JzSGt0blEwU2NERUFSNSs1MkoKWEFYa0VTLzRwSU5wQmN4dk5VSEdPNktYS0g0ckpWZjNRdlhYYW55MHVnd1ZRK1FYaXJBNnlPb1kzWEZnQnhnVQpQN1FkNXB5UWRWZi9Td0o1VWs1WjliMkhYazhrLzZqTnhlMUE2V2lvalRPbm4xZkQvVnpPVG40eGlvYnFOSXBFCnc1ZFVobGovVGlOK2czdUdCSDRCUG82SVlIQ21mc1hGRWNTWlc3NWs3ZFJsWjNaTUk0azB1dFVWbTNZOEIrVEMKc2o0V213blhldEZQMkVNblJmdDdCblIxM29MeXpyRkI4dGtGYWZzdGNWb0U2b1IyMHBJQnRBRnhyU0RXSjVkQQpYZFgyTkdQTlVDbmQxUnFKeHUyU0dBL3hISHN5UFQwNmlKZUlaR1V5UlhtdjZ2QnZ5Q2t5ZUx0TUVkcTJHemZpCk1UMEd0RGtHNVIrYWwvQStPdDN3M0NNYk1nVUZyeHZFaGx4TTFzRWl0Y2xYSmM0dEFnTUJBQUdqZ2ZNd2dmQXcKSFFZRFZSME9CQllFRkJiOW1DRkFxVi9KZ21NeHR3UTZVS3pvTElRUU1JSEFCZ05WSFNNRWdiZ3dnYldBRkJiOQptQ0ZBcVYvSmdtTXh0d1E2VUt6b0xJUVFvWUdScElHT01JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFCkNCTUhSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWcKVTI5bWRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQgpDUUVXRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YllJSkFLMWxXLzV6OFpTb01Bd0dBMVVkRXdRRk1BTUJBZjh3CkRRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFJVW1Kc3hkclQ4QU4yeVpxekk2OXFRS2pMbkRodW9qZGdNM1hHTDMKZ0pUbGRYUjVPSU1udy9uYThXY0lDM29uSGpnaWpVZUVmc2xUSUlIbU5jcU9kM2hUZk9xNFFxMi9RbXBwK2gxZAo1ZEN6U2NyTEZpRGdqbnprWDBWY3pPai9CdG5aTWd4eDV4OFlPODBNTVVXVkVtVkNrK2kyYkZWVHlwVjllNHF3CjFFSkxtR1RuS29vN2wyalBITFVCNWxMMkx2U080S0hEaG1XRzV3dEZnNy9uZDA5N3lHNXVCSGRhNXl0YmM2UzgKQ0lTOElCSnpkN1RBNGZyM3FPaEMyOThMTUQ5Nm5KZGNjSHFLWXRsRnZmOVlaWjUwMG5yQStwSDZLcG84UEQ2Nwo4V2lJVy9DTXRPMFg5cHh3K0tSbG1hRG1DR0dnUmh2UHlIb1lxYlg0c3ZyY2E4dXZFcmVQdFhJUUlMZS9JSVNKClRYTGtpVnNlajhrM1VEdTc3cS93WDNaZHprbldha1p5UGorQ3RZa2taTDR2cWtJRElGU1VjWGZ5bnlEWk5aRW8KMmQrbnBBQnpQQjQyKzR4R1pHR25GSXNmdVRNQWdwYks4VEFnUFFOTUlhd2ZXVHEyS2haOE1ZSGZQZGtVM0ZCbwpNYUV4cjY4NHN2aUFJbXFPb3Rjb05RVjJpTU9LZHd6QTA5N2pSQnJmYTQzTGhwZG9XTTB2N1JWeEI4cytrRzBQCjhuSE9HbXA2cjZjSUFrNWhqSFlBd1FZaVpqWHV6dm5GVHREOUlseTYzaSt5Vmg4blJTWTlOU0xocEZwbDRlem8KaG4rc2F2TzRubS9IdWVBQVRuR1IxaVBsS25mWE5WcVFZZGwrd3d6cUsxLzNpSGp6VVVqeVFrazBvVEJrNEJlegplamJoCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K</pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Output should be a one line string, so under Linux correct command would be:</p>
+<div class="literalblock">
+<div class="content">
+<pre>$ cat rootCA.crt | base64 -w0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>On Windows there is no built-in command, so you can use an online Base64 encoder.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Set an environment variable starting with <code>ROOT_CA_</code> to browser image using <a href="#capability-env">env</a> capability:</p>
+<div class="listingblock">
+<div class="title">Adding root certification authority</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">version</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">87.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>: [
+            <span class="comment"># You can add as many certification authorities as needed</span>
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">ROOT_CA_MY_CA_1=LS0tLS1CRUdJTiBDRVJUSU.....</span><span class="delimiter">&quot;</span></span>,
+            <span class="string"><span class="delimiter">&quot;</span><span class="content">ROOT_CA_MY_CA_2=...</span><span class="delimiter">&quot;</span></span>,
+        ]
+    }
+}</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="cypress"><a class="anchor" href="#cypress"></a>2.2. Using Cypress</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1438,7 +2057,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <p>Cypress compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser type or additional features is passing all these requirements in HTTP endpoint URL. Next section describes supported URL naming conventions.</p>
 </div>
 <div class="sect3">
-<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>2.1.1. Selecting Requested Browser</h4>
+<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>2.2.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Cypress (<code>chrome</code>, <code>chromium</code>, <code>edge</code>, <code>electron</code> or <code>firefox</code>) by specifying its name in URL. By default, Moon will use <code>browsers/cypress-&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -1474,7 +2093,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>2.1.2. Selecting Exact Cypress Version</h4>
+<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>2.2.2. Selecting Exact Cypress Version</h4>
 <div class="paragraph">
 <p>Cypress API can change from version to version. Because of that it is recommended to make sure that Cypress version being used in your project corresponds to Cypress version in browser image. To use an image compatible with exact Cypress version - add this version as follows:</p>
 </div>
@@ -1486,7 +2105,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.1.3. Enabling Additional Features</h4>
+<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.2.3. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting Cypress version - you can enable additional features like changing screen resolution, passing custom test name and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -1575,7 +2194,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect2">
-<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.2. Using Playwright</h3>
+<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.3. Using Playwright</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1632,7 +2251,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </table>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.2.1. Selecting Requested Browser</h4>
+<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.3.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Playwright (<code>firefox</code>, <code>chromium</code> or <code>webkit</code>) by specifying its name in URL. By default, Moon will use <code>playwright/&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -1656,7 +2275,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>2.2.2. Selecting Exact Browser Version</h4>
+<h4 id="playwright-select-browser-version"><a class="anchor" href="#playwright-select-browser-version"></a>2.3.2. Selecting Exact Browser Version</h4>
 <div class="paragraph">
 <p>Every browser version is distributed as a separate image tagged <code>playwright/&lt;browser-name&gt;:&lt;browser-version&gt;</code>. To use an exact browser version - add this version as follows:</p>
 </div>
@@ -1671,7 +2290,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>2.2.3. Selecting Exact Playwright Version</h4>
+<h4 id="playwright-select-playwright-version"><a class="anchor" href="#playwright-select-playwright-version"></a>2.3.3. Selecting Exact Playwright Version</h4>
 <div class="paragraph">
 <p>Currently, Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
 </div>
@@ -1683,7 +2302,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.2.4. Enabling Additional Features</h4>
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -1770,9 +2389,21 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </tbody>
 </table>
 </div>
+<div class="sect3">
+<h4 id="playwright-root-ca"><a class="anchor" href="#playwright-root-ca"></a>2.3.5. Using self-signed TLS certificates</h4>
+<div class="paragraph">
+<p>Similarly to <a href="#selenium-root-ca">Selenium</a> you have to encode self-signed TLS certificates to <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> and pass encoded value as environment variable to connection URL parameter using <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoding</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding root certification authority to Playwright</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome?headless=false&amp;enableVideo=true&amp;env=ROOT_CA_MY_CA_1%3DLS0tLS1CRUdJ...&amp;env=ROOT_CA_MY_CA_2%3DLS0tLS1CRUdJ...</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
-<h3 id="devtools"><a class="anchor" href="#devtools"></a>2.3. Accessing Chrome Developer Tools</h3>
+<h3 id="devtools"><a class="anchor" href="#devtools"></a>2.4. Using Chrome Developer Tools</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1805,7 +2436,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/devtools/chrome</code></pre>
 </div>
 </div>
 <div class="admonitionblock important">
@@ -1832,7 +2463,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 const host = <span class="string"><span class="delimiter">'</span><span class="content">moon.example.com</span><span class="delimiter">'</span></span>;
 (async () =&gt; {
     const devtools = await puppeteer.connect(
-        { <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">browserWSEndpoint</span>: <span class="error">`</span>wss:<span class="comment">//${host}/cdtp/chrome` }</span>
+        { <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">browserWSEndpoint</span>: <span class="error">`</span>wss:<span class="comment">//${host}/devtools/chrome` }</span>
     ); <span class="comment">// For every call of this method a new browser is started</span>
     const page = await devtools.newPage();
     await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com</span><span class="delimiter">'</span></span>);
@@ -1846,26 +2477,26 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-select-browser"><a class="anchor" href="#devtools-select-browser"></a>2.3.1. Selecting Requested Browser</h4>
+<h4 id="devtools-select-browser"><a class="anchor" href="#devtools-select-browser"></a>2.4.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can choose desired browser version by changing connection URL:</p>
 </div>
 <div class="listingblock">
 <div class="title">Selecting Chrome version (<code>cdtp/chrome:85.0</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome/85.0</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/devtools/chrome/85.0</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.3.2. Enabling Additional Features</h4>
+<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.4.2. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>You can enable additional features by changing connection URL:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding parameters to enable additional features</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/cdtp/chrome?headless=false&amp;nameserver=ns1.example.com</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/devtools/chrome?headless=false&amp;nameserver=ns1.example.com</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1941,6 +2572,18 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="devtools-root-ca"><a class="anchor" href="#devtools-root-ca"></a>2.4.3. Using self-signed TLS certificates</h4>
+<div class="paragraph">
+<p>Similarly to <a href="#selenium-root-ca">Selenium</a> you have to encode self-signed TLS certificates to <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> and pass encoded value as environment variable to connection URL parameter using <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoding</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding root certification authority to Chrome Developer Tools</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/devtools/chrome?headless=false&amp;enableVideo=true&amp;env=ROOT_CA_MY_CA_1%3DLS0tLS1CRUdJ...&amp;env=ROOT_CA_MY_CA_2%3DLS0tLS1CRUdJ...</code></pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -2089,7 +2732,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 <p>Full list of available expressions can be found <a href="https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md">here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Moon can add custom labels to started browser pods (e.g. browser automation project name, tested feature name and so on). This can be done globally in using <a href="labels.html">browsers list</a>, <a href="special-capabilities.html#capability-labels">Selenium capabilities</a> and so on. For example, after having a label <code>project="MyCoolProject"</code> on browser pods, you can filter such pods like this:</p>
+<p>Moon can add custom labels to started browser pods (e.g. browser automation project name, tested feature name and so on). This can be done globally in using <a href="#labels">browsers list</a>, <a href="#capability-labels">Selenium capabilities</a> and so on. For example, after having a label <code>project="MyCoolProject"</code> on browser pods, you can filter such pods like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2099,7 +2742,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect2">
-<h3 id="_log_files"><a class="anchor" href="#_log_files"></a>3.3. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.3. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -2203,7 +2846,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 <div class="sect2">
 <h3 id="faq-moon-logs"><a class="anchor" href="#faq-moon-logs"></a>4.1. Where are Moon logs?</h3>
 <div class="paragraph">
-<p>See <a href="#">Log Files</a> section.</p>
+<p>See <a href="#log-files">Log Files</a> section.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2829,11 +3472,319 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>Appendix A: Supported Mobile Devices</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Supported Mobile Devices</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><code>deviceName</code> capability</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad 10.2 (2019)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (10.5)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 10.5"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (12.9)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 12.9"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 5/SE</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 6/7/8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 6/7/8 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone SE</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone XR</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Blackberry PlayBook</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BlackBerry Z30</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 5X</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 6</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 6P</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Nexus 10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 2 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 3 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 4 XL</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">JioPhone 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kindle Fire HDX</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with HiDPI screen</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with MDPI screen</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with touch</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LG Optimus L70</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Lumia 550</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Lumia 950</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Surface Duo</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Moto G4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nokia Lumia 520</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nokia N9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Palm PVG100</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Red Hydrogen One</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy A20</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Fold</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 2</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Note 10+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S8+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S9</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S9+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10+</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S10e</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Tab S3</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy Tab S4</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-21 14:47:13 UTC
+Last updated 2021-12-23 08:07:52 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
