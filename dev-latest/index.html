@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-23</span>
+<span id="revdate">2021-12-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -615,18 +615,23 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#configuration">3. Configuration</a>
 <ul class="sectlevel2">
 <li><a href="#license">3.1. Installing a License</a></li>
-<li><a href="#monitoring">3.2. Monitoring</a>
+<li><a href="#users-quotas">3.2. Users and Quotas</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring-setup">3.2.1. Setup</a></li>
-<li><a href="#monitoring-built-in-metrics">3.2.2. Built-in Moon metrics</a></li>
-<li><a href="#filter-by-labels">3.2.3. Filtering Browser Pods by Labels</a></li>
+<li><a href="#quotas">3.2.1. Quotas</a></li>
 </ul>
 </li>
-<li><a href="#log-files">3.3. Log Files</a></li>
-<li><a href="#_cli_flags">3.4. CLI Flags</a>
+<li><a href="#monitoring">3.3. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.4.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-conf">3.4.2. Moon Conf Container Flags</a></li>
+<li><a href="#monitoring-setup">3.3.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.3.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.3.3. Filtering Browser Pods by Labels</a></li>
+</ul>
+</li>
+<li><a href="#log-files">3.4. Log Files</a></li>
+<li><a href="#_cli_flags">3.5. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#cli-flags-moon">3.5.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-conf">3.5.2. Moon Conf Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -1580,7 +1585,7 @@ Without this capability launched browser containers will have Moon timezone.</p>
 <div class="sect4">
 <h5 id="capability-hosts"><a class="anchor" href="#capability-hosts"></a>Hosts Entries: hosts</h5>
 <div class="paragraph">
-<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#browsers-list">Browsers List</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
+<p>Although you can configure a separate list of <code>/etc/hosts</code> entries for every browser image in <a href="#browsers-set">browsers set</a> sometimes you may need to add more entries for particular test cases. This can be easily achieved with:</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: array, format: &lt;hostname&gt;:&lt;ip-address&gt;</div>
@@ -1745,7 +1750,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="paragraph">
-<p>Moon comes with a preconfigured list of supported devices stored in <a href="#devices-list">Devices List</a>. Full list of available devices is available in <a href="#mobile-emulation-devices">Supported Mobile Devices</a> section. In order to add your own mobile devices definitions - simply update this list.</p>
+<p>Moon comes with a preconfigured list of supported devices stored in <a href="#devices-set">devices set</a>. Full list of available devices is available in <a href="#mobile-emulation-devices">Supported Mobile Devices</a> section. In order to add your own mobile devices definitions - simply update this list.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2622,12 +2627,94 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 </div>
 </div>
 <div class="sect2">
-<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.2. Monitoring</h3>
+<h3 id="users-quotas"><a class="anchor" href="#users-quotas"></a>3.2. Users and Quotas</h3>
+<div class="sect3">
+<h4 id="quotas"><a class="anchor" href="#quotas"></a>3.2.1. Quotas</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As you already know Moon is a multi-user application. For every user you need to create one quota. For example for user <code>alice</code> you should create a quota named <code>alice</code> and so on. When only one quota is available - no authentication is required.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The main configuration object in Moon is called <code>quota</code>. This object contains all configuration specific to one Moon user. To list available quotas:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing quotas</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get quotas -n moon
+NAME   NAMESPACE   CONFIG    BROWSERS   DEVICES   AGE
+moon   moon        default   default    default   13h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see every quota is a native Kubernetes object containing the following information:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Namespace</strong>. Kubernetes <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod/">namespace</a> name where Moon starts browsers. By default, this is the same namespace where Moon is running. More details on what you can do with namespaces is described <a href="#moon-operation-modes">here</a>.</p>
+</li>
+<li>
+<p><strong>Config</strong>. Name of Moon <a href="#configuration-object">configuration object</a> allowing to adjust resources consumption for Moon system images, user and group identifiers and other features.</p>
+</li>
+<li>
+<p><strong>Browsers</strong>. Name of Moon <a href="#browsers-set">browsers set</a> to use for this quota.</p>
+</li>
+<li>
+<p><strong>Devices</strong>. Names of Moon <a href="#devices-set">devices set</a> to use for this quota.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Using object names instead of their contents allows to easily reuse the same browsers set or devices set for different quotas. To view the same list in YAML format:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing quotas in YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get quotas -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Quota
+  metadata:
+    name: moon
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    browsers: default
+    config: default
+    devices: default
+    namespace: moon
+kind: List
+metadata:
+  # List metadata</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To edit a quota object:</p>
+</div>
+<div class="listingblock">
+<div class="title">Editing a quota object</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit quota moon -n moon # Do modifications in text editor, save and exit</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.3. Monitoring</h3>
 <div class="paragraph">
 <p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.2.1. Setup</h4>
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.3.1. Setup</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -2664,7 +2751,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.2.2. Built-in Moon metrics</h4>
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.3.2. Built-in Moon metrics</h4>
 <div class="paragraph">
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod). The following metrics are available:</p>
 </div>
@@ -2719,7 +2806,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </table>
 </div>
 <div class="sect3">
-<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.2.3. Filtering Browser Pods by Labels</h4>
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.3.3. Filtering Browser Pods by Labels</h4>
 <div class="paragraph">
 <p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
 </div>
@@ -2742,7 +2829,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect2">
-<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.3. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.4. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -2764,7 +2851,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl logs -f -lapp=moon -c moon-api -n moon
+<pre>$ kubectl logs -f -lapp=moon -c moon-conf -n moon
 $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
@@ -2781,12 +2868,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.4. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.5. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.4.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.5.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -2826,7 +2913,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-conf"><a class="anchor" href="#cli-flags-moon-conf"></a>3.4.2. Moon Conf Container Flags</h4>
+<h4 id="cli-flags-moon-conf"><a class="anchor" href="#cli-flags-moon-conf"></a>3.5.2. Moon Conf Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -3784,7 +3871,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-23 08:07:52 UTC
+Last updated 2021-12-24 10:35:51 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
