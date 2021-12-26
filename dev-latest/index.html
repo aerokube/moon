@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-24</span>
+<span id="revdate">2021-12-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -618,6 +618,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#users-quotas">3.2. Users and Quotas</a>
 <ul class="sectlevel3">
 <li><a href="#quotas">3.2.1. Quotas</a></li>
+<li><a href="#configuration-object">3.2.2. Configuration Object</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.3. Monitoring</a>
@@ -2684,18 +2685,42 @@ items:
 - apiVersion: moon.aerokube.com/v1
   kind: Quota
   metadata:
-    name: moon
+    name: moon                    <i class="conum" data-value="1"></i><b>(1)</b>
     namespace: moon
     # Other Kubernetes metadata
   spec:
-    browsers: default
-    config: default
-    devices: default
-    namespace: moon
+    browsers: default             <i class="conum" data-value="2"></i><b>(2)</b>
+    config: default               <i class="conum" data-value="3"></i><b>(3)</b>
+    devices: default              <i class="conum" data-value="4"></i><b>(4)</b>
+    namespace: moon               <i class="conum" data-value="5"></i><b>(5)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
 </div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Quota name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Name of browsers set to use for this quota</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Name of configuration object to use for this quota</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Name of devices set to use for this quota</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Namespace where Moon starts browsers</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>To edit a quota object:</p>
@@ -2704,6 +2729,140 @@ metadata:
 <div class="title">Editing a quota object</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit quota moon -n moon # Do modifications in text editor, save and exit</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="configuration-object"><a class="anchor" href="#configuration-object"></a>3.2.2. Configuration Object</h4>
+<div class="paragraph">
+<p>Configuration object stores various configuration options: computing resources being assigned to system Moon images, group and user identifiers to run browser pods and so on. To list available configuration objects:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing configuration objects</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon
+NAME      AGE
+default   2d22h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the same list in YAML format:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing quotas in YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Config
+  metadata:
+    name: default                             <i class="conum" data-value="1"></i><b>(1)</b>
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    containers:                               <i class="conum" data-value="2"></i><b>(2)</b>
+      defender:                               <i class="conum" data-value="3"></i><b>(3)</b>
+        image: aerokube/defender:2.0.0        <i class="conum" data-value="4"></i><b>(4)</b>
+        ports:                                <i class="conum" data-value="5"></i><b>(5)</b>
+        - 4545
+        resources:                            <i class="conum" data-value="6"></i><b>(6)</b>
+          limits:                             <i class="conum" data-value="7"></i><b>(7)</b>
+            cpu: 250m
+            memory: 64Mi
+          requests:                           <i class="conum" data-value="8"></i><b>(8)</b>
+            cpu: 100m
+            memory: 64Mi
+      vnc-server:                             <i class="conum" data-value="9"></i><b>(9)</b>
+        # The same fields as for defender
+      x-server:                               <i class="conum" data-value="10"></i><b>(10)</b>
+        # The same fields as for defender
+    group:                                    <i class="conum" data-value="11"></i><b>(11)</b>
+      id: 4096                                <i class="conum" data-value="12"></i><b>(12)</b>
+      name: user                              <i class="conum" data-value="13"></i><b>(13)</b>
+    user:                                     <i class="conum" data-value="14"></i><b>(14)</b>
+      id: 4096                                <i class="conum" data-value="15"></i><b>(15)</b>
+      name: user                              <i class="conum" data-value="16"></i><b>(16)</b>
+kind: List
+metadata:
+  # List metadata</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Configuration object name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Service containers (<code>defender</code>, <code>vnc-server</code>, <code>x-server</code>) configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>defender</code> container configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Used container image</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Exposed container ports</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Computing resources assigned to container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>CPU and memory limits assigned to container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>CPU and memory requests assigned to container</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td><code>vnc-server</code> container configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td><code>x-server</code> container configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>System group used to start containers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
+<td>System group numeric identifier (<code>gid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td>System group name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td>System user used to start containers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td>System user numeric identifier (<code>uid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>System user name</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To edit a configuration object:</p>
+</div>
+<div class="listingblock">
+<div class="title">Editing a configuration object</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit config default -n moon # Do modifications in text editor, save and exit</code></pre>
 </div>
 </div>
 </div>
@@ -3871,7 +4030,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-24 10:35:51 UTC
+Last updated 2021-12-26 13:34:51 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
