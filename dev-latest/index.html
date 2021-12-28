@@ -620,6 +620,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#quotas">3.2.1. Quotas</a></li>
 <li><a href="#configuration-object">3.2.2. Configuration Object</a></li>
 <li><a href="#browsers-set">3.2.3. Browsers Set</a></li>
+<li><a href="#devices-set">3.2.4. Devices Set</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.3. Monitoring</a>
@@ -3381,6 +3382,95 @@ browserVersion = 96.0</code></pre>
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="devices-set"><a class="anchor" href="#devices-set"></a>3.2.4. Devices Set</h4>
+<div class="paragraph">
+<p>Moon loads information about available mobile devices for <a href="#mobile-emulation">Mobile Emulation</a> from <code>devices set</code> object. This object corresponds to <code>devices.json</code> file in Moon 1.x. To list available device sets:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing device sets</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get devicesets -n moon
+NAME      AGE
+default   2d23h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the same list in YAML format:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing device sets as YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get browsersets -n moon -o yaml
+$ kubectl get devicesets -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: DeviceSet
+  metadata:
+    name: default                                                                                 <i class="conum" data-value="1"></i><b>(1)</b>
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    devices:                                                                                      <i class="conum" data-value="2"></i><b>(2)</b>
+      Apple iPhone 11:                                                                            <i class="conum" data-value="3"></i><b>(3)</b>
+        height: 896                                                                               <i class="conum" data-value="4"></i><b>(4)</b>
+        pixelRatio: 2                                                                             <i class="conum" data-value="5"></i><b>(5)</b>
+        printVersion: true                                                                        <i class="conum" data-value="6"></i><b>(6)</b>
+        userAgent: user-agent-string-for-chrome-%s                                                <i class="conum" data-value="7"></i><b>(7)</b>
+        width: 414                                                                                <i class="conum" data-value="8"></i><b>(8)</b>
+      # Other devices
+kind: List
+metadata:
+  # List metadata</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Device set name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Devices list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Concrete device definition</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Device screen height</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Device pixel ratio</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Whether to substitute Chrome version to user agent string (<code>%s</code> placeholder is replaced by Chrome version)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Device user agent</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Device screen width</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To edit a device set object:</p>
+</div>
+<div class="listingblock">
+<div class="title">Editing a device set</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit deviceset default -n moon # Do modifications in text editor, save and exit</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.3. Monitoring</h3>
@@ -3623,9 +3713,9 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl edit config default -n moon # Updating global Moon configuration
-$ kubectl edit browserset default -n moon # Updating Moon browsers list
-$ kubectl edit deviceset users -n moon # Updating Moon devices list
+<pre>$ kubectl edit config default -n moon # Updating configuration object
+$ kubectl edit browserset default -n moon # Updating Moon browsers set
+$ kubectl edit deviceset users -n moon # Updating Moon devices set
 $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 </div>
 </div>
@@ -4545,7 +4635,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-28 13:10:55 UTC
+Last updated 2021-12-28 14:11:15 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
