@@ -619,6 +619,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <ul class="sectlevel3">
 <li><a href="#quotas">3.2.1. Quotas</a></li>
 <li><a href="#configuration-object">3.2.2. Configuration Object</a></li>
+<li><a href="#browsers-set">3.2.3. Browsers Set</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.3. Monitoring</a>
@@ -1542,22 +1543,6 @@ driver = webdriver.Remote(
 </div>
 <div class="paragraph">
 <p>The main application of this capability - is debugging tests in the UI which is showing specified name for every running session.</p>
-</div>
-</div>
-<div class="sect4">
-<h5 id="capability-timeZone"><a class="anchor" href="#capability-timeZone"></a>Per-session Time Zone: timeZone</h5>
-<div class="paragraph">
-<p>Some tests require particular time zone to be set in operating system.</p>
-</div>
-<div class="listingblock">
-<div class="title">Type: string</div>
-<div class="content">
-<pre>timeZone: "Europe/Moscow"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can find most of available time zones <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">here</a>.
-Without this capability launched browser containers will have Moon timezone.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2677,7 +2662,7 @@ moon   moon        default   default    default   13h</code></pre>
 <p>Using object names instead of their contents allows to easily reuse the same browsers set or devices set for different quotas. To view the same list in YAML format:</p>
 </div>
 <div class="listingblock">
-<div class="title">Listing quotas in YAML</div>
+<div class="title">Listing quotas as YAML</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get quotas -n moon -o yaml
 apiVersion: v1
@@ -2735,7 +2720,7 @@ metadata:
 <div class="sect3">
 <h4 id="configuration-object"><a class="anchor" href="#configuration-object"></a>3.2.2. Configuration Object</h4>
 <div class="paragraph">
-<p>Configuration object stores various configuration options: computing resources being assigned to system Moon images, group and user identifiers to run browser pods and so on. To list available configuration objects:</p>
+<p>Configuration object stores various configuration options: computing resources being assigned to system Moon images, group and user identifiers to run browser pods and so on. This object corresponds to <code>service.json</code> configuration file in Moon 1.x. To list available configuration objects:</p>
 </div>
 <div class="listingblock">
 <div class="title">Listing configuration objects</div>
@@ -2749,7 +2734,7 @@ default   2d22h</code></pre>
 <p>To view the same list in YAML format:</p>
 </div>
 <div class="listingblock">
-<div class="title">Listing quotas in YAML</div>
+<div class="title">Listing configuration objects as YAML</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
 apiVersion: v1
@@ -2866,6 +2851,536 @@ metadata:
 </div>
 </div>
 </div>
+<div class="sect3">
+<h4 id="browsers-set"><a class="anchor" href="#browsers-set"></a>3.2.3. Browsers Set</h4>
+<div class="paragraph">
+<p>The browsers set stores browsers startup configuration. This object corresponds to <code>browsers.json</code> file in Moon 1.x. To list available browser sets:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing browser sets</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get browsersets -n moon
+NAME      AGE
+default   2d23h</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view the same list in YAML format:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing browser sets as YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get browsersets -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: BrowserSet
+  metadata:
+    name: default                                       <i class="conum" data-value="1"></i><b>(1)</b>
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    cypress:                                            <i class="conum" data-value="2"></i><b>(2)</b>
+      chrome:                                           <i class="conum" data-value="3"></i><b>(3)</b>
+        repository: quay.io/browsers/cypress-chrome     <i class="conum" data-value="4"></i><b>(4)</b>
+      chromium:                                         <i class="conum" data-value="5"></i><b>(5)</b>
+        # The same fields as for chrome
+      edge:                                             <i class="conum" data-value="6"></i><b>(6)</b>
+        # The same fields as for chrome
+      electron:                                         <i class="conum" data-value="7"></i><b>(7)</b>
+        # The same fields as for chrome
+      firefox:                                          <i class="conum" data-value="8"></i><b>(8)</b>
+        # The same fields as for chrome
+    devtools:                                           <i class="conum" data-value="9"></i><b>(9)</b>
+      chrome:
+        # The same fields as for cypress
+    playwright:                                         <i class="conum" data-value="10"></i><b>(10)</b>
+      chrome:
+        # The same fields as for cypress
+      # Other supported browser types
+    selenium:                                           <i class="conum" data-value="11"></i><b>(11)</b>
+      MicrosoftEdge:
+        repository: quay.io/browser/microsoft-edge-beta
+      chrome:
+        repository: quay.io/browser/google-chrome-stable
+      firefox:
+        repository: quay.io/browser/firefox-mozilla-build
+kind: List
+metadata:
+  # List metadata</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Browser set name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Cypress browsers configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Cypress Chrome browser configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Images repository to search for Cypress Chrome browser images</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Cypress Chromium browser configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>Cypress Microsoft Edge browser configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Cypress Electron browser configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td>Cypress Firefox browser configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Chrome Developer Tools browsers configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Playwright browsers configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="11"></i><b>11</b></td>
+<td>Selenium browsers configuration</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To edit a browser set object:</p>
+</div>
+<div class="listingblock">
+<div class="title">Editing a browser set</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit browserset default -n moon # Do modifications in text editor, save and exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you were previously using Moon 1.x, you could notice that browsers set in Moon 2.x is slightly different compared to <code>browsers.json</code> from Moon 1.x. This is how a typical <code>browsers.json</code> file looks like:</p>
+</div>
+<div class="listingblock">
+<div class="title">How Moon 1.x <code>browsers.json</code> file looks like</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>: {
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">default</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">97.0</span><span class="delimiter">&quot;</span></span>,
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">versions</span><span class="delimiter">&quot;</span></span>: {
+      <span class="key"><span class="delimiter">&quot;</span><span class="content">97.0</span><span class="delimiter">&quot;</span></span>: {
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">image</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">quay.io/browsers/chrome:97.0</span><span class="delimiter">&quot;</span></span>,
+        <span class="key"><span class="delimiter">&quot;</span><span class="content">port</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">4444</span><span class="delimiter">&quot;</span></span>
+      }
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For every browser type and version you had to provide an exact browser image (e.g. <code>browsers/chrome:97.0</code>) and this file contained configuration only for Selenium browsers. The main problem with this approach is that it requires a manual update from Moon cluster administrator every time a new browser image appears. Container images for different versions of the same browser are usually stored in the same repository with different tags, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">quay.io/browsers/chrome:95.0 &lt;==&gt; Chrome 95.0
+quay.io/browsers/chrome:96.0 &lt;==&gt; Chrome 96.0
+quay.io/browsers/chrome:97.0 &lt;==&gt; Chrome 97.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In Moon 2.x instead of copy-pasting the same image specification you only need to provide repository name in browsers set object:</p>
+</div>
+<div class="listingblock">
+<div class="title">Moon 2.x browser type specification</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This new configuration format means that all images for <code>chrome</code> browser used in Selenium tests will be downloaded from <code>quay.io/browsers/chrome</code> repository. Concrete image tag is determined when you request to start a new browser. For example, you pass the following <a href="#selenium">Selenium</a> <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">browserName = chrome
+browserVersion = 96.0</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In that case Moon will use <code>quay.io/browsers/chrome:96.0</code> image. If there is no such image, then <strong>partial tag match</strong> also works. For example, if there is <code>quay.io/browsers/chrome:96.0.4664.45</code> image it will also be used because <code>96.0.4664.45</code> contains <code>96.0</code>. Similarly, in <a href="#cypress">Cypress</a>, <a href="#playwright">Playwright</a> and <a href="#devtools">Chrome Developer Tools</a> you are using URL path and parameters to pass the same information.</p>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-versions"><a class="anchor" href="#browsers-set-versions"></a>Browser Versions</h5>
+<div class="paragraph">
+<p>Although, not enabled by default, in Moon 2.x it is still possible to limit allowed browser versions:</p>
+</div>
+<div class="listingblock">
+<div class="title">Limiting allowed browser versions</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">versions</span>: <span class="string"><span class="content">[&quot;96.0&quot;, &quot;97.0&quot;]            </span></span><i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="key">default</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">96.0</span><span class="delimiter">&quot;</span></span>                       <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="key">port</span>: <span class="string"><span class="content">4444                            </span></span><i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="key">path</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">/</span><span class="delimiter">&quot;</span></span>                             <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Allowed browser versions list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Default browser version</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Port inside browser container to send requests to (default is 4444)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Base API path to send requests to</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When <code>versions</code> list is specified, Moon will only allow to start browser versions from this list. By default, if no version is provided by the user, the first available version is taken. You easily override default version using <code>default</code> field. When <code>versions</code> and <code>default</code> fields are omitted, default version is <code>latest</code>.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-computing-resources"><a class="anchor" href="#browsers-set-computing-resources"></a>Computing Resources</h5>
+<div class="paragraph">
+<p>For every browser type you can easily configure available <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">computing resources</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting computing resources for browser pods</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">resources</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">limits</span>:                             <i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1Gi</span><span class="delimiter">&quot;</span></span>                     <i class="conum" data-value="4"></i><b>(4)</b>
+      <span class="key">requests</span>:                           <i class="conum" data-value="5"></i><b>(5)</b>
+        <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>                        <i class="conum" data-value="6"></i><b>(6)</b>
+        <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1Gi</span><span class="delimiter">&quot;</span></span>                     <i class="conum" data-value="7"></i><b>(7)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Computing resources section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Limits section (maximum allowed computing resources)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>CPU limit</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Memory limit</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>Request section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
+<td>CPU request</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
+<td>Memory request</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-environment-variables"><a class="anchor" href="#browsers-set-environment-variables"></a>Environment Variables</h5>
+<div class="paragraph">
+<p>In some situations you may need to set environment variables to browser pods. For example this may be needed to set <code>LANG</code> or <code>TZ</code> environment variables being used by some browsers to detect preferred language and time zone respectively. To set an arbitrary environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting arbitrary environment variables</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">env</span>:                                <i class="conum" data-value="1"></i><b>(1)</b>
+      - <span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=Europe/Paris</span><span class="delimiter">&quot;</span></span>               <i class="conum" data-value="2"></i><b>(2)</b>
+      - <span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=fr_FR.UTF-8</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Environment variables section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Concrete environment variable</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The same can be certainly written in one line:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting environment variable in one line</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">env</span>: <span class="string"><span class="content">[&quot;TZ=Europe/Paris&quot;, &quot;LANG=fr_FR.UTF-8&quot;]</span></span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-custom-annotations"><a class="anchor" href="#browsers-set-custom-annotations"></a>Custom Annotations</h5>
+<div class="paragraph">
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. If you need to add the same annotations to all browser types - then configure global annotations in <a href="#configuration-object">configuration object</a>. To add annotations to some browser types - do the same in browser set as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting browser-specific Kubernetes annotations</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">annotations</span>:                          <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>                      <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Annotations specification section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more annotations to be set</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon adds some annotations by default to browser pods and their names are reserved:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Moon Reserved Annotation Names</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Key</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Custom session label passed in <code>name</code> capability</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-custom-labels"><a class="anchor" href="#browsers-set-custom-labels"></a>Custom Labels</h5>
+<div class="paragraph">
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. If you need to add the same labels to all browser types - then configure global labels in <a href="#configuration-object">configuration object</a>. To add labels to some browser types - do the same in browser set as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting browser-specific Kubernetes labels</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">labels</span>:                               <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>                      <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Labels specification section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more labels to be set</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon adds some labels by default to browser pods and their names are reserved:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. Moon Reserved Label Names</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Key</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">app</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores unique name for every pod</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">browserName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores browser name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVNC</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores whether VNC is enabled</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">moon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System label, always equal to <code>browsers</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">quota</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores user quota name</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores screen resolution requested by user</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">browserVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores browser version</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-node-selectors"><a class="anchor" href="#browsers-set-node-selectors"></a>Node Selectors</h5>
+<div class="paragraph">
+<p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers set as shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting environment variable in one line</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">nodeSelector</span>:                         <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">node-label-1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">label1-value</span><span class="delimiter">&quot;</span></span>        <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="key">node-label-2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">label2-value</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Node selector specification section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more Kubernetes node labels to match against</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-networking"><a class="anchor" href="#browsers-set-networking"></a>Networking</h5>
+<div class="paragraph">
+<p>Some scenarios require flexible networking configuration. For example you may need to override used DNS server or <code>/etc/hosts</code> entries. This can be easily done as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting advanced network configuration</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">dnsConfig</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">nameservers</span>:
+        - <span class="string"><span class="content">1.2.3.4</span></span>
+      <span class="key">searches</span>:
+        - <span class="string"><span class="content">ns1.svc.cluster-domain.example</span></span>
+        - <span class="string"><span class="content">my.dns.search.suffix</span></span>
+      <span class="key">options</span>:
+        - <span class="string"><span class="content">name: ndots</span></span>
+          <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2</span><span class="delimiter">&quot;</span></span>
+        - <span class="string"><span class="content">name: edns0</span></span>
+    <span class="key">hostAliases</span>:                          <i class="conum" data-value="2"></i><b>(2)</b>
+      - <span class="string"><span class="content">ip: &quot;127.0.0.1&quot;</span></span>
+        <span class="key">hostnames</span>:
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">foo.local</span><span class="delimiter">&quot;</span></span>
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.local</span><span class="delimiter">&quot;</span></span>
+      - <span class="string"><span class="content">ip: &quot;10.1.2.3&quot;</span></span>
+        <span class="key">hostnames</span>:
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">foo.remote</span><span class="delimiter">&quot;</span></span>
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">bar.remote</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>DNS configuration section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Host aliases (<code>/etc/hosts</code>) configuration section</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><code>dnsConfig</code> and <code>hostAliases</code> fields have the same syntax as their Kubernetes equivalents (<a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config">pod DNS config</a> and <a href="https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/">host aliases</a> respectively).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-privileged-mode"><a class="anchor" href="#browsers-set-privileged-mode"></a>Privileged Mode</h5>
+<div class="paragraph">
+<p>In some cases like running Android emulators browser container should be run in <code>privileged</code> mode. This setting can be applied for each browser type as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Activating Privileged Mode</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">privileged</span>: <span class="string"><span class="content">true                    </span></span><i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Launch pod in privileged mode</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.3. Monitoring</h3>
@@ -2915,7 +3430,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod). The following metrics are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Moon Built-in Prometheus Metrics</caption>
+<caption class="title">Table 10. Moon Built-in Prometheus Metrics</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -3631,7 +4146,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. Moon License Pricing</caption>
+<caption class="title">Table 11. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3722,7 +4237,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <h2 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>Appendix A: Supported Mobile Devices</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Supported Mobile Devices</caption>
+<caption class="title">Table 12. Supported Mobile Devices</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4030,7 +4545,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-28 13:00:35 UTC
+Last updated 2021-12-28 13:10:55 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
