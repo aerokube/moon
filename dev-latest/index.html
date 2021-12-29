@@ -618,10 +618,11 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#license">3.1. Installing a License</a></li>
 <li><a href="#users-quotas">3.2. Users and Quotas</a>
 <ul class="sectlevel3">
-<li><a href="#quotas">3.2.1. Quotas</a></li>
-<li><a href="#configuration-object">3.2.2. Configuration Object</a></li>
-<li><a href="#browsers-set">3.2.3. Browsers Set</a></li>
-<li><a href="#devices-set">3.2.4. Devices Set</a></li>
+<li><a href="#users">3.2.1. Users</a></li>
+<li><a href="#quotas">3.2.2. Quotas</a></li>
+<li><a href="#configuration-object">3.2.3. Configuration Object</a></li>
+<li><a href="#browsers-set">3.2.4. Browsers Set</a></li>
+<li><a href="#devices-set">3.2.5. Devices Set</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.3. Monitoring</a>
@@ -1331,7 +1332,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <p><strong>Improved network communication</strong>. Moon 1.x relies on Kubernetes DNS implementation (e.g. <a href="https://github.com/coredns/coredns">CoreDNS</a>) for communicating with browser pods. DNS service is known to suffer from caching and cloud-specific networking issues which can in rare cases lead to broken browser sessions. Moon 2.x relies on pod IP addresses instead and does not depend on DNS at all.</p>
 </li>
 <li>
-<p><strong>No built-in authentication</strong>. Moon 1.x supports only <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. Moon 2.x instead does not provide built-in authentication mechanism by default. Instead, you can use existing Kubernetes-compatible software (e.g. <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a>) to provide any authentication mechanism (e.g. <a href="https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/">mutual TLS authentication</a>) you need. Moon derives user name from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers.</p>
+<p><strong>No built-in authentication</strong>. Moon 1.x supports only <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. Moon 2.x instead does not provide built-in authentication mechanism by default. Instead, you can use existing Kubernetes-compatible software (e.g. <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a>) to provide any authentication mechanism (e.g. <a href="https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/">mutual TLS authentication</a>) you need. Moon derives user name from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers. See <a href="#users">Users</a> section for more details.</p>
 </li>
 <li>
 <p><strong>OpenID Connect support</strong>. Moon 2.x comes with a ready-to-use sidecar container for using <a href="https://openid.net/connect/">OpenID Connect</a> authentication. This allows for example to easily use an existing private or public <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> service. For example, you can easily load existing <a href="https://github.com/">Github</a> users like this.</p>
@@ -2665,7 +2666,133 @@ Ti90a3ljSWpvV3hicU5ZY3U3ZVNMUzdzalVjU29nSVU2a3lmWDdENmhOSEs4SFJVVE5LNEpKL2oxRGhW
 <div class="sect2">
 <h3 id="users-quotas"><a class="anchor" href="#users-quotas"></a>3.2. Users and Quotas</h3>
 <div class="sect3">
-<h4 id="quotas"><a class="anchor" href="#quotas"></a>3.2.1. Quotas</h4>
+<h4 id="users"><a class="anchor" href="#users"></a>3.2.1. Users</h4>
+<div class="paragraph">
+<p>Moon 2.x compared to Moon 1.x has <strong>no built-in authentication</strong> mechanism. This is because the recommended way to deliver authentication in Kubernetes is using available Ingress authentication features or sidecar containers delivering authentication. Moon reads username from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers being set by Ingress or sidecar container. The following sections describe possible authentication configurations.</p>
+</div>
+<div class="sect4">
+<h5 id="users-nginx-basic-http"><a class="anchor" href="#users-nginx-basic-http"></a>Nginx Basic HTTP Authentication</h5>
+<div class="paragraph">
+<p>Moon 1.x out of the box only supports so-called <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. When using this method, username and password are expected to be passed in <code>Authorization</code> HTTP header:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>Authorization: base64("username:password")</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, the following URL notation is supported for using this type of authentication:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>https://username:password@example.com/</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The simplest way of providing the basic HTTP authentication is configuring Ingress. For example, <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress</a> supports it out of the box. To configure it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a text file with a list of available users in <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> format:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ htpasswd -Bbn new-user new-user-password &gt;&gt; users.htpasswd # Adding new user
+$ htpasswd -Bb users.htpasswd some-user new-password # Updating password
+$ htpasswd -D users.htpasswd test-user # Deleting existing user</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Resulting file contents will look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cat users.htpasswd
+test:$apr1$.dZyHlKN$jdoZkin/kPviFNArx/cVL1 # User is test, password is encrypted
+alice:$apr1$mLYJAC4y$VYeJstWjWP/4iVlH/TNcD.
+bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Save file contents to Kubernetes secret as follows:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl create secret generic moon-basic-auth --from-file=users.htpasswd -n moon</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Configure Nginx Ingress to use credentials for basic HTTP authentication:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">networking.k8s.io/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Ingress</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">nginx.ingress.kubernetes.io/force-ssl-redirect</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">true</span><span class="delimiter">&quot;</span></span>
+    <span class="key">nginx.ingress.kubernetes.io/auth-type</span>: <span class="string"><span class="content">basic                                      </span></span><i class="conum" data-value="1"></i><b>(1)</b>
+    <span class="key">nginx.ingress.kubernetes.io/auth-secret</span>: <span class="string"><span class="content">moon-basic-auth                          </span></span><i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="key">nginx.ingress.kubernetes.io/auth-realm</span>: <span class="string"><span class="content">'Authentication Required - Moon Realm'    </span></span><i class="conum" data-value="3"></i><b>(3)</b>
+    <span class="key">nginx.ingress.kubernetes.io/configuration-snippet</span>: <span class="string"><span class="delimiter">|</span></span>                              <i class="conum" data-value="4"></i><b>(4)</b>
+      <span class="error">proxy_set_header X-Moon-Quota $remote_user;</span>
+      <span class="error">proxy_set_header Authorization $http_authorization;</span>
+    <span class="key">nginx.ingress.kubernetes.io/proxy-connect-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
+    <span class="key">nginx.ingress.kubernetes.io/proxy-send-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
+    <span class="key">nginx.ingress.kubernetes.io/proxy-read-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
+<span class="key">spec</span>:
+  <span class="key">ingressClassName</span>: <span class="string"><span class="content">nginx</span></span>
+  <span class="key">tls</span>:
+  - <span class="string"><span class="content">hosts:</span></span>
+    - <span class="string"><span class="content">moon.example.com</span></span>
+    <span class="key">secretName</span>: <span class="string"><span class="content">moon-tls                                                              </span></span><i class="conum" data-value="5"></i><b>(5)</b>
+  <span class="key">rules</span>:
+  - <span class="string"><span class="content">host: moon.example.com</span></span>
+    <span class="key">http</span>:
+      <span class="key">paths</span>:
+      - <span class="string"><span class="content">path: /wd/hub</span></span>
+        <span class="key">pathType</span>: <span class="string"><span class="content">Prefix</span></span>
+        <span class="key">backend</span>:
+          <span class="key">service</span>:
+            <span class="key">name</span>: <span class="string"><span class="content">moon</span></span>
+            <span class="key">port</span>:
+              <span class="key">number</span>: <span class="string"><span class="content">4444</span></span>
+      <span class="comment"># Other rules</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>This is where we enable basic HTTP authentication in Nginx</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is where we configure Nginx to use our credentials list</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Any desired authentication realm name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>This is where Nginx will set <code>X-Moon-Quota</code> and <code>Authorization</code> headers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="5"></i><b>5</b></td>
+<td>How to configure TLS is described <a href="https://kubernetes.github.io/ingress-nginx/user-guide/tls/">here</a></td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="quotas"><a class="anchor" href="#quotas"></a>3.2.2. Quotas</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2768,7 +2895,7 @@ metadata:
 </div>
 </div>
 <div class="sect3">
-<h4 id="configuration-object"><a class="anchor" href="#configuration-object"></a>3.2.2. Configuration Object</h4>
+<h4 id="configuration-object"><a class="anchor" href="#configuration-object"></a>3.2.3. Configuration Object</h4>
 <div class="paragraph">
 <p>Configuration object stores various configuration options: computing resources being assigned to system Moon images, group and user identifiers to run browser pods and so on. This object corresponds to <code>service.json</code> configuration file in Moon 1.x. To list available configuration objects:</p>
 </div>
@@ -2902,7 +3029,7 @@ metadata:
 </div>
 </div>
 <div class="sect3">
-<h4 id="browsers-set"><a class="anchor" href="#browsers-set"></a>3.2.3. Browsers Set</h4>
+<h4 id="browsers-set"><a class="anchor" href="#browsers-set"></a>3.2.4. Browsers Set</h4>
 <div class="paragraph">
 <p>The browsers set stores browsers startup configuration. This object corresponds to <code>browsers.json</code> file in Moon 1.x. To list available browser sets:</p>
 </div>
@@ -3432,7 +3559,7 @@ browserVersion = 96.0</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="devices-set"><a class="anchor" href="#devices-set"></a>3.2.4. Devices Set</h4>
+<h4 id="devices-set"><a class="anchor" href="#devices-set"></a>3.2.5. Devices Set</h4>
 <div class="paragraph">
 <p>Moon loads information about available mobile devices for <a href="#mobile-emulation">Mobile Emulation</a> from <code>devices set</code> object. This object corresponds to <code>devices.json</code> file in Moon 1.x. To list available device sets:</p>
 </div>
@@ -4684,7 +4811,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-29 08:22:40 UTC
+Last updated 2021-12-29 15:13:30 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
