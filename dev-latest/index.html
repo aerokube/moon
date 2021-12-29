@@ -544,7 +544,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2021-12-28</span>
+<span id="revdate">2021-12-29</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -585,6 +585,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#accessing-downloaded-files">2.1.4. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#selenium-locale">2.1.5. Changing Browser Locale</a></li>
 <li><a href="#selenium-root-ca">2.1.6. Using self-signed TLS certificates</a></li>
+<li><a href="#selenium-external-host">2.1.7. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -1581,7 +1582,7 @@ driver = webdriver.Remote(
 </div>
 </div>
 <div class="paragraph">
-<p>Entries from this capability will be override <code>/etc/hosts</code> entries from browsers list.</p>
+<p>Entries from this capability will be override <code>/etc/hosts</code> entries from browsers set.</p>
 </div>
 </div>
 <div class="sect4">
@@ -1670,7 +1671,7 @@ driver = webdriver.Remote(
 </div>
 </div>
 <div class="paragraph">
-<p>Labels from this capability override labels from browsers list. More information about labels is described in <a href="#labels">Using Custom Kubernetes Labels</a> section.</p>
+<p>Labels from this capability override labels from browsers set. More information about labels is described in <a href="#browsers-set-custom-labels">Using Custom Kubernetes Labels</a> section.</p>
 </div>
 </div>
 </div>
@@ -1963,6 +1964,54 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.7. Using External Hosts</h4>
+<div class="paragraph">
+<p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Running Selenium tests on complicated platforms such as MacOS or iOS. According to license agreement these platforms require Apple hardware devices, and it is complicated to run Kubernetes on top of these devices.</p>
+</li>
+<li>
+<p>Using Selenium online platforms for some browsers. In that case you can run the majority of browsers (e.g. Firefox, Chrome, Opera) in Moon and complicated browsers (don&#8217;t work on standard virtual machines) such as Chrome Mobile or real devices in external Selenium platform.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>To use external hosts you should have the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>A set of hosts with Selenium-compatible solution (Selenoid, Appium, Selenium Grid, etc.): <code>host1.example.com:4444</code>, <code>host1.example.com:4444</code> and so on.</p>
+</li>
+<li>
+<p><strong>Optionally</strong> a <a href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">VNC</a> server listening on every such host on standard port <code>5900</code>. Every VNC server should be password protected with the same password having 8+ characters.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>For every browser type you need to add the following to <a href="#browsers-set">browsers set</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Sending requests to external hosts</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">internet explorer</span><span class="delimiter">&quot;</span></span>:
+      <span class="key">default</span>: <span class="string"><span class="content">1.0.0</span></span>
+      <span class="key">repository</span>: <span class="string"><span class="content">aerokube/moon-external-host</span></span>
+      <span class="key">env</span>:
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[\\\&quot;http://host1.example.com:4444/\\\&quot;, \\\&quot;http://host2.example.com:4444/\\\&quot;]</span><span class="delimiter">&quot;</span></span> <span class="comment"># A list of external hosts</span>
+        - <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span> <span class="comment"># At least 8 symbols</span>
+      ]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With such configuration Selenium session requests with be randomly load-balanced across the hosts specified in <code>URLS</code> environment variable. VNC feature should also work - you should be seeing remote host screen in Moon UI.</p>
 </div>
 </div>
 </div>
@@ -3583,7 +3632,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 <p>Full list of available expressions can be found <a href="https://github.com/kubernetes/kube-state-metrics/blob/master/docs/pod-metrics.md">here</a>.</p>
 </div>
 <div class="paragraph">
-<p>Moon can add custom labels to started browser pods (e.g. browser automation project name, tested feature name and so on). This can be done globally in using <a href="#labels">browsers list</a>, <a href="#capability-labels">Selenium capabilities</a> and so on. For example, after having a label <code>project="MyCoolProject"</code> on browser pods, you can filter such pods like this:</p>
+<p>Moon can add custom labels to started browser pods (e.g. browser automation project name, tested feature name and so on). This can be done globally in using <a href="#browsers-set-custom-labels">browsers set</a>, <a href="#capability-labels">Selenium capabilities</a> and so on. For example, after having a label <code>project="MyCoolProject"</code> on browser pods, you can filter such pods like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4635,7 +4684,7 @@ $ kubectl edit quota default -n moon # Updating Moon quota</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2021-12-28 14:11:15 UTC
+Last updated 2021-12-29 08:22:40 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
