@@ -1090,7 +1090,7 @@ $ cd moon-deploy</pre>
 <p>One or more <code>Moon</code> application instances. Their main purpose is to start and stop browser containers. These replicas are usually exposed as <a href="https://kubernetes.io/docs/concepts/services-networking/service/">Kubernetes service</a> available on standard Selenium port <code>4444</code>. You should run all the tests against this service. Also, this application provides an API to get information about running browser instances (in Moon 1.x this was a separate application called <code>Moon API</code>).</p>
 </li>
 <li>
-<p>One or more <code>Moon Conf</code> application instances. This application is watching all configured Kubernetes namespaces and controls correct distribution of licenses among all these namespaces.</p>
+<p>One or more <code>Moon Conf</code> application instances. This application is restarting Moon pods when you update a license key.</p>
 </li>
 <li>
 <p>One or more <code>Moon UI</code> application instances. <code>Moon UI</code> collects information from Moon and visualizes it. It is usually available on HTTP port <code>8080</code>.</p>
@@ -5660,7 +5660,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-01-21 04:06:26 UTC
+Last updated 2022-01-21 04:19:42 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
