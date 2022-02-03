@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2022-02-02</span>
+<span id="revdate">2022-02-03</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1065,7 +1065,8 @@ $ cd moon-deploy</pre>
 <p>Start Moon with Openshift UI or <code>oc</code> client using <code>moon-openshift.yaml</code> file:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ oc create -f moon-openshift.yaml -n moon</pre>
+<pre>$ oc create -f moon-openshift.yaml -n moon
+$ oc new-app moon</pre>
 </div>
 </div>
 </li>
@@ -4012,8 +4013,8 @@ metadata:
 <p>Configure Kubernetes authentication to your private registry:</p>
 <div class="literalblock">
 <div class="content">
-<pre>$ kubectl create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com
-$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' # Use correct service account name here</pre>
+<pre>$ kubectl create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com -n moon
+$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' -n moon # Use correct service account name here</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4021,8 +4022,8 @@ $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-re
 </div>
 <div class="literalblock">
 <div class="content">
-<pre>$ oc create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com
-$ oc secrets link default my-registry.example.com --for=pull</pre>
+<pre>$ oc create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com -n moon
+$ oc secrets link default my-registry.example.com --for=pull -n moon</pre>
 </div>
 </div>
 </li>
@@ -5660,7 +5661,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-02 12:29:41 UTC
+Last updated 2022-02-03 16:17:06 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
