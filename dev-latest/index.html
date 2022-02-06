@@ -1143,6 +1143,11 @@ $ oc new-app moon</pre>
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ca-certs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Needed to provide CA certificates to browser</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Always as init container</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">defender</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows only one browser session to be created in the pod, handles session timeouts</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
@@ -4014,7 +4019,7 @@ metadata:
 <div class="literalblock">
 <div class="content">
 <pre>$ kubectl create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com -n moon
-$ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' -n moon # Use correct service account name here</pre>
+$ kubectl patch serviceaccount moon -p '{"imagePullSecrets": [{"name": "my-registry.example.com"}]}' -n moon # Use correct service account name here</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -4023,7 +4028,7 @@ $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "my-re
 <div class="literalblock">
 <div class="content">
 <pre>$ oc create secret docker-registry my-registry.example.com --docker-server=my-registry.example.com --docker-username=some-user --docker-password=registry-password --docker-email=some-user@example.com -n moon
-$ oc secrets link default my-registry.example.com --for=pull -n moon</pre>
+$ oc secrets link moon my-registry.example.com --for=pull -n moon</pre>
 </div>
 </div>
 </li>
@@ -4059,8 +4064,10 @@ $ oc secrets link default my-registry.example.com --for=pull -n moon</pre>
 <p>Copy desired version of the Moon service images to your registry:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">aerokube/defender:2.0.0 =&gt; my-registry.example.com/aerokube/defender:2.0.0
+<pre class="CodeRay highlight"><code data-lang="bash">aerokube/ca-certs:2.0.0 =&gt; my-registry.example.com/aerokube/ca-certs:2.0.0
+aerokube/defender:2.0.0 =&gt; my-registry.example.com/aerokube/defender:2.0.0
 aerokube/vnc-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0
+aerokube/video-recorder:2.0.0 =&gt; my-registry.example.com/aerokube/video-recorder:2.0.0
 aerokube/x-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0</code></pre>
 </div>
 </div>
@@ -4077,12 +4084,17 @@ aerokube/x-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0<
     <span class="comment"># Other Kubernetes metadata</span>
 <span class="key">spec</span>:
     <span class="key">containers</span>:
+      <span class="key">ca-certs</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/ca-certs</span></span>
+        <span class="key">version</span>: <span class="string"><span class="content">2.0.0</span></span> <span class="comment"># You can omit this field and then Moon will use its own image tag (recommended approach)</span>
       <span class="key">defender</span>:
-        <span class="key">image</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/defender:2.0.0</span></span>
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/defender</span></span>
       <span class="key">vnc-server</span>:
-        <span class="key">image</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/vnc-server:2.0.0</span></span>
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/vnc-server</span></span>
       <span class="key">x-server</span>:
-        <span class="key">image</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/x-server:2.0.0</span></span></code></pre>
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/x-server</span></span>
+      <span class="key">video-recorder</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/video-recorder</span></span></code></pre>
 </div>
 </div>
 </li>
@@ -5661,7 +5673,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-06 12:53:12 UTC
+Last updated 2022-02-06 13:26:04 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
