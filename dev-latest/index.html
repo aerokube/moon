@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2022-02-06</span>
+<span id="revdate">2022-02-07</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1293,7 +1293,7 @@ $ oc new-app moon</pre>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can request to create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption for every team. From the license key perspective - you are still using one license key but available licenses are automatically distributed across all browser namespaces depending on the load. In Moon 1.x in order to use separate namespaces for different teams you had to install a separate Moon instance to every namespace and use a different license key for every such instance. This sometimes prevented teams from requesting more browsers during the peak load. In Moon 2.x one big license key is automatically shared between namespaces and thus if licenses are available, every team during the peak load can request more browsers than it usually needs. Detailed description of how it looks like is provided in <a href="#architecture">Architecture</a> section.</p>
+<p><strong>Multiple Kubernetes namespaces</strong>. Moon 1.x allows to run all browsers in <strong>one</strong> Kubernetes namespace. However, the same Moon cluster is often being used by different teams. A common problem is limiting the maximum number of browsers available for every team. Limiting the number of browsers is the same as limiting the number of CPUs and memory available for every team. Kubernetes solves this problem by introducing <strong>namespaces</strong>. Namespaces can be considered as projects that can have some limited number of computing resources assigned by Kubernetes administrator. In Moon 2.x you can create an unlimited number of separate namespaces for browsers, one for every team, and then configure Moon to launch browsers in these namespaces. This gives Kubernetes administrator full control of resources consumption for every team. From the license key perspective - you are still using one license key for all these namespaces. In Moon 1.x in order to use separate namespaces for different teams you had to install a separate Moon instance to every namespace and use a different license key for every such instance. This sometimes prevented teams from requesting more browsers during the peak load. In Moon 2.x one big license key is automatically shared between namespaces and thus if licenses are available, every team during the peak load can request more browsers than it usually needs. Detailed description of how it looks like is provided in <a href="#architecture">Architecture</a> section.</p>
 </li>
 <li>
 <p><strong>Improved configuration</strong>. Moon 1.x is using <a href="https://json.org/">JSON</a> configuration files. For example Moon 1.x browsers list file is stored in Kubernetes config map and looks like this:</p>
@@ -2831,7 +2831,7 @@ status:
 <p><a href="#install">Deploy</a> two independent Moon clusters to namespace <code>ns1</code> and <code>ns2</code></p>
 </li>
 <li>
-<p>Create two license objects with namespace field set to <code>ns1</code> and <code>ns2</code> and save them to file (e.g. <code>license-keys.yaml</code>):</p>
+<p>Create two license objects with <code>namespace</code> field set to <code>ns1</code> and <code>ns2</code> and save them to file (e.g. <code>license-keys.yaml</code>):</p>
 <div class="listingblock">
 <div class="title">License keys to be created</div>
 <div class="content">
@@ -2849,7 +2849,7 @@ kind: License
 metadata:
   name: license-key-ns2
 spec:
-  data: &lt;license-key-1&gt;
+  data: &lt;license-key-2&gt;
   namespace: ns2</code></pre>
 </div>
 </div>
@@ -2874,7 +2874,7 @@ spec:
 <p>If you try to create two license keys with the same <code>data</code> field value, then one of them will be considered as a duplicate and automatically deleted.</p>
 </li>
 <li>
-<p>If you have two different license keys for the same namespace, then Moon will always choose the most recently created one.</p>
+<p>If you have two different license keys with the same <code>namespace</code> field, then Moon will always choose the most recently created one.</p>
 </li>
 </ul>
 </div>
@@ -2910,7 +2910,7 @@ license-key-ns2   Acme Inc.   20         27d       Ok       ns2</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>When you delete the last license key for Moon namespace, Moon will automatically fall back to the free license key with 4 parallel sessions included.</p>
+<p>When you delete the last license key with <code>namespace</code> field set to some Moon namespace, Moon will automatically fall back to the free license key with 4 parallel sessions included.</p>
 </div>
 </div>
 <div class="sect3">
@@ -2996,7 +2996,7 @@ moon_license_expire 1.6444512e+09</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Authorization: base64("username:password")</pre>
+<pre>Authorization: Basic base64("username:password")</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3794,6 +3794,10 @@ browserVersion = 96.0</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Stores browser name</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">browserVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stores browser version</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">enableVNC</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Stores whether VNC is enabled</p></td>
 </tr>
@@ -3808,10 +3812,6 @@ browserVersion = 96.0</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Stores screen resolution requested by user</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">browserVersion</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Stores browser version</p></td>
 </tr>
 </tbody>
 </table>
@@ -4638,32 +4638,16 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 <div class="content">
 <pre>-browser-limit value
     parallel browser sessions limit
--browser-service-account string
-    browser service account name (default "default")
--cpu-limit value
-    browser container cpu limit (default 1)
--cpu-request value
-    browser container cpu request (default 1)
 -delete-timeout duration
     timeout to delete Kubernetes resources (default 10m0s)
--disable-cpu-limits
-    disable cpu limits for pods
--disable-memory-limits
-    disable memory limits for pods
 -grace-period duration
     graceful shutdown period (default 5m0s)
 -listen string
     host and port to listen to (default ":4444")
--memory-limit value
-    browser container memory limit (default 2Gi)
--memory-request value
-    browser container memory request (default 2Gi)
 -moon-url value
     moon service url (default http://moon.moon:4444/wd/hub)
 -session-attempt-timeout duration
     new session attempt timeout (default 30m0s)
--timeout duration
-    override session timeout (default 1m0s)
 -version
     show version and exit</pre>
 </div>
@@ -5673,7 +5657,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-06 13:26:04 UTC
+Last updated 2022-02-07 10:26:29 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
