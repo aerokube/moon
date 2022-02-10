@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2022-02-09</span>
+<span id="revdate">2022-02-10</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1360,7 +1360,7 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <p><strong>New browser versions are available automatically</strong>. Moon 1.x requires to add an image for every new browser version to browsers list file manually. If a browser version is missing, then Moon 1.x will not be able to start this browser. Moon 2.x contrarily only needs to configure a browser image repository for every browser type. Once configured - new browser versions are detected automatically.</p>
 </li>
 <li>
-<p><strong>Improved browser performance</strong>. Moon 2.x is using completely new browser startup architecture that starts only required operating system components for current set of requested browser features. This leads to smaller browser images, faster startup and browser commands execution.</p>
+<p><strong>Improved browser performance</strong>. Moon 2.x is using completely new browser startup architecture that starts only required operating system components for current set of requested browser features. For example, operating system components responsible for window management are started only when browser window is visible (browser is not "headless"). This leads to smaller browser images, faster startup and faster browser commands execution.</p>
 </li>
 <li>
 <p><strong>Lower cloud resources consumption</strong>. Reworked browser startup architecture leads to at least 20% lower average cloud resources (CPU, memory, network traffic) consumption.</p>
@@ -1369,10 +1369,29 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <p><strong>Improved network communication</strong>. Moon 1.x relies on Kubernetes DNS implementation (e.g. <a href="https://github.com/coredns/coredns">CoreDNS</a>) for communicating with browser pods. DNS service is known to suffer from caching and cloud-specific networking issues which can in rare cases lead to broken browser sessions. Moon 2.x relies on pod IP addresses instead and does not depend on DNS at all.</p>
 </li>
 <li>
-<p><strong>No built-in authentication</strong>. Moon 1.x supports only <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. Moon 2.x instead does not provide built-in authentication mechanism by default. Instead, you can use existing Kubernetes-compatible software (e.g. <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a>) to provide any authentication mechanism (e.g. <a href="https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/">mutual TLS authentication</a>) you need. Moon derives user name from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers. See <a href="#users">Users</a> section for more details.</p>
+<p><strong>No built-in authentication</strong>. Moon 1.x supports only <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. Moon 2.x instead does not provide built-in authentication mechanism by default. Instead, you can use existing Kubernetes-compatible software (e.g. <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress Controller</a>) to provide any authentication mechanism (e.g. <a href="https://www.cloudflare.com/learning/access-management/what-is-mutual-tls/">mutual TLS authentication</a>) you need. Moon derives username from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers. See <a href="#users">Users</a> section for more details.</p>
 </li>
 <li>
 <p><strong>OpenID Connect support</strong>. Moon 2.x comes with a ready-to-use sidecar container for using <a href="https://openid.net/connect/">OpenID Connect</a> authentication. This allows for example to easily use an existing private or public <a href="https://en.wikipedia.org/wiki/OAuth">OAuth</a> service. For example, you can easily load existing <a href="https://github.com/">Github</a> users like this.</p>
+</li>
+<li>
+<p><strong>Improved self-signed TLS root certification authorities support</strong>. Companies are often using self-signed TLS certificates for internal web services. In Moon 2.x adding support for such self-signed TLS certificates is as easy as providing TLS self-signed root certification authority in Moon configuration. You can configure it globally for all Moon components and browser versions in a single place.</p>
+<div class="listingblock">
+<div class="title">Moon 2 self-signed root CA configuration</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: Config
+  metadata:
+    annotations:
+    name: default
+    namespace: moon
+  spec:
+    additionalTrustedCAs: &quot;&lt;your-self-signed-ca-here&gt;&quot;</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Advanced Selenium features</strong>. Moon is fully compatible with <a href="https://www.w3.org/TR/webdriver/">W3C Webdriver protocol</a> meaning that all Selenium 4.x features will work out of the box. In addition to these standard features Moon provides some advanced browser manipulation methods like interacting with the <a href="#clipboard">clipboard</a> or <a href="#accessing-downloaded-files">getting files</a> from browser container. For example, you can easily copy and paste arbitrary text data and images from your tests to browser clipboard.</p>
 </li>
 </ul>
 </div>
@@ -1788,13 +1807,25 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Clipboard is accessible only when browser session is running.
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Clipboard is accessible only when browser session is running.</p>
+</li>
+<li>
+<p>Only <a href="https://en.wikipedia.org/wiki/Portable_Network_Graphics">PNG</a> image format is supported.</p>
+</li>
+<li>
+<p>This functionality is working out of the box in <a href="https://github.com/aerokube/lightning-java">Lightning</a> client.</p>
+</li>
+</ol>
+</div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Sometimes you may need to interact with the clipboard to check that your application copy-paste feature works. Moon has a dedicated API to interact with the clipboard. To use it:</p>
+<p>Sometimes you may need to interact with the clipboard to check that your application copy-paste feature works. Moon has a dedicated API to interact with the clipboard:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1805,17 +1836,33 @@ Clipboard is accessible only when browser session is running.
 <p>To get clipboard value send the following HTTP request:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/clipboard/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -H 'Accept: application/json' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/clipboard
 
-some-clipboard-value</code></pre>
+{&quot;value&quot;: &quot;some-clipboard-value&quot;, &quot;media&quot;: &quot;&quot;}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If clipboard contains an image, then response will contain <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encoded image bytes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{<span class="key"><span class="delimiter">&quot;</span><span class="content">value</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">iVBORw0KGgoAAAAN....</span><span class="delimiter">&quot;</span></span>, <span class="key"><span class="delimiter">&quot;</span><span class="content">media</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">image/png</span><span class="delimiter">&quot;</span></span>}</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>To update clipboard value:</p>
+<p>To update clipboard with text value:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl -X POST --data 'some-clipboard-value' https://moon.example.com/clipboard/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -X POST -H 'Content-Type: application/json' --data '{&quot;value&quot;: &quot;some-clipboard-value&quot;}' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/clipboard</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To update clipboard with image value, send <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>-encoded image bytes and :</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -X POST -H 'Content-Type: application/json' --data '{&quot;value&quot;: &quot;iVBORw0KGgoAAAAN....&quot;, &quot;media&quot;: &quot;image/png&quot;}' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/clipboard</code></pre>
 </div>
 </div>
 </li>
@@ -1831,13 +1878,22 @@ some-clipboard-value</code></pre>
 <i class="fa icon-note" title="Note"></i>
 </td>
 <td class="content">
-Files are accessible only when browser session is running.
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Files are accessible only when browser session is running.</p>
+</li>
+<li>
+<p>This functionality is working out of the box in <a href="https://github.com/aerokube/lightning-java">Lightning</a> client.</p>
+</li>
+</ol>
+</div>
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Your tests may need to download files with browsers. To analyze these files a common requirement is then to somehow extract downloaded files from browser containers. Moon provides a <code>/download</code> API dramatically simplifying downloading such files. To work with it:</p>
+<p>Your tests may need to download files with browsers. To analyze these files a common requirement is then to somehow extract downloaded files from browser containers. Moon provides an API to work with such files:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1848,10 +1904,30 @@ Files are accessible only when browser session is running.
 <p>In tests code save all files to <code>/home/selenium/Downloads</code> directory.</p>
 </li>
 <li>
-<p>Access all downloaded files using an URL:</p>
+<p>To list available files:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">https://moon.example.com/download/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/myfile.txt</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">curl -H 'Accept: application/json' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/download/
+
+[&quot;myfile.txt&quot;, &quot;another-file.png&quot;]</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Access any file contents using the following URL:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">curl -H 'Accept: application/json' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/download/myfile.txt
+
+{&quot;value&quot;: &quot;bXktZmlsZS1jb250ZW50cwo=&quot;} # Base64-encoded file contents</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>To delete a file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">curl -X DELETE https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/download/myfile.txt</code></pre>
 </div>
 </div>
 </li>
@@ -5657,7 +5733,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-09 07:50:52 UTC
+Last updated 2022-02-10 10:10:49 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
