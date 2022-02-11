@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2022-02-10</span>
+<span id="revdate">2022-02-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -652,8 +652,10 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#advanced-settings-labels">3.6.2. Adding Custom Kubernetes Labels</a></li>
 <li><a href="#advanced-settings-network-policies">3.6.3. Adding Network Policies</a></li>
 <li><a href="#node-selectors">3.6.4. Using Node Selectors</a></li>
-<li><a href="#privileged-mode">3.6.5. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#advanced-settings-user-group">3.6.6. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#affinity">3.6.5. Using Affinity</a></li>
+<li><a href="#tolerations">3.6.6. Using Tolerations</a></li>
+<li><a href="#privileged-mode">3.6.7. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#advanced-settings-user-group">3.6.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.7. Monitoring</a>
@@ -3358,28 +3360,42 @@ items:
     namespace: moon
     # Other Kubernetes metadata
   spec:
-    containers:                               <i class="conum" data-value="2"></i><b>(2)</b>
-      defender:                               <i class="conum" data-value="3"></i><b>(3)</b>
-        image: aerokube/defender:2.0.0        <i class="conum" data-value="4"></i><b>(4)</b>
-        ports:                                <i class="conum" data-value="5"></i><b>(5)</b>
+    additionalTrustedCAs: &quot;&quot;                  <i class="conum" data-value="2"></i><b>(2)</b>
+    containers:                               <i class="conum" data-value="3"></i><b>(3)</b>
+      ca-certs:                               <i class="conum" data-value="4"></i><b>(4)</b>
+        repository: aerokube/ca-certs         <i class="conum" data-value="5"></i><b>(5)</b>
+        version: 2.0.0                        <i class="conum" data-value="6"></i><b>(6)</b>
+        ports:                                <i class="conum" data-value="7"></i><b>(7)</b>
         - 4545
-        resources:                            <i class="conum" data-value="6"></i><b>(6)</b>
-          limits:                             <i class="conum" data-value="7"></i><b>(7)</b>
+        resources:                            <i class="conum" data-value="8"></i><b>(8)</b>
+          limits:                             <i class="conum" data-value="9"></i><b>(9)</b>
             cpu: 250m
             memory: 64Mi
-          requests:                           <i class="conum" data-value="8"></i><b>(8)</b>
+          requests:                           <i class="conum" data-value="10"></i><b>(10)</b>
             cpu: 100m
             memory: 64Mi
-      vnc-server:                             <i class="conum" data-value="9"></i><b>(9)</b>
-        # The same fields as for defender
-      x-server:                               <i class="conum" data-value="10"></i><b>(10)</b>
-        # The same fields as for defender
-    group:                                    <i class="conum" data-value="11"></i><b>(11)</b>
-      id: 4096                                <i class="conum" data-value="12"></i><b>(12)</b>
-      name: user                              <i class="conum" data-value="13"></i><b>(13)</b>
-    user:                                     <i class="conum" data-value="14"></i><b>(14)</b>
-      id: 4096                                <i class="conum" data-value="15"></i><b>(15)</b>
-      name: user                              <i class="conum" data-value="16"></i><b>(16)</b>
+      defender:                               <i class="conum" data-value="11"></i><b>(11)</b>
+        # The same fields as for ca-certs
+      video-recorder:                         <i class="conum" data-value="12"></i><b>(12)</b>
+        # The same fields as for ca-certs
+      vnc-server:                             <i class="conum" data-value="13"></i><b>(13)</b>
+        # The same fields as for ca-certs
+      x-server:                               <i class="conum" data-value="14"></i><b>(14)</b>
+        # The same fields as for ca-certs
+    group:                                    <i class="conum" data-value="15"></i><b>(15)</b>
+      id: 4096                                <i class="conum" data-value="16"></i><b>(16)</b>
+      name: user                              <i class="conum" data-value="17"></i><b>(17)</b>
+    serviceAccountName: default               <i class="conum" data-value="18"></i><b>(18)</b>
+    sessionTimeout: 5m                        <i class="conum" data-value="19"></i><b>(19)</b>
+    storage:                                  <i class="conum" data-value="20"></i><b>(20)</b>
+      accessKey: &quot;&quot;
+      bucket: &quot;&quot;
+      endpoint: &quot;&quot;
+      pattern: &quot;&quot;
+      secretKey: &quot;&quot;
+    user:                                     <i class="conum" data-value="21"></i><b>(21)</b>
+      id: 4096                                <i class="conum" data-value="22"></i><b>(22)</b>
+      name: user                              <i class="conum" data-value="23"></i><b>(23)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
@@ -3393,62 +3409,90 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Service containers (<code>defender</code>, <code>vnc-server</code>, <code>x-server</code>) configuration</td>
+<td>Additional root certification authorities to be used (needed to work with self-signed TLS certificates)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td><code>defender</code> container configuration</td>
+<td>Service containers (<code>ca-certs</code>, <code>defender</code>, <code>video-recorder</code>, <code>vnc-server</code>, <code>x-server</code>) configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Used container image</td>
+<td><code>ca-certs</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Exposed container ports</td>
+<td>Container image repository</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Computing resources assigned to container</td>
+<td>Container image version (optional)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>CPU and memory limits assigned to container</td>
+<td>Exposed container ports</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="8"></i><b>8</b></td>
-<td>CPU and memory requests assigned to container</td>
+<td>Computing resources assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="9"></i><b>9</b></td>
-<td><code>vnc-server</code> container configuration</td>
+<td>CPU and memory limits assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="10"></i><b>10</b></td>
-<td><code>x-server</code> container configuration</td>
+<td>CPU and memory requests assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
-<td>System group used to start containers</td>
+<td><code>defender</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
-<td>System group numeric identifier (<code>gid</code>)</td>
+<td><code>video-recorder-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="13"></i><b>13</b></td>
-<td>System group name</td>
+<td><code>vnc-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="14"></i><b>14</b></td>
-<td>System user used to start containers</td>
+<td><code>x-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="15"></i><b>15</b></td>
-<td>System user numeric identifier (<code>uid</code>)</td>
+<td>System group used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="16"></i><b>16</b></td>
+<td>System group numeric identifier (<code>gid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td>System group name</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td>Kubernetes service account name to use</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td>Default Selenium session timeout</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td>S3 storage settings (used to save recorded videos)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="21"></i><b>21</b></td>
+<td>System user used to start containers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="22"></i><b>22</b></td>
+<td>System user numeric identifier (<code>uid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
 <td>System username</td>
 </tr>
 </table>
@@ -3629,7 +3673,7 @@ browserVersion = 96.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In that case Moon will use <code>quay.io/browsers/chrome:96.0</code> image. If there is no such image, then <strong>partial tag match</strong> also works. For example, if there is <code>quay.io/browsers/chrome:96.0.4664.45</code> image it will also be used because <code>96.0.4664.45</code> contains <code>96.0</code>. Similarly, in <a href="#cypress">Cypress</a>, <a href="#playwright">Playwright</a> and <a href="#devtools">Chrome Developer Tools</a> you are using URL path and parameters to pass the same information.</p>
+<p>In that case Moon will use <code>quay.io/browsers/chrome:96.0</code> image. Similarly, in <a href="#cypress">Cypress</a>, <a href="#playwright">Playwright</a> and <a href="#devtools">Chrome Developer Tools</a> you are using URL path and parameters to pass the same information.</p>
 </div>
 <div class="sect4">
 <h5 id="browsers-set-versions"><a class="anchor" href="#browsers-set-versions"></a>Browser Versions</h5>
@@ -3768,8 +3812,50 @@ browserVersion = 96.0</code></pre>
 </div>
 <div class="sect4">
 <h5 id="browsers-set-custom-annotations"><a class="anchor" href="#browsers-set-custom-annotations"></a>Custom Annotations</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon is using exactly the same annotations YAML format as <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes itself</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. If you need to add the same annotations to all browser types - then configure global annotations in <a href="#configuration-object">configuration object</a>. To add annotations to some browser types - do the same in browser set as follows:</p>
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/">Kubernetes annotations</a> to started browser pods. If you need to add the same annotations to all browser types:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting custom Kubernetes annotations applied to all browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    annotations:                          <i class="conum" data-value="1"></i><b>(1)</b>
+      key1: &quot;value1&quot;                      <i class="conum" data-value="2"></i><b>(2)</b>
+      key2: &quot;value2&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Global annotations section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more annotations to be set</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To add annotations to some browser types - do the same for concrete browser type in browser set as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Setting browser-specific Kubernetes annotations</div>
@@ -3819,8 +3905,50 @@ browserVersion = 96.0</code></pre>
 </div>
 <div class="sect4">
 <h5 id="browsers-set-custom-labels"><a class="anchor" href="#browsers-set-custom-labels"></a>Custom Labels</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon is using exactly the same labels YAML format as <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#syntax-and-character-set">Kubernetes itself</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. If you need to add the same labels to all browser types - then configure global labels in <a href="#configuration-object">configuration object</a>. To add labels to some browser types - do the same in browser set as follows:</p>
+<p>In some cases you may need to add custom <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes labels</a> to started browser pods. If you need to add the same labels to all browser types:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting custom Kubernetes labels applied to all browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    labels:                          <i class="conum" data-value="1"></i><b>(1)</b>
+      key1: &quot;value1&quot;                 <i class="conum" data-value="2"></i><b>(2)</b>
+      key2: &quot;value2&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Global labels section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more annotations to be set</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To add labels to some browser types - do the same in browser set as follows:</p>
 </div>
 <div class="listingblock">
 <div class="title">Setting browser-specific Kubernetes labels</div>
@@ -3894,11 +4022,53 @@ browserVersion = 96.0</code></pre>
 </div>
 <div class="sect4">
 <h5 id="browsers-set-node-selectors"><a class="anchor" href="#browsers-set-node-selectors"></a>Node Selectors</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon is using exactly the same node selector YAML format as <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector">Kubernetes pods YAML</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
-<p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. To provide such selector to Moon browser pods update browsers set as shown below:</p>
+<p>Sometimes you may need to run browser pods on particular Kubernetes nodes (i.e. hardware hosts) only. Kubernetes allows to do this by specifying so-called <a href="https://kubernetes.io/docs/concepts/configuration/assign-pod-node/">node selectors</a>. If you need to add the same node selector to all browser types:</p>
 </div>
 <div class="listingblock">
-<div class="title">Setting environment variable in one line</div>
+<div class="title">Setting node selector applied to all browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    nodeSelector:                         <i class="conum" data-value="1"></i><b>(1)</b>
+      node-label-1: &quot;label1-value&quot;        <i class="conum" data-value="2"></i><b>(2)</b>
+      node-label-2: &quot;label2-value&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Node selector specification section</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>One or more Kubernetes node labels to match against</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To provide node selector to specific browser type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting node selector for specific browser type</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
@@ -3917,6 +4087,153 @@ browserVersion = 96.0</code></pre>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
 <td>One or more Kubernetes node labels to match against</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-affinity"><a class="anchor" href="#browsers-set-affinity"></a>Affinity</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon is using exactly the same affinity configuration YAML format as <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#affinity-and-anti-affinity">Kubernetes pods YAML</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In addition to node selectors, you can also use all available node and pod affinity features available in Kubernetes. This allows you to have even more advanced pod scheduling settings like matching Kubernetes nodes against complex logical expressions, preventing some labeled pods to be running on the same node with another labeled pods and so on. If you need to add the same affinity setting to all browser types:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting affinity applied to all browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    affinity:                                            <i class="conum" data-value="1"></i><b>(1)</b>
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: kubernetes.io/e2e-az-name
+              operator: In
+              values:
+              - e2e-az1
+              - e2e-az2</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Affinity specification section</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To provide affinity to specific browser type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting affinity for specific browser type</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">affinity</span>:                                           <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="key">nodeAffinity</span>:
+        <span class="key">requiredDuringSchedulingIgnoredDuringExecution</span>:
+          <span class="key">nodeSelectorTerms</span>:
+          - <span class="string"><span class="content">matchExpressions:</span></span>
+            - <span class="string"><span class="content">key: kubernetes.io/e2e-az-name</span></span>
+              <span class="key">operator</span>: <span class="string"><span class="content">In</span></span>
+              <span class="key">values</span>:
+              - <span class="string"><span class="content">e2e-az1</span></span>
+              - <span class="string"><span class="content">e2e-az2</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Affinity specification section</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="browsers-set-tolerations"><a class="anchor" href="#browsers-set-tolerations"></a>Tolerations</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon is using exactly the same tolerations configuration YAML format as <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/">Kubernetes pods YAML</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In addition to node selector and affinity, Kubernetes has a concept of <a href="https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/">node taints</a>. Taints allow nodes to repel some pods from being scheduled on them. If you wish to run browser pods on tainted nodes - you have to add <strong>tolerations</strong>, that is to say a number of conditions to match against tainted nodes.</p>
+</div>
+<div class="paragraph">
+<p>If you need to add the same tolerations to all browser types:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting affinity applied to all browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    tolerations:            <i class="conum" data-value="1"></i><b>(1)</b>
+    - key: &quot;key1&quot;
+      operator: &quot;Equal&quot;
+      value: &quot;value1&quot;
+      effect: &quot;NoSchedule&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Tolerations specification section</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To assign tolerations to specific browser type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting tolerations for specific browser type</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
+  <span class="key">chrome</span>:
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">tolerations</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
+    - <span class="string"><span class="content">key: &quot;key1&quot;</span></span>
+      <span class="key">operator</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Equal</span><span class="delimiter">&quot;</span></span>
+      <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+      <span class="key">effect</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">NoSchedule</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Tolerations specification section</td>
 </tr>
 </table>
 </div>
@@ -3966,7 +4283,7 @@ browserVersion = 96.0</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p><code>dnsConfig</code> and <code>hostAliases</code> fields have the same syntax as their Kubernetes equivalents (<a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config">pod DNS config</a> and <a href="https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/">host aliases</a> respectively).</p>
+<p><code>dnsConfig</code> and <code>hostAliases</code> fields have exactly the same syntax as their Kubernetes equivalents (<a href="https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config">pod DNS config</a> and <a href="https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/">host aliases</a> respectively).</p>
 </div>
 </div>
 <div class="sect4">
@@ -4419,18 +4736,64 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <div class="sect2">
 <h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.6. Advanced Settings</h3>
 <div class="paragraph">
-<p>This section describes how to configure some advanced features sometimes required by Kubernetes cluster settings.</p>
+<p>This section describes how to configure some advanced features sometimes required by Kubernetes cluster settings. Moon is using just the same keys and values that Kubernetes itself does for most of the settings below. This is how a typical Kubernetes pod looks like:</p>
+</div>
+<div class="listingblock">
+<div class="title">Standard Kubernetes pod YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Pod</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">my-app</span></span>
+<span class="key">spec</span>:
+  <span class="key">containers</span>:
+  - <span class="string"><span class="content">name: app</span></span>
+    <span class="key">image</span>: <span class="string"><span class="content">my-company/my-app:1.0.0</span></span>
+    <span class="key">annotations</span>:
+      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+    <span class="key">labels</span>:
+      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+    <span class="key">resources</span>:
+      <span class="key">requests</span>:
+        <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
+        <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">250m</span><span class="delimiter">&quot;</span></span>
+      <span class="key">limits</span>:
+        <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">128Mi</span><span class="delimiter">&quot;</span></span>
+        <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">500m</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now compare this with one of Moon objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    annotations:
+      key1: &quot;value1&quot;
+      key2: &quot;value2&quot;
+    labels:
+      key1: &quot;value1&quot;
+      key2: &quot;value2&quot;</span></span></code></pre>
+</div>
 </div>
 <div class="sect3">
 <h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.6.1. Adding Custom Kubernetes Annotations</h4>
 <div class="paragraph">
-<p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-annotations">here</a>.</p>
+<p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-annotations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
 <h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.6.2. Adding Custom Kubernetes Labels</h4>
 <div class="paragraph">
-<p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-labels">here</a>. Also, you can override labels using <a href="#capability-labels"><code>labels</code> capability</a>.</p>
+<p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-labels">here</a>. Also, you can override labels using <a href="#capability-labels"><code>labels</code> capability</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4482,17 +4845,29 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <div class="sect3">
 <h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.6.4. Using Node Selectors</h4>
 <div class="paragraph">
-<p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-node-selectors">here</a>.</p>
+<p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-node-selectors">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.6.5. Running Browser Pods in Privileged Mode</h4>
+<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.6.5. Using Affinity</h4>
+<div class="paragraph">
+<p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-affinity">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.6.6. Using Tolerations</h4>
+<div class="paragraph">
+<p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-tolerations">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.6.7. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-privileged-mode">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.6.6. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.6.8. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
@@ -5733,7 +6108,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-10 10:10:49 UTC
+Last updated 2022-02-11 04:32:26 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
