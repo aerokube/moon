@@ -3362,40 +3362,48 @@ items:
   spec:
     additionalTrustedCAs: &quot;&quot;                  <i class="conum" data-value="2"></i><b>(2)</b>
     containers:                               <i class="conum" data-value="3"></i><b>(3)</b>
-      ca-certs:                               <i class="conum" data-value="4"></i><b>(4)</b>
-        repository: aerokube/ca-certs         <i class="conum" data-value="5"></i><b>(5)</b>
-        version: 2.0.0                        <i class="conum" data-value="6"></i><b>(6)</b>
-        ports:                                <i class="conum" data-value="7"></i><b>(7)</b>
+      browser:                                <i class="conum" data-value="4"></i><b>(4)</b>
+        resources:                            <i class="conum" data-value="5"></i><b>(5)</b>
+          limits:                             <i class="conum" data-value="6"></i><b>(6)</b>
+            cpu: &quot;1&quot;
+            memory: 2Gi
+          requests:                           <i class="conum" data-value="7"></i><b>(7)</b>
+            cpu: 500m
+            memory: 2Gi
+      ca-certs:                               <i class="conum" data-value="8"></i><b>(8)</b>
+        repository: aerokube/ca-certs         <i class="conum" data-value="9"></i><b>(9)</b>
+        version: 2.0.0                        <i class="conum" data-value="10"></i><b>(10)</b>
+        ports:                                <i class="conum" data-value="11"></i><b>(11)</b>
         - 4545
-        resources:                            <i class="conum" data-value="8"></i><b>(8)</b>
-          limits:                             <i class="conum" data-value="9"></i><b>(9)</b>
+        resources:                            <i class="conum" data-value="12"></i><b>(12)</b>
+          limits:                             <i class="conum" data-value="13"></i><b>(13)</b>
             cpu: 250m
             memory: 64Mi
-          requests:                           <i class="conum" data-value="10"></i><b>(10)</b>
+          requests:                           <i class="conum" data-value="14"></i><b>(14)</b>
             cpu: 100m
             memory: 64Mi
-      defender:                               <i class="conum" data-value="11"></i><b>(11)</b>
+      defender:                               <i class="conum" data-value="15"></i><b>(15)</b>
         # The same fields as for ca-certs
-      video-recorder:                         <i class="conum" data-value="12"></i><b>(12)</b>
+      video-recorder:                         <i class="conum" data-value="16"></i><b>(16)</b>
         # The same fields as for ca-certs
-      vnc-server:                             <i class="conum" data-value="13"></i><b>(13)</b>
+      vnc-server:                             <i class="conum" data-value="17"></i><b>(17)</b>
         # The same fields as for ca-certs
-      x-server:                               <i class="conum" data-value="14"></i><b>(14)</b>
+      x-server:                               <i class="conum" data-value="18"></i><b>(18)</b>
         # The same fields as for ca-certs
-    group:                                    <i class="conum" data-value="15"></i><b>(15)</b>
-      id: 4096                                <i class="conum" data-value="16"></i><b>(16)</b>
-      name: user                              <i class="conum" data-value="17"></i><b>(17)</b>
-    serviceAccountName: default               <i class="conum" data-value="18"></i><b>(18)</b>
-    sessionTimeout: 5m                        <i class="conum" data-value="19"></i><b>(19)</b>
-    storage:                                  <i class="conum" data-value="20"></i><b>(20)</b>
+    group:                                    <i class="conum" data-value="19"></i><b>(19)</b>
+      id: 4096                                <i class="conum" data-value="20"></i><b>(20)</b>
+      name: user                              <i class="conum" data-value="21"></i><b>(21)</b>
+    serviceAccountName: default               <i class="conum" data-value="22"></i><b>(22)</b>
+    sessionTimeout: 5m                        <i class="conum" data-value="23"></i><b>(23)</b>
+    storage:                                  <i class="conum" data-value="24"></i><b>(24)</b>
       accessKey: &quot;&quot;
       bucket: &quot;&quot;
       endpoint: &quot;&quot;
       pattern: &quot;&quot;
       secretKey: &quot;&quot;
-    user:                                     <i class="conum" data-value="21"></i><b>(21)</b>
-      id: 4096                                <i class="conum" data-value="22"></i><b>(22)</b>
-      name: user                              <i class="conum" data-value="23"></i><b>(23)</b>
+    user:                                     <i class="conum" data-value="25"></i><b>(25)</b>
+      id: 4096                                <i class="conum" data-value="26"></i><b>(26)</b>
+      name: user                              <i class="conum" data-value="27"></i><b>(27)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
@@ -3417,82 +3425,98 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
-<td><code>ca-certs</code> container configuration</td>
+<td><code>browser</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Container image repository</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Container image version (optional)</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="7"></i><b>7</b></td>
-<td>Exposed container ports</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="8"></i><b>8</b></td>
 <td>Computing resources assigned to container</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td><i class="conum" data-value="6"></i><b>6</b></td>
 <td>CPU and memory limits assigned to container</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td><i class="conum" data-value="7"></i><b>7</b></td>
 <td>CPU and memory requests assigned to container</td>
 </tr>
 <tr>
+<td><i class="conum" data-value="8"></i><b>8</b></td>
+<td><code>ca-certs</code> container configuration</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="9"></i><b>9</b></td>
+<td>Container image repository</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="10"></i><b>10</b></td>
+<td>Container image version (optional)</td>
+</tr>
+<tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
-<td><code>defender</code> container configuration</td>
+<td>Exposed container ports</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="12"></i><b>12</b></td>
-<td><code>video-recorder-server</code> container configuration</td>
+<td>Computing resources assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="13"></i><b>13</b></td>
-<td><code>vnc-server</code> container configuration</td>
+<td>CPU and memory limits assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="14"></i><b>14</b></td>
-<td><code>x-server</code> container configuration</td>
+<td>CPU and memory requests assigned to container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="15"></i><b>15</b></td>
-<td>System group used to start containers</td>
+<td><code>defender</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="16"></i><b>16</b></td>
-<td>System group numeric identifier (<code>gid</code>)</td>
+<td><code>video-recorder-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="17"></i><b>17</b></td>
-<td>System group name</td>
+<td><code>vnc-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="18"></i><b>18</b></td>
-<td>Kubernetes service account name to use</td>
+<td><code>x-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="19"></i><b>19</b></td>
-<td>Default Selenium session timeout</td>
+<td>System group used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="20"></i><b>20</b></td>
-<td>S3 storage settings (used to save recorded videos)</td>
+<td>System group numeric identifier (<code>gid</code>)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="21"></i><b>21</b></td>
-<td>System user used to start containers</td>
+<td>System group name</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
-<td>System user numeric identifier (<code>uid</code>)</td>
+<td>Kubernetes service account name to use</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="23"></i><b>23</b></td>
+<td>Default Selenium session timeout</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="24"></i><b>24</b></td>
+<td>S3 storage settings (used to save recorded videos)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="25"></i><b>25</b></td>
+<td>System user used to start containers</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="26"></i><b>26</b></td>
+<td>System user numeric identifier (<code>uid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="27"></i><b>27</b></td>
 <td>System username</td>
 </tr>
 </table>
@@ -4512,10 +4536,39 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <div class="sect3">
 <h4 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>3.4.1. Adjusting Moon Timeouts</h4>
 <div class="paragraph">
-<p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes suspicious browser sessions. Several Moon flags are responsible for timeout settings:</p>
+<p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes idle browser sessions. A session is considered idle when the delay between separate HTTP requests corresponding to a running session is bigger than configured timeout. Idle timeout may need to be increased when tested application pages are loading too slowly. To view or change idle timeout setting - take a look at <a href="#configuration-object">configuration object</a>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing configuration objects as YAML</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Config
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    # Other fields
+    # Use values like 60s or 1m10s here
+    sessionTimeout: 5m                        <i class="conum" data-value="1"></i><b>(1)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Idle session timeout setting</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Several rarely needed Moon <a href="#cli-flags-moon">command-line flags</a> are responsible for advanced timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Available Timeout Flags</caption>
+<caption class="title">Table 10. Rarely Needed Command-line Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -4532,12 +4585,6 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-timeout</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1 minute</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum browser session idle time - measured as maximum time between separate HTTP requests corresponding to a running session.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">When this timeout expires - session is automatically closed. You may need to increase this timeout when tested application pages load too slowly.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">-delete-timeout</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">10 minutes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to delete Kubernetes resources created for browser session.</p></td>
@@ -4547,7 +4594,7 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <td class="tableblock halign-left valign-top"><p class="tableblock">-session-attempt-timeout</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">30 minutes</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Maximum time to start browser pod.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">This time includes Kubernetes scheduling time and browser image download duration.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This time includes Kubernetes scheduling time and browser image download duration. You load balancer proxy timeout should be bigger than this setting.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4587,133 +4634,93 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <div class="sect3">
 <h4 id="resources-browser"><a class="anchor" href="#resources-browser"></a>3.5.1. Browser Resources Consumption</h4>
 <div class="paragraph">
-<p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image use one of the following <a href="#cli-flags-moon">moon container flags</a>:</p>
+<p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image - use <a href="#configuration-object">configuration object</a>:</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Resources Consumption Flags</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="error">$ kubectl get configs -n moon -o yaml</span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">items</span>:
+- <span class="string"><span class="content">apiVersion: moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="key">containers</span>:
+      <span class="key">browser</span>:
+        <span class="key">resources</span>:        <i class="conum" data-value="1"></i><b>(1)</b>
+          <span class="key">limits</span>:
+            <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1</span><span class="delimiter">&quot;</span></span>
+            <span class="key">memory</span>: <span class="string"><span class="content">2Gi</span></span>
+      <span class="comment"># Other fields</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
 <tr>
-<th class="tableblock halign-left valign-top">Flag</th>
-<th class="tableblock halign-left valign-top">Default Value</th>
-<th class="tableblock halign-left valign-top">Meaning</th>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Browser container resources configuration</td>
 </tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-cpu-limit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Hard CPU limit for browser container (no more than this limit is given)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-cpu-request</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Soft (guaranteed) CPU limit for browser container</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-memory-limit</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2Gi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Hard memory limit for browser container</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-memory-request</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2Gi</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Soft memory limit for browser container</p></td>
-</tr>
-</tbody>
 </table>
+</div>
 <div class="paragraph">
-<p>You can also override the same values for every browser type in <a href="#browsers-set">browsers set</a>. An example snippet can be found <a href="#browsers-set-computing-resources">here</a>. In some installations you may also want to completely disable CPU or memory limits for all browsers pods. This can be achieved with one of the following flags:</p>
+<p>To update resource settings - simply edit configuration object, save and exit:</p>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Disabling Memory and CPU limits</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Flag</th>
-<th class="tableblock halign-left valign-top">Meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-disable-cpu-limits</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Completely disables CPU limits for all browser pods</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">-disable-memory-limits</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Completely disables memory limits for all browser pods</p></td>
-</tr>
-</tbody>
-</table>
+<div class="listingblock">
+<div class="title">Editing a configuration object</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit config default -n moon # Update computing resources configuration, save and exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also override the same values for every browser type in <a href="#browsers-set">browsers set</a>. An example snippet can be found <a href="#browsers-set-computing-resources">here</a>.</p>
+</div>
 </div>
 <div class="sect3">
 <h4 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>3.5.2. Service Images Resources Consumption</h4>
 <div class="paragraph">
-<p>By default, service images have the following resources requirements:</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. Service Images Default Resources Limits</caption>
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">CPU Limit</th>
-<th class="tableblock halign-left valign-top">Memory Limit</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">defender</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">64Mi</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">vnc-server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">64Mi</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">x-server</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">64Mi</p></td>
-</tr>
-</tbody>
-</table>
-<div class="paragraph">
-<p>You can optionally adjust CPU and memory consumption for each service image in <a href="#configuration-object">configuration object</a> similarly to browsers:</p>
+<p>To check service images resources requirements - simply show configuration object for your quota in YAML format:</p>
 </div>
 <div class="listingblock">
-<div class="title">Adjusting memory and CPU limits for service images</div>
+<div class="title">Listing configuration objects as YAML</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
-<span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
-<span class="key">metadata</span>:
-    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
-    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="comment"># Other Kubernetes metadata</span>
-<span class="key">spec</span>:
-    <span class="key">containers</span>:
-      <span class="key">defender</span>:
-        <span class="key">image</span>: <span class="string"><span class="content">aerokube/defender:2.0.0</span></span>
-        <span class="key">resources</span>:
-          <span class="key">limits</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="content">250m</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="content">64Mi</span></span>
-          <span class="key">requests</span>:
-            <span class="key">cpu</span>: <span class="string"><span class="content">100m</span></span>
-            <span class="key">memory</span>: <span class="string"><span class="content">64Mi</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Config
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    containers:
+      browser:
+        # Some fields
+      ca-certs:
+        # More fields go here
+        resources:
+          limits:
+            cpu: 250m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+      defender:
+        # The same fields as for ca-certs
+      video-recorder:
+        # The same fields as for ca-certs
+      vnc-server:
+        # The same fields as for ca-certs
+      x-server:
+        # The same fields as for ca-certs
+      # Other fields</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>To adjust CPU and memory consumption for each service image - simply update <a href="#configuration-object">configuration object</a> accordingly.</p>
 </div>
 </div>
 <div class="sect3">
@@ -4872,7 +4879,7 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Default user and group assigned to browser pods</caption>
+<caption class="title">Table 11. Default user and group assigned to browser pods</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4964,7 +4971,7 @@ $ curl -s http://localhost:4444/metrics
 <p>The following metrics are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Moon Built-in Prometheus Metrics</caption>
+<caption class="title">Table 12. Moon Built-in Prometheus Metrics</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -5709,7 +5716,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Moon License Pricing</caption>
+<caption class="title">Table 13. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5800,7 +5807,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <h2 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>Appendix A: Supported Mobile Devices</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 17. Supported Mobile Devices</caption>
+<caption class="title">Table 14. Supported Mobile Devices</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -6108,7 +6115,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-11 04:32:26 UTC
+Last updated 2022-02-11 08:42:41 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
