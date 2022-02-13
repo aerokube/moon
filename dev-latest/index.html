@@ -1850,7 +1850,9 @@ Using video recording requires <a href="#video-recording">initial configuration<
 <div class="title">Enabling video in Selenium capabilities</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="python">capabilities = {
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVideo</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVideo</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
+    }
 }</code></pre>
 </div>
 </div>
@@ -6731,7 +6733,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-13 16:24:34 UTC
+Last updated 2022-02-13 16:58:30 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
