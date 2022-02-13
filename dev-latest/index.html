@@ -579,18 +579,20 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#selenium">2.1. Using Selenium</a>
 <ul class="sectlevel3">
 <li><a href="#selenium-moon-capabilities">2.1.1. Moon-specific Capabilities</a></li>
-<li><a href="#mobile-emulation">2.1.2. Mobile Emulation</a></li>
-<li><a href="#clipboard">2.1.3. Accessing Clipboard</a></li>
-<li><a href="#accessing-downloaded-files">2.1.4. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-locale">2.1.5. Changing Browser Locale</a></li>
-<li><a href="#selenium-external-host">2.1.6. Using External Hosts</a></li>
+<li><a href="#selenium-video-recording">2.1.2. Video Recording</a></li>
+<li><a href="#mobile-emulation">2.1.3. Mobile Emulation</a></li>
+<li><a href="#clipboard">2.1.4. Accessing Clipboard</a></li>
+<li><a href="#accessing-downloaded-files">2.1.5. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-locale">2.1.6. Changing Browser Locale</a></li>
+<li><a href="#selenium-external-host">2.1.7. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
 <ul class="sectlevel3">
 <li><a href="#cypress-select-browser">2.2.1. Selecting Requested Browser</a></li>
 <li><a href="#cypress-select-cypress-version">2.2.2. Selecting Exact Cypress Version</a></li>
-<li><a href="#cypress-additional-features">2.2.3. Enabling Additional Features</a></li>
+<li><a href="#cypress-video-recording">2.2.3. Video Recording</a></li>
+<li><a href="#cypress-additional-features">2.2.4. Enabling Additional Features</a></li>
 </ul>
 </li>
 <li><a href="#playwright">2.3. Using Playwright</a>
@@ -598,13 +600,15 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#playwright-select-browser">2.3.1. Selecting Requested Browser</a></li>
 <li><a href="#playwright-select-browser-version">2.3.2. Selecting Exact Browser Version</a></li>
 <li><a href="#playwright-select-playwright-version">2.3.3. Selecting Exact Playwright Version</a></li>
-<li><a href="#playwright-additional-features">2.3.4. Enabling Additional Features</a></li>
+<li><a href="#playwright-video-recording">2.3.4. Video Recording</a></li>
+<li><a href="#playwright-additional-features">2.3.5. Enabling Additional Features</a></li>
 </ul>
 </li>
 <li><a href="#devtools">2.4. Using Chrome Developer Tools</a>
 <ul class="sectlevel3">
 <li><a href="#devtools-select-browser">2.4.1. Selecting Requested Browser</a></li>
-<li><a href="#devtools-additional-features">2.4.2. Enabling Additional Features</a></li>
+<li><a href="#devtools-video-recording">2.4.2. Video Recording</a></li>
+<li><a href="#devtools-additional-features">2.4.3. Enabling Additional Features</a></li>
 </ul>
 </li>
 </ul>
@@ -629,45 +633,51 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#devices-set">3.2.5. Devices Set</a></li>
 </ul>
 </li>
-<li><a href="#private-container-registry">3.3. Using Private Container Registry</a></li>
-<li><a href="#timeouts">3.4. Adjusting Timeouts</a>
+<li><a href="#video-recording">3.3. Video Recording</a>
 <ul class="sectlevel3">
-<li><a href="#timeouts-moon">3.4.1. Adjusting Moon Timeouts</a></li>
-<li><a href="#timeouts-other">3.4.2. Adjusting Other Timeouts</a></li>
+<li><a href="#video-recording-s3">3.3.1. Enabling S3 Storage</a></li>
+<li><a href="#video-recording-enable">3.3.2. Requesting to Record a Video</a></li>
 </ul>
 </li>
-<li><a href="#resources">3.5. Adjusting Resources Consumption</a>
+<li><a href="#private-container-registry">3.4. Using Private Container Registry</a></li>
+<li><a href="#timeouts">3.5. Adjusting Timeouts</a>
 <ul class="sectlevel3">
-<li><a href="#resources-browser">3.5.1. Browser Resources Consumption</a></li>
-<li><a href="#resources-service-images">3.5.2. Service Images Resources Consumption</a></li>
-<li><a href="#resources-qos">3.5.3. Pods Quality of Service</a></li>
+<li><a href="#timeouts-moon">3.5.1. Adjusting Moon Timeouts</a></li>
+<li><a href="#timeouts-other">3.5.2. Adjusting Other Timeouts</a></li>
 </ul>
 </li>
-<li><a href="#ca-certs">3.6. Using self-signed TLS certificates</a></li>
-<li><a href="#advanced-settings">3.7. Advanced Settings</a>
+<li><a href="#resources">3.6. Adjusting Resources Consumption</a>
 <ul class="sectlevel3">
-<li><a href="#advanced-settings-annotations">3.7.1. Adding Custom Kubernetes Annotations</a></li>
-<li><a href="#advanced-settings-labels">3.7.2. Adding Custom Kubernetes Labels</a></li>
-<li><a href="#advanced-settings-network-policies">3.7.3. Adding Network Policies</a></li>
-<li><a href="#node-selectors">3.7.4. Using Node Selectors</a></li>
-<li><a href="#affinity">3.7.5. Using Affinity</a></li>
-<li><a href="#tolerations">3.7.6. Using Tolerations</a></li>
-<li><a href="#privileged-mode">3.7.7. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#advanced-settings-user-group">3.7.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#resources-browser">3.6.1. Browser Resources Consumption</a></li>
+<li><a href="#resources-service-images">3.6.2. Service Images Resources Consumption</a></li>
+<li><a href="#resources-qos">3.6.3. Pods Quality of Service</a></li>
 </ul>
 </li>
-<li><a href="#monitoring">3.8. Monitoring</a>
+<li><a href="#ca-certs">3.7. Using self-signed TLS certificates</a></li>
+<li><a href="#advanced-settings">3.8. Advanced Settings</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring-setup">3.8.1. Setup</a></li>
-<li><a href="#monitoring-built-in-metrics">3.8.2. Built-in Moon metrics</a></li>
-<li><a href="#filter-by-labels">3.8.3. Filtering Browser Pods by Labels</a></li>
+<li><a href="#advanced-settings-annotations">3.8.1. Adding Custom Kubernetes Annotations</a></li>
+<li><a href="#advanced-settings-labels">3.8.2. Adding Custom Kubernetes Labels</a></li>
+<li><a href="#advanced-settings-network-policies">3.8.3. Adding Network Policies</a></li>
+<li><a href="#node-selectors">3.8.4. Using Node Selectors</a></li>
+<li><a href="#affinity">3.8.5. Using Affinity</a></li>
+<li><a href="#tolerations">3.8.6. Using Tolerations</a></li>
+<li><a href="#privileged-mode">3.8.7. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#advanced-settings-user-group">3.8.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
 </ul>
 </li>
-<li><a href="#log-files">3.9. Log Files</a></li>
-<li><a href="#_cli_flags">3.10. CLI Flags</a>
+<li><a href="#monitoring">3.9. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.10.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-auth">3.10.2. Moon Auth Container Flags</a></li>
+<li><a href="#monitoring-setup">3.9.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.9.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.9.3. Filtering Browser Pods by Labels</a></li>
+</ul>
+</li>
+<li><a href="#log-files">3.10. Log Files</a></li>
+<li><a href="#_cli_flags">3.11. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#cli-flags-moon">3.11.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-auth">3.11.2. Moon Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -1607,6 +1617,91 @@ driver = webdriver.Remote(
 </div>
 </div>
 <div class="sect4">
+<h5 id="capability-video-recording"><a class="anchor" href="#capability-video-recording"></a>Video Recording: enableVideo, videoName, videoScreenSize, videoFrameRate, videoCodec, pattern</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using video recording requires <a href="#video-recording">initial configuration</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To enable video recording for browser session, add:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>enableVideo: true</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>By default, saved video files are named <code>video.mp4</code>. To provide custom video name specify:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoName: "my-cool-video.mp4"</pre>
+</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+It is important to add <code>mp4</code> file extension.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>By default, the entire screen picture is being recorded. Specifying <code>screenResolution</code> capability changes recorded video size (width and height) accordingly. You can override video screen size by passing a capability. In case of <code>videoScreenSize</code> resolution is less than actual, screen on video will be trimmed starting from top-left corner:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoScreenSize: "1024x768"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Default video frame rate is <code>12</code> frames per second. Specifying <code>videoFrameRate</code> capability changes this value:</p>
+<div class="listingblock">
+<div class="title">Type: int</div>
+<div class="content">
+<pre>videoFrameRate: 24</pre>
+</div>
+</div>
+</li>
+<li>
+<p>By default, Moon is using <code>libx264</code> codec for video output. If this codec is consuming too much CPU, you can change it using <code>videoCodec</code> capability:</p>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>videoCodec: "mpeg4"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>To organize <a href="#video-recording-s3-custom-layout">custom S3 layout</a> for every uploaded video - use <code>pattern</code> (or <code>s3KeyPattern</code>) capability:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>pattern: "$quota/$browserName/$sessionId"</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="capability-env"><a class="anchor" href="#capability-env"></a>Per-session Environment Variables: env</h5>
 <div class="paragraph">
 <p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
@@ -1659,7 +1754,7 @@ driver = webdriver.Remote(
 <div class="sect4">
 <h5 id="capability-sessionTimeout"><a class="anchor" href="#capability-sessionTimeout"></a>Custom Session Timeout: sessionTimeout</h5>
 <div class="paragraph">
-<p>Sometimes you may want to change idle timeout for selected browser session. To achieve this - pass the following capability:</p>
+<p>Sometimes you may want to change <a href="#timeouts">idle timeout</a> for selected browser session. To achieve this - pass the following capability:</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: string</div>
@@ -1735,7 +1830,36 @@ driver = webdriver.Remote(
 </div>
 </div>
 <div class="sect3">
-<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.2. Mobile Emulation</h4>
+<h4 id="selenium-video-recording"><a class="anchor" href="#selenium-video-recording"></a>2.1.2. Video Recording</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Using video recording requires <a href="#video-recording">initial configuration</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>When video recording is configured, recording a video of Selenium session is as easy as adding one capability to your test:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling video in Selenium capabilities</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVideo</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add other <a href="#capability-video-recording">capabilities</a> to change recorded video name, screen size, frame rate and so on.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.3. Mobile Emulation</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1801,7 +1925,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.3. Accessing Clipboard</h4>
+<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.4. Accessing Clipboard</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1872,7 +1996,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.4. Accessing Files Downloaded with Browser</h4>
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.5. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1940,7 +2064,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.5. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.6. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -1970,7 +2094,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.6. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.7. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -2149,7 +2273,22 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.2.3. Enabling Additional Features</h4>
+<h4 id="cypress-video-recording"><a class="anchor" href="#cypress-video-recording"></a>2.2.3. Video Recording</h4>
+<div class="paragraph">
+<p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling video recording</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron/cypress-7.3.0?headless=false&amp;enableVideo=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add other <a href="#cypress-additional-features">parameters</a> to change recorded video name, screen size, frame rate and so on.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.2.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting Cypress version - you can enable additional features like changing screen resolution, passing custom test name and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -2184,6 +2323,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">Custom Cypress configuration file</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Path to custom Cypress <a href="https://docs.cypress.io/guides/references/configuration">configuration file</a>. <strong>Supported for Cypress 9.0.0 and above.</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable video recording.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
@@ -2222,6 +2367,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to leave container running after executing all tests. Mainly needed for debugging purposes.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string with placeholders</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$quota/$browserName/$sessionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A custom S3 key <a href="#video-recording-s3-custom-layout">pattern</a> used to save videos to S3 bucket.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
@@ -2232,6 +2383,30 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cypress test spec file name (e.g. <code>cypress/integration/my-spec.js</code>)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to run one or more concrete test files. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Codec to be used for video encoding, e.g. <code>mpeg4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libx264</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to change codec used for video recording.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoFrameRate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video frame rate.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Video file name with extension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>video.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video file name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoScreenSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equals to <code>screenResolution</code> value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video screen size. If value is smaller than <code>screenResolution</code>, then video will be cropped.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2302,19 +2477,19 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <div class="listingblock">
 <div class="title">Requesting Chromium (<code>playwright/chromium:latest</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chromium</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chromium</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Requesting Firefox (<code>playwright/firefox:latest</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/firefox</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Requesting Webkit (<code>playwright/webkit:latest</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/webkit</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/webkit</code></pre>
 </div>
 </div>
 </div>
@@ -2326,7 +2501,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <div class="listingblock">
 <div class="title">Selecting Firefox 94.0 (<code>playwright/firefox:94.0</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/94.0</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/firefox/94.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2341,19 +2516,34 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <div class="listingblock">
 <div class="title">Selecting an image compatible to Playwright 1.17.1 (<code>playwright/firefox:playwright-1.17.1</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/firefox/playwright-1.17.1</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/firefox/playwright-1.17.1</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.4. Enabling Additional Features</h4>
+<h4 id="playwright-video-recording"><a class="anchor" href="#playwright-video-recording"></a>2.3.4. Video Recording</h4>
+<div class="paragraph">
+<p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling video recording</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com:4444/playwright/firefox/playwright-1.17.1?headless=false&amp;enableVideo=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add other <a href="#playwright-additional-features">parameters</a> to change recorded video name, screen size, frame rate and so on.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.5. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding parameters to enable additional features</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">ws://moon.example.com:4444/playwright/chrome?headless=false&amp;arg=--use-gl</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome?headless=false&amp;arg=--use-gl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2389,6 +2579,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar (only applicable to <code>chromium</code> browser).</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable video recording.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
@@ -2419,6 +2615,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string with placeholders</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$quota/$browserName/$sessionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A custom S3 key <a href="#video-recording-s3-custom-layout">pattern</a> used to save videos to S3 bucket.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
@@ -2429,6 +2631,30 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Codec to be used for video encoding, e.g. <code>mpeg4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libx264</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to change codec used for video recording.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoFrameRate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video frame rate.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Video file name with extension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>video.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video file name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoScreenSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equals to <code>screenResolution</code> value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video screen size. If value is smaller than <code>screenResolution</code>, then video will be cropped.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2521,7 +2747,22 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.4.2. Enabling Additional Features</h4>
+<h4 id="devtools-video-recording"><a class="anchor" href="#devtools-video-recording"></a>2.4.2. Video Recording</h4>
+<div class="paragraph">
+<p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling video recording</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/devtools/chrome/85.0?headless=false&amp;enableVideo=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can optionally add other <a href="#devtools-additional-features">parameters</a> to change recorded video name, screen size, frame rate and so on.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.4.3. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>You can enable additional features by changing connection URL:</p>
 </div>
@@ -2561,6 +2802,12 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock">Whether to show Chrome Developer Toolbar.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">enableVideo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable video recording</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">env</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Environment variables</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
@@ -2591,6 +2838,12 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly set one or several DNS servers for browser. Can be passed multiple times.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">pattern</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string with placeholders</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>$quota/$browserName/$sessionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A custom S3 key <a href="#video-recording-s3-custom-layout">pattern</a> used to save videos to S3 bucket.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">screenResolution</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code> or <code>1280x1024x24</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>1920x1080x24</code></p></td>
@@ -2601,6 +2854,30 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Europe/Moscow</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Time zone set to Moon</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sets time zone being used by browser.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoCodec</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Codec to be used for video encoding, e.g. <code>mpeg4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>libx264</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Allows to change codec used for video recording.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoFrameRate</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video frame rate.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Video file name with extension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>video.mp4</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video file name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">videoScreenSize</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1280x1024</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equals to <code>screenResolution</code> value</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recorded video screen size. If value is smaller than <code>screenResolution</code>, then video will be cropped.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4288,7 +4565,344 @@ metadata:
 </div>
 </div>
 <div class="sect2">
-<h3 id="private-container-registry"><a class="anchor" href="#private-container-registry"></a>3.3. Using Private Container Registry</h3>
+<h3 id="video-recording"><a class="anchor" href="#video-recording"></a>3.3. Video Recording</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Depending on <a href="#resources-service-images">computing resources configuration</a> enabling video recording will require approximately +1 CPU and +1 GB RAM for every browser sessions.</p>
+</li>
+<li>
+<p>We consider video recording mainly a debugging feature and do not recommend recording videos for every test scenario. Not only because doing this slightly increases computing resources consumption, but also because nobody will review thousands of recorded videos (especially for passed test scenarios).</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Video recording allows you to record the video of browser screen with your test scenario running in it. Recorded video can be then viewed in browser, video player or e.g. attached to test execution report. In Kubernetes or Openshift browsers are being run on a random network host and in case of auto-scaling enabled, these hosts periodically appear and disappear. So recorded videos should be saved to persistent storage before deleting browser pod. When requested Moon automatically sends recorded to video <a href="https://en.wikipedia.org/wiki/Amazon_S3">S3</a>-compatible storage. Such type of storage is supported by <a href="https://aws.amazon.com/">AWS</a>, <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://azure.microsoft.com/">Microsoft Azure</a>, <a href="https://digitalocean.com/">Digital Ocean</a> and many other cloud providers. To deploy a private S3-compatible storage you can use <a href="https://minio.io/">Minio</a>.</p>
+</div>
+<div class="paragraph">
+<p>To enable video recording you need to:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure S3 storage in Moon settings.</p>
+</li>
+<li>
+<p>Request to record a video during test run.</p>
+</li>
+</ol>
+</div>
+<div class="sect3">
+<h4 id="video-recording-s3"><a class="anchor" href="#video-recording-s3"></a>3.3.1. Enabling S3 Storage</h4>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create an S3 bucket. In this example bucket name is <code>moon-test</code>. You can create an S3-compatible bucket in the majority of public cloud platforms. How to configure Moon with these platforms in shown in the table below:</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. S3 settings for popular cloud platforms</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Platform Name</th>
+<th class="tableblock halign-left valign-top">Service Name</th>
+<th class="tableblock halign-left valign-top">Endpoint</th>
+<th class="tableblock halign-left valign-top">Signature Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AWS S3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Depends on region, e.g. <code><a href="https://s3.us-east-2.amazonaws.com" class="bare">https://s3.us-east-2.amazonaws.com</a></code>. See AWS <a href="https://docs.aws.amazon.com/general/latest/gr/s3.html">documentation</a> for detailed list of endpoints.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DigitalOcean</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DigitalOcean Spaces</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Depends on region, e.g. <code><a href="https://nyc3.digitaloceanspaces.com" class="bare">https://nyc3.digitaloceanspaces.com</a></code>. See <a href="https://www.digitalocean.com/docs/spaces/">documentation</a> for more details.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Cloud</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Cloud Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code><a href="https://storage.googleapis.com" class="bare">https://storage.googleapis.com</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Azure</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Azure Blob Storage</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No built-in S3 support. Need to deploy additional software like <a href="https://docs.min.io/docs/minio-gateway-for-azure.html">Minio</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">S3v4</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>Access to S3 bucket can be provided either with <strong>a pair of static credentials</strong> (an <strong>access key</strong> and a <strong>secret key</strong>) or by <strong>adding cloud platform roles</strong>. This section shows how to configure static credentials. How to configure role-based access to S3 bucket is shown <a href="#video-recording-s3-roles">below</a>.</p>
+</li>
+<li>
+<p>Update storage settings in <a href="#configuration-object">configuration object</a>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="comment"># Some fields before</span>
+    <span class="key">storage</span>:
+      <span class="key">accessKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">AKIAXXXXXXXXXXXXXXXX</span><span class="delimiter">&quot;</span></span> <span class="comment"># Set if a pair of credentials is used</span>
+      <span class="key">bucket</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">moon-test</span><span class="delimiter">&quot;</span></span>
+      <span class="key">endpoint</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://s3.us-east-2.amazonaws.com</span><span class="delimiter">&quot;</span></span>
+      <span class="key">pattern</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="comment"># See below</span>
+      <span class="key">secretKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">okUa0XXXXXXXXXXXXXXXXXXXX</span><span class="delimiter">&quot;</span></span> <span class="comment"># Set if a pair of credentials is used</span>
+    <span class="comment"># Other fields</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="video-recording-enable"><a class="anchor" href="#video-recording-enable"></a>3.3.2. Requesting to Record a Video</h4>
+<div class="paragraph">
+<p>How to enable video recording depends on browser automation technology you are using:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#selenium-video-recording">Selenium</a></p>
+</li>
+<li>
+<p><a href="#cypress-video-recording">Cypress</a></p>
+</li>
+<li>
+<p><a href="#playwright-video-recording">Playwright</a></p>
+</li>
+<li>
+<p><a href="#devtools-video-recording">Chrome Developer Tools</a></p>
+</li>
+</ul>
+</div>
+<div class="sect4">
+<h5 id="video-recording-s3-custom-layout"><a class="anchor" href="#video-recording-s3-custom-layout"></a>Custom S3 Layout</h5>
+<div class="paragraph">
+<p>By default, videos are uploaded to S3 bucket as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Default S3 bucket layout</div>
+<div class="content">
+<pre>\---my-bucket
+    \---- &lt;session-id&gt;
+        |---- video.mp4</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon allows to organize any custom S3 keys layout using <strong>S3 key pattern</strong> with placeholders. A typical S3 key pattern looks like the following:</p>
+</div>
+<div class="listingblock">
+<div class="title">Typical S3 key pattern</div>
+<div class="content">
+<pre>$quota/$browserName/$browserVersion/$sessionId</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here every placeholder such as <code>$quota</code>, <code>$browserName</code>, <code>$browserVersion</code> and so on will be replaced by corresponding information: user name, browser name, browser version. The resulting S3 key will be used as a directory to save video files. A list of supported placeholders is shown in the table below:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. S3 Key Placeholders</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Placeholder</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$sessionId</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium session ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$browserName</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium browser name capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$browserVersion</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by Selenium browser version capability value</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by current date, e.g. <code>2018-11-01</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">$quota</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Replaced by quota name (i.e. user name provided in Selenium URL)</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Default S3 key pattern is just <code>$sessionId</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Default video paths</div>
+<div class="content">
+<pre>my-bucket/chrome-71-0-686efb96-eabe-4435-af31-21a33c8a4c8b/video.mp4</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can change S3 key pattern in <a href="#configuration-object">configuration object</a> as follows:</p>
+</div>
+<div class="paragraph">
+<div class="title">Setting custom S3 key pattern</div>
+<p>+</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="comment"># Some fields before</span>
+    <span class="key">storage</span>:
+      <span class="comment"># Other S3 storage settings</span>
+      <span class="key">pattern</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">$quota/$browserName/$browserVersion/$sessionId</span><span class="delimiter">&quot;</span></span>
+    <span class="comment"># Other fields</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To define an S3 key pattern for every browser session independently - use <code>pattern</code> capability described in <a href="#selenium-moon-capabilities">Moon-specific Capabilities</a> section.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="video-recording-s3-roles"><a class="anchor" href="#video-recording-s3-roles"></a>Role-based Access to S3</h5>
+<div class="paragraph">
+<p>Some teams prefer using cloud platform roles for giving access to S3 storage instead of a pair of static credentials. In this section we are showing how to deliver role-based access to S3 bucket in <a href="https://aws.amazon.com/">AWS</a> cloud. To do this:</p>
+</div>
+<div class="paragraph">
+<p><strong>Option 1. Use kube2iam and Kubernetes annotations</strong>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://github.com/jtblin/kube2iam">kube2iam</a>.</p>
+</li>
+<li>
+<p>Create an IAM role to access S3 bucket using the following CloudFormation template:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="comment">#jinja2:trim_blocks: False</span>
+<span class="comment">#jinja2:lstrip_blocks: False</span>
+{<span class="error">% set var = config.jinja_parameters %}</span>
+<span class="key">AWSTemplateFormatVersion</span>: <span class="string"><span class="content">'2010-09-09'</span></span>
+
+<span class="key">Description</span>: <span class="string"><span class="content">Contains infra components for Aerokube Moon</span></span>
+<span class="key">Parameters</span>:
+  <span class="key">TargetBucket</span>:
+    <span class="key">Description</span>: <span class="string"><span class="content">Target bucket for IAM permissions</span></span>
+    <span class="key">Type</span>: <span class="string"><span class="content">String</span></span>
+<span class="key">Resources</span>:
+  <span class="key">PodRole</span>:
+    <span class="key">Type</span>: <span class="string"><span class="content">AWS::IAM::Role</span></span>
+    <span class="key">Properties</span>:
+      <span class="key">RoleName</span>: <span class="string"><span class="content">aerokube-moon</span></span>
+      <span class="key">AssumeRolePolicyDocument</span>:
+        <span class="key">Version</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">2012-10-17</span><span class="delimiter">&quot;</span></span>
+        <span class="key">Statement</span>:
+        - <span class="string"><span class="content">Effect: Allow</span></span>
+          <span class="key">Action</span>: <span class="string"><span class="content">sts:AssumeRole</span></span>
+          <span class="key">Principal</span>:
+            <span class="key">Service</span>: <span class="string"><span class="content">ec2.amazonaws.com</span></span>
+        - <span class="string"><span class="content">Effect: Allow</span></span>
+          <span class="key">Action</span>: <span class="string"><span class="content">sts:AssumeRole</span></span>
+          <span class="key">Principal</span>:
+            <span class="key">AWS</span>: <span class="type">!Sub</span> <span class="string"><span class="content">arn:aws:iam::${AWS::AccountId}:role/EKSInstanceRole</span></span>
+      <span class="key">Policies</span>:
+        - <span class="string"><span class="content">PolicyName: aerokube-moon</span></span>
+          <span class="key">PolicyDocument</span>:
+            <span class="key">Statement</span>:
+              - <span class="string"><span class="content">Action:</span><span class="content">
+                  - s3:List*
+                  - s3:Get*
+                  - s3:Put*</span></span>
+                <span class="key">Effect</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Allow</span><span class="delimiter">&quot;</span></span>
+                <span class="key">Resource</span>:
+                  - <span class="type">!Sub</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">arn:aws:s3:::${TargetBucket}/*</span><span class="delimiter">&quot;</span></span>
+                  - <span class="type">!Sub</span> <span class="string"><span class="delimiter">&quot;</span><span class="content">arn:aws:s3:::${TargetBucket}</span><span class="delimiter">&quot;</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Annotate Moon namespace with the following annotation:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">annotations</span>:
+  <span class="key">iam.amazonaws.com/allowed-roles</span>: <span class="string"><span class="delimiter">|</span><span class="content">
+    [&quot;aerokube-moon&quot;]</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add an annotation to browser pods in <a href="#browsers-set">browsers set</a>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
+  kind: BrowserSet
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    annotations:
+      iam.amazonaws.com/role: &quot;aerokube-moon&quot;
+    # Other fields</span></span></code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Option 2. Add IAM role to Moon service account</strong>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Configure an IAM role for EKS service account <a href="https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html">AWS documentation</a>.</p>
+</li>
+<li>
+<p>Configure Moon to <a href="#faq-kubernetes-service-account">use</a> this service account.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="private-container-registry"><a class="anchor" href="#private-container-registry"></a>3.4. Using Private Container Registry</h3>
 <div class="paragraph">
 <p>By default, Moon images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) are downloaded from public container images registry. If in your environment due to security restrictions container images can only be downloaded from private registry (e.g. <code>my-registry.example.com</code>) you need to configure Moon to work with this registry. To do this:</p>
 </div>
@@ -4395,9 +5009,9 @@ aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1
 </div>
 </div>
 <div class="sect2">
-<h3 id="timeouts"><a class="anchor" href="#timeouts"></a>3.4. Adjusting Timeouts</h3>
+<h3 id="timeouts"><a class="anchor" href="#timeouts"></a>3.5. Adjusting Timeouts</h3>
 <div class="sect3">
-<h4 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>3.4.1. Adjusting Moon Timeouts</h4>
+<h4 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>3.5.1. Adjusting Moon Timeouts</h4>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes idle browser sessions. A session is considered idle when the delay between separate HTTP requests corresponding to a running session is bigger than configured timeout. Idle timeout may need to be increased when tested application pages are loading too slowly. To view or change idle timeout setting - take a look at <a href="#configuration-object">configuration object</a>:</p>
 </div>
@@ -4431,7 +5045,7 @@ items:
 <p>Several rarely needed Moon <a href="#cli-flags-moon">command-line flags</a> are responsible for advanced timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. Rarely Needed Command-line Timeout Flags</caption>
+<caption class="title">Table 12. Rarely Needed Command-line Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -4463,7 +5077,7 @@ items:
 </table>
 </div>
 <div class="sect3">
-<h4 id="timeouts-other"><a class="anchor" href="#timeouts-other"></a>3.4.2. Adjusting Other Timeouts</h4>
+<h4 id="timeouts-other"><a class="anchor" href="#timeouts-other"></a>3.5.2. Adjusting Other Timeouts</h4>
 <div class="paragraph">
 <p>Not only Moon timeout settings can cause your tests to break. A typical Moon installation looks like the following:</p>
 </div>
@@ -4493,9 +5107,9 @@ items:
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources"><a class="anchor" href="#resources"></a>3.5. Adjusting Resources Consumption</h3>
+<h3 id="resources"><a class="anchor" href="#resources"></a>3.6. Adjusting Resources Consumption</h3>
 <div class="sect3">
-<h4 id="resources-browser"><a class="anchor" href="#resources-browser"></a>3.5.1. Browser Resources Consumption</h4>
+<h4 id="resources-browser"><a class="anchor" href="#resources-browser"></a>3.6.1. Browser Resources Consumption</h4>
 <div class="paragraph">
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image - use <a href="#configuration-object">configuration object</a>:</p>
 </div>
@@ -4542,7 +5156,7 @@ items:
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>3.5.2. Service Images Resources Consumption</h4>
+<h4 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>3.6.2. Service Images Resources Consumption</h4>
 <div class="paragraph">
 <p>To check service images resources requirements - simply show configuration object for your quota in YAML format:</p>
 </div>
@@ -4587,7 +5201,7 @@ items:
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-qos"><a class="anchor" href="#resources-qos"></a>3.5.3. Pods Quality of Service</h4>
+<h4 id="resources-qos"><a class="anchor" href="#resources-qos"></a>3.6.3. Pods Quality of Service</h4>
 <div class="paragraph">
 <p>Browser automation stability and speed highly depends on how many computing resources are actually available to browser pods. Kubernetes has so-called <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service (QoS)</a> defining how many resources are assigned to pods being started. For stable browser automation we recommend always setting <code>Guaranteed</code> QoS class to Moon browser pods. To deliver this you have to make sure that <code>requests</code> and <code>limits</code> values for CPU and memory have equal values:</p>
 </div>
@@ -4604,7 +5218,7 @@ items:
 </div>
 </div>
 <div class="sect2">
-<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.6. Using self-signed TLS certificates</h3>
+<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.7. Using self-signed TLS certificates</h3>
 <div class="paragraph">
 <p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such self-signed TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>.</p>
 </div>
@@ -4731,7 +5345,7 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
 </div>
 </div>
 <div class="sect2">
-<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.7. Advanced Settings</h3>
+<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.8. Advanced Settings</h3>
 <div class="paragraph">
 <p>This section describes how to configure some advanced features sometimes required by Kubernetes cluster settings. Moon is using just the same keys and values that Kubernetes itself does for most of the settings below. This is how a typical Kubernetes pod looks like:</p>
 </div>
@@ -4782,19 +5396,19 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.7.1. Adding Custom Kubernetes Annotations</h4>
+<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.8.1. Adding Custom Kubernetes Annotations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-annotations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.7.2. Adding Custom Kubernetes Labels</h4>
+<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.8.2. Adding Custom Kubernetes Labels</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-labels">here</a>. Also, you can override labels using <a href="#capability-labels"><code>labels</code> capability</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.7.3. Adding Network Policies</h4>
+<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.8.3. Adding Network Policies</h4>
 <div class="paragraph">
 <p><a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Network policies</a> are dedicated Kubernetes objects allowing to control network firewall rules. Using them with Moon is straightforward:</p>
 </div>
@@ -4840,36 +5454,36 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
 </div>
 </div>
 <div class="sect3">
-<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.7.4. Using Node Selectors</h4>
+<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.8.4. Using Node Selectors</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-node-selectors">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.7.5. Using Affinity</h4>
+<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.8.5. Using Affinity</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-affinity">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.7.6. Using Tolerations</h4>
+<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.8.6. Using Tolerations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-tolerations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.7.7. Running Browser Pods in Privileged Mode</h4>
+<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.8.7. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-privileged-mode">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.7.8. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.8.8. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. Default user and group assigned to browser pods</caption>
+<caption class="title">Table 13. Default user and group assigned to browser pods</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4902,12 +5516,12 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
 </div>
 </div>
 <div class="sect2">
-<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.8. Monitoring</h3>
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.9. Monitoring</h3>
 <div class="paragraph">
 <p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.8.1. Setup</h4>
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.9.1. Setup</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -4944,7 +5558,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.8.2. Built-in Moon metrics</h4>
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.9.2. Built-in Moon metrics</h4>
 <div class="paragraph">
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod).</p>
 </div>
@@ -4961,7 +5575,7 @@ $ curl -s http://localhost:4444/metrics
 <p>The following metrics are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Moon Built-in Prometheus Metrics</caption>
+<caption class="title">Table 14. Moon Built-in Prometheus Metrics</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -5011,7 +5625,7 @@ $ curl -s http://localhost:4444/metrics
 </table>
 </div>
 <div class="sect3">
-<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.8.3. Filtering Browser Pods by Labels</h4>
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.9.3. Filtering Browser Pods by Labels</h4>
 <div class="paragraph">
 <p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
 </div>
@@ -5034,7 +5648,7 @@ $ curl -s http://localhost:4444/metrics
 </div>
 </div>
 <div class="sect2">
-<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.9. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.10. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -5073,12 +5687,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.10. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.11. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.10.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.11.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -5102,7 +5716,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.10.2. Moon Auth Container Flags</h4>
+<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.11.2. Moon Auth Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -5174,7 +5788,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div class="sect2">
 <h3 id="faq-kubernetes-service-account"><a class="anchor" href="#faq-kubernetes-service-account"></a>4.4. Is it possible to configure Kubernetes service account for Moon?</h3>
 <div class="paragraph">
-<p>Yes, Moon has <code>-browser-service-account</code> flag described in <a href="#cli-flags-moon">Moon Container Flags</a> section.</p>
+<p>Yes, Moon has <code>serviceAccountName</code> setting in <a href="#configuration-object">configuration object</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -5718,7 +6332,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. Moon License Pricing</caption>
+<caption class="title">Table 15. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5809,7 +6423,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <h2 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>Appendix A: Supported Mobile Devices</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Supported Mobile Devices</caption>
+<caption class="title">Table 16. Supported Mobile Devices</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -6117,7 +6731,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-13 07:48:55 UTC
+Last updated 2022-02-13 16:24:34 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
