@@ -3207,7 +3207,7 @@ moon_license_expire 1.6444512e+09</code></pre>
 <div class="sect3">
 <h4 id="users"><a class="anchor" href="#users"></a>3.2.1. Users</h4>
 <div class="paragraph">
-<p>Moon 2.x compared to Moon 1.x has <strong>no built-in authentication</strong> mechanism. This is because the recommended way to deliver authentication in Kubernetes is using available Ingress authentication features or sidecar containers delivering authentication. Moon reads username from <code>Authorization</code> or <code>X-Moon-Quota</code> HTTP headers being set by Ingress or sidecar container. The following sections describe possible authentication configurations.</p>
+<p>Moon 2.x compared to Moon 1.x has <strong>no built-in authentication</strong> mechanism. This is because the recommended way to deliver authentication in Kubernetes is using available Ingress authentication features or sidecar containers delivering authentication. Moon reads username from <code>X-Moon-Quota</code> HTTP header being set by Ingress or sidecar container. The following sections describe possible authentication configurations.</p>
 </div>
 <div class="sect4">
 <h5 id="users-nginx-basic-http"><a class="anchor" href="#users-nginx-basic-http"></a>Nginx Basic HTTP Authentication</h5>
@@ -3277,7 +3277,6 @@ bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
     <span class="key">nginx.ingress.kubernetes.io/auth-realm</span>: <span class="string"><span class="content">'Authentication Required - Moon Realm'    </span></span><i class="conum" data-value="3"></i><b>(3)</b>
     <span class="key">nginx.ingress.kubernetes.io/configuration-snippet</span>: <span class="string"><span class="delimiter">|</span></span>                              <i class="conum" data-value="4"></i><b>(4)</b>
       <span class="error">proxy_set_header X-Moon-Quota $remote_user;</span>
-      <span class="error">proxy_set_header Authorization $http_authorization;</span>
     <span class="key">nginx.ingress.kubernetes.io/proxy-connect-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
     <span class="key">nginx.ingress.kubernetes.io/proxy-send-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
     <span class="key">nginx.ingress.kubernetes.io/proxy-read-timeout</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">108000</span><span class="delimiter">&quot;</span></span>
@@ -5222,7 +5221,7 @@ items:
 <div class="sect2">
 <h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.7. Using self-signed TLS certificates</h3>
 <div class="paragraph">
-<p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such self-signed TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">HSTS</a>.</p>
+<p>In corporate networks tested environments are often using self-signed <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such self-signed TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">Strict Transport Security</a>.</p>
 </div>
 <div class="paragraph">
 <p>In order to work properly with self-signed certificates, you have to add your root certification authority certificate to a list of trusted certificates:</p>
@@ -5276,40 +5275,7 @@ ejbh
 </div>
 </li>
 <li>
-<p>Encode certificate data with <a href="https://en.wikipedia.org/wiki/Base64">Base64</a> algorithm:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ cat rootCA.crt | base64
-LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNvTUEwR0NTcUdTSWIzRFFFQkN3VUFNSUdMTVFzd0NRWUQKVlFRR0V3SkZSVEVRTUE0R0ExVUVDQk1IUlhOMGIyNXBZVEVRTUE0R0ExVUVCeE1IVkdGc2JHbHViakVlTUJ3RwpBMVVFQ2hRVlFXVnliMnQxWW1VZ1UyOW1kSGRoY21VZ1Q4T2NNUlV3RXdZRFZRUURFd3hoWlhKdmEzVmlaUzVqCmIyMHhJVEFmQmdrcWhraUc5dzBCQ1FFV0VtRmtiV2x1UUdGbGNtOXJkV0psTG1OdmJUQWVGdzB5TVRBeU1UY3cKTmpRNU5ESmFGdzB5TXpFeU1EZ3dOalE1TkRKYU1JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFQ0JNSApSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWdVMjltCmRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQkNRRVcKRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YlRDQ0FpSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnSVBBRENDQWdvQwpnZ0lCQUtkaDU0eDlXWnNTeElNZnoxckZFSHVKOCszbWVVdWEwUThjcGdDLzcwRjBHNlg2QlhPa2kwQ3U3aUVUCjZFVGZpcld1VWRSS0tHS1hITEY4RmR2NldUcW5MbERxZ3p5MVdwOUR1UElnZUorenRLWnQrdUpGa1dqZlFiOVIKbW43UXM0dnAvRjlIVHdxbFRabDVqTVErL25yY05BUWVORVoxSDFBZlpXQXVTdnJxcDNyVzMzd2w2SUJaY3FmRApWc01Ca25CS20vWmM4R3BnZ1k4Tll4a2ZqN0pvMml6d24vdFYrREZnd0YwcEprVXJEWlBQVGlOVzdxOFNlMlZiCjd0QzZJeTlaVmdrSDhoa3JXclB6d1c0enh6L2QvU2k3L2NubjlBOStiRitwS3JzSGt0blEwU2NERUFSNSs1MkoKWEFYa0VTLzRwSU5wQmN4dk5VSEdPNktYS0g0ckpWZjNRdlhYYW55MHVnd1ZRK1FYaXJBNnlPb1kzWEZnQnhnVQpQN1FkNXB5UWRWZi9Td0o1VWs1WjliMkhYazhrLzZqTnhlMUE2V2lvalRPbm4xZkQvVnpPVG40eGlvYnFOSXBFCnc1ZFVobGovVGlOK2czdUdCSDRCUG82SVlIQ21mc1hGRWNTWlc3NWs3ZFJsWjNaTUk0azB1dFVWbTNZOEIrVEMKc2o0V213blhldEZQMkVNblJmdDdCblIxM29MeXpyRkI4dGtGYWZzdGNWb0U2b1IyMHBJQnRBRnhyU0RXSjVkQQpYZFgyTkdQTlVDbmQxUnFKeHUyU0dBL3hISHN5UFQwNmlKZUlaR1V5UlhtdjZ2QnZ5Q2t5ZUx0TUVkcTJHemZpCk1UMEd0RGtHNVIrYWwvQStPdDN3M0NNYk1nVUZyeHZFaGx4TTFzRWl0Y2xYSmM0dEFnTUJBQUdqZ2ZNd2dmQXcKSFFZRFZSME9CQllFRkJiOW1DRkFxVi9KZ21NeHR3UTZVS3pvTElRUU1JSEFCZ05WSFNNRWdiZ3dnYldBRkJiOQptQ0ZBcVYvSmdtTXh0d1E2VUt6b0xJUVFvWUdScElHT01JR0xNUXN3Q1FZRFZRUUdFd0pGUlRFUU1BNEdBMVVFCkNCTUhSWE4wYjI1cFlURVFNQTRHQTFVRUJ4TUhWR0ZzYkdsdWJqRWVNQndHQTFVRUNoUVZRV1Z5YjJ0MVltVWcKVTI5bWRIZGhjbVVnVDhPY01SVXdFd1lEVlFRREV3eGhaWEp2YTNWaVpTNWpiMjB4SVRBZkJna3Foa2lHOXcwQgpDUUVXRW1Ga2JXbHVRR0ZsY205cmRXSmxMbU52YllJSkFLMWxXLzV6OFpTb01Bd0dBMVVkRXdRRk1BTUJBZjh3CkRRWUpLb1pJaHZjTkFRRUxCUUFEZ2dJQkFJVW1Kc3hkclQ4QU4yeVpxekk2OXFRS2pMbkRodW9qZGdNM1hHTDMKZ0pUbGRYUjVPSU1udy9uYThXY0lDM29uSGpnaWpVZUVmc2xUSUlIbU5jcU9kM2hUZk9xNFFxMi9RbXBwK2gxZAo1ZEN6U2NyTEZpRGdqbnprWDBWY3pPai9CdG5aTWd4eDV4OFlPODBNTVVXVkVtVkNrK2kyYkZWVHlwVjllNHF3CjFFSkxtR1RuS29vN2wyalBITFVCNWxMMkx2U080S0hEaG1XRzV3dEZnNy9uZDA5N3lHNXVCSGRhNXl0YmM2UzgKQ0lTOElCSnpkN1RBNGZyM3FPaEMyOThMTUQ5Nm5KZGNjSHFLWXRsRnZmOVlaWjUwMG5yQStwSDZLcG84UEQ2Nwo4V2lJVy9DTXRPMFg5cHh3K0tSbG1hRG1DR0dnUmh2UHlIb1lxYlg0c3ZyY2E4dXZFcmVQdFhJUUlMZS9JSVNKClRYTGtpVnNlajhrM1VEdTc3cS93WDNaZHprbldha1p5UGorQ3RZa2taTDR2cWtJRElGU1VjWGZ5bnlEWk5aRW8KMmQrbnBBQnpQQjQyKzR4R1pHR25GSXNmdVRNQWdwYks4VEFnUFFOTUlhd2ZXVHEyS2haOE1ZSGZQZGtVM0ZCbwpNYUV4cjY4NHN2aUFJbXFPb3Rjb05RVjJpTU9LZHd6QTA5N2pSQnJmYTQzTGhwZG9XTTB2N1JWeEI4cytrRzBQCjhuSE9HbXA2cjZjSUFrNWhqSFlBd1FZaVpqWHV6dm5GVHREOUlseTYzaSt5Vmg4blJTWTlOU0xocEZwbDRlem8KaG4rc2F2TzRubS9IdWVBQVRuR1IxaVBsS25mWE5WcVFZZGwrd3d6cUsxLzNpSGp6VVVqeVFrazBvVEJrNEJlegplamJoCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K</pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Output should be a one line string, so under Linux correct command would be:</p>
-<div class="paragraph">
-<p>$ cat rootCA.crt | base64 -w0</p>
-</div>
-</li>
-<li>
-<p>On Windows there is no built-in command, so you can use an online Base64 encoder.</p>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</li>
-<li>
-<p>Add encoded certificate data to <a href="#configuration-object">configuration object</a>:</p>
+<p>Add certificate data to <a href="#configuration-object">configuration object</a>:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
@@ -5319,7 +5285,12 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
     <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
     <span class="comment"># Other Kubernetes metadata</span>
 <span class="key">spec</span>:
-  <span class="key">additionalTrustedCAs</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">LS0tLS1CRUdJTiBDRVJUSUZJQ0F...</span><span class="delimiter">&quot;</span></span> <span class="comment"># Add encoded certificate data to this field</span></code></pre>
+  <span class="key">additionalTrustedCAs</span>: <span class="string"><span class="delimiter">|</span><span class="content">
+    -----BEGIN CERTIFICATE-----
+    MIIGjzCCBHegAwIBAgIJAK1lW/5z8ZSoMA0GCSqGSIb3DQEBCwUAMIGLMQswCQYD
+    VQQGEwJFRTEQMA4GA1UECBMHRXN0b25pYTEQMA4GA1UEBxMHVGFsbGlubjEeMBwG
+    A1UEChQVQWVyb2t1YmUgU29mdHdhcmUgT8OcMRUwEwYDVQQDEwxhZXJva3ViZS5j
+    ....</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5335,8 +5306,18 @@ LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUdqekNDQkhlZ0F3SUJBZ0lKQUsxbFcvNXo4WlNv
     <span class="comment"># Other Kubernetes metadata</span>
 <span class="key">spec</span>:
   <span class="key">additionalTrustedCAs</span>: <span class="string"><span class="delimiter">|</span><span class="content">
-    encoded-certificate-1...
-    encoded-certificate-2...</span></span></code></pre>
+    -----BEGIN CERTIFICATE-----
+    MIIGjzCCBHegAwIBAgIJAK1lW/5z8ZSoMA0GCSqGSIb3DQEBCwUAMIGLMQswCQYD
+    VQQGEwJFRTEQMA4GA1UECBMHRXN0b25pYTEQMA4GA1UEBxMHVGFsbGlubjEeMBwG
+    A1UEChQVQWVyb2t1YmUgU29mdHdhcmUgT8OcMRUwEwYDVQQDEwxhZXJva3ViZS5j
+    ...
+    -----END CERTIFICATE-----
+    -----BEGIN CERTIFICATE-----
+    MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+    a3ViZUNBMB4XDTIyMDExMDEzMzgwNloXDTMyMDEwOTEzMzgwNlowFTETMBEGA1UE
+    AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALpJ
+    ...
+    -----END CERTIFICATE-----</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -6733,7 +6714,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-15 03:51:16 UTC
+Last updated 2022-02-15 04:02:28 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
