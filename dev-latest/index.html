@@ -579,12 +579,13 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#selenium">2.1. Using Selenium</a>
 <ul class="sectlevel3">
 <li><a href="#selenium-moon-capabilities">2.1.1. Moon-specific Capabilities</a></li>
-<li><a href="#selenium-video-recording">2.1.2. Video Recording</a></li>
-<li><a href="#mobile-emulation">2.1.3. Mobile Emulation</a></li>
-<li><a href="#clipboard">2.1.4. Accessing Clipboard</a></li>
-<li><a href="#accessing-downloaded-files">2.1.5. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-locale">2.1.6. Changing Browser Locale</a></li>
-<li><a href="#selenium-external-host">2.1.7. Using External Hosts</a></li>
+<li><a href="#selenium-headless">2.1.2. Headless Mode</a></li>
+<li><a href="#selenium-video-recording">2.1.3. Video Recording</a></li>
+<li><a href="#mobile-emulation">2.1.4. Mobile Emulation</a></li>
+<li><a href="#clipboard">2.1.5. Accessing Clipboard</a></li>
+<li><a href="#accessing-downloaded-files">2.1.6. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-locale">2.1.7. Changing Browser Locale</a></li>
+<li><a href="#selenium-external-host">2.1.8. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -1526,7 +1527,7 @@ driver = webdriver.Remote(
 <pre class="CodeRay highlight"><code data-lang="python">capabilities = {
     <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
     <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: { <span class="comment"># All Moon capabilities live under moon:options</span>
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>,
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVideo</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>,
         <span class="string"><span class="delimiter">&quot;</span><span class="content">screenResolution</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1280x1024</span><span class="delimiter">&quot;</span></span>
     }
 }</code></pre>
@@ -1539,31 +1540,8 @@ driver = webdriver.Remote(
 <div class="title">Passing Moon capabilities in Java</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>, <span class="predefined-constant">true</span>
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">screenResolution</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">1280x1024</span><span class="delimiter">&quot;</span></span>
 ));</code></pre>
-</div>
-</div>
-<div class="sect4">
-<h5 id="capability-enableVNC"><a class="anchor" href="#capability-enableVNC"></a>Live Browser Screen: enableVNC</h5>
-<div class="paragraph">
-<p>Moon supports showing browser screen during test execution. To see browser screen in Moon user interface add capability:</p>
-</div>
-<div class="listingblock">
-<div class="title">Type: boolean</div>
-<div class="content">
-<pre>enableVNC: true</pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Enabling VNC in capabilities</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
-        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableVNC</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
-    }
-}</code></pre>
-</div>
 </div>
 </div>
 <div class="sect4">
@@ -1742,7 +1720,7 @@ It is important to add <code>mp4</code> file extension.
 <div class="sect4">
 <h5 id="capability-nameservers"><a class="anchor" href="#capability-nameservers"></a>Custom DNS Servers: nameservers</h5>
 <div class="paragraph">
-<p>By default browser pods are using global Kubernetes DNS settings. Sometimes you may need to override used DNS servers list for particular test cases. This can be easily achieved with:</p>
+<p>By default, browser pods are using global Kubernetes DNS settings. Sometimes you may need to override used DNS servers list for particular test cases. This can be easily achieved with:</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: array, format: &lt;dns-ip-address&gt;</div>
@@ -1830,7 +1808,27 @@ It is important to add <code>mp4</code> file extension.
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-video-recording"><a class="anchor" href="#selenium-video-recording"></a>2.1.2. Video Recording</h4>
+<h4 id="selenium-headless"><a class="anchor" href="#selenium-headless"></a>2.1.2. Headless Mode</h4>
+<div class="paragraph">
+<p>By default, all browsers in Moon are started with visible browser window. The majority of browsers nowadays support so-called "headless" mode, when browser is opening pages in the background and no window is visible to the user. Usually such mode is enabled by passing <code>--headless</code> flag to browser startup command in Selenium capabilities.</p>
+</div>
+<div class="listingblock">
+<div class="title">Starting Chrome browser in headless mode</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">google:chromeOptions</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">--headless</span><span class="delimiter">&quot;</span></span>]
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Moon automatically detects when browser is started in headless mode. Headless browsers do not require any graphical components like X-server or window manager, so Moon does not start such components when not needed. Because of this feature, there is no need to additionally pass <code>enableVNC</code> capability to show browser screen in Moon user interface.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-video-recording"><a class="anchor" href="#selenium-video-recording"></a>2.1.3. Video Recording</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1861,7 +1859,7 @@ Using video recording requires <a href="#video-recording">initial configuration<
 </div>
 </div>
 <div class="sect3">
-<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.3. Mobile Emulation</h4>
+<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.4. Mobile Emulation</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1927,7 +1925,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.4. Accessing Clipboard</h4>
+<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.5. Accessing Clipboard</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1998,7 +1996,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.5. Accessing Files Downloaded with Browser</h4>
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.6. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2066,7 +2064,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.6. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.7. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -2096,7 +2094,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.7. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.8. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -6714,7 +6712,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-21 10:10:13 UTC
+Last updated 2022-02-21 13:35:16 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
