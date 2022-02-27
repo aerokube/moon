@@ -665,6 +665,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#tolerations">3.8.6. Using Tolerations</a></li>
 <li><a href="#privileged-mode">3.8.7. Running Browser Pods in Privileged Mode</a></li>
 <li><a href="#advanced-settings-user-group">3.8.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#advanced-settings-service-account">3.8.9. Setting Custom Service Account</a></li>
 </ul>
 </li>
 <li><a href="#monitoring">3.9. Monitoring</a>
@@ -710,14 +711,14 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="paragraph">
 <p>This reference for version: <em>dev-latest</em></p>
 </div>
-<div class="admonitionblock warning">
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-This documentation is the work in progress for the new development Moon 2.x version. Moon 1.x (stable version) documentation is published <a href="https://aerokube.com/moon/latest">here</a>.
+Moon 1.x documentation is published <a href="https://aerokube.com/moon/1-latest">here</a>.
 </td>
 </tr>
 </table>
@@ -788,66 +789,100 @@ Helm chart is the recommended Moon installation way. Steps below require Helm 3 
 <ol class="arabic">
 <li>
 <p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ helm repo add aerokube https://charts.aerokube.com/
-$ helm repo update</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</code></pre>
 </div>
 </div>
 </li>
 <li>
 <p>To list available Moon versions type:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ helm search repo aerokube --versions</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm search repo aerokube --versions</code></pre>
 </div>
 </div>
 </li>
 <li>
 <p>Create a namespace:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ kubectl create namespace moon</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl create namespace moon</code></pre>
 </div>
 </div>
 </li>
 <li>
 <p>To install or upgrade Moon type:</p>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ helm upgrade --install -n moon moon aerokube/moon</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon moon aerokube/moon2</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Moon chart has a lot of various configuration parameters that can be listed as follows:</p>
-<div class="literalblock">
+<p>Moon chart has a lot of other configuration parameters that can be listed as follows:</p>
+<div class="listingblock">
 <div class="content">
-<pre>$ helm show values aerokube/moon</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm show values aerokube/moon2</code></pre>
 </div>
 </div>
 <div class="paragraph">
 <p>To change one of these parameters - use <code>--set</code> flag:</p>
 </div>
-<div class="literalblock">
+<div class="listingblock">
 <div class="content">
-<pre>$ helm upgrade --install --set=moon.enabled.resources=false -n moon moon aerokube/moon</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install --set=moon.enabled.resources=false -n moon moon aerokube/moon2</code></pre>
 </div>
+</div>
+</li>
+<li>
+<p>By default, deployed Ingress has <code>moon.aerokube.local</code> host name. To change it:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon moon aerokube/moon2 --set ingress.host=moon.example.com</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Open <a href="http://moon.example.com/" class="bare">http://moon.example.com/</a> in browser to show user interface. Use <a href="http://moon.example.com/wd/hub" class="bare">http://moon.example.com/wd/hub</a> as Selenium URL.</p>
+</div>
+</li>
+<li>
+<p>By default, Moon is started in HTTP-only mode. To enable TLS encryption (also known as HTTPS) - simply provide TLS certificate and private key:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon moon aerokube/moon2 --set ingress.host=moon.example.com --set-file ingress.tlsCert=server.crt --set-file ingress.tlsKey=server.key</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Usually TLS certificate and private key are provided by third-party providers or your company information security department. To generate a test pair of such files use the following commands:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash"># Generate the CA Key and Certificate
+$ openssl req -x509 -sha256 -newkey rsa:4096 -keyout ca.key -out ca.crt -days 356 -nodes -subj '/CN=My Cert Authority'
+# Generate the Server Key, Certificate request and Sign with the CA Certificate
+$ openssl req -new -newkey rsa:4096 -keyout server.key -out server.csr -nodes -subj '/CN=moon.aerokube.local'
+$ openssl x509 -req -sha256 -days 365 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When using such self-signed TLS certificates you may need to explicitly allow opening Moon in your browser.</p>
 </div>
 </li>
 </ol>
 </div>
 </div>
 <div class="sect4">
-<h5 id="install-moon-deploy"><a class="anchor" href="#install-moon-deploy"></a>Option 2: use raw YAML manifests</h5>
-<div class="admonitionblock note">
+<h5 id="install-minikube"><a class="anchor" href="#install-minikube"></a>Option 2: you have Minikube</h5>
+<div class="admonitionblock important">
 <table>
 <tr>
 <td class="icon">
-<i class="fa icon-note" title="Note"></i>
+<i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Although we maintain raw YAML manifests up-to-date, we recommend using Helm where possible.
+Make sure you have Docker installed.
 </td>
 </tr>
 </table>
@@ -855,183 +890,26 @@ Although we maintain raw YAML manifests up-to-date, we recommend using Helm wher
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Clone YAML manifests repository:</p>
-<div class="literalblock">
+<p>Install Moon with Helm as shown <a href="#install-helm">above</a>.</p>
+</li>
+<li>
+<p>Add <code>moon.aerokube.local</code> to <code>/etc/hosts</code>:</p>
+<div class="listingblock">
 <div class="content">
-<pre>$ git clone https://github.com/aerokube/moon-deploy.git
-$ cd moon-deploy</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ sudo echo '127.0.0.1 moon.aerokube.local' &gt;&gt; /etc/hosts</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Run one command to start Moon and Moon API:</p>
-<div class="literalblock">
+<p>Start Minikube tunnel in a separate tab. Enter your password when prompted:</p>
+<div class="listingblock">
 <div class="content">
-<pre>$ kubectl apply -f moon.yaml</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you have only several CPUs available in your cluster - use <code>moon-local.yaml</code> file instead. By default, Moon is started in a separate namespace called <code>moon</code>, so we append <code>-n moon</code> to the next commands.</p>
-</div>
-</li>
-<li>
-<p>Wait for LoadBalancer IP to allocate:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl get svc -n moon
-NAME      TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                         AGE
-browsers  ClusterIP      None            &lt;none&gt;        &lt;none&gt;                          51s
-moon      LoadBalancer   10.63.242.109   &lt;pending&gt;     4444:31894/TCP,8080:30625/TCP   17s</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It will look like this when finished:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ kubectl get svc -n moon
-NAME      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
-browsers  ClusterIP      None            &lt;none&gt;           &lt;none&gt;                          51s
-moon      LoadBalancer   10.63.242.109   104.154.161.58   4444:31894/TCP,8080:30625/TCP   1m</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now you can optionally point a domain name to this IP address:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>$ host moon.example.com
-moon.example.com has address 104.154.161.58</pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ minikube tunnel</code></pre>
 </div>
 </div>
 </li>
 <li>
-<p>Run your tests against <code>moon</code> like you do with regular Selenium:</p>
-<div class="literalblock">
-<div class="content">
-<pre>http://104.154.161.58:4444/wd/hub</pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-When running your tests for the first time for every browser version Kubernetes will download and cache requested browser image. This can take several minutes depending on your network connection.
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>Same address using domain name:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://moon.example.com:4444/wd/hub</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Moon web interface is available at:</p>
-<div class="literalblock">
-<div class="content">
-<pre>http://104.154.161.58:8080/</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect4">
-<h5 id="install-minikube"><a class="anchor" href="#install-minikube"></a>Option 3: you have Minikube</h5>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Clone an example configuration repository:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ git clone https://github.com/aerokube/moon-deploy.git
-$ cd moon-deploy</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Run one command to start Moon and Moon API:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ minikube kubectl -- apply -f moon-local.yaml</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Minikube does not automatically assign IP address to LoadBalancer, so let&#8217;s do this manually:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ minikube kubectl -- patch svc moon -n moon --patch "{\"spec\":{\"externalIPs\":[\"$(minikube ip)\"]}}"</pre>
-</div>
-</div>
-</li>
-<li>
-<p>The last step is to get Selenium URL:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ minikube ip
-192.168.99.100</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Use the following as Selenium URL:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://192.168.99.100:4444/wd/hub</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Moon web interface is available at:</p>
-</div>
-<div class="literalblock">
-<div class="content">
-<pre>http://192.168.99.100:8080/</pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>When Minikube is using <a href="https://minikube.sigs.k8s.io/docs/drivers/docker/">Docker driver</a> to access Moon you can use <a href="https://minikube.sigs.k8s.io/docs/commands/tunnel/">minikube tunnel</a> command instead:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>In a separate terminal run command to start Minikube tunnel:</p>
-<div class="literalblock">
-<div class="content">
-<pre>$ minikube tunnel</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Use <code>127.0.0.1</code> to access Moon:</p>
-<div class="literalblock">
-<div class="content">
-<pre>http://127.0.0.1:4444/wd/hub
-http://127.0.0.1:8080/</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</table>
-</div>
+<p>Open <a href="http://moon.example.com/" class="bare">http://moon.example.com/</a> in browser to show user interface. Use <a href="http://moon.aerokube.local/wd/hub" class="bare">http://moon.aerokube.local/wd/hub</a> as Selenium URL.</p>
 </li>
 </ol>
 </div>
@@ -3537,6 +3415,7 @@ items:
     storage:                                  <i class="conum" data-value="24"></i><b>(24)</b>
       accessKey: &quot;&quot;
       bucket: &quot;&quot;
+      filename: &quot;&quot;
       endpoint: &quot;&quot;
       pattern: &quot;&quot;
       secretKey: &quot;&quot;
@@ -4670,6 +4549,7 @@ metadata:
     <span class="key">storage</span>:
       <span class="key">accessKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">AKIAXXXXXXXXXXXXXXXX</span><span class="delimiter">&quot;</span></span> <span class="comment"># Set if a pair of credentials is used</span>
       <span class="key">bucket</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">moon-test</span><span class="delimiter">&quot;</span></span>
+      <span class="key">filename</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="comment"># Recorded video file name, e.g. myvideo.mp4</span>
       <span class="key">endpoint</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">https://s3.us-east-2.amazonaws.com</span><span class="delimiter">&quot;</span></span>
       <span class="key">pattern</span>: <span class="string"><span class="delimiter">&quot;</span><span class="delimiter">&quot;</span></span> <span class="comment"># See below</span>
       <span class="key">secretKey</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">okUa0XXXXXXXXXXXXXXXXXXXX</span><span class="delimiter">&quot;</span></span> <span class="comment"># Set if a pair of credentials is used</span>
@@ -4773,11 +4653,8 @@ metadata:
 <div class="paragraph">
 <p>You can change S3 key pattern in <a href="#configuration-object">configuration object</a> as follows:</p>
 </div>
-<div class="paragraph">
-<div class="title">Setting custom S3 key pattern</div>
-<p>+</p>
-</div>
 <div class="listingblock">
+<div class="title">Setting custom S3 key pattern</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
   <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
@@ -4997,7 +4874,7 @@ aerokube/x-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0<
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">aerokube/moon:2.0.0 =&gt; my-registry.example.com/aerokube/moon:2.0.0
 aerokube/moon-conf:2.0.0 =&gt; my-registry.example.com/aerokube/moon-conf:2.0.0
-aerokube/selenoid-ui:1.10.3 =&gt; my-registry.example.com/aerokube/selenoid-ui:1.10.3</code></pre>
+aerokube/moon-ui:2.0.0 =&gt; my-registry.example.com/aerokube/moon-ui:2.0.0</code></pre>
 </div>
 </div>
 </li>
@@ -5162,37 +5039,37 @@ items:
 <div class="listingblock">
 <div class="title">Listing configuration objects as YAML</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
-apiVersion: v1
-items:
-- apiVersion: moon.aerokube.com/v1
-  kind: Config
-  metadata:
-    name: default
-    namespace: moon
-    # Other Kubernetes metadata
-  spec:
-    containers:
-      browser:
-        # Some fields
-      ca-certs:
-        # More fields go here
-        resources:
-          limits:
-            cpu: 250m
-            memory: 64Mi
-          requests:
-            cpu: 100m
-            memory: 64Mi
-      defender:
-        # The same fields as for ca-certs
-      video-recorder:
-        # The same fields as for ca-certs
-      vnc-server:
-        # The same fields as for ca-certs
-      x-server:
-        # The same fields as for ca-certs
-      # Other fields</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="error">$ kubectl get configs -n moon -o yaml</span>
+<span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">items</span>:
+- <span class="string"><span class="content">apiVersion: moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="key">containers</span>:
+      <span class="key">browser</span>:
+        <span class="comment"># Some fields</span>
+      <span class="key">ca-certs</span>:
+        <span class="comment"># More fields go here</span>
+        <span class="key">resources</span>:
+          <span class="key">limits</span>:
+            <span class="key">cpu</span>: <span class="string"><span class="content">250m</span></span>
+            <span class="key">memory</span>: <span class="string"><span class="content">64Mi</span></span>
+          <span class="key">requests</span>:
+            <span class="key">cpu</span>: <span class="string"><span class="content">100m</span></span>
+            <span class="key">memory</span>: <span class="string"><span class="content">64Mi</span></span>
+      <span class="key">defender</span>:
+        <span class="comment"># The same fields as for ca-certs</span>
+      <span class="key">video-recorder</span>:
+        <span class="comment"># The same fields as for ca-certs</span>
+      <span class="key">vnc-server</span>:
+        <span class="comment"># The same fields as for ca-certs</span>
+      <span class="key">x-server</span>:
+        <span class="comment"># The same fields as for ca-certs</span>
+      <span class="comment"># Other fields</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -5337,16 +5214,16 @@ ejbh
 <span class="key">kind</span>: <span class="string"><span class="content">Pod</span></span>
 <span class="key">metadata</span>:
   <span class="key">name</span>: <span class="string"><span class="content">my-app</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+    <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  <span class="key">labels</span>:
+    <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+    <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
 <span class="key">spec</span>:
   <span class="key">containers</span>:
   - <span class="string"><span class="content">name: app</span></span>
     <span class="key">image</span>: <span class="string"><span class="content">my-company/my-app:1.0.0</span></span>
-    <span class="key">annotations</span>:
-      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
-      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
-    <span class="key">labels</span>:
-      <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
-      <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
     <span class="key">resources</span>:
       <span class="key">requests</span>:
         <span class="key">memory</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">64Mi</span><span class="delimiter">&quot;</span></span>
@@ -5494,6 +5371,12 @@ ejbh
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.8.9. Setting Custom Service Account</h4>
+<div class="paragraph">
+<p>This is configured globally for all browser pods in <a href="#configuration-object">configuration object</a>.</p>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -6712,7 +6595,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-27 11:19:25 UTC
+Last updated 2022-02-27 14:59:11 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
