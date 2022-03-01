@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version dev-latest,</span>
-<span id="revdate">2022-02-28</span>
+<span id="revdate">2022-03-01</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -655,31 +655,32 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </ul>
 </li>
 <li><a href="#ca-certs">3.7. Using Untrusted TLS Certificates</a></li>
-<li><a href="#advanced-settings">3.8. Advanced Settings</a>
+<li><a href="#multiple-namespaces">3.8. Multiple Namespaces Mode</a></li>
+<li><a href="#advanced-settings">3.9. Advanced Settings</a>
 <ul class="sectlevel3">
-<li><a href="#advanced-settings-annotations">3.8.1. Adding Custom Kubernetes Annotations</a></li>
-<li><a href="#advanced-settings-labels">3.8.2. Adding Custom Kubernetes Labels</a></li>
-<li><a href="#advanced-settings-network-policies">3.8.3. Adding Network Policies</a></li>
-<li><a href="#node-selectors">3.8.4. Using Node Selectors</a></li>
-<li><a href="#affinity">3.8.5. Using Affinity</a></li>
-<li><a href="#tolerations">3.8.6. Using Tolerations</a></li>
-<li><a href="#privileged-mode">3.8.7. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#advanced-settings-user-group">3.8.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
-<li><a href="#advanced-settings-service-account">3.8.9. Setting Custom Service Account</a></li>
+<li><a href="#advanced-settings-annotations">3.9.1. Adding Custom Kubernetes Annotations</a></li>
+<li><a href="#advanced-settings-labels">3.9.2. Adding Custom Kubernetes Labels</a></li>
+<li><a href="#advanced-settings-network-policies">3.9.3. Adding Network Policies</a></li>
+<li><a href="#node-selectors">3.9.4. Using Node Selectors</a></li>
+<li><a href="#affinity">3.9.5. Using Affinity</a></li>
+<li><a href="#tolerations">3.9.6. Using Tolerations</a></li>
+<li><a href="#privileged-mode">3.9.7. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#advanced-settings-user-group">3.9.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#advanced-settings-service-account">3.9.9. Setting Custom Service Account</a></li>
 </ul>
 </li>
-<li><a href="#monitoring">3.9. Monitoring</a>
+<li><a href="#monitoring">3.10. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring-setup">3.9.1. Setup</a></li>
-<li><a href="#monitoring-built-in-metrics">3.9.2. Built-in Moon metrics</a></li>
-<li><a href="#filter-by-labels">3.9.3. Filtering Browser Pods by Labels</a></li>
+<li><a href="#monitoring-setup">3.10.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.10.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.10.3. Filtering Browser Pods by Labels</a></li>
 </ul>
 </li>
-<li><a href="#log-files">3.10. Log Files</a></li>
-<li><a href="#_cli_flags">3.11. CLI Flags</a>
+<li><a href="#log-files">3.11. Log Files</a></li>
+<li><a href="#_cli_flags">3.12. CLI Flags</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.11.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-auth">3.11.2. Moon Auth Container Flags</a></li>
+<li><a href="#cli-flags-moon">3.12.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-auth">3.12.2. Moon Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -901,6 +902,43 @@ Make sure you have Docker installed.
 <p>Install Moon with Helm as shown <a href="#install-helm">above</a>.</p>
 </li>
 <li>
+<p>Configure access to Moon:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Option 1.</strong> Use <code>minikube ip</code> to patch Moon service.</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Patch service with <code>minikube ip</code> command output:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl patch svc moon -n moon --patch &quot;{\&quot;spec\&quot;:{\&quot;externalIPs\&quot;:[\&quot;$(minikube ip)\&quot;]}}&quot;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On Windows - you may need to insert <code>minikube ip</code> output manually, because <code>$()</code> expression expansion may not work.</p>
+</div>
+</li>
+<li>
+<p>Add <code>moon.aerokube.local</code> to <code>/etc/hosts</code>:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ sudo echo &quot;$(minikube ip) moon.aerokube.local&quot; &gt;&gt; /etc/hosts</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On Windows you may need to update hosts file manually.</p>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>Option 2.</strong> Use minikube tunnel. This works only when minikube is using Docker driver.</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
 <p>Add <code>moon.aerokube.local</code> to <code>/etc/hosts</code>:</p>
 <div class="listingblock">
 <div class="content">
@@ -914,6 +952,12 @@ Make sure you have Docker installed.
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ minikube tunnel</code></pre>
 </div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ol>
 </div>
 </li>
 <li>
@@ -1011,14 +1055,14 @@ $ oc new-app moon</pre>
 <p><span class="image"><img src="img/single-namespace-mode.png" alt="single-namespace-mode"></span></p>
 </div>
 <div class="paragraph">
-<p>In single namespace mode Moon itself and all launched browser pods are running in the one Kubernetes namespace. Moon 1.x was only able to work like this. This is still suitable if only one team is using Moon or you don&#8217;t need to limit browser consumption of different Moon users.</p>
+<p>In single namespace mode Moon itself and all launched browser pods are running in the one Kubernetes namespace. Moon 1.x was only able to work like this. This is still suitable if only one team is using Moon or you don&#8217;t need to limit browser consumption of different Moon users. By default, Moon is launched in this mode.</p>
 </div>
 <div class="paragraph">
 <div class="title">Multiple Namespaces Mode</div>
 <p><span class="image"><img src="img/multiple-namespaces-mode.png" alt="multiple-namespaces-mode"></span></p>
 </div>
 <div class="paragraph">
-<p>In multiple namespaces mode Moon is running in one namespace and browsers are launched in separate namespaces. The total number of such namespaces is unlimited. This mode is mainly needed when you want to control computing resources, browsers or network access rules (<a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">network policies</a>) available for every team.</p>
+<p>In multiple namespaces mode Moon is running in one namespace and browsers are launched in separate namespaces. The total number of such namespaces is unlimited. This mode is mainly needed when you want to control computing resources, browsers or network access rules (<a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">network policies</a>) available for every team. How to enable this mode is described <a href="#multiple-namespaces">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -5211,7 +5255,103 @@ ejbh
 </div>
 </div>
 <div class="sect2">
-<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.8. Advanced Settings</h3>
+<h3 id="multiple-namespaces"><a class="anchor" href="#multiple-namespaces"></a>3.8. Multiple Namespaces Mode</h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Existing Moon operation modes are described <a href="#moon-operation-modes">here</a>.</p>
+</li>
+<li>
+<p>You should have permissions to create new Kubernetes namespaces. Detailed description of required Moon permissions is available <a href="#permissions-multiple-namespaces">here</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This section describes how to configure Moon in multiple namespaces mode. To do this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <code>values.yaml</code> file with a list of users to be created:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">quota</span>:
+  <span class="key">moon</span>: <span class="string"><span class="content">null</span></span> <span class="comment"># This one is needed to disable single-namespace mode in Moon</span>
+  <span class="key">alfa-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">alfa</span></span>
+  <span class="key">beta-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Deploy Moon with your <code>values.yaml</code> applied:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This will create a separate namespace for every team:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get namespaces
+NAME              STATUS   AGE
+alfa              Active   40m
+beta              Active   40m
+# Other namespaces</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In every such namespace chart a secret with user password will be automatically created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secrets -n alfa
+NAME                            TYPE                                  DATA   AGE
+alfa-team-basic-auth-password   Opaque                                1      2m11s
+# Other secrets</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Password is stored in this secret. To print it - simply extract <code>password</code> field (stored as <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>) from the secret and decode it. A one line command how to do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secret alfa-team-basic-auth-password -n alfa -o 'go-template={{index .data &quot;password&quot;}}' | base64 -d
+8X4juoCQ9gHAACqbc05B3oPXUcV6Oxb7KNTSYdM15eYF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use quota name (<code>alfa-team</code>, <code>beta-team</code> and so on) as username and password from the secret. The same credentials should be used in your tests code and to access user interface. In multiple namespaces mode user interface is only showing browser sessions corresponding to one user.</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect2">
+<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.9. Advanced Settings</h3>
 <div class="paragraph">
 <p>This section describes how to configure some advanced features sometimes required by Kubernetes cluster settings. Moon is using just the same keys and values that Kubernetes itself does for most of the settings below. This is how a typical Kubernetes pod looks like:</p>
 </div>
@@ -5262,19 +5402,19 @@ ejbh
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.8.1. Adding Custom Kubernetes Annotations</h4>
+<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.9.1. Adding Custom Kubernetes Annotations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-annotations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.8.2. Adding Custom Kubernetes Labels</h4>
+<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.9.2. Adding Custom Kubernetes Labels</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-labels">here</a>. Also, you can override labels using <a href="#capability-labels"><code>labels</code> capability</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.8.3. Adding Network Policies</h4>
+<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.9.3. Adding Network Policies</h4>
 <div class="paragraph">
 <p><a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Network policies</a> are dedicated Kubernetes objects allowing to control network firewall rules. Using them with Moon is straightforward:</p>
 </div>
@@ -5320,31 +5460,31 @@ ejbh
 </div>
 </div>
 <div class="sect3">
-<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.8.4. Using Node Selectors</h4>
+<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.9.4. Using Node Selectors</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-node-selectors">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.8.5. Using Affinity</h4>
+<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.9.5. Using Affinity</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-affinity">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.8.6. Using Tolerations</h4>
+<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.9.6. Using Tolerations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-tolerations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.8.7. Running Browser Pods in Privileged Mode</h4>
+<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.9.7. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-privileged-mode">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.8.8. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.9.8. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
@@ -5381,19 +5521,19 @@ ejbh
 </table>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.8.9. Setting Custom Service Account</h4>
+<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.9.9. Setting Custom Service Account</h4>
 <div class="paragraph">
 <p>This is configured globally for all browser pods in <a href="#configuration-object">configuration object</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.9. Monitoring</h3>
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.10. Monitoring</h3>
 <div class="paragraph">
 <p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.9.1. Setup</h4>
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.10.1. Setup</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -5430,7 +5570,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.9.2. Built-in Moon metrics</h4>
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.10.2. Built-in Moon metrics</h4>
 <div class="paragraph">
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod).</p>
 </div>
@@ -5497,7 +5637,7 @@ $ curl -s http://localhost:4444/metrics
 </table>
 </div>
 <div class="sect3">
-<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.9.3. Filtering Browser Pods by Labels</h4>
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.10.3. Filtering Browser Pods by Labels</h4>
 <div class="paragraph">
 <p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
 </div>
@@ -5520,7 +5660,7 @@ $ curl -s http://localhost:4444/metrics
 </div>
 </div>
 <div class="sect2">
-<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.10. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.11. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -5559,12 +5699,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.11. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.12. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.11.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.12.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -5588,7 +5728,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.11.2. Moon Auth Container Flags</h4>
+<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.12.2. Moon Auth Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -6603,7 +6743,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version dev-latest<br>
-Last updated 2022-02-28 12:18:35 UTC
+Last updated 2022-03-01 08:48:00 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
