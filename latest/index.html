@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-03-03</span>
+<span id="revdate">2022-03-09</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -654,7 +654,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#resources-qos">3.6.3. Pods Quality of Service</a></li>
 </ul>
 </li>
-<li><a href="#ca-certs">3.7. Using Untrusted TLS Certificates</a></li>
+<li><a href="#ca-certs">3.7. Using Additional Trusted TLS Certificates</a></li>
 <li><a href="#multiple-namespaces">3.8. Multiple Namespaces Mode</a></li>
 <li><a href="#advanced-settings">3.9. Advanced Settings</a>
 <ul class="sectlevel3">
@@ -5183,12 +5183,12 @@ items:
 </div>
 </div>
 <div class="sect2">
-<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.7. Using Untrusted TLS Certificates</h3>
+<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.7. Using Additional Trusted TLS Certificates</h3>
 <div class="paragraph">
-<p>In corporate networks tested environments are often using untrusted <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such untrusted TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">Strict Transport Security</a>.</p>
+<p>In corporate networks tested environments are often using additional trusted <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">Strict Transport Security</a>.</p>
 </div>
 <div class="paragraph">
-<p>In order to work properly with untrusted TLS certificates, you have to add your root certification authority certificate to a list of trusted certificates:</p>
+<p>In order to work properly with additional trusted TLS certificates, you have to add your root certification authority certificate to a list of trusted certificates:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -6780,7 +6780,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-03-03 12:53:42 UTC
+Last updated 2022-03-09 04:16:18 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
