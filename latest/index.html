@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-03-11</span>
+<span id="revdate">2022-03-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -584,8 +584,9 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#mobile-emulation">2.1.4. Mobile Emulation</a></li>
 <li><a href="#clipboard">2.1.5. Accessing Clipboard</a></li>
 <li><a href="#accessing-downloaded-files">2.1.6. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-locale">2.1.7. Changing Browser Locale</a></li>
-<li><a href="#selenium-external-host">2.1.8. Using External Hosts</a></li>
+<li><a href="#selenium-devtools">2.1.7. Accessing Developer Tools</a></li>
+<li><a href="#selenium-locale">2.1.8. Changing Browser Locale</a></li>
+<li><a href="#selenium-external-host">2.1.9. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -2031,7 +2032,34 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.7. Changing Browser Locale</h4>
+<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.7. Accessing Developer Tools</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature works in Moon 2.1.0 and above.</p>
+</li>
+<li>
+<p>This feature requires to create a Selenium session first. If you need to use developer tools with tools like <a href="https://pptr.dev/">Puppeteer</a> - take a look at the following <a href="#devtools">documentation section</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Selenium 4 and above has <a href="https://www.selenium.dev/documentation/webdriver/bidirectional/">bidirectional functionality</a> allowing to access advanced browser features. This works just out of the box. An example project demonstrating how to use it stored <a href="https://github.com/aerokube/moon-cloud-java-example/blob/master/src/test/java/com/aerokube/selenoid/DevtoolsTest.java">here</a>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.8. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -2061,7 +2089,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.8. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.9. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -6780,7 +6808,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-03-11 13:18:42 UTC
+Last updated 2022-03-12 14:31:19 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
