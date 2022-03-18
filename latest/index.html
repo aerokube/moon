@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-03-17</span>
+<span id="revdate">2022-03-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2047,6 +2047,9 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </li>
 <li>
 <p>This feature requires to create a Selenium session first. If you need to use developer tools with tools like <a href="https://pptr.dev/">Puppeteer</a> - take a look at the following <a href="#devtools">documentation section</a>.</p>
+</li>
+<li>
+<p>This feature needs full cluster URL in order to work properly. Make sure your Ingress configuration is proxying <code>X-Forwarded-Host</code>, <code>X-Forwarded-Port</code> and <code>X-Forwarded-Scheme</code> HTTP headers. In some cases such as using <a href="https://aws.amazon.com/elasticloadbalancing/application-load-balancer/">AWS ALB</a> or accessing Moon without Ingress, proxying headers above is not possible. In that case you have to set Moon <code>-callback-url</code> <a href="#cli-flags-moon">flag</a> to correct cluster address, e.g. <code>-callback-url <a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code>.</p>
 </li>
 </ol>
 </div>
@@ -5777,6 +5780,8 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 <div class="content">
 <pre>-browser-limit value
     parallel browser sessions limit
+-callback-url value
+    moon callback url
 -delete-timeout duration
     timeout to delete Kubernetes resources (default 10m0s)
 -grace-period duration
@@ -5973,7 +5978,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <h2 id="_license_agreement"><a class="anchor" href="#_license_agreement"></a>5. License Agreement</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Last updated December 17th, 2021. Replaces the prior version in its entirety.</p>
+<p>Last updated March 18th, 2022. Replaces the prior version in its entirety.</p>
 </div>
 <div class="paragraph">
 <p>This is a legal agreement. By downloading, installing, copying, saving on Customer&#8217;s computer, or otherwise using Aerokube software, support or products Customer becomes a party to this Agreement and Customer consents to be bound by all the terms and conditions set forth below.</p>
@@ -5985,7 +5990,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><strong>"Aerokube"</strong>, <strong>"Licensor"</strong> or <strong>"We"</strong> means <strong>Aerokube Software OÜ</strong>, having its principal place of business at Harju maakond, Tallinn, Kesklinna linnaosa, Estonia pst 5-309B, 10143, Estonia, registered in the Commercial Register of Estonia, registry code: 14653208.</p>
+<p><strong>"Aerokube"</strong>, <strong>"Licensor"</strong> or <strong>"We"</strong> means <strong>Aerokube Software OÜ</strong>, having its principal place of business at Harju maakond, Tallinn, Kesklinna linnaosa, Karu tn 14-8, 10120, Estonia, registered in the Commercial Register of Estonia, registry code: 14653208.</p>
 </li>
 <li>
 <p><strong>"Customer"</strong>, <strong>"Licensee"</strong> or <strong>"You"</strong> means the sole proprietor or legal entity specified in the Subscription Confirmation. For legal entities, "Customer" includes any entity which controls, is controlled by, or is under common control with Customer. For the purposes of this definition, "control" means one of the following:</p>
@@ -6808,7 +6813,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-03-17 18:05:02 UTC
+Last updated 2022-03-18 04:25:42 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
