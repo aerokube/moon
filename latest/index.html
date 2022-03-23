@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-03-22</span>
+<span id="revdate">2022-03-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -3814,9 +3814,9 @@ metadata:
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">quay.io/browsers/chrome:95.0 &lt;==&gt; Chrome 95.0
-quay.io/browsers/chrome:96.0 &lt;==&gt; Chrome 96.0
-quay.io/browsers/chrome:97.0 &lt;==&gt; Chrome 97.0</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">quay.io/browser/google-chrome-stable:95.0 &lt;==&gt; Chrome 95.0
+quay.io/browser/google-chrome-stable:96.0 &lt;==&gt; Chrome 96.0
+quay.io/browser/google-chrome-stable:97.0 &lt;==&gt; Chrome 97.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -3827,11 +3827,11 @@ quay.io/browsers/chrome:97.0 &lt;==&gt; Chrome 97.0</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span></code></pre>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>This new configuration format means that all images for <code>chrome</code> browser used in Selenium tests will be downloaded from <code>quay.io/browsers/chrome</code> repository. Concrete image tag is determined when you request to start a new browser. For example, you pass the following <a href="#selenium">Selenium</a> <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a>:</p>
+<p>This new configuration format means that all images for <code>chrome</code> browser used in Selenium tests will be downloaded from <code>quay.io/browser/google-chrome-stable</code> repository. Concrete image tag is determined when you request to start a new browser. For example, you pass the following <a href="#selenium">Selenium</a> <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3840,7 +3840,7 @@ browserVersion = 96.0</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In that case Moon will use <code>quay.io/browsers/chrome:96.0</code> image. Similarly, in <a href="#cypress">Cypress</a>, <a href="#playwright">Playwright</a> and <a href="#devtools">Chrome Developer Tools</a> you are using URL path and parameters to pass the same information.</p>
+<p>In that case Moon will use <code>quay.io/browser/google-chrome-stable:96.0</code> image. Similarly, in <a href="#cypress">Cypress</a>, <a href="#playwright">Playwright</a> and <a href="#devtools">Chrome Developer Tools</a> you are using URL path and parameters to pass the same information.</p>
 </div>
 <div class="sect4">
 <h5 id="browsers-set-versions"><a class="anchor" href="#browsers-set-versions"></a>Browser Versions</h5>
@@ -3852,7 +3852,7 @@ browserVersion = 96.0</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">versions</span>: <span class="string"><span class="content">[&quot;96.0&quot;, &quot;97.0&quot;]            </span></span><i class="conum" data-value="1"></i><b>(1)</b>
     <span class="key">default</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">96.0</span><span class="delimiter">&quot;</span></span>                       <i class="conum" data-value="2"></i><b>(2)</b>
     <span class="key">port</span>: <span class="string"><span class="content">4444                            </span></span><i class="conum" data-value="3"></i><b>(3)</b>
@@ -3893,7 +3893,7 @@ browserVersion = 96.0</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">resources</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">limits</span>:                             <i class="conum" data-value="2"></i><b>(2)</b>
         <span class="key">cpu</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">1.0</span><span class="delimiter">&quot;</span></span>                        <i class="conum" data-value="3"></i><b>(3)</b>
@@ -3946,7 +3946,7 @@ browserVersion = 96.0</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">env</span>:                                <i class="conum" data-value="1"></i><b>(1)</b>
       - <span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=Europe/Paris</span><span class="delimiter">&quot;</span></span>               <i class="conum" data-value="2"></i><b>(2)</b>
       - <span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=fr_FR.UTF-8</span><span class="delimiter">&quot;</span></span></code></pre>
@@ -3972,7 +3972,7 @@ browserVersion = 96.0</code></pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">env</span>: <span class="string"><span class="content">[&quot;TZ=Europe/Paris&quot;, &quot;LANG=fr_FR.UTF-8&quot;]</span></span></code></pre>
 </div>
 </div>
@@ -4029,7 +4029,7 @@ Moon is using exactly the same annotations YAML format as <a href="https://kuber
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">annotations</span>:                          <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>                      <i class="conum" data-value="2"></i><b>(2)</b>
       <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span></code></pre>
@@ -4122,7 +4122,7 @@ Moon is using exactly the same labels YAML format as <a href="https://kubernetes
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">labels</span>:                               <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>                      <i class="conum" data-value="2"></i><b>(2)</b>
       <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span></code></pre>
@@ -4239,7 +4239,7 @@ Moon is using exactly the same node selector YAML format as <a href="https://kub
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">nodeSelector</span>:                         <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">node-label-1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">label1-value</span><span class="delimiter">&quot;</span></span>        <i class="conum" data-value="2"></i><b>(2)</b>
       <span class="key">node-label-2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">label2-value</span><span class="delimiter">&quot;</span></span></code></pre>
@@ -4313,7 +4313,7 @@ Moon is using exactly the same affinity configuration YAML format as <a href="ht
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">affinity</span>:                                           <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">nodeAffinity</span>:
         <span class="key">requiredDuringSchedulingIgnoredDuringExecution</span>:
@@ -4388,7 +4388,7 @@ Moon is using exactly the same tolerations configuration YAML format as <a href=
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">tolerations</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
     - <span class="string"><span class="content">key: &quot;key1&quot;</span></span>
       <span class="key">operator</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Equal</span><span class="delimiter">&quot;</span></span>
@@ -4415,7 +4415,7 @@ Moon is using exactly the same tolerations configuration YAML format as <a href=
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">dnsConfig</span>:                            <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="key">nameservers</span>:
         - <span class="string"><span class="content">1.2.3.4</span></span>
@@ -4463,7 +4463,7 @@ Moon is using exactly the same tolerations configuration YAML format as <a href=
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">privileged</span>: <span class="string"><span class="content">true                    </span></span><i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
@@ -4931,7 +4931,7 @@ $ oc secrets link moon my-registry.example.com --for=pull -n moon</pre>
 <p>Copy all desired browser images to your registry:</p>
 <div class="literalblock">
 <div class="content">
-<pre>quay.io/browsers/chrome:96.0 =&gt; my-registry.example.com/browsers/chrome:96.0</pre>
+<pre>quay.io/browser/google-chrome-stable:96.0 =&gt; my-registry.example.com/browsers/chrome:96.0</pre>
 </div>
 </div>
 </li>
@@ -5523,7 +5523,7 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browsers/chrome</span></span>
+    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">labels</span>:
       <span class="key">role</span>: <span class="string"><span class="content">browser</span></span> <span class="comment"># Every Chrome pod will have this label set</span></code></pre>
 </div>
@@ -6818,7 +6818,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-03-22 10:25:31 UTC
+Last updated 2022-03-23 03:52:21 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
