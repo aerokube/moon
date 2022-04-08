@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-04-07</span>
+<span id="revdate">2022-04-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1998,7 +1998,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 <p>Start a new session, for example with ID <code>firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840</code>.</p>
 </li>
 <li>
-<p>In tests code save all files to <code>/home/selenium/Downloads</code> directory.</p>
+<p>In tests code save all files to <code>/home/&lt;user&gt;/Downloads</code> directory, where <code>&lt;user&gt;</code> is name of the user configured in <a href="#configuration-object">configuration object</a>. Default username is just <code>user</code>, so default directory is <code>/home/user/Downloads</code>.</p>
 </li>
 <li>
 <p>To list available files:</p>
@@ -2014,9 +2014,9 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 <p>Access any file contents using the following URL:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">curl -H 'Accept: application/json' https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/download/myfile.txt
+<pre class="CodeRay highlight"><code data-lang="bash">curl https://moon.example.com/wd/hub/session/firefox-95-0-f2bcd32b-d932-4cdc-a639-687ab8e4f840/aerokube/download/myfile.txt
 
-{&quot;value&quot;: &quot;bXktZmlsZS1jb250ZW50cwo=&quot;} # Base64-encoded file contents</code></pre>
+file-contents-go-here</code></pre>
 </div>
 </div>
 </li>
@@ -6792,7 +6792,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-04-07 09:56:57 UTC
+Last updated 2022-04-08 10:38:51 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
