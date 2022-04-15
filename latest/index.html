@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-04-08</span>
+<span id="revdate">2022-04-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -3443,8 +3443,21 @@ metadata:
 <div class="listingblock">
 <div class="title">Editing a quota object</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit quota moon -n moon # Do modifications in text editor, save and exit</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl edit quota.moon moon -n moon # Do modifications in text editor, save and exit
+$ kubectl edit team moon -n moon # An alias if you don't want to use fully qualified name</code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+We are using <code>quota.moon</code> instead of just <code>quota</code> because in Kubernetes by default <code>quota</code> corresponds to <a href="https://kubernetes.io/docs/concepts/policy/resource-quotas/">ResourceQuota</a> object.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -6792,7 +6805,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-04-08 10:38:51 UTC
+Last updated 2022-04-15 12:50:23 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
