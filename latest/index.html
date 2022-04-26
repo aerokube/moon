@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-04-15</span>
+<span id="revdate">2022-04-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -595,6 +595,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#cypress-select-cypress-version">2.2.2. Selecting Exact Cypress Version</a></li>
 <li><a href="#cypress-video-recording">2.2.3. Video Recording</a></li>
 <li><a href="#cypress-additional-features">2.2.4. Enabling Additional Features</a></li>
+<li><a href="#cypress-dashboard">2.2.5. Recording Runs to Cypress Dashboard</a></li>
 </ul>
 </li>
 <li><a href="#playwright">2.3. Using Playwright</a>
@@ -2411,6 +2412,30 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect3">
+<h4 id="cypress-dashboard"><a class="anchor" href="#cypress-dashboard"></a>2.2.5. Recording Runs to Cypress Dashboard</h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This feature works with Cypress images 9.6.0 and above.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Cypress provides <a href="https://www.cypress.io/dashboard/">Cypress Dashboard</a> - an online service for storing test runs information. To send information about executed tests to this service you have to send your access key using <code>CYPRESS_RECORD_KEY</code> environment variable:</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding parameters to enable additional features</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/chrome/cypress-9.6.0?&amp;env=CYPRESS_RECORD_KEY%3Dyour-key</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -6805,7 +6830,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-04-15 12:50:23 UTC
+Last updated 2022-04-26 09:20:38 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
