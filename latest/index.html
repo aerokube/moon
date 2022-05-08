@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-05-07</span>
+<span id="revdate">2022-05-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1778,6 +1778,98 @@ It is important to add <code>mp4</code> file extension.
 <p>Labels from this capability override labels from browsers set. More information about labels is described in <a href="#browsers-set-custom-labels">Using Custom Kubernetes Labels</a> section.</p>
 </div>
 </div>
+<div class="sect4">
+<h5 id="capability-log-level"><a class="anchor" href="#capability-log-level"></a>Browser Log Level: logLevel</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This feature is available since Moon 2.1.3.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>By default, Moon browsers output very limited quality of logs to decrease overall load on Kubernetes and log storage software. You can change logging verbosity using <code>logLevel</code> capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>logLevel: "INFO"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Supported browsers are: Google Chrome, Microsoft Edge, Opera and Firefox. Possible values for this capability depend on browser type:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Supported log levels for Chrome, Microsoft Edge and Opera</caption>
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Capability value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ALL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DEBUG</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">INFO</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">WARNING</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SEVERE</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">OFF</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Supported log levels for Firefox</caption>
+<colgroup>
+<col style="width: 100%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Capability value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">fatal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">error</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">warn</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">info</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">config</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">debug</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">trace</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div class="sect3">
 <h4 id="selenium-headless"><a class="anchor" href="#selenium-headless"></a>2.1.2. Headless Mode</h4>
@@ -2304,7 +2396,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <p>Full list of supported parameters and their meaning is shown below.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. Supported parameters for enabling additional features</caption>
+<caption class="title">Table 7. Supported parameters for enabling additional features</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2552,7 +2644,7 @@ This feature works with Cypress images 9.6.0 and above.
 <p>Full list of supported parameters and their meaning is shown below.</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. Supported parameters for enabling additional features</caption>
+<caption class="title">Table 8. Supported parameters for enabling additional features</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2769,7 +2861,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. Supported parameters for enabling additional features</caption>
+<caption class="title">Table 9. Supported parameters for enabling additional features</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -4051,7 +4143,7 @@ Moon is using exactly the same annotations YAML format as <a href="https://kuber
 <p>Moon adds some annotations by default to browser pods and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. Moon Reserved Annotation Names</caption>
+<caption class="title">Table 10. Moon Reserved Annotation Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4144,7 +4236,7 @@ Moon is using exactly the same labels YAML format as <a href="https://kubernetes
 <p>Moon adds some labels by default to browser pods and their names are reserved:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. Moon Reserved Label Names</caption>
+<caption class="title">Table 11. Moon Reserved Label Names</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4613,7 +4705,7 @@ metadata:
 <li>
 <p>Create an S3 bucket. In this example bucket name is <code>moon-test</code>. You can create an S3-compatible bucket in the majority of public cloud platforms. How to configure Moon with these platforms in shown in the table below:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. S3 settings for popular cloud platforms</caption>
+<caption class="title">Table 12. S3 settings for popular cloud platforms</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -4732,7 +4824,7 @@ metadata:
 <p>Here every placeholder such as <code>$quota</code>, <code>$browserName</code>, <code>$browserVersion</code> and so on will be replaced by corresponding information: user name, browser name, browser version. The resulting S3 key will be used as a directory to save video files. A list of supported placeholders is shown in the table below:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. S3 Key Placeholders</caption>
+<caption class="title">Table 13. S3 Key Placeholders</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5046,7 +5138,7 @@ items:
 <p>Several rarely needed Moon <a href="#cli-flags-moon">command-line flags</a> are responsible for advanced timeout settings:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. Rarely Needed Command-line Timeout Flags</caption>
+<caption class="title">Table 14. Rarely Needed Command-line Timeout Flags</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -5562,7 +5654,7 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. Default user and group assigned to browser pods</caption>
+<caption class="title">Table 15. Default user and group assigned to browser pods</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -5660,7 +5752,7 @@ $ curl -s http://localhost:4444/metrics
 <p>The following metrics are available:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. Moon Built-in Prometheus Metrics</caption>
+<caption class="title">Table 16. Moon Built-in Prometheus Metrics</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -6419,7 +6511,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <li>
 <p>For simplicity, we calculated monthly prices for some frequent cases:</p>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 15. Moon License Pricing</caption>
+<caption class="title">Table 17. Moon License Pricing</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -6510,7 +6602,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <h2 id="mobile-emulation-devices"><a class="anchor" href="#mobile-emulation-devices"></a>Appendix A: Supported Mobile Devices</h2>
 <div class="sectionbody">
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 16. Supported Mobile Devices</caption>
+<caption class="title">Table 18. Supported Mobile Devices</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -6818,7 +6910,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-05-07 17:38:08 UTC
+Last updated 2022-05-08 05:34:45 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
