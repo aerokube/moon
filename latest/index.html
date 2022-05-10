@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-05-09</span>
+<span id="revdate">2022-05-10</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -3636,6 +3636,10 @@ items:
       endpoint: &quot;&quot;
       pattern: &quot;&quot;
       secretKey: &quot;&quot;
+      secretRef:
+        accessKey: RootUser
+        name: minio
+        secretKey: RootPass
     user:                                     <i class="conum" data-value="25"></i><b>(25)</b>
       id: 4096                                <i class="conum" data-value="26"></i><b>(26)</b>
       name: user                              <i class="conum" data-value="27"></i><b>(27)</b>
@@ -4889,6 +4893,77 @@ metadata:
 </div>
 <div class="paragraph">
 <p>To define an S3 key pattern for every browser session independently - use <code>pattern</code> capability described in <a href="#selenium-moon-capabilities">Moon-specific Capabilities</a> section.</p>
+</div>
+<div id="video-recording-s3-secret" class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.1.3.</p>
+</li>
+<li>
+<p>Make sure that Kubernetes secret is created in the namespace where browser pods will be started.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In some cases you may want to load S3 credentials from Kubernetes secret instead of setting them as plain text in <a href="#configuration-object">configuration object</a>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a Kubernetes <a href="https://kubernetes.io/docs/concepts/configuration/secret/">secret</a> in the namespace for respective <a href="https://aerokube.com/moon/latest/#quotas">quota</a>:</p>
+<div class="listingblock">
+<div class="title">An example Kubernetes secret with S3 credentials</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ cat secret.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: credentials
+stringData:
+  RootUser: &quot;AKIAXXXXXXXXXXXXXXXX&quot;
+  RootPass: &quot;okUa0XXXXXXXXXXXXXXXXXXXX&quot;
+
+$ kubectl create -n moon -f secret.yaml
+secret/minio created</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Add <code>secretRef</code> field in <a href="#configuration-object">configuration object</a> as follows:</p>
+<div class="listingblock">
+<div class="title">Loading S3 credentials from Kubernetes secret</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="comment"># Some fields before</span>
+    <span class="key">storage</span>:
+      <span class="comment"># Other S3 storage settings</span>
+      <span class="key">secretRef</span>:
+        <span class="key">accessKey</span>: <span class="string"><span class="content">RootUser</span></span> <span class="comment"># Name of the secret field with access key</span>
+        <span class="key">name</span>: <span class="string"><span class="content">credentials</span></span> <span class="comment"># Secret name from previous step</span>
+        <span class="key">secretKey</span>: <span class="string"><span class="content">RootPass</span></span>  <span class="comment"># Name of the secret field with secret key</span>
+    <span class="comment"># Other fields</span></code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 <div class="sect4">
@@ -6910,7 +6985,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-05-09 11:26:16 UTC
+Last updated 2022-05-10 16:01:56 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
