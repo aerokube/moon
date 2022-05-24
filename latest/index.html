@@ -2341,8 +2341,10 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
       <span class="key">default</span>: <span class="string"><span class="content">1.0.0</span></span>
       <span class="key">repository</span>: <span class="string"><span class="content">aerokube/moon-external-host</span></span>
       <span class="key">env</span>:
-        - <span class="string"><span class="delimiter">&quot;</span><span class="content">URLS=[\\\&quot;http://host1.example.com:4444/\\\&quot;, \\\&quot;http://host2.example.com:4444/\\\&quot;]</span><span class="delimiter">&quot;</span></span> <span class="comment"># A list of external hosts</span>
-        - <span class="string"><span class="delimiter">&quot;</span><span class="content">VNC_PASSWORD=myvncpassword</span><span class="delimiter">&quot;</span></span> <span class="comment"># At least 8 symbols</span>
+        - <span class="string"><span class="content">name: URLS</span></span>
+          <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">[\\\&quot;http://host1.example.com:4444/\\\&quot;, \\\&quot;http://host2.example.com:4444/\\\&quot;]</span><span class="delimiter">&quot;</span></span> <span class="comment"># A list of external hosts</span>
+        - <span class="string"><span class="content">name: VNC_PASSWORD</span></span>
+          <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">myvncpassword</span><span class="delimiter">&quot;</span></span> <span class="comment"># At least 8 symbols</span>
       ]</code></pre>
 </div>
 </div>
@@ -4150,7 +4152,7 @@ browserVersion = 96.0</code></pre>
 <div class="sect4">
 <h5 id="browsers-set-environment-variables"><a class="anchor" href="#browsers-set-environment-variables"></a>Environment Variables</h5>
 <div class="paragraph">
-<p>In some situations you may need to set environment variables to browser pods. For example this may be needed to set <code>LANG</code> or <code>TZ</code> environment variables being used by some browsers to detect preferred language and time zone respectively. To set an arbitrary environment variable:</p>
+<p>In some situations you may need to set environment variables to browser pods. For example this may be needed to set <code>LANG</code> or <code>TZ</code> environment variables being used by some browsers to detect preferred language and time zone respectively. To set an arbitrary environment variable - use regular Kubernetes syntax:</p>
 </div>
 <div class="listingblock">
 <div class="title">Setting arbitrary environment variables</div>
@@ -4159,8 +4161,10 @@ browserVersion = 96.0</code></pre>
   <span class="key">chrome</span>:
     <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
     <span class="key">env</span>:                                <i class="conum" data-value="1"></i><b>(1)</b>
-      - <span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=Europe/Paris</span><span class="delimiter">&quot;</span></span>               <i class="conum" data-value="2"></i><b>(2)</b>
-      - <span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=fr_FR.UTF-8</span><span class="delimiter">&quot;</span></span></code></pre>
+      - <span class="string"><span class="content">name: TZ                        </span></span><i class="conum" data-value="2"></i><b>(2)</b>
+        <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">Europe/Paris</span><span class="delimiter">&quot;</span></span>
+      - <span class="string"><span class="content">name: LANG</span></span>
+        <span class="key">value</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">fr_FR.UTF-8</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -4176,15 +4180,35 @@ browserVersion = 96.0</code></pre>
 </table>
 </div>
 <div class="paragraph">
-<p>The same can be certainly written in one line:</p>
+<p>Advanced features like loading environment variables from pod fields, ConfigMap or Secret:</p>
 </div>
 <div class="listingblock">
-<div class="title">Setting environment variable in one line</div>
+<div class="title">Loading environment variables</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
     <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
-    <span class="key">env</span>: <span class="string"><span class="content">[&quot;TZ=Europe/Paris&quot;, &quot;LANG=fr_FR.UTF-8&quot;]</span></span></code></pre>
+    <span class="key">env</span>:
+        - <span class="string"><span class="content">name: MY_NODE_NAME</span></span>
+          <span class="key">valueFrom</span>:
+            <span class="key">fieldRef</span>:
+              <span class="key">fieldPath</span>: <span class="string"><span class="content">spec.nodeName</span></span> <span class="comment"># Pod spec field value</span>
+        - <span class="string"><span class="content">name: SECRET_USERNAME</span></span>
+          <span class="key">valueFrom</span>:
+            <span class="key">secretKeyRef</span>:
+              <span class="key">name</span>: <span class="string"><span class="content">some-secret</span></span> <span class="comment"># Secret name</span>
+              <span class="key">key</span>: <span class="string"><span class="content">username</span></span> <span class="comment"># Key name</span>
+        - <span class="string"><span class="content">name: MEM_LIMIT</span></span>
+          <span class="key">valueFrom</span>:
+            <span class="key">resourceFieldRef</span>:
+              <span class="key">containerName</span>: <span class="string"><span class="content">some-container</span></span> <span class="comment"># Container name</span>
+              <span class="key">resource</span>: <span class="string"><span class="content">limits.memory</span></span> <span class="comment"># Resource parameter</span>
+              <span class="key">divisor</span>: <span class="string"><span class="content">1Mi</span></span>
+        - <span class="string"><span class="content">name: SOME_KEY</span></span>
+          <span class="key">valueFrom</span>:
+            <span class="key">configMapKeyRef</span>:
+              <span class="key">name</span>: <span class="string"><span class="content">some-map</span></span> <span class="comment"># ConfigMap name</span>
+              <span class="key">key</span>: <span class="string"><span class="content">some-key</span></span> <span class="comment"># Key name</span></code></pre>
 </div>
 </div>
 </div>
@@ -7100,7 +7124,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-05-24 13:47:59 UTC
+Last updated 2022-05-24 14:18:11 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
