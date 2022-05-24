@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-05-20</span>
+<span id="revdate">2022-05-24</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -583,10 +583,11 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#selenium-video-recording">2.1.3. Video Recording</a></li>
 <li><a href="#mobile-emulation">2.1.4. Mobile Emulation</a></li>
 <li><a href="#clipboard">2.1.5. Accessing Clipboard</a></li>
-<li><a href="#accessing-downloaded-files">2.1.6. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-devtools">2.1.7. Accessing Developer Tools</a></li>
-<li><a href="#selenium-locale">2.1.8. Changing Browser Locale</a></li>
-<li><a href="#selenium-external-host">2.1.9. Using External Hosts</a></li>
+<li><a href="#uploading-files">2.1.6. Uploading Files to Browser</a></li>
+<li><a href="#accessing-downloaded-files">2.1.7. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-devtools">2.1.8. Accessing Developer Tools</a></li>
+<li><a href="#selenium-locale">2.1.9. Changing Browser Locale</a></li>
+<li><a href="#selenium-external-host">2.1.10. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -2096,7 +2097,85 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.6. Accessing Files Downloaded with Browser</h4>
+<h4 id="uploading-files"><a class="anchor" href="#uploading-files"></a>2.1.6. Uploading Files to Browser</h4>
+<div class="paragraph">
+<p>Uploading files to browser is a built-in Selenium feature supported in the majority of Selenium clients. How to do this in different programming languages is shown below:</p>
+</div>
+<div class="listingblock">
+<div class="title">Uploading files with <a href="https://github.com/seleniumhq/selenium">standard Java client</a></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Find file input element</span>
+WebElement input = driver.findElement(By.cssSelector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>));
+
+<span class="comment">// Make sure element is visible</span>
+((JavascriptExecutor) driver).executeScript(<span class="string"><span class="delimiter">&quot;</span><span class="content">arguments[0].style.display = 'block';</span><span class="delimiter">&quot;</span></span>, input);
+
+<span class="comment">// Configure your client to upload local files to remote Selenium instance</span>
+driver.setFileDetector(<span class="keyword">new</span> LocalFileDetector());
+
+<span class="comment">// Specify you local file path here (not path inside browser container!)</span>
+input.sendKeys(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/file/on/machine/which/runs/tests</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Uploading files with <a href="https://github.com/aerokube/lightning-java">Lightning</a> Java client</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Find file input element</span>
+WebElement fileInput = driver.elements().findFirst(By.cssSelector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>));
+
+<span class="comment">// Upload file</span>
+Path fileToUpload = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/file/on/machine/which/runs/tests</span><span class="delimiter">&quot;</span></span>);
+<span class="predefined-type">String</span> fileRemotePath = driver.document().uploadFile(fileToUpload);
+
+<span class="comment">// Set file input field value to remote uploaded file path</span>
+fileInput.sendKeys(fileRemotePath);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Uploading files with Python</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python"><span class="keyword">from</span> <span class="include">selenium.webdriver.remote.file_detector</span> <span class="keyword">import</span> <span class="include">LocalFileDetector</span>
+
+<span class="comment"># ...</span>
+
+<span class="comment"># Find input field</span>
+input = driver.find_element_by_css_selector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>)
+
+<span class="comment"># Make sure it is visible</span>
+driver.execute_script(<span class="string"><span class="delimiter">&quot;</span><span class="content">arguments[0].style.display = 'block';</span><span class="delimiter">&quot;</span></span>, <span class="predefined">input</span>)
+
+<span class="comment"># Upload file</span>
+driver.file_detector = LocalFileDetector()
+<span class="predefined">input</span>.send_keys(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/file/on/machine/which/runs/tests</span><span class="delimiter">&quot;</span></span>)</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Uploading files with C#</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="csharp">// Create driver instance
+ChromeOptions options = new ChromeOptions();
+IWebDriver driver = new RemoteWebDriver(new Uri(&quot;https://moon.example.com/wd/hub&quot;), options);
+
+// Open page
+driver.Navigate().GoToUrl(&quot;https://example.com/&quot;);
+
+// Upload file
+IAllowsFileDetection allowsDetection = (IAllowsFileDetection)driver;
+allowsDetection.FileDetector = new LocalFileDetector();
+driver.FindElement(By.Id(&quot;uploadfile_0&quot;)).SendKeys(&quot;/tmp/file.txt&quot;);</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Uploading files with <a href="https://github.com/webdriverio/webdriverio/">Webdriver.io</a></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> filePath = path.join(<span class="string"><span class="delimiter">'</span><span class="content">/path/to/file/on/machine/which/runs/tests</span><span class="delimiter">'</span></span>);
+<span class="keyword">var</span> remoteFilePath = browser.uploadFile(filePath);
+<span class="predefined">$</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>).setValue(remoteFilePath);</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.7. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2164,7 +2243,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.7. Accessing Developer Tools</h4>
+<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.8. Accessing Developer Tools</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2194,7 +2273,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.8. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.9. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -2224,7 +2303,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.9. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.10. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -7021,7 +7100,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-05-20 17:44:00 UTC
+Last updated 2022-05-24 13:47:59 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
