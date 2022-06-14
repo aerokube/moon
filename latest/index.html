@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-06-07</span>
+<span id="revdate">2022-06-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -603,7 +603,8 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <ul class="sectlevel3">
 <li><a href="#playwright-select-browser">2.3.1. Selecting Requested Browser</a></li>
 <li><a href="#playwright-video-recording">2.3.2. Video Recording</a></li>
-<li><a href="#playwright-additional-features">2.3.3. Enabling Additional Features</a></li>
+<li><a href="#playwright-context">2.3.3. Additional Browser Data</a></li>
+<li><a href="#playwright-additional-features">2.3.4. Enabling Additional Features</a></li>
 </ul>
 </li>
 <li><a href="#devtools">2.4. Using Chrome Developer Tools</a>
@@ -1907,6 +1908,198 @@ This feature is available since Moon 2.2.0.
 </div>
 </div>
 </div>
+<div class="sect4">
+<h5 id="capability-context"><a class="anchor" href="#capability-context"></a>Additional Browser Data: context</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.3.0.</p>
+</li>
+<li>
+<p>Only <code>*.tar.gz</code> archives are supported. We do not support regular <code>*.zip</code> archives because of performance issues.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>NOTE:</p>
+</div>
+<div class="paragraph">
+<p>Often when working with a browser you may need to use additional data: browser extensions, test files to be uploaded, browser settings files (also known as <code>browser profile</code>) and so on. In standard Selenium every such additional file is uploaded with different code snippet. The most important thing is that anyway all such data is being uploaded as HTTP request body. Every time you send file like this your Selenium implementation needs to read all the bytes into memory and this dramatically increases memory consumption. A lot more efficient way of delivering the same functionality is packing all required files to a single archive (e.g. on your CI server). An URL to this archive is then sent as a Selenium capability, thus allowing every browser session to download it before actually launching the browser. We call an archive like this a <code>browser context</code> and respective capability is named just <code>context</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>context: https://example.com/browser-data.tar.gz</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you provide <code>context</code> capability, Moon will download an archive and unpack it to <code>/home/&lt;user&gt;</code> directory, where <code>&lt;user&gt;</code> is name of the user configured in <a href="#configuration-object">configuration object</a>. Default username is just <code>user</code>, so default directory is <code>/home/user/</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">How archive is unpacked</div>
+<div class="content">
+<pre>browser-data.tar.gz    ===&gt;     /home/user
+|                               |
+---- some-file.txt              ---- some-file.txt
+---- some-directory             ---- some-directory
+     |                               |
+     ---- another-file.xpi           ---- another-file.xpi
+     ---- one-more-file.png          ---- one-more-file.png</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create an archive with browser context:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating an archive with browser context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf browser-data.tar.gz some-file.txt some-directory # Add an arbitrary number of files and directories here</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Possible use cases of this feature include:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Uploading files to browser.</strong> You pack any test files and just set their path to file input fields or open them in the browser.</p>
+<div class="listingblock">
+<div class="title">Capabilities to upload test files to browser</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/browser-data.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to upload test files to browser</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/browser-data.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now just use unpacked files in your Selenium code:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using uploaded files from context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Find file input element</span>
+WebElement input = driver.findElement(By.cssSelector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>));
+
+<span class="comment">// Specify path of the file from context directory</span>
+input.sendKeys(<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/some-directory/one-more-file.png</span><span class="delimiter">&quot;</span></span>);
+
+<span class="comment">// You can also open files from context directory in browser</span>
+driver.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">file:///home/user/some-file.txt</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Using browser extensions.</strong> You repack your extension (<code>extension.crx</code>) to the archive (<code>extension.tar.gz</code>) and then load it using browser command-line flags. To repack extension:</p>
+<div class="listingblock">
+<div class="title">How to repack extension to <code>*.tar.gz</code></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ unzip extension.crx # The same works for *.xpi as both are zip archives
+$ tar cvzf extersion.tar.gz extension</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Respective capabilities can look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities to use a browser extension</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-extensions-except=/home/user/extension</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--load-extension=/home/user/extension</span><span class="delimiter">&quot;</span></span>
+    ]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/extension.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to use browser extension</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-extensions-except=/home/user/extensions&quot;,&quot;--load-extension=/home/user/extensions&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/extensions.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Overriding browser profile.</strong> You pack a directory with browser profile (<code>profile</code>) to the archive (<code>profile.tar.gz</code>) and then load it using browser command-line flags. Respective capabilities for Chrome can look like this:</p>
+<div class="listingblock">
+<div class="title">Capabilities to override Chrome profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">--user-data-dir=/home/user/profile</span><span class="delimiter">&quot;</span></span>]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to override Chrome profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--user-data-dir=/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Firefox approach remains the same but command-line flags differ:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities to override Firefox profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moz:firefoxOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">-profile</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/profile</span><span class="delimiter">&quot;</span></span>]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to override Firefox profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;firefox&quot;, &quot;moz:firefoxOptions&quot;:{&quot;args&quot;:[&quot;-profile&quot;,&quot;/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Overriding various user settings.</strong> Previously we understood that browser context archive is unpacked to user home directory in browser pod. You can use this to override various operating system configuration files (<code>~/.bashrc</code>, <code>~/.gtkrc-3.0</code> to e.g. turn off cursor blinking) and directories (<code>~/.ssh</code>, <code>~/.gpg</code> and so on).</p>
+</li>
+</ol>
+</div>
+</div>
 </div>
 <div class="sect3">
 <h4 id="selenium-headless"><a class="anchor" href="#selenium-headless"></a>2.1.2. Headless Mode</h4>
@@ -2676,7 +2869,7 @@ This feature works with Cypress images 9.6.0 and above.
 <pre class="CodeRay highlight"><code data-lang="javascript">const { firefox } = require(<span class="string"><span class="delimiter">'</span><span class="content">playwright</span><span class="delimiter">'</span></span>);
 
 (async () =&gt; {
-  const browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">wss://moon.example.com/playwright/firefox/playwright-1.17.1</span><span class="delimiter">'</span></span> });
+  const browser = await firefox.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">wss://moon.example.com/playwright/firefox/playwright-1.22.2</span><span class="delimiter">'</span></span> });
   const page = await browser.newPage();
   await page.<span class="reserved">goto</span>(<span class="string"><span class="delimiter">'</span><span class="content">https://aerokube.com/moon/</span><span class="delimiter">'</span></span>);
   await page.screenshot({ <span class="key">path</span>: <span class="error">`</span>screenshot.png<span class="error">`</span> });
@@ -2707,27 +2900,27 @@ This feature works with Cypress images 9.6.0 and above.
 <p>You can request one of browsers supported by Playwright (<code>chrome</code>, <code>chromium</code>, <code>firefox</code>  or <code>webkit</code>) by specifying its name in URL. By default, Moon will use <code>quay.io/playwright-&lt;browser-name&gt;</code> repository to download images. Currently, Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Chromium (<code>quay.io/browser/playwright-chromium:playwright-1.17.1</code> image)</div>
+<div class="title">Requesting Chromium (<code>quay.io/browser/playwright-chromium:playwright-1.22.2</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chromium/playwright-1.17.1</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chromium/playwright-1.22.2</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Chrome (<code>quay.io/browser/playwright-chrome:playwright-1.17.1</code> image)</div>
+<div class="title">Requesting Chrome (<code>quay.io/browser/playwright-chrome:playwright-1.22.2</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome/playwright-1.17.1</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome/playwright-1.22.2</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Firefox (<code>quay.io/browser/playwright-firefox:playwright-1.17.1</code> image)</div>
+<div class="title">Requesting Firefox (<code>quay.io/browser/playwright-firefox:playwright-1.22.2</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/firefox/playwright-1.17.1</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/firefox/playwright-1.22.2</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Webkit (<code>quay.io/browser/playwright-webkit:playwright-1.17.1</code> image)</div>
+<div class="title">Requesting Webkit (<code>quay.io/browser/playwright-webkit:playwright-1.22.2</code> image)</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/webkit/playwright-1.17.1</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/webkit/playwright-1.22.2</code></pre>
 </div>
 </div>
 </div>
@@ -2739,7 +2932,7 @@ This feature works with Cypress images 9.6.0 and above.
 <div class="listingblock">
 <div class="title">Enabling video recording</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com:4444/playwright/firefox/playwright-1.17.1?headless=false&amp;enableVideo=true</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com:4444/playwright/firefox/playwright-1.22.2?headless=false&amp;enableVideo=true</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2747,14 +2940,35 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.3. Enabling Additional Features</h4>
+<h4 id="playwright-context"><a class="anchor" href="#playwright-context"></a>2.3.3. Additional Browser Data</h4>
+<div class="paragraph">
+<p>Similarly to Selenium, you can make browser pod automatically download arbitrary files as a single archive and unpack them to user directory. This feature is described in detail <a href="#capability-context">here</a>. The main particularity in Playwright is that archive URL is being passed as Playwright <code>context</code> URL parameter and thus needs to be <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoded</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling browser context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com:4444/playwright/chrome/playwright-1.22.2?context=http%3A%2F%2Fexample.com%2Fbrowser-data.tar.gz</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For example to upload a browser extension:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling browser context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> browser = await chromium.connect({ <span class="key">timeout</span>: <span class="integer">0</span>, <span class="key">wsEndpoint</span>: <span class="string"><span class="delimiter">'</span><span class="content">wss://moon.example.com/playwright/chrome/playwright-1.22.2?headless=false&amp;context=https%3A%2F%2Fexample.com%2Fextensions.tar.gz&amp;arg=--disable-extensions-except%3D%2Fhome%2Fuser%2Fextensions&amp;arg=--load-extension%3D%2Fhome%2Fuser%2Fextensions</span><span class="delimiter">'</span></span> });</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
 <div class="listingblock">
 <div class="title">Adding parameters to enable additional features</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome/playwright-1.17.1?headless=false&amp;arg=--use-gl</code></pre>
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chrome/playwright-1.22.2?headless=false&amp;arg=--use-gl</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2782,6 +2996,12 @@ This feature works with Cypress images 9.6.0 and above.
 <td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">One or more additional command-line arguments to be passed to browser. This parameter can be passed multiple times: <code>arg=--use-fake-ui-for-media-stream&amp;arg=--use-gl</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">context</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Browser context HTTP URL</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An HTTP URL for <code>*.tar.gz</code> file with additional files you want to be available to browser (so-called <code>browser context</code>).</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">devtools</p></td>
@@ -7124,7 +7344,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-06-07 09:20:41 UTC
+Last updated 2022-06-14 08:22:48 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
