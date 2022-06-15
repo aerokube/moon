@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-06-14</span>
+<span id="revdate">2022-06-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -642,47 +642,53 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#video-recording-enable">3.3.2. Requesting to Record a Video</a></li>
 </ul>
 </li>
-<li><a href="#private-container-registry">3.4. Using Private Container Registry</a></li>
-<li><a href="#timeouts">3.5. Adjusting Timeouts</a>
+<li><a href="#browser-ops">3.4. Automatically Updating Browser Versions</a>
 <ul class="sectlevel3">
-<li><a href="#timeouts-moon">3.5.1. Adjusting Moon Timeouts</a></li>
-<li><a href="#timeouts-other">3.5.2. Adjusting Other Timeouts</a></li>
+<li><a href="#browser-ops-installation">3.4.1. Installation</a></li>
+<li><a href="#browser-ops-configuration">3.4.2. Configuration Options</a></li>
 </ul>
 </li>
-<li><a href="#resources">3.6. Adjusting Resources Consumption</a>
+<li><a href="#private-container-registry">3.5. Using Private Container Registry</a></li>
+<li><a href="#timeouts">3.6. Adjusting Timeouts</a>
 <ul class="sectlevel3">
-<li><a href="#resources-browser">3.6.1. Browser Resources Consumption</a></li>
-<li><a href="#resources-service-images">3.6.2. Service Images Resources Consumption</a></li>
-<li><a href="#resources-qos">3.6.3. Pods Quality of Service</a></li>
+<li><a href="#timeouts-moon">3.6.1. Adjusting Moon Timeouts</a></li>
+<li><a href="#timeouts-other">3.6.2. Adjusting Other Timeouts</a></li>
 </ul>
 </li>
-<li><a href="#ca-certs">3.7. Using Additional Trusted TLS Certificates</a></li>
-<li><a href="#multiple-namespaces">3.8. Multiple Namespaces Mode</a></li>
-<li><a href="#advanced-settings">3.9. Advanced Settings</a>
+<li><a href="#resources">3.7. Adjusting Resources Consumption</a>
 <ul class="sectlevel3">
-<li><a href="#advanced-settings-annotations">3.9.1. Adding Custom Kubernetes Annotations</a></li>
-<li><a href="#advanced-settings-labels">3.9.2. Adding Custom Kubernetes Labels</a></li>
-<li><a href="#advanced-settings-network-policies">3.9.3. Adding Network Policies</a></li>
-<li><a href="#node-selectors">3.9.4. Using Node Selectors</a></li>
-<li><a href="#affinity">3.9.5. Using Affinity</a></li>
-<li><a href="#tolerations">3.9.6. Using Tolerations</a></li>
-<li><a href="#privileged-mode">3.9.7. Running Browser Pods in Privileged Mode</a></li>
-<li><a href="#advanced-settings-user-group">3.9.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
-<li><a href="#advanced-settings-service-account">3.9.9. Setting Custom Service Account</a></li>
+<li><a href="#resources-browser">3.7.1. Browser Resources Consumption</a></li>
+<li><a href="#resources-service-images">3.7.2. Service Images Resources Consumption</a></li>
+<li><a href="#resources-qos">3.7.3. Pods Quality of Service</a></li>
 </ul>
 </li>
-<li><a href="#monitoring">3.10. Monitoring</a>
+<li><a href="#ca-certs">3.8. Using Additional Trusted TLS Certificates</a></li>
+<li><a href="#multiple-namespaces">3.9. Multiple Namespaces Mode</a></li>
+<li><a href="#advanced-settings">3.10. Advanced Settings</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring-setup">3.10.1. Setup</a></li>
-<li><a href="#monitoring-built-in-metrics">3.10.2. Built-in Moon metrics</a></li>
-<li><a href="#filter-by-labels">3.10.3. Filtering Browser Pods by Labels</a></li>
+<li><a href="#advanced-settings-annotations">3.10.1. Adding Custom Kubernetes Annotations</a></li>
+<li><a href="#advanced-settings-labels">3.10.2. Adding Custom Kubernetes Labels</a></li>
+<li><a href="#advanced-settings-network-policies">3.10.3. Adding Network Policies</a></li>
+<li><a href="#node-selectors">3.10.4. Using Node Selectors</a></li>
+<li><a href="#affinity">3.10.5. Using Affinity</a></li>
+<li><a href="#tolerations">3.10.6. Using Tolerations</a></li>
+<li><a href="#privileged-mode">3.10.7. Running Browser Pods in Privileged Mode</a></li>
+<li><a href="#advanced-settings-user-group">3.10.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
+<li><a href="#advanced-settings-service-account">3.10.9. Setting Custom Service Account</a></li>
 </ul>
 </li>
-<li><a href="#log-files">3.11. Log Files</a></li>
-<li><a href="#_cli_flags">3.12. CLI Flags</a>
+<li><a href="#monitoring">3.11. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.12.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-auth">3.12.2. Moon Auth Container Flags</a></li>
+<li><a href="#monitoring-setup">3.11.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.11.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.11.3. Filtering Browser Pods by Labels</a></li>
+</ul>
+</li>
+<li><a href="#log-files">3.12. Log Files</a></li>
+<li><a href="#_cli_flags">3.13. CLI Flags</a>
+<ul class="sectlevel3">
+<li><a href="#cli-flags-moon">3.13.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-auth">3.13.2. Moon Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -5429,7 +5435,107 @@ secret/minio created</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="private-container-registry"><a class="anchor" href="#private-container-registry"></a>3.4. Using Private Container Registry</h3>
+<h3 id="browser-ops"><a class="anchor" href="#browser-ops"></a>3.4. Automatically Updating Browser Versions</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This feature is available since Moon 2.3.0.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon 2.x is choosing browser images by naming convention. For example, when you request a Selenium browser <code>chrome 100.0</code> it will by default try to use <code>quay.io/browser/google-chrome-stable:100.0</code> image. Exact repository used to fetch images can be configured in <a href="#browsers-set">browsers set</a> object. However, for Moon UI a list of available browser versions is limited and should be configured explicitly in the same browsers set object. Starting from Moon 2.3.0 we provide an automated solution to maintain the list of browser versions in Moon UI always up to date. This solution is called <code>browser-ops</code> and is distributed as a separate <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/">Kubernetes job</a> that periodically checks for new browser versions in images repository and updates browsers set accordingly.</p>
+</div>
+<div class="sect3">
+<h4 id="browser-ops-installation"><a class="anchor" href="#browser-ops-installation"></a>3.4.1. Installation</h4>
+<div class="paragraph">
+<p>To activate this solution you need to install one more <a href="https://helm.sh">Helm</a> chart:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository if you don&#8217;t have it already:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Install <code>browser-ops</code> chart:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon browser-ops aerokube/browser-ops</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect3">
+<h4 id="browser-ops-configuration"><a class="anchor" href="#browser-ops-configuration"></a>3.4.2. Configuration Options</h4>
+<div class="paragraph">
+<p>Like for any other Helm chart, <code>browser-ops</code> configuration options are stored in <code>values.yaml</code> file and applied like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon browser-ops aerokube/browser-ops</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>By default, browser versions will be updated every night. To change version update schedule:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">schedule</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">0 */2 * * *</span><span class="delimiter">&quot;</span></span> <span class="comment"># Run every two hours</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>By default, <code>browser-ops</code> will configure Moon to use the latest available browser version. You can easily change this behavior to configure all available browser versions or fixed number of the latest available browser versions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browserImageVersions</span>: <span class="string"><span class="content">all</span></span> <span class="comment"># Use all available browser versions</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browserImageVersions</span>: <span class="string"><span class="content">5</span></span> <span class="comment"># Use 5 available browser versions</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>By default, <code>browser-ops</code> will use short browser versions like <code>102.0</code> instead of <code>102.0.1245.30</code>. To use full versions:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browserImageTagFormat</span>: <span class="string"><span class="content">long</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>By default, <code>browser-ops</code> only updates browsers set object named <code>default</code>. If you have several browsers set objects, provide all required names of such objects:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browsersets</span>:
+- <span class="string"><span class="content">default</span></span>
+- <span class="string"><span class="content">alpha</span></span>
+- <span class="string"><span class="content">beta</span></span></code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="private-container-registry"><a class="anchor" href="#private-container-registry"></a>3.5. Using Private Container Registry</h3>
 <div class="paragraph">
 <p>By default, Moon images (<code>aerokube/defender</code>, <code>aerokube/logger</code> and so on) are downloaded from public container images registry. If in your environment due to security restrictions container images can only be downloaded from private registry (e.g. <code>my-registry.example.com</code>) you need to configure Moon to work with this registry. To do this:</p>
 </div>
@@ -5536,9 +5642,9 @@ aerokube/moon-ui:2.0.0 =&gt; my-registry.example.com/aerokube/moon-ui:2.0.0</cod
 </div>
 </div>
 <div class="sect2">
-<h3 id="timeouts"><a class="anchor" href="#timeouts"></a>3.5. Adjusting Timeouts</h3>
+<h3 id="timeouts"><a class="anchor" href="#timeouts"></a>3.6. Adjusting Timeouts</h3>
 <div class="sect3">
-<h4 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>3.5.1. Adjusting Moon Timeouts</h4>
+<h4 id="timeouts-moon"><a class="anchor" href="#timeouts-moon"></a>3.6.1. Adjusting Moon Timeouts</h4>
 <div class="paragraph">
 <p>Sometimes things go wrong: user can unexpectedly disconnect or browser session starts longer than needed. This can lead to overall cluster degradation because of broken browser pods occupying all available hardware. To prevent such cases Moon automatically detects and closes idle browser sessions. A session is considered idle when the delay between separate HTTP requests corresponding to a running session is bigger than configured timeout. Idle timeout may need to be increased when tested application pages are loading too slowly. To view or change idle timeout setting - take a look at <a href="#configuration-object">configuration object</a>:</p>
 </div>
@@ -5604,7 +5710,7 @@ items:
 </table>
 </div>
 <div class="sect3">
-<h4 id="timeouts-other"><a class="anchor" href="#timeouts-other"></a>3.5.2. Adjusting Other Timeouts</h4>
+<h4 id="timeouts-other"><a class="anchor" href="#timeouts-other"></a>3.6.2. Adjusting Other Timeouts</h4>
 <div class="paragraph">
 <p>Not only Moon timeout settings can cause your tests to break. A typical Moon installation looks like the following:</p>
 </div>
@@ -5634,9 +5740,9 @@ items:
 </div>
 </div>
 <div class="sect2">
-<h3 id="resources"><a class="anchor" href="#resources"></a>3.6. Adjusting Resources Consumption</h3>
+<h3 id="resources"><a class="anchor" href="#resources"></a>3.7. Adjusting Resources Consumption</h3>
 <div class="sect3">
-<h4 id="resources-browser"><a class="anchor" href="#resources-browser"></a>3.6.1. Browser Resources Consumption</h4>
+<h4 id="resources-browser"><a class="anchor" href="#resources-browser"></a>3.7.1. Browser Resources Consumption</h4>
 <div class="paragraph">
 <p>Moon has reasonable defaults for resources consumed by every browser pod. Sometimes you may need to override these settings. To override resource settings globally for every browser image - use <a href="#configuration-object">configuration object</a>:</p>
 </div>
@@ -5683,7 +5789,7 @@ items:
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>3.6.2. Service Images Resources Consumption</h4>
+<h4 id="resources-service-images"><a class="anchor" href="#resources-service-images"></a>3.7.2. Service Images Resources Consumption</h4>
 <div class="paragraph">
 <p>To check service images resources requirements - simply show configuration object for your quota in YAML format:</p>
 </div>
@@ -5728,7 +5834,7 @@ items:
 </div>
 </div>
 <div class="sect3">
-<h4 id="resources-qos"><a class="anchor" href="#resources-qos"></a>3.6.3. Pods Quality of Service</h4>
+<h4 id="resources-qos"><a class="anchor" href="#resources-qos"></a>3.7.3. Pods Quality of Service</h4>
 <div class="paragraph">
 <p>Browser automation stability and speed highly depends on how many computing resources are actually available to browser pods. Kubernetes has so-called <a href="https://kubernetes.io/docs/tasks/configure-pod-container/quality-service-pod/">Quality of Service (QoS)</a> defining how many resources are assigned to pods being started. For stable browser automation we recommend always setting <code>Guaranteed</code> QoS class to Moon browser pods. To deliver this you have to make sure that <code>requests</code> and <code>limits</code> values for CPU and memory have equal values:</p>
 </div>
@@ -5745,7 +5851,7 @@ items:
 </div>
 </div>
 <div class="sect2">
-<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.7. Using Additional Trusted TLS Certificates</h3>
+<h3 id="ca-certs"><a class="anchor" href="#ca-certs"></a>3.8. Using Additional Trusted TLS Certificates</h3>
 <div class="paragraph">
 <p>In corporate networks tested environments are often using additional trusted <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates. Such certificates are issued by a <a href="https://en.wikipedia.org/wiki/Root_certificate">root certification authority</a> not known to browsers. When trying to open an HTTPS web-page using such TLS certificate, your browser by default will refuse to do this saying that "Your connection is not private" or "This connection is untrusted". In Selenium tests you can use a standard capability (<code>acceptInsecureCerts = true</code>) to ignore such certificate errors but this will not work when your web-page is using <a href="https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security">Strict Transport Security</a>.</p>
 </div>
@@ -5854,7 +5960,7 @@ ejbh
 </div>
 </div>
 <div class="sect2">
-<h3 id="multiple-namespaces"><a class="anchor" href="#multiple-namespaces"></a>3.8. Multiple Namespaces Mode</h3>
+<h3 id="multiple-namespaces"><a class="anchor" href="#multiple-namespaces"></a>3.9. Multiple Namespaces Mode</h3>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -5950,7 +6056,7 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 </div>
 </div>
 <div class="sect2">
-<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.9. Advanced Settings</h3>
+<h3 id="advanced-settings"><a class="anchor" href="#advanced-settings"></a>3.10. Advanced Settings</h3>
 <div class="paragraph">
 <p>This section describes how to configure some advanced features sometimes required by Kubernetes cluster settings. Moon is using just the same keys and values that Kubernetes itself does for most of the settings below. This is how a typical Kubernetes pod looks like:</p>
 </div>
@@ -6001,19 +6107,19 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.9.1. Adding Custom Kubernetes Annotations</h4>
+<h4 id="advanced-settings-annotations"><a class="anchor" href="#advanced-settings-annotations"></a>3.10.1. Adding Custom Kubernetes Annotations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-annotations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.9.2. Adding Custom Kubernetes Labels</h4>
+<h4 id="advanced-settings-labels"><a class="anchor" href="#advanced-settings-labels"></a>3.10.2. Adding Custom Kubernetes Labels</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-custom-labels">here</a>. Also, you can override labels using <a href="#capability-labels"><code>labels</code> capability</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.9.3. Adding Network Policies</h4>
+<h4 id="advanced-settings-network-policies"><a class="anchor" href="#advanced-settings-network-policies"></a>3.10.3. Adding Network Policies</h4>
 <div class="paragraph">
 <p><a href="https://kubernetes.io/docs/concepts/services-networking/network-policies/">Network policies</a> are dedicated Kubernetes objects allowing to control network firewall rules. Using them with Moon is straightforward:</p>
 </div>
@@ -6059,31 +6165,31 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 </div>
 </div>
 <div class="sect3">
-<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.9.4. Using Node Selectors</h4>
+<h4 id="node-selectors"><a class="anchor" href="#node-selectors"></a>3.10.4. Using Node Selectors</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-node-selectors">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.9.5. Using Affinity</h4>
+<h4 id="affinity"><a class="anchor" href="#affinity"></a>3.10.5. Using Affinity</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-affinity">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.9.6. Using Tolerations</h4>
+<h4 id="tolerations"><a class="anchor" href="#tolerations"></a>3.10.6. Using Tolerations</h4>
 <div class="paragraph">
 <p>This is configured globally or for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-tolerations">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.9.7. Running Browser Pods in Privileged Mode</h4>
+<h4 id="privileged-mode"><a class="anchor" href="#privileged-mode"></a>3.10.7. Running Browser Pods in Privileged Mode</h4>
 <div class="paragraph">
 <p>This is configured for concrete browser types in <a href="#browsers-set">browsers set</a>. How to do this is described <a href="#browsers-set-privileged-mode">here</a>.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.9.8. Setting Custom User and Group Identifier to Browser Pods</h4>
+<h4 id="advanced-settings-user-group"><a class="anchor" href="#advanced-settings-user-group"></a>3.10.8. Setting Custom User and Group Identifier to Browser Pods</h4>
 <div class="paragraph">
 <p>In Moon 2.x this is configured for all browser pods in <a href="#configuration-object">configuration object</a>. If you need to use different user and group identifiers for different Moon users, simply create several configuration objects and attach them to respective quota objects. Default values are:</p>
 </div>
@@ -6120,19 +6226,19 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 </table>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.9.9. Setting Custom Service Account</h4>
+<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.10.9. Setting Custom Service Account</h4>
 <div class="paragraph">
 <p>This is configured globally for all browser pods in <a href="#configuration-object">configuration object</a>.</p>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.10. Monitoring</h3>
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.11. Monitoring</h3>
 <div class="paragraph">
 <p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.10.1. Setup</h4>
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.11.1. Setup</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6169,7 +6275,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.10.2. Built-in Moon metrics</h4>
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.11.2. Built-in Moon metrics</h4>
 <div class="paragraph">
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod).</p>
 </div>
@@ -6236,7 +6342,7 @@ $ curl -s http://localhost:4444/metrics
 </table>
 </div>
 <div class="sect3">
-<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.10.3. Filtering Browser Pods by Labels</h4>
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.11.3. Filtering Browser Pods by Labels</h4>
 <div class="paragraph">
 <p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
 </div>
@@ -6259,7 +6365,7 @@ $ curl -s http://localhost:4444/metrics
 </div>
 </div>
 <div class="sect2">
-<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.11. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.12. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -6298,12 +6404,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.12. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.13. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.12.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.13.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -6329,7 +6435,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.12.2. Moon Auth Container Flags</h4>
+<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.13.2. Moon Auth Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -7344,7 +7450,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-06-14 08:22:48 UTC
+Last updated 2022-06-15 17:36:54 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
