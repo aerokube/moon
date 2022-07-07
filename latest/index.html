@@ -587,7 +587,8 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#accessing-downloaded-files">2.1.7. Accessing Files Downloaded with Browser</a></li>
 <li><a href="#selenium-devtools">2.1.8. Accessing Developer Tools</a></li>
 <li><a href="#selenium-locale">2.1.9. Changing Browser Locale</a></li>
-<li><a href="#selenium-external-host">2.1.10. Using External Hosts</a></li>
+<li><a href="#selenium-time-zone">2.1.10. Changing Browser Time Zone</a></li>
+<li><a href="#selenium-external-host">2.1.11. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -2495,14 +2496,76 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
 options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">browserVersion</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">81.0</span><span class="delimiter">&quot;</span></span>);
-options.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANGUAGE=at:de</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LC_ALL=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>));
+capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">LANG=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LANGUAGE=at:de</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">LC_ALL=de_AT.UTF-8</span><span class="delimiter">&quot;</span></span>)
+));
 WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">&quot;</span></span>), options);</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.10. Using External Hosts</h4>
+<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.1.10. Changing Browser Time Zone</h4>
+<div class="paragraph">
+<p>A common testing task is checking that your web application behaves as expected in different <a href="https://en.wikipedia.org/wiki/Time_zone">time zones</a>. Depending on tested web application one of the following approaches can help.</p>
+</div>
+<div class="sect4">
+<h5 id="selenium-time-zone-tz-env"><a class="anchor" href="#selenium-time-zone-tz-env"></a>Option 1: Setting TZ environment variable</h5>
+<div class="paragraph">
+<p>A typical approach for overriding time zone in Linux is setting <a href="https://www.gnu.org/software/libc/manual/html_node/TZ-Variable.html">TZ</a> environment variable. To do this in Moon - you just need to set <a href="#capability-env">env</a> capability in your code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+
+capabilities.setCapability(<span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Map</span>.of(
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">env</span><span class="delimiter">&quot;</span></span>, <span class="predefined-type">Arrays</span>.asList(<span class="string"><span class="delimiter">&quot;</span><span class="content">TZ=America/New_York</span><span class="delimiter">&quot;</span></span>) <span class="comment">// This is where you set TZ variable with values like &quot;America/New_York&quot; or &quot;Europe/London&quot;</span>
+));
+
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">&quot;</span></span>), options);
+
+driver.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://dateful.com/time-zone-converter</span><span class="delimiter">&quot;</span></span>); <span class="comment">// An example web site that respects TZ setting</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you set time zone like this, web application can fetch your time zone information using <a href="https://stackoverflow.com/questions/1091372/getting-the-clients-time-zone-and-offset-in-javascript">Javascript Time API</a>. The main problem with this approach is that not all web applications are using it. So if it does not work - then try the next option.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="selenium-time-zone-geolocation"><a class="anchor" href="#selenium-time-zone-geolocation"></a>Option 2: Overriding Browser Geolocation</h5>
+<div class="paragraph">
+<p>Some web applications are applying time zone settings by analyzing browser geolocation information using <a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API">Javascript Geolocation API</a>. If setting time zone directly does not work, you may try to override geolocation API coordinates:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">ChromeOptions options = <span class="keyword">new</span> ChromeOptions();
+WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://moon.example.com/wd/hub</span><span class="delimiter">&quot;</span></span>), options);
+driver = <span class="keyword">new</span> Augmenter().augment(driver);
+
+DevTools devTools = ((HasDevTools) driver).getDevTools();
+devTools.createSession();
+
+<span class="comment">// Location of London (change this to 40.715502419712244, -74.00597334074466 for New York)</span>
+devTools.send(Emulation.setGeolocationOverride(Optional.of(<span class="float">51.495930861102245</span>),
+        Optional.of(<span class="float">0.010205721644136127</span>),
+        Optional.of(<span class="integer">1</span>)));
+
+driver.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">https://google.com</span><span class="delimiter">&quot;</span></span>);
+WebElement element = driver.findElement(By.name(<span class="string"><span class="delimiter">&quot;</span><span class="content">q</span><span class="delimiter">&quot;</span></span>));
+Actions actionProvider = <span class="keyword">new</span> Actions(driver);
+<span class="predefined-type">Action</span> select = actionProvider
+        .sendKeys(<span class="string"><span class="delimiter">&quot;</span><span class="content">what is my time zone</span><span class="char">\n</span><span class="delimiter">&quot;</span></span>)
+        .build();
+select.perform();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In some rare cases when both options do not work, this can be a signal that your web application is detecting your time zone by comparing your IP address with IP addresses geolocation database. In that case you may need to configure your browser to go through a proxy server physically located in desired geographic region.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.11. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -7462,7 +7525,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-07 11:56:38 UTC
+Last updated 2022-07-07 16:58:08 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
