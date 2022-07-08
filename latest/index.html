@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-07-07</span>
+<span id="revdate">2022-07-08</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2022,7 +2022,7 @@ driver.get(<span class="string"><span class="delimiter">&quot;</span><span class
 <div class="title">How to repack extension to <code>*.tar.gz</code></div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ unzip extension.crx -d extension # The same works for *.xpi as both are zip archives
-$ tar cvzf extersion.tar.gz extension</code></pre>
+$ tar cvzf extension.tar.gz extension</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2103,6 +2103,54 @@ $ tar cvzf extersion.tar.gz extension</code></pre>
 </li>
 <li>
 <p><strong>Overriding various user settings.</strong> Previously we understood that browser context archive is unpacked to user home directory in browser pod. You can use this to override various operating system configuration files (<code>~/.bashrc</code>, <code>~/.gtkrc-3.0</code> to e.g. turn off cursor blinking) and directories (<code>~/.ssh</code>, <code>~/.gpg</code> and so on).</p>
+</li>
+<li>
+<p><strong>Emulating web camera video.</strong> You upload a video file to browser pod and then use it as fake web camera video. You start by preparing a fake video:</p>
+<div class="listingblock">
+<div class="title">Converting an *.mp4 video to *.y4m</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ mkdir webcam-video
+$ ffmpeg -i my-video.mp4 -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.y4m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you add resulting video to an archive:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating an archive with video</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf webcam-video.tar.gz webcam-video</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Having an archive you can now create a Chrome session with the following capabilities:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities for Chrome web camera emulation</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-gpu</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-ui-for-media-stream</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-device-for-media-stream</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m</span><span class="delimiter">&quot;</span></span>
+    ]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/webcam-video.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to emulate web camera in Chrome</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-gpu&quot;, &quot;--use-fake-ui-for-media-stream&quot;, &quot;--use-fake-device-for-media-stream&quot;, &quot;--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m&quot;]},&quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/webcam-video.tar.gz&quot;}}}'</code></pre>
+</div>
+</div>
 </li>
 </ol>
 </div>
@@ -7525,7 +7573,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-07 16:58:08 UTC
+Last updated 2022-07-08 09:54:34 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
