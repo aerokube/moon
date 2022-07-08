@@ -4065,29 +4065,27 @@ items:
       ca-certs:                               <i class="conum" data-value="8"></i><b>(8)</b>
         repository: aerokube/ca-certs         <i class="conum" data-value="9"></i><b>(9)</b>
         version: 2.0.0                        <i class="conum" data-value="10"></i><b>(10)</b>
-        ports:                                <i class="conum" data-value="11"></i><b>(11)</b>
-        - 4545
-        resources:                            <i class="conum" data-value="12"></i><b>(12)</b>
-          limits:                             <i class="conum" data-value="13"></i><b>(13)</b>
+        resources:                            <i class="conum" data-value="11"></i><b>(11)</b>
+          limits:                             <i class="conum" data-value="12"></i><b>(12)</b>
             cpu: 250m
             memory: 64Mi
-          requests:                           <i class="conum" data-value="14"></i><b>(14)</b>
+          requests:                           <i class="conum" data-value="13"></i><b>(13)</b>
             cpu: 100m
             memory: 64Mi
-      defender:                               <i class="conum" data-value="15"></i><b>(15)</b>
+      defender:                               <i class="conum" data-value="14"></i><b>(14)</b>
         # The same fields as for ca-certs
-      video-recorder:                         <i class="conum" data-value="16"></i><b>(16)</b>
+      video-recorder:                         <i class="conum" data-value="15"></i><b>(15)</b>
         # The same fields as for ca-certs
-      vnc-server:                             <i class="conum" data-value="17"></i><b>(17)</b>
+      vnc-server:                             <i class="conum" data-value="16"></i><b>(16)</b>
         # The same fields as for ca-certs
-      x-server:                               <i class="conum" data-value="18"></i><b>(18)</b>
+      x-server:                               <i class="conum" data-value="17"></i><b>(17)</b>
         # The same fields as for ca-certs
-    group:                                    <i class="conum" data-value="19"></i><b>(19)</b>
-      id: 4096                                <i class="conum" data-value="20"></i><b>(20)</b>
-      name: user                              <i class="conum" data-value="21"></i><b>(21)</b>
-    serviceAccountName: default               <i class="conum" data-value="22"></i><b>(22)</b>
-    sessionTimeout: 5m                        <i class="conum" data-value="23"></i><b>(23)</b>
-    storage:                                  <i class="conum" data-value="24"></i><b>(24)</b>
+    group:                                    <i class="conum" data-value="18"></i><b>(18)</b>
+      id: 4096                                <i class="conum" data-value="19"></i><b>(19)</b>
+      name: user                              <i class="conum" data-value="20"></i><b>(20)</b>
+    serviceAccountName: default               <i class="conum" data-value="21"></i><b>(21)</b>
+    sessionTimeout: 5m                        <i class="conum" data-value="22"></i><b>(22)</b>
+    storage:                                  <i class="conum" data-value="23"></i><b>(23)</b>
       accessKey: &quot;&quot;
       bucket: &quot;&quot;
       filename: &quot;&quot;
@@ -4098,9 +4096,9 @@ items:
         accessKey: RootUser
         name: minio
         secretKey: RootPass
-    user:                                     <i class="conum" data-value="25"></i><b>(25)</b>
-      id: 4096                                <i class="conum" data-value="26"></i><b>(26)</b>
-      name: user                              <i class="conum" data-value="27"></i><b>(27)</b>
+    user:                                     <i class="conum" data-value="24"></i><b>(24)</b>
+      id: 4096                                <i class="conum" data-value="25"></i><b>(25)</b>
+      name: user                              <i class="conum" data-value="26"></i><b>(26)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
@@ -4150,70 +4148,66 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="11"></i><b>11</b></td>
-<td>Exposed container ports</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>Computing resources assigned to container</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="13"></i><b>13</b></td>
+<td><i class="conum" data-value="12"></i><b>12</b></td>
 <td>CPU and memory limits assigned to container</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="14"></i><b>14</b></td>
+<td><i class="conum" data-value="13"></i><b>13</b></td>
 <td>CPU and memory requests assigned to container</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="15"></i><b>15</b></td>
+<td><i class="conum" data-value="14"></i><b>14</b></td>
 <td><code>defender</code> container configuration</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="16"></i><b>16</b></td>
+<td><i class="conum" data-value="15"></i><b>15</b></td>
 <td><code>video-recorder-server</code> container configuration</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="17"></i><b>17</b></td>
+<td><i class="conum" data-value="16"></i><b>16</b></td>
 <td><code>vnc-server</code> container configuration</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="18"></i><b>18</b></td>
+<td><i class="conum" data-value="17"></i><b>17</b></td>
 <td><code>x-server</code> container configuration</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="19"></i><b>19</b></td>
+<td><i class="conum" data-value="18"></i><b>18</b></td>
 <td>System group used to start containers</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="20"></i><b>20</b></td>
+<td><i class="conum" data-value="19"></i><b>19</b></td>
 <td>System group numeric identifier (<code>gid</code>)</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="21"></i><b>21</b></td>
+<td><i class="conum" data-value="20"></i><b>20</b></td>
 <td>System group name</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="22"></i><b>22</b></td>
+<td><i class="conum" data-value="21"></i><b>21</b></td>
 <td>Kubernetes service account name to use</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="23"></i><b>23</b></td>
+<td><i class="conum" data-value="22"></i><b>22</b></td>
 <td>Default Selenium session timeout</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="24"></i><b>24</b></td>
+<td><i class="conum" data-value="23"></i><b>23</b></td>
 <td>S3 storage settings (used to save recorded videos)</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="25"></i><b>25</b></td>
+<td><i class="conum" data-value="24"></i><b>24</b></td>
 <td>System user used to start containers</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="26"></i><b>26</b></td>
+<td><i class="conum" data-value="25"></i><b>25</b></td>
 <td>System user numeric identifier (<code>uid</code>)</td>
 </tr>
 <tr>
-<td><i class="conum" data-value="27"></i><b>27</b></td>
+<td><i class="conum" data-value="26"></i><b>26</b></td>
 <td>System username</td>
 </tr>
 </table>
@@ -7577,7 +7571,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-08 17:00:46 UTC
+Last updated 2022-07-08 17:44:47 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
