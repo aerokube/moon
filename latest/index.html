@@ -1380,7 +1380,9 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
     name: default
     namespace: moon
   spec:
-    additionalTrustedCAs: &quot;&lt;your-self-signed-ca-here&gt;&quot;</span></span></code></pre>
+    additionalTrustedCAs: |
+      -----BEGIN CERTIFICATE-----
+      ...</span></span></code></pre>
 </div>
 </div>
 </li>
@@ -4048,7 +4050,9 @@ items:
     namespace: moon
     # Other Kubernetes metadata
   spec:
-    additionalTrustedCAs: &quot;&lt;some-value&gt;&quot;      <i class="conum" data-value="2"></i><b>(2)</b>
+    additionalTrustedCAs: |                   <i class="conum" data-value="2"></i><b>(2)</b>
+      -----BEGIN CERTIFICATE-----
+      ...
     containers:                               <i class="conum" data-value="3"></i><b>(3)</b>
       browser:                                <i class="conum" data-value="4"></i><b>(4)</b>
         resources:                            <i class="conum" data-value="5"></i><b>(5)</b>
@@ -7573,7 +7577,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-08 11:47:25 UTC
+Last updated 2022-07-08 17:00:46 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
