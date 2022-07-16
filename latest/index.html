@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-07-14</span>
+<span id="revdate">2022-07-16</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1931,9 +1931,6 @@ This feature is available since Moon 2.2.0.
 <li>
 <p>This feature is available since Moon 2.3.0.</p>
 </li>
-<li>
-<p>Only <code>*.tar.gz</code> archives are supported. We do not support regular <code>*.zip</code> archives because of performance issues.</p>
-</li>
 </ol>
 </div>
 </td>
@@ -1941,220 +1938,13 @@ This feature is available since Moon 2.2.0.
 </table>
 </div>
 <div class="paragraph">
-<p>NOTE:</p>
-</div>
-<div class="paragraph">
-<p>Often when working with a browser you may need to use additional data: browser extensions, test files to be uploaded, browser settings files (also known as <code>browser profile</code>) and so on. In standard Selenium every such additional file is uploaded with different code snippet. The most important thing is that anyway all such data is being uploaded as HTTP request body. Every time you send file like this your Selenium implementation needs to read all the bytes into memory and this dramatically increases memory consumption. A lot more efficient way of delivering the same functionality is packing all required files to a single archive (e.g. on your CI server). An URL to this archive is then sent as a Selenium capability, thus allowing every browser session to download it before actually launching the browser. We call an archive like this a <code>browser context</code> and respective capability is named just <code>context</code>:</p>
+<p>This capability allows to efficiently upload arbitrary files to browser pod. All required files are packed to a <code>*.tar.gz</code> archive and capability value should contain a download URL to this archive. Detailed description and examples can be found <a href="#selenium-context">here</a>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Type: string</div>
 <div class="content">
-<pre>context: https://example.com/browser-data.tar.gz</pre>
+<pre>context: "https://example.com/browser-data.tar.gz"</pre>
 </div>
-</div>
-<div class="paragraph">
-<p>When you provide <code>context</code> capability, Moon will download an archive and unpack it to <code>/home/&lt;user&gt;</code> directory, where <code>&lt;user&gt;</code> is name of the user configured in <a href="#configuration-object">configuration object</a>. Default username is just <code>user</code>, so default directory is <code>/home/user/</code>.</p>
-</div>
-<div class="listingblock">
-<div class="title">How archive is unpacked</div>
-<div class="content">
-<pre>browser-data.tar.gz    ===&gt;     /home/user
-|                               |
----- some-file.txt              ---- some-file.txt
----- some-directory             ---- some-directory
-     |                               |
-     ---- another-file.xpi           ---- another-file.xpi
-     ---- one-more-file.png          ---- one-more-file.png</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>To create an archive with browser context:</p>
-</div>
-<div class="listingblock">
-<div class="title">Creating an archive with browser context</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf browser-data.tar.gz some-file.txt some-directory # Add an arbitrary number of files and directories here</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Possible use cases of this feature include:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p><strong>Uploading files to browser.</strong> You pack any test files and just set their path to file input fields or open them in the browser.</p>
-<div class="listingblock">
-<div class="title">Capabilities to upload test files to browser</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/browser-data.tar.gz</span><span class="delimiter">&quot;</span></span>}
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The same as HTTP request:</p>
-</div>
-<div class="listingblock">
-<div class="title">An HTTP request to upload test files to browser</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/browser-data.tar.gz&quot;}}}}'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now just use unpacked files in your Selenium code:</p>
-</div>
-<div class="listingblock">
-<div class="title">Using uploaded files from context</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Find file input element</span>
-WebElement input = driver.findElement(By.cssSelector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>));
-
-<span class="comment">// Specify path of the file from context directory</span>
-input.sendKeys(<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/some-directory/one-more-file.png</span><span class="delimiter">&quot;</span></span>);
-
-<span class="comment">// You can also open files from context directory in browser</span>
-driver.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">file:///home/user/some-file.txt</span><span class="delimiter">&quot;</span></span>);</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p><strong>Using browser extensions.</strong> You repack your extension (<code>extension.crx</code>) to the archive (<code>extension.tar.gz</code>) and then load it using browser command-line flags. To repack extension:</p>
-<div class="listingblock">
-<div class="title">How to repack extension to <code>*.tar.gz</code></div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ unzip extension.crx -d extension # The same works for *.xpi as both are zip archives
-$ tar cvzf extension.tar.gz extension</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Respective capabilities can look like this:</p>
-</div>
-<div class="listingblock">
-<div class="title">Capabilities to use a browser extension</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-extensions-except=/home/user/extension</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--load-extension=/home/user/extension</span><span class="delimiter">&quot;</span></span>
-    ]
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/extension.tar.gz</span><span class="delimiter">&quot;</span></span>}
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The same as HTTP request:</p>
-</div>
-<div class="listingblock">
-<div class="title">An HTTP request to use browser extension</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-extensions-except=/home/user/extensions&quot;,&quot;--load-extension=/home/user/extensions&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/extensions.tar.gz&quot;}}}}'</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p><strong>Overriding browser profile.</strong> You pack a directory with browser profile (<code>profile</code>) to the archive (<code>profile.tar.gz</code>) and then load it using browser command-line flags. Respective capabilities for Chrome can look like this:</p>
-<div class="listingblock">
-<div class="title">Capabilities to override Chrome profile</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">--user-data-dir=/home/user/profile</span><span class="delimiter">&quot;</span></span>]
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The same as HTTP request:</p>
-</div>
-<div class="listingblock">
-<div class="title">An HTTP request to override Chrome profile</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--user-data-dir=/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>For Firefox approach remains the same but command-line flags differ:</p>
-</div>
-<div class="listingblock">
-<div class="title">Capabilities to override Firefox profile</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moz:firefoxOptions</span><span class="delimiter">&quot;</span></span>:{
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">-profile</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/profile</span><span class="delimiter">&quot;</span></span>]
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The same as HTTP request:</p>
-</div>
-<div class="listingblock">
-<div class="title">An HTTP request to override Firefox profile</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;firefox&quot;, &quot;moz:firefoxOptions&quot;:{&quot;args&quot;:[&quot;-profile&quot;,&quot;/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p><strong>Overriding various user settings.</strong> Previously we understood that browser context archive is unpacked to user home directory in browser pod. You can use this to override various operating system configuration files (<code>~/.bashrc</code>, <code>~/.gtkrc-3.0</code> to e.g. turn off cursor blinking) and directories (<code>~/.ssh</code>, <code>~/.gpg</code> and so on).</p>
-</li>
-<li>
-<p><strong>Emulating web camera video.</strong> You upload a video file to browser pod and then use it as fake web camera video. You start by preparing a fake video:</p>
-<div class="listingblock">
-<div class="title">Converting an *.mp4 video to *.y4m</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ mkdir webcam-video
-$ ffmpeg -i my-video.mp4 -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.y4m</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Then you add resulting video to an archive:</p>
-</div>
-<div class="listingblock">
-<div class="title">Creating an archive with video</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf webcam-video.tar.gz webcam-video</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Having an archive you can now create a Chrome session with the following capabilities:</p>
-</div>
-<div class="listingblock">
-<div class="title">Capabilities for Chrome web camera emulation</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="json">{
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
-    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-gpu</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-ui-for-media-stream</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-device-for-media-stream</span><span class="delimiter">&quot;</span></span>,
-      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m</span><span class="delimiter">&quot;</span></span>
-    ]
-  },
-  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/webcam-video.tar.gz</span><span class="delimiter">&quot;</span></span>}
-}</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The same as HTTP request:</p>
-</div>
-<div class="listingblock">
-<div class="title">An HTTP request to emulate web camera in Chrome</div>
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-gpu&quot;, &quot;--use-fake-ui-for-media-stream&quot;, &quot;--use-fake-device-for-media-stream&quot;, &quot;--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m&quot;]},&quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/webcam-video.tar.gz&quot;}}}'</code></pre>
-</div>
-</div>
-</li>
-</ol>
 </div>
 </div>
 </div>
@@ -2421,6 +2211,243 @@ driver.FindElement(By.Id(&quot;uploadfile_0&quot;)).SendKeys(&quot;/tmp/file.txt
 <pre class="CodeRay highlight"><code data-lang="javascript"><span class="keyword">var</span> filePath = path.join(<span class="string"><span class="delimiter">'</span><span class="content">/path/to/file/on/machine/which/runs/tests</span><span class="delimiter">'</span></span>);
 <span class="keyword">var</span> remoteFilePath = browser.uploadFile(filePath);
 <span class="predefined">$</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>).setValue(remoteFilePath);</code></pre>
+</div>
+</div>
+<div class="sect4">
+<h5 id="selenium-context"><a class="anchor" href="#selenium-context"></a>Providing Additional Browser Data</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.3.0.</p>
+</li>
+<li>
+<p>Only <code>*.tar.gz</code> archives are supported. We do not support regular <code>*.zip</code> archives because of performance issues.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Often when working with a browser you may need to use additional data: browser extensions, test files to be uploaded, browser settings files (also known as <code>browser profile</code>) and so on. In standard Selenium every such additional file is uploaded with different code snippet. The most important thing is that anyway all such data is being uploaded as HTTP request body. Every time you send file like this your Selenium implementation needs to read all the bytes into memory and this dramatically increases memory consumption. A lot more efficient way of delivering the same functionality is packing all required files to a single archive (e.g. on your CI server). An URL to this archive is then sent as a Selenium capability, thus allowing every browser session to download it before actually launching the browser. We call an archive like this a <code>browser context</code> and respective capability is named just <code>context</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: string</div>
+<div class="content">
+<pre>context: https://example.com/browser-data.tar.gz</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you provide <code>context</code> capability, Moon will download an archive and unpack it to <code>/home/&lt;user&gt;</code> directory, where <code>&lt;user&gt;</code> is name of the user configured in <a href="#configuration-object">configuration object</a>. Default username is just <code>user</code>, so default directory is <code>/home/user/</code>.</p>
+</div>
+<div class="listingblock">
+<div class="title">How archive is unpacked</div>
+<div class="content">
+<pre>browser-data.tar.gz    ===&gt;     /home/user
+|                               |
+---- some-file.txt              ---- some-file.txt
+---- some-directory             ---- some-directory
+     |                               |
+     ---- another-file.xpi           ---- another-file.xpi
+     ---- one-more-file.png          ---- one-more-file.png</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To create an archive with browser context:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating an archive with browser context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf browser-data.tar.gz some-file.txt some-directory # Add an arbitrary number of files and directories here</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Possible use cases of this feature include:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Uploading files to browser.</strong> You pack any test files and just set their path to file input fields or open them in the browser.</p>
+<div class="listingblock">
+<div class="title">Capabilities to upload test files to browser</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/browser-data.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to upload test files to browser</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/browser-data.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now just use unpacked files in your Selenium code:</p>
+</div>
+<div class="listingblock">
+<div class="title">Using uploaded files from context</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">// Find file input element</span>
+WebElement input = driver.findElement(By.cssSelector(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>));
+
+<span class="comment">// Specify path of the file from context directory</span>
+input.sendKeys(<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/some-directory/one-more-file.png</span><span class="delimiter">&quot;</span></span>);
+
+<span class="comment">// You can also open files from context directory in browser</span>
+driver.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">file:///home/user/some-file.txt</span><span class="delimiter">&quot;</span></span>);</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Using browser extensions.</strong> You repack your extension (<code>extension.crx</code>) to the archive (<code>extension.tar.gz</code>) and then load it using browser command-line flags. To repack extension:</p>
+<div class="listingblock">
+<div class="title">How to repack extension to <code>*.tar.gz</code></div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ unzip extension.crx -d extension # The same works for *.xpi as both are zip archives
+$ tar cvzf extension.tar.gz extension</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Respective capabilities can look like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities to use a browser extension</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-extensions-except=/home/user/extension</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--load-extension=/home/user/extension</span><span class="delimiter">&quot;</span></span>
+    ]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/extension.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to use browser extension</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-extensions-except=/home/user/extensions&quot;,&quot;--load-extension=/home/user/extensions&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/extensions.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Overriding browser profile.</strong> You pack a directory with browser profile (<code>profile</code>) to the archive (<code>profile.tar.gz</code>) and then load it using browser command-line flags. Respective capabilities for Chrome can look like this:</p>
+<div class="listingblock">
+<div class="title">Capabilities to override Chrome profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">--user-data-dir=/home/user/profile</span><span class="delimiter">&quot;</span></span>]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to override Chrome profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--user-data-dir=/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Firefox approach remains the same but command-line flags differ:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities to override Firefox profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">firefox</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moz:firefoxOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[<span class="string"><span class="delimiter">&quot;</span><span class="content">-profile</span><span class="delimiter">&quot;</span></span>,<span class="string"><span class="delimiter">&quot;</span><span class="content">/home/user/profile</span><span class="delimiter">&quot;</span></span>]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/profile.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to override Firefox profile</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;firefox&quot;, &quot;moz:firefoxOptions&quot;:{&quot;args&quot;:[&quot;-profile&quot;,&quot;/home/user/profile&quot;]}, &quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/profile.tar.gz&quot;}}}}'</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p><strong>Overriding various user settings.</strong> Previously we understood that browser context archive is unpacked to user home directory in browser pod. You can use this to override various operating system configuration files (<code>~/.bashrc</code>, <code>~/.gtkrc-3.0</code> to e.g. turn off cursor blinking) and directories (<code>~/.ssh</code>, <code>~/.gpg</code> and so on).</p>
+</li>
+<li>
+<p><strong>Emulating web camera video.</strong> You upload a video file to browser pod and then use it as fake web camera video. You start by preparing a fake video:</p>
+<div class="listingblock">
+<div class="title">Converting an *.mp4 video to *.y4m</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ mkdir webcam-video
+$ ffmpeg -i my-video.mp4 -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.y4m</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you add resulting video to an archive:</p>
+</div>
+<div class="listingblock">
+<div class="title">Creating an archive with video</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ tar cvzf webcam-video.tar.gz webcam-video</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Having an archive you can now create a Chrome session with the following capabilities:</p>
+</div>
+<div class="listingblock">
+<div class="title">Capabilities for Chrome web camera emulation</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="json">{
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>:{
+    <span class="key"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>:[
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--disable-gpu</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-ui-for-media-stream</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-fake-device-for-media-stream</span><span class="delimiter">&quot;</span></span>,
+      <span class="string"><span class="delimiter">&quot;</span><span class="content">--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m</span><span class="delimiter">&quot;</span></span>
+    ]
+  },
+  <span class="key"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>:{<span class="key"><span class="delimiter">&quot;</span><span class="content">context</span><span class="delimiter">&quot;</span></span>:<span class="string"><span class="delimiter">&quot;</span><span class="content">https://example.com/webcam-video.tar.gz</span><span class="delimiter">&quot;</span></span>}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same as HTTP request:</p>
+</div>
+<div class="listingblock">
+<div class="title">An HTTP request to emulate web camera in Chrome</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl https://moon.example.com/wd/hub/session -H'Content-Type: application/json' -d'{&quot;capabilities&quot;:{&quot;alwaysMatch&quot;:{&quot;browserName&quot;:&quot;chrome&quot;, &quot;goog:chromeOptions&quot;:{&quot;args&quot;:[&quot;--disable-gpu&quot;, &quot;--use-fake-ui-for-media-stream&quot;, &quot;--use-fake-device-for-media-stream&quot;, &quot;--use-file-for-fake-video-capture=/home/user/webcam-video/webcam-video.y4m&quot;]},&quot;moon:options&quot;:{&quot;context&quot;:&quot;https://example.com/webcam-video.tar.gz&quot;}}}'</code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -3061,7 +3088,7 @@ This feature works with Cypress images 9.6.0 and above.
 <div class="sect3">
 <h4 id="playwright-context"><a class="anchor" href="#playwright-context"></a>2.3.3. Additional Browser Data</h4>
 <div class="paragraph">
-<p>Similarly to Selenium, you can make browser pod automatically download arbitrary files as a single archive and unpack them to user directory. This feature is described in detail <a href="#capability-context">here</a>. The main particularity in Playwright is that archive URL is being passed as Playwright <code>context</code> URL parameter and thus needs to be <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoded</a>.</p>
+<p>Similarly to Selenium, you can make browser pod automatically download arbitrary files as a single archive and unpack them to user directory. This feature is described in detail <a href="#selenium-context">here</a>. The main particularity in Playwright is that archive URL is being passed as Playwright <code>context</code> URL parameter and thus needs to be <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoded</a>.</p>
 </div>
 <div class="listingblock">
 <div class="title">Enabling browser context</div>
@@ -7571,7 +7598,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-14 11:43:19 UTC
+Last updated 2022-07-16 13:10:40 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
