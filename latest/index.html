@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-07-16</span>
+<span id="revdate">2022-07-17</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -584,11 +584,12 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#mobile-emulation">2.1.4. Mobile Emulation</a></li>
 <li><a href="#clipboard">2.1.5. Accessing Clipboard</a></li>
 <li><a href="#uploading-files">2.1.6. Uploading Files to Browser</a></li>
-<li><a href="#accessing-downloaded-files">2.1.7. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-devtools">2.1.8. Accessing Developer Tools</a></li>
-<li><a href="#selenium-locale">2.1.9. Changing Browser Locale</a></li>
-<li><a href="#selenium-time-zone">2.1.10. Changing Browser Time Zone</a></li>
-<li><a href="#selenium-external-host">2.1.11. Using External Hosts</a></li>
+<li><a href="#selenium-context">2.1.7. Providing Additional Browser Data</a></li>
+<li><a href="#accessing-downloaded-files">2.1.8. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-devtools">2.1.9. Accessing Developer Tools</a></li>
+<li><a href="#selenium-locale">2.1.10. Changing Browser Locale</a></li>
+<li><a href="#selenium-time-zone">2.1.11. Changing Browser Time Zone</a></li>
+<li><a href="#selenium-external-host">2.1.12. Using External Hosts</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.2. Using Cypress</a>
@@ -2213,8 +2214,9 @@ driver.FindElement(By.Id(&quot;uploadfile_0&quot;)).SendKeys(&quot;/tmp/file.txt
 <span class="predefined">$</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">input[type='file']</span><span class="delimiter">&quot;</span></span>).setValue(remoteFilePath);</code></pre>
 </div>
 </div>
-<div class="sect4">
-<h5 id="selenium-context"><a class="anchor" href="#selenium-context"></a>Providing Additional Browser Data</h5>
+</div>
+<div class="sect3">
+<h4 id="selenium-context"><a class="anchor" href="#selenium-context"></a>2.1.7. Providing Additional Browser Data</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2450,9 +2452,8 @@ $ ffmpeg -i my-video.mp4 -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.
 </ol>
 </div>
 </div>
-</div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.7. Accessing Files Downloaded with Browser</h4>
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.8. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2520,7 +2521,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.8. Accessing Developer Tools</h4>
+<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.9. Accessing Developer Tools</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2550,7 +2551,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.9. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.10. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -2582,7 +2583,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.1.10. Changing Browser Time Zone</h4>
+<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.1.11. Changing Browser Time Zone</h4>
 <div class="paragraph">
 <p>A common testing task is checking that your web application behaves as expected in different <a href="https://en.wikipedia.org/wiki/Time_zone">time zones</a>. Depending on tested web application one of the following approaches can help.</p>
 </div>
@@ -2642,7 +2643,7 @@ select.perform();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.11. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.12. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -7598,7 +7599,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-16 13:10:40 UTC
+Last updated 2022-07-17 05:08:34 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
