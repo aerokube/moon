@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-07-17</span>
+<span id="revdate">2022-07-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2548,6 +2548,15 @@ file-contents-go-here</code></pre>
 </div>
 <div class="paragraph">
 <p>Selenium 4 and above has <a href="https://www.selenium.dev/documentation/webdriver/bidirectional/">bidirectional functionality</a> allowing to access advanced browser features. This works just out of the box. An example project demonstrating how to use it stored <a href="https://github.com/aerokube/moon-cloud-java-example/blob/master/src/test/java/com/aerokube/selenoid/DevtoolsTest.java">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>Moon 1.x and Selenoid <a href="https://aerokube.com/selenoid/latest/#_accessing_browser_developer_tools">have</a> custom <code>/devtools/</code> API allowing direct access to browser using <a href="https://chromedevtools.github.io/devtools-protocol/">Chrome Developer Tools Protocol</a>. For backwards compatibility this is also supported in Moon 2.x. In <a href="https://www.w3.org/TR/webdriver/">W3C WebDriver</a> standard Selenium extension commands should be located under vendor prefix, so having a Selenium session ID to access this API in Moon 2 you have to use URL like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">Old-style Chrome Developer Tools access URL</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/session/&lt;session-id&gt;/aerokube/devtools</code></pre>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -7599,7 +7608,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-17 05:08:34 UTC
+Last updated 2022-07-18 09:09:03 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
