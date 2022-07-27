@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-07-21</span>
+<span id="revdate">2022-07-27</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2407,7 +2407,7 @@ $ tar cvzf extension.tar.gz extension</code></pre>
 <div class="title">Converting an *.mp4 video to *.y4m</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ mkdir webcam-video
-$ ffmpeg -i my-video.mp4 -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.y4m</code></pre>
+$ ffmpeg -i my-video.mp4 -vf hflip -pix_fmt yuv420p -s 1280x720 webcam-video/webcam-video.y4m</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -7608,7 +7608,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-07-21 10:03:47 UTC
+Last updated 2022-07-27 12:27:51 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
