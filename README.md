@@ -18,6 +18,7 @@ Moon is a commercial closed-source enterprise [Selenium](https://en.wikipedia.or
 * Detailed [documentation](http://aerokube.com/moon/latest/)
 * Telegram [support channel](https://t.me/aerokube_moon)
 * Support by [email](mailto:support@aerokube.com)
+* StackOverflow [tag](https://stackoverflow.com/questions/tagged/aerokube-moon)
 * Issue [tracker](https://github.com/aerokube/moon/issues)
 * YouTube [channel](https://www.youtube.com/channel/UC9HvE3FNfTvftzpvXi9c69g)
 
