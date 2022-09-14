@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-09-10</span>
+<span id="revdate">2022-09-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6161,10 +6161,54 @@ $ helm repo update</code></pre>
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">quota</span>:
   <span class="key">moon</span>: <span class="string"><span class="content">null</span></span> <span class="comment"># This one is needed to disable single-namespace mode in Moon</span>
   <span class="key">alfa-team</span>:
-    <span class="key">namespace</span>: <span class="string"><span class="content">alfa</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">alfa</span></span> <span class="comment"># Password for this team will be generated automatically</span>
   <span class="key">beta-team</span>:
-    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span></code></pre>
+    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span>
+    <span class="key">password</span>: <span class="string"><span class="content">beta-team-password</span></span> <span class="comment"># You can also set password value explicitly</span></code></pre>
 </div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Depending on the number of users setting or not setting <code>password</code> field behaves differently:</p>
+</div>
+<div class="paragraph">
+<p><strong>Option 1. You have only one user.</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>password</code> is missing: no authentication is configured.</p>
+</li>
+<li>
+<p><code>password: ''</code> (empty string): authentication is configured, password is generated.</p>
+</li>
+<li>
+<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Option 2. You have 2 or more users.</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>password</code> is missing or empty string: authentication is configured, password is generated.</p>
+</li>
+<li>
+<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
 </div>
 </li>
 <li>
@@ -6198,7 +6242,7 @@ alfa-team-basic-auth-password   Opaque                                1      2m1
 </div>
 </div>
 <div class="paragraph">
-<p>Password is stored in this secret. To print it - simply extract <code>password</code> field (stored as <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>) from the secret and decode it. A one line command how to do this:</p>
+<p>Password is stored in this secret. To print generated password value - simply extract <code>password</code> field (stored as <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>) from the secret and decode it. A one line command how to do this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -7608,7 +7652,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-09-10 15:12:28 UTC
+Last updated 2022-09-14 15:26:15 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
