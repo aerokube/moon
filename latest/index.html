@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-11-01</span>
+<span id="revdate">2022-11-02</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -5549,16 +5549,16 @@ secret/minio created</code></pre>
 <p>Add an annotation to browser pods in <a href="#browsers-set">browsers set</a>:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
-  kind: BrowserSet
-  metadata:
-    name: default
-    namespace: moon
-    # Other Kubernetes metadata
-  spec:
-    annotations:
-      iam.amazonaws.com/role: &quot;aerokube-moon&quot;
-    # Other fields</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">BrowserSet</span></span>
+<span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">annotations</span>:
+      <span class="key">iam.amazonaws.com/role</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube-moon</span><span class="delimiter">&quot;</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+<span class="key">spec</span>:
+  <span class="comment"># Other fields</span></code></pre>
 </div>
 </div>
 </li>
@@ -7652,7 +7652,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-11-01 11:25:34 UTC
+Last updated 2022-11-02 14:32:54 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
