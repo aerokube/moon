@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-11-02</span>
+<span id="revdate">2022-11-11</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -3761,9 +3761,7 @@ You can also use Kubernetes API directly instead of <code>kubectl</code> to list
 <div class="listingblock">
 <div class="title">Prometheus license key expiration metric</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl port-forward service/moon 4444 -n moon
-# Open another terminal
-$ curl -s http://localhost:4444/metrics | grep license_expire
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -s https://moon.example.com/metrics | grep license_expire
 # HELP moon_license_expire Moon license expiration time.
 # TYPE moon_license_expire gauge
 moon_license_expire 1.6444512e+09</code></pre>
@@ -6479,14 +6477,12 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 <div class="sect3">
 <h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.11.2. Built-in Moon metrics</h4>
 <div class="paragraph">
-<p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API on port <code>4444</code> (<code>moon</code> container of the Moon pod).</p>
+<p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API.</p>
 </div>
 <div class="listingblock">
-<div class="title">Getting Prometheus license key expiration metric</div>
+<div class="title">Getting Prometheus metrics</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl port-forward service/moon 4444 -n moon
-# Open another terminal
-$ curl -s http://localhost:4444/metrics
+<pre class="CodeRay highlight"><code data-lang="bash">$ curl -s https://moon.example.com/metrics
 # A lot of metrics come here</code></pre>
 </div>
 </div>
@@ -7652,7 +7648,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-11-02 14:32:54 UTC
+Last updated 2022-11-11 09:37:46 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
