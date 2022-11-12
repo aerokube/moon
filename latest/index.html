@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-11-11</span>
+<span id="revdate">2022-11-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -627,6 +627,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#license-multiple">3.1.3. Multiple License Keys</a></li>
 <li><a href="#license-delete">3.1.4. Deleting a License Key</a></li>
 <li><a href="#license-expiration">3.1.5. License Key Expiration</a></li>
+<li><a href="#license-ops">3.1.6. Updating License Key From An External Secret</a></li>
 </ul>
 </li>
 <li><a href="#users-quotas">3.2. Users and Quotas</a>
@@ -3770,6 +3771,49 @@ moon_license_expire 1.6444512e+09</code></pre>
 <div class="paragraph">
 <p>These metrics are collected by Prometheus automatically, so you only need to configure alerts and charts if needed.</p>
 </div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="license-ops"><a class="anchor" href="#license-ops"></a>3.1.6. Updating License Key From An External Secret</h4>
+<div class="paragraph">
+<p>In some cases you still may want to store license key in a <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes secret</a> and allow Moon to automatically read license key from this secret. To achieve this we provide a dedicated component called <code>license-ops</code>. This component is a <a href="https://kubernetes.io/docs/concepts/workloads/controllers/job/">Kubernetes job</a> that reads license key contents from configured secret and automatically updates custom Kubernetes resource being used by Moon. To enabled <code>license-ops</code> you need to install one more Helm chart:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Having Moon <a href="#install">installed</a>, create a regular Kubernetes secret in Moon namespace with license key contents:</p>
+<div class="listingblock">
+<div class="title">Example secret with license key</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">Secret</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">licensekey</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="key">stringData</span>:
+  <span class="key">license.key</span>: <span class="string"><span class="content">MG1RSVdpc2Z6....</span></span> <span class="comment"># Insert license key contents here</span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Now install one more Helm chart (source code can be found <a href="https://github.com/aerokube/charts/tree/master/license-ops">here</a>):</p>
+<div class="listingblock">
+<div class="title">Installing license-ops Helm chart</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon license-ops aerokube/license-ops</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To change secret name, job schedule and other parameters - use Helm values:</p>
+</div>
+<div class="listingblock">
+<div class="title">Updating license-ops parameters</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install --set secretName=mysecret --set schedule=&quot;0 * * * *&quot; -n moon license-ops aerokube/license-ops</code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7648,7 +7692,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-11-11 09:37:46 UTC
+Last updated 2022-11-12 12:01:07 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
