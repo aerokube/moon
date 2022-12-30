@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-12-28</span>
+<span id="revdate">2022-12-30</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -576,44 +576,45 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#main-features">2. Main Features</a>
 <ul class="sectlevel2">
-<li><a href="#selenium">2.1. Using Selenium</a>
+<li><a href="#user-interface">2.1. User Interface</a></li>
+<li><a href="#selenium">2.2. Using Selenium</a>
 <ul class="sectlevel3">
-<li><a href="#selenium-moon-capabilities">2.1.1. Moon-specific Capabilities</a></li>
-<li><a href="#selenium-headless">2.1.2. Headless Mode</a></li>
-<li><a href="#selenium-video-recording">2.1.3. Video Recording</a></li>
-<li><a href="#mobile-emulation">2.1.4. Mobile Emulation</a></li>
-<li><a href="#clipboard">2.1.5. Accessing Clipboard</a></li>
-<li><a href="#uploading-files">2.1.6. Uploading Files to Browser</a></li>
-<li><a href="#selenium-context">2.1.7. Providing Additional Browser Data</a></li>
-<li><a href="#accessing-downloaded-files">2.1.8. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-devtools">2.1.9. Accessing Developer Tools</a></li>
-<li><a href="#selenium-locale">2.1.10. Changing Browser Locale</a></li>
-<li><a href="#selenium-time-zone">2.1.11. Changing Browser Time Zone</a></li>
-<li><a href="#selenium-external-host">2.1.12. Using External Hosts</a></li>
+<li><a href="#selenium-moon-capabilities">2.2.1. Moon-specific Capabilities</a></li>
+<li><a href="#selenium-headless">2.2.2. Headless Mode</a></li>
+<li><a href="#selenium-video-recording">2.2.3. Video Recording</a></li>
+<li><a href="#mobile-emulation">2.2.4. Mobile Emulation</a></li>
+<li><a href="#clipboard">2.2.5. Accessing Clipboard</a></li>
+<li><a href="#uploading-files">2.2.6. Uploading Files to Browser</a></li>
+<li><a href="#selenium-context">2.2.7. Providing Additional Browser Data</a></li>
+<li><a href="#accessing-downloaded-files">2.2.8. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-devtools">2.2.9. Accessing Developer Tools</a></li>
+<li><a href="#selenium-locale">2.2.10. Changing Browser Locale</a></li>
+<li><a href="#selenium-time-zone">2.2.11. Changing Browser Time Zone</a></li>
+<li><a href="#selenium-external-host">2.2.12. Using External Hosts</a></li>
 </ul>
 </li>
-<li><a href="#cypress">2.2. Using Cypress</a>
+<li><a href="#cypress">2.3. Using Cypress</a>
 <ul class="sectlevel3">
-<li><a href="#cypress-select-browser">2.2.1. Selecting Requested Browser</a></li>
-<li><a href="#cypress-select-cypress-version">2.2.2. Selecting Exact Cypress Version</a></li>
-<li><a href="#cypress-video-recording">2.2.3. Video Recording</a></li>
-<li><a href="#cypress-additional-features">2.2.4. Enabling Additional Features</a></li>
-<li><a href="#cypress-dashboard">2.2.5. Recording Runs to Cypress Dashboard</a></li>
+<li><a href="#cypress-select-browser">2.3.1. Selecting Requested Browser</a></li>
+<li><a href="#cypress-select-cypress-version">2.3.2. Selecting Exact Cypress Version</a></li>
+<li><a href="#cypress-video-recording">2.3.3. Video Recording</a></li>
+<li><a href="#cypress-additional-features">2.3.4. Enabling Additional Features</a></li>
+<li><a href="#cypress-dashboard">2.3.5. Recording Runs to Cypress Dashboard</a></li>
 </ul>
 </li>
-<li><a href="#playwright">2.3. Using Playwright</a>
+<li><a href="#playwright">2.4. Using Playwright</a>
 <ul class="sectlevel3">
-<li><a href="#playwright-select-browser">2.3.1. Selecting Requested Browser</a></li>
-<li><a href="#playwright-video-recording">2.3.2. Video Recording</a></li>
-<li><a href="#playwright-context">2.3.3. Additional Browser Data</a></li>
-<li><a href="#playwright-additional-features">2.3.4. Enabling Additional Features</a></li>
+<li><a href="#playwright-select-browser">2.4.1. Selecting Requested Browser</a></li>
+<li><a href="#playwright-video-recording">2.4.2. Video Recording</a></li>
+<li><a href="#playwright-context">2.4.3. Additional Browser Data</a></li>
+<li><a href="#playwright-additional-features">2.4.4. Enabling Additional Features</a></li>
 </ul>
 </li>
-<li><a href="#devtools">2.4. Using Chrome Developer Tools</a>
+<li><a href="#devtools">2.5. Using Chrome Developer Tools</a>
 <ul class="sectlevel3">
-<li><a href="#devtools-select-browser">2.4.1. Selecting Requested Browser</a></li>
-<li><a href="#devtools-video-recording">2.4.2. Video Recording</a></li>
-<li><a href="#devtools-additional-features">2.4.3. Enabling Additional Features</a></li>
+<li><a href="#devtools-select-browser">2.5.1. Selecting Requested Browser</a></li>
+<li><a href="#devtools-video-recording">2.5.2. Video Recording</a></li>
+<li><a href="#devtools-additional-features">2.5.3. Enabling Additional Features</a></li>
 </ul>
 </li>
 </ul>
@@ -1425,7 +1426,96 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 <h2 id="main-features"><a class="anchor" href="#main-features"></a>2. Main Features</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="selenium"><a class="anchor" href="#selenium"></a>2.1. Using Selenium</h3>
+<h3 id="user-interface"><a class="anchor" href="#user-interface"></a>2.1. User Interface</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.4.0.</p>
+</li>
+<li>
+<p>User interface described in this section should be enabled explicitly when deploying Moon. To enable it - use the following parameter in Helm chart values:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">deployment:
+  experimentalUI: true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When enabled - new user interface (UI) is automatically available under <code>/ui/</code>, e.g. <code><a href="https://moon.example.com/ui/" class="bare">https://moon.example.com/ui/</a></code> and UI that was present is still available under <code>/</code> (<code><a href="https://moon.example.com/" class="bare">https://moon.example.com/</a></code>). We plan to stop using old UI when we get sufficient feedback from the teams and fix possibly found issues.</p>
+</div>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon comes with a powerful user interface allowing to list and filter running browser sessions, view browser screen, launch browser sessions for manual testing and so on.</p>
+</div>
+<div class="paragraph">
+<div class="title">Moon UI general view</div>
+<p><span class="image"><img src="img/moon-ui-general-view.png" alt="moon ui general view"></span></p>
+</div>
+<div class="paragraph">
+<p>The main screen of the UI is showing the list of browser sessions that are currently running or being started. For every session you can see browser automation tool, browser name, version, test name, labels, status, duration, enabled features and so on. To delete a running session you have <strong>to click twice</strong> on the button with a trash can icon (two clicks are needed to prevent accidentally removing a running session). To create a browser session for <strong>manual testing</strong> - click on the button with browser name at the top of UI screen.</p>
+</div>
+<div class="paragraph">
+<div class="title">Moon UI session filters</div>
+<p><span class="image"><img src="img/moon-ui-filtering.png" alt="moon ui session filters"></span></p>
+</div>
+<div class="paragraph">
+<p>One Moon cluster can run dozens, hundreds or even thousands of browser sessions in parallel. To find sessions that belong to your project or exact build number - <strong>use filters</strong>. These controls allow to filter browser sessions by <strong>id</strong>, <strong>name</strong> and <strong>labels</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Session <strong>id</strong> is a unique value automatically assigned to every browser session by Moon. You can&#8217;t change it. Full session id looks like this: <code>chrome-73-0-ac15ffaa-e641-4c7f-a54c-f25b5be1f135</code>. In the UI we are printing only a few symbols of this long value.</p>
+</li>
+<li>
+<p>Session <strong>name</strong> is a free-form value allowing to describe purpose of the session in the UI. Usually this value contains test case name. To change session name - use <strong><a href="#capability-name">name capability</a></strong> for Selenium or <strong>name parameter</strong> for <a href="#playwright-additional-features">Playwright</a>, <a href="#cypress-additional-features">Cypress</a> or <a href="#devtools-additional-features">developer tools</a>, e.g.:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">wss://moon.example.com/playwright/chromium?name=MyTestCaseName</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Session <strong>labels</strong> are free-form key-value pairs allowing to put additional metadata on every browser session. This can be for example build number, project name, release information and so on. To add labels - use <strong><a href="#capability-labels">labels capability</a></strong> for Selenium or configure <strong><a href="#browsers-set-custom-labels">labels in browsers set</a></strong>. Every label requested to be set by Moon is converted to a <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/">Kubernetes label</a> added to respective browser pod. User interface is using exactly the same syntax of <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/#label-selectors">label selectors</a> that is supported by Kubernetes. For example, having <code>project</code> and <code>buildNumber</code> labels set to some browser session you can use expressions like this:</p>
+<div class="listingblock">
+<div class="title">How to filter by labels</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">project=MyCoolProject # Exact match of one label
+
+project=MyCoolProject,buildNumber=42 # Match of project AND buildNumber values
+
+project in (MyCoolProject, AnotherProject),buildNumber!=42 # Select project from the list
+
+project notin (MyCoolProject, AnotherProject),!buildNumber # Select project not from the list, build number not set
+
+project!=AnotherProject,buildNumber # Any project except AnotherProject, build number should be set</code></pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">Moon UI browser screen</div>
+<p><span class="image"><img src="img/moon-ui-vnc.png" alt="moon ui browser screen"></span></p>
+</div>
+<div class="paragraph">
+<p>When you click on a row in the sessions list, browser screen is shown automatically if possible. For example for browser sessions with invisible browser window (so-called <strong>headless</strong> browsers) - nothing happens when you click on a row. By default, browser screen is in view-only mode. To interact with the browser - click on the button with the lock icon (🔒). Click on this button again - to switch back to view-only mode. Browser screen allows to follow automated test execution and intercept it when needed. When you launch a manual testing session - use this screen to manually execute your scenario step-by-step. All browser features like opening developer toolbar are working exactly the same as on your personal computer. To copy and paste values from your computer to Moon browser session - use <strong>Ctrl+C\Ctrl+V</strong> or <strong>Cmd+C\Cmd+V</strong> shortcuts on your keyboard.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="selenium"><a class="anchor" href="#selenium"></a>2.2. Using Selenium</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1502,7 +1592,7 @@ driver = webdriver.Remote(
 <p>Moon provides additional features by using <a href="https://www.w3.org/TR/webdriver/#extensions-0">extension</a> commands and capabilities described in the next sections.</p>
 </div>
 <div class="sect3">
-<h4 id="selenium-moon-capabilities"><a class="anchor" href="#selenium-moon-capabilities"></a>2.1.1. Moon-specific Capabilities</h4>
+<h4 id="selenium-moon-capabilities"><a class="anchor" href="#selenium-moon-capabilities"></a>2.2.1. Moon-specific Capabilities</h4>
 <div class="paragraph">
 <p>Moon supports a set of extension capabilities. You can pass them in your code to enable or disable some features. All these capabilities should be passed under <code>moon:options</code> key:</p>
 </div>
@@ -1951,7 +2041,7 @@ This feature is available since Moon 2.2.0.
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-headless"><a class="anchor" href="#selenium-headless"></a>2.1.2. Headless Mode</h4>
+<h4 id="selenium-headless"><a class="anchor" href="#selenium-headless"></a>2.2.2. Headless Mode</h4>
 <div class="paragraph">
 <p>By default, all browsers in Moon are started with visible browser window. The majority of browsers nowadays support so-called "headless" mode, when browser is opening pages in the background and no window is visible to the user. Usually such mode is enabled by passing <code>--headless</code> flag to browser startup command in Selenium capabilities.</p>
 </div>
@@ -1971,7 +2061,7 @@ This feature is available since Moon 2.2.0.
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-video-recording"><a class="anchor" href="#selenium-video-recording"></a>2.1.3. Video Recording</h4>
+<h4 id="selenium-video-recording"><a class="anchor" href="#selenium-video-recording"></a>2.2.3. Video Recording</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2002,7 +2092,7 @@ Using video recording requires <a href="#video-recording">initial configuration<
 </div>
 </div>
 <div class="sect3">
-<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.1.4. Mobile Emulation</h4>
+<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.2.4. Mobile Emulation</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2068,7 +2158,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.1.5. Accessing Clipboard</h4>
+<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.2.5. Accessing Clipboard</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2139,7 +2229,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="uploading-files"><a class="anchor" href="#uploading-files"></a>2.1.6. Uploading Files to Browser</h4>
+<h4 id="uploading-files"><a class="anchor" href="#uploading-files"></a>2.2.6. Uploading Files to Browser</h4>
 <div class="paragraph">
 <p>Uploading files to browser is a built-in Selenium feature supported in the majority of Selenium clients. How to do this in different programming languages is shown below:</p>
 </div>
@@ -2217,7 +2307,7 @@ driver.FindElement(By.Id(&quot;uploadfile_0&quot;)).SendKeys(&quot;/tmp/file.txt
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-context"><a class="anchor" href="#selenium-context"></a>2.1.7. Providing Additional Browser Data</h4>
+<h4 id="selenium-context"><a class="anchor" href="#selenium-context"></a>2.2.7. Providing Additional Browser Data</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2454,7 +2544,7 @@ $ ffmpeg -i my-video.mp4 -vf hflip -pix_fmt yuv420p -s 1280x720 webcam-video/web
 </div>
 </div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.1.8. Accessing Files Downloaded with Browser</h4>
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.2.8. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2522,7 +2612,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.1.9. Accessing Developer Tools</h4>
+<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.2.9. Accessing Developer Tools</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2561,7 +2651,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.1.10. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.2.10. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -2593,7 +2683,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.1.11. Changing Browser Time Zone</h4>
+<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.2.11. Changing Browser Time Zone</h4>
 <div class="paragraph">
 <p>A common testing task is checking that your web application behaves as expected in different <a href="https://en.wikipedia.org/wiki/Time_zone">time zones</a>. Depending on tested web application one of the following approaches can help.</p>
 </div>
@@ -2653,7 +2743,7 @@ select.perform();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.1.12. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.2.12. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -2704,7 +2794,7 @@ select.perform();</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="cypress"><a class="anchor" href="#cypress"></a>2.2. Using Cypress</h3>
+<h3 id="cypress"><a class="anchor" href="#cypress"></a>2.3. Using Cypress</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2786,7 +2876,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <p>Cypress compared to Selenium has no <a href="https://www.w3.org/TR/webdriver/#capabilities">capabilities</a> concept. The only way to request an exact browser type or additional features is passing all these requirements in HTTP endpoint URL. Next section describes supported URL naming conventions.</p>
 </div>
 <div class="sect3">
-<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>2.2.1. Selecting Requested Browser</h4>
+<h4 id="cypress-select-browser"><a class="anchor" href="#cypress-select-browser"></a>2.3.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Cypress (<code>chrome</code>, <code>chromium</code>, <code>edge</code>, <code>electron</code> or <code>firefox</code>) by specifying its name in URL. By default, Moon will use <code>browsers/cypress-&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
@@ -2822,7 +2912,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>2.2.2. Selecting Exact Cypress Version</h4>
+<h4 id="cypress-select-cypress-version"><a class="anchor" href="#cypress-select-cypress-version"></a>2.3.2. Selecting Exact Cypress Version</h4>
 <div class="paragraph">
 <p>Cypress API can change from version to version. Because of that it is recommended to make sure that Cypress version being used in your project corresponds to Cypress version in browser image. To use an image compatible with exact Cypress version - add this version as follows:</p>
 </div>
@@ -2834,7 +2924,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-video-recording"><a class="anchor" href="#cypress-video-recording"></a>2.2.3. Video Recording</h4>
+<h4 id="cypress-video-recording"><a class="anchor" href="#cypress-video-recording"></a>2.3.3. Video Recording</h4>
 <div class="paragraph">
 <p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
 </div>
@@ -2849,7 +2939,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </div>
 </div>
 <div class="sect3">
-<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.2.4. Enabling Additional Features</h4>
+<h4 id="cypress-additional-features"><a class="anchor" href="#cypress-additional-features"></a>2.3.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting Cypress version - you can enable additional features like changing screen resolution, passing custom test name and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -2973,7 +3063,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </table>
 </div>
 <div class="sect3">
-<h4 id="cypress-dashboard"><a class="anchor" href="#cypress-dashboard"></a>2.2.5. Recording Runs to Cypress Dashboard</h4>
+<h4 id="cypress-dashboard"><a class="anchor" href="#cypress-dashboard"></a>2.3.5. Recording Runs to Cypress Dashboard</h4>
 <div class="admonitionblock important">
 <table>
 <tr>
@@ -2998,7 +3088,7 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect2">
-<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.3. Using Playwright</h3>
+<h3 id="playwright"><a class="anchor" href="#playwright"></a>2.4. Using Playwright</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -3052,7 +3142,7 @@ This feature works with Cypress images 9.6.0 and above.
 </table>
 </div>
 <div class="sect3">
-<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.3.1. Selecting Requested Browser</h4>
+<h4 id="playwright-select-browser"><a class="anchor" href="#playwright-select-browser"></a>2.4.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can request one of browsers supported by Playwright (<code>chrome</code>, <code>chromium</code>, <code>firefox</code>  or <code>webkit</code>) by specifying its name in URL. By default, Moon will use <code>quay.io/playwright-&lt;browser-name&gt;</code> repository to download images. Currently, Playwright API can change from version to version. Because of that it is recommended to make sure that Playwright client version being used in your code corresponds to Playwright server version in browser image. To use an image compatible with exact Playwright version - add this version as follows:</p>
 </div>
@@ -3082,7 +3172,7 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-video-recording"><a class="anchor" href="#playwright-video-recording"></a>2.3.2. Video Recording</h4>
+<h4 id="playwright-video-recording"><a class="anchor" href="#playwright-video-recording"></a>2.4.2. Video Recording</h4>
 <div class="paragraph">
 <p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
 </div>
@@ -3097,7 +3187,7 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-context"><a class="anchor" href="#playwright-context"></a>2.3.3. Additional Browser Data</h4>
+<h4 id="playwright-context"><a class="anchor" href="#playwright-context"></a>2.4.3. Additional Browser Data</h4>
 <div class="paragraph">
 <p>Similarly to Selenium, you can make browser pod automatically download arbitrary files as a single archive and unpack them to user directory. This feature is described in detail <a href="#selenium-context">here</a>. The main particularity in Playwright is that archive URL is being passed as Playwright <code>context</code> URL parameter and thus needs to be <a href="https://en.wikipedia.org/wiki/Percent-encoding">URL encoded</a>.</p>
 </div>
@@ -3118,7 +3208,7 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect3">
-<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.3.4. Enabling Additional Features</h4>
+<h4 id="playwright-additional-features"><a class="anchor" href="#playwright-additional-features"></a>2.4.4. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>In addition to selecting browser and its version - you can enable additional features like using headless browser versions, passing environment variables and so on. All these optional features are set by adding parameters to URL:</p>
 </div>
@@ -3243,7 +3333,7 @@ This feature works with Cypress images 9.6.0 and above.
 </div>
 </div>
 <div class="sect2">
-<h3 id="devtools"><a class="anchor" href="#devtools"></a>2.4. Using Chrome Developer Tools</h3>
+<h3 id="devtools"><a class="anchor" href="#devtools"></a>2.5. Using Chrome Developer Tools</h3>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -3317,7 +3407,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-select-browser"><a class="anchor" href="#devtools-select-browser"></a>2.4.1. Selecting Requested Browser</h4>
+<h4 id="devtools-select-browser"><a class="anchor" href="#devtools-select-browser"></a>2.5.1. Selecting Requested Browser</h4>
 <div class="paragraph">
 <p>You can choose desired browser version by changing connection URL:</p>
 </div>
@@ -3329,7 +3419,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-video-recording"><a class="anchor" href="#devtools-video-recording"></a>2.4.2. Video Recording</h4>
+<h4 id="devtools-video-recording"><a class="anchor" href="#devtools-video-recording"></a>2.5.2. Video Recording</h4>
 <div class="paragraph">
 <p>To enable <a href="#video-recording">video recording</a> - simply add <code>enableVideo</code> parameter to URL:</p>
 </div>
@@ -3344,7 +3434,7 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </div>
 </div>
 <div class="sect3">
-<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.4.3. Enabling Additional Features</h4>
+<h4 id="devtools-additional-features"><a class="anchor" href="#devtools-additional-features"></a>2.5.3. Enabling Additional Features</h4>
 <div class="paragraph">
 <p>You can enable additional features by changing connection URL:</p>
 </div>
@@ -7692,7 +7782,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-12-28 14:43:33 UTC
+Last updated 2022-12-30 11:31:31 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
