@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2022-12-30</span>
+<span id="revdate">2023-01-02</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -693,6 +693,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <ul class="sectlevel3">
 <li><a href="#cli-flags-moon">3.13.1. Moon Container Flags</a></li>
 <li><a href="#cli-flags-moon-auth">3.13.2. Moon Auth Container Flags</a></li>
+<li><a href="#cli-flags-moon-basic-auth">3.13.3. Moon Basic Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -3911,13 +3912,40 @@ moon_license_expire 1.6444512e+09</code></pre>
 <h3 id="users-quotas"><a class="anchor" href="#users-quotas"></a>3.2. Users and Quotas</h3>
 <div class="sect3">
 <h4 id="users"><a class="anchor" href="#users"></a>3.2.1. Users</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>By default, Moon is accessible without providing any credentials. This section describes how to configure Moon to require authentication. Usually this makes sense if you have multiple teams accessing the same cluster.</p>
+</li>
+<li>
+<p>Moon is mainly handling browser session requests from your code being executed. This code is usually being maintained and executed by a team of engineers, so it is a bad practice to use real person access credentials in this code. Although, real person username and password can be useful for accessing Moon <a href="#user-interface">user interface</a>, program code will normally contain some service or robot account credentials being used by the entire team. So in this documentation we use terms <code>user</code> and <code>team</code> interchangeably, because Moon user credentials are often the entire team access credentials.</p>
+</li>
+<li>
+<p>We recommend configuring <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS encryption</a> when authentication is enabled. Otherwise, an attacker can capture network traffic between your computer and Moon cluster and extract your access credentials from this traffic.</p>
+</li>
+<li>
+<p>Take a look at our <a href="https://blog.aerokube.com/selenium-securing-your-moon-cluster-in-kubernetes-and-openshift-92bde882a240">article about cluster security</a>. We describe TLS and basic authentication configuration there too.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Moon 2.x compared to Moon 1.x has <strong>no built-in authentication</strong> mechanism. This is because the recommended way to deliver authentication in Kubernetes is using available Ingress authentication features or sidecar containers delivering authentication. Moon reads username from <code>X-Moon-Quota</code> HTTP header being set by Ingress or sidecar container. The following sections describe possible authentication configurations.</p>
 </div>
 <div class="sect4">
-<h5 id="users-nginx-basic-http"><a class="anchor" href="#users-nginx-basic-http"></a>Nginx Basic HTTP Authentication</h5>
+<h5 id="users-basic-http"><a class="anchor" href="#users-basic-http"></a>Basic HTTP Authentication</h5>
 <div class="paragraph">
-<p>Moon 1.x out of the box only supports so-called <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. When using this method, username and password are expected to be passed in <code>Authorization</code> HTTP header:</p>
+<p>The most popular authentication method in browser automation now is the so-called <a href="https://en.wikipedia.org/wiki/Basic_access_authentication">basic HTTP authentication</a>. When using this method, username and password are expected to be passed in <code>Authorization</code> HTTP header:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -3933,7 +3961,183 @@ moon_license_expire 1.6444512e+09</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The simplest way of providing the basic HTTP authentication is configuring Ingress. For example, <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress</a> supports it out of the box. To configure it:</p>
+<p>The simplest way of providing the basic HTTP authentication is configuring Ingress. Below we describe several possible options of configuring basic HTTP authentication in Moon.</p>
+</div>
+<div class="sect5">
+<h6 id="users-basic-http-nginx-automated"><a class="anchor" href="#users-basic-http-nginx-automated"></a>Option 1. Nginx Ingress Configured By Helm</h6>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This approach works in Kubernetes and does not work in Openshift. Refer to <a href="#users-basic-http-openshift">Openshift</a> section for configuration instructions.</p>
+</li>
+<li>
+<p>In this example we configure Moon to launch browsers in a separate Kubernetes namespace for every user. Existing Moon operation modes are described <a href="#moon-operation-modes">here</a>.</p>
+</li>
+<li>
+<p>You should have permissions to create new Kubernetes namespaces. Detailed description of required Moon permissions is available <a href="#permissions-multiple-namespaces">here</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<div class="title">How Nginx Ingress Works</div>
+<p><span class="image"><img src="img/users-nginx-ingress.png" alt="users-nginx-ingress"></span></p>
+</div>
+<div class="paragraph">
+<p>The easiest way of getting a protected Moon cluster with multiple users enabled is using <a href="https://github.com/kubernetes/ingress-nginx">Nginx Ingress</a> instance automatically created by our Helm [chart](<a href="https://github.com/aerokube/charts" class="bare">https://github.com/aerokube/charts</a>):</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Create a <code>values.yaml</code> file with Ingress host and a list of users to be created:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">ingress</span>:
+  <span class="key">host</span>: <span class="string"><span class="content">moon.example.com</span></span> <span class="comment"># Provide cluster hostname here</span>
+<span class="key">quota</span>:
+  <span class="key">moon</span>: <span class="string"><span class="content">null</span></span> <span class="comment"># This one is needed to disable single-namespace mode in Moon</span>
+  <span class="key">alpha-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">alpha</span></span> <span class="comment"># Password for this team will be generated automatically</span>
+  <span class="key">beta-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span>
+    <span class="key">password</span>: <span class="string"><span class="content">beta-team-password</span></span> <span class="comment"># You can also set password value explicitly</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Depending on the number of users setting or not setting <code>password</code> field behaves differently:</p>
+</div>
+<div class="paragraph">
+<p><strong>Option 1. You have only one user.</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>password</code> is missing: no authentication is configured.</p>
+</li>
+<li>
+<p><code>password: ''</code> (empty string): authentication is configured, password is generated.</p>
+</li>
+<li>
+<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Option 2. You have 2 or more users.</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>password</code> is missing or empty string: authentication is configured, password is generated.</p>
+</li>
+<li>
+<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Deploy Moon with your <code>values.yaml</code> applied:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>This will create a separate namespace for every team:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get namespaces
+NAME              STATUS   AGE
+alpha              Active   40m
+beta              Active   40m
+# Other namespaces</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In every such namespace chart a secret with user password will be automatically created:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secrets -n alpha
+NAME                            TYPE                                  DATA   AGE
+alpha-team-basic-auth-password   Opaque                                1      2m11s
+# Other secrets</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Password is stored in this secret. To print generated password value - simply extract <code>password</code> field (stored as <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>) from the secret and decode it. A one line command how to do this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secret alpha-team-basic-auth-password -n alpha -o 'go-template={{index .data &quot;password&quot;}}' | base64 -d
+8X4juoCQ9gHAACqbc05B3oPXUcV6Oxb7KNTSYdM15eYF</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Use quota name (<code>alpha-team</code>, <code>beta-team</code> and so on) as username and password from the secret. The same credentials should be used in your tests code and to access user interface. In multiple namespaces mode user interface is only showing browser sessions corresponding to one user.</p>
+</li>
+<li>
+<p>To protect Moon with TLS encryption - use standard TLS private key (<code>server.key</code>) and certificate (<code>server.crt</code>) files as follows:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml --set-file ingress.tlsCert=server.crt --set-file ingress.tlsKey=server.key -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="users-basic-http-nginx-manual"><a class="anchor" href="#users-basic-http-nginx-manual"></a>Option 2. Nginx Ingress Configured Manually</h6>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In this approach we only configure authentication. <a href="#moon-operation-modes">Multiple namespaces mode</a> is not active.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To configure Nginx Ingress manually:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -3952,9 +4156,8 @@ $ htpasswd -D users.htpasswd test-user # Deleting existing user</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cat users.htpasswd
-test:$apr1$.dZyHlKN$jdoZkin/kPviFNArx/cVL1 # User is test, password is encrypted
-alice:$apr1$mLYJAC4y$VYeJstWjWP/4iVlH/TNcD.
-bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
+alpha-team:$apr1$.dZyHlKN$jdoZkin/kPviFNArx/cVL1 # User is alpha-team, password is encrypted
+beta-team:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
 </div>
 </div>
 </li>
@@ -4031,6 +4234,109 @@ bob:$apr1$gyqzbSpt$RBNcxrsQaolPZCQZW0VQW1</code></pre>
 </div>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="users-basic-http-openshift"><a class="anchor" href="#users-basic-http-openshift"></a>Option 3. Openshift Ingress</h6>
+<div class="paragraph">
+<p>Openshift Ingress often relies on <a href="http://www.haproxy.org/">HAProxy</a> where basic HTTP authentication options are limited or unavailable. To overcome this limitation Moon provides a sidecar container called <a href="#cli-flags-moon-basic-auth">moon-basic-auth</a>. This container is able to read users list from <a href="https://httpd.apache.org/docs/2.4/misc/password_encryptions.html">htpasswd</a> file, validate user information from <code>Authorization</code> header and send correct <code>X-Moon-Quota</code> to Moon.</p>
+</div>
+<div class="paragraph">
+<div class="title">How Authentication In Openshift Works</div>
+<p><span class="image"><img src="img/users-openshift.png" alt="users-openshift"></span></p>
+</div>
+<div class="paragraph">
+<p>Configuring users for Openshift is done with Helm chart in exactly the same way as <a href="#users-basic-http-nginx-automated">Nginx Ingress</a>. The only difference is that you have to add <code>openshift: true</code> parameter to <code>values.yaml</code> as follows:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a <code>values.yaml</code> file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">ingress</span>:
+  <span class="key">host</span>: <span class="string"><span class="content">moon.example.com</span></span>
+  <span class="key">openshift</span>: <span class="string"><span class="content">true</span></span> <span class="comment"># This enables sidecar for Openshift</span>
+<span class="key">quota</span>:
+  <span class="key">moon</span>: <span class="string"><span class="content">null</span></span>
+  <span class="key">alpha-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">alpha</span></span>
+  <span class="key">beta-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span>
+    <span class="key">password</span>: <span class="string"><span class="content">beta-team-password</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Apply Helm chart:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon moon aerokube/moon2
+$ helm upgrade --install -f values.yaml --set-file ingress.tlsCert=server.crt --set-file ingress.tlsKey=server.key -n moon moon aerokube/moon2 # The same with TLS encryption</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect5">
+<h6 id="users-basic-http-custom-ingress"><a class="anchor" href="#users-basic-http-custom-ingress"></a>Option 4. Custom Ingress</h6>
+<div class="paragraph">
+<p>Our Helm chart allows to provide custom Ingress configuration using <code>customIngress</code> Helm parameter. When using custom Ingress, our Helm chart always starts a sidecar container called <a href="#cli-flags-moon-basic-auth">moon-basic-auth</a> similarly to <a href="#users-basic-http-openshift">Openshift</a> section. That means that authentication is handled inside Moon pod and even trying to access Moon using Kubernetes service directly will require authentication. For example to configure an <a href="https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html">ALB Ingress</a> in AWS:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a <code>values.yaml</code> file:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">customIngress</span>:
+  <span class="key">enabled</span>: <span class="string"><span class="content">true</span></span>
+  <span class="key">annotations</span>:
+    <span class="key">external-dns.alpha.kubernetes.io/hostname</span>: <span class="string"><span class="content">moon.example.com</span></span>
+    <span class="key">alb.ingress.kubernetes.io/group.name</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="key">alb.ingress.kubernetes.io/scheme</span>: <span class="string"><span class="content">internet-facing</span></span>
+    <span class="key">alb.ingress.kubernetes.io/target-type</span>: <span class="string"><span class="content">ip</span></span>
+  <span class="key">ingressClassName</span>: <span class="string"><span class="content">alb</span></span>
+  <span class="key">host</span>: <span class="string"><span class="content">moon.example.com</span></span>
+  <span class="key">paths</span>:
+    - <span class="string"><span class="content">path: /api</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">9090</span></span>
+    - <span class="string"><span class="content">path: /cypress</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+    - <span class="string"><span class="content">path: /playwright</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+    - <span class="string"><span class="content">path: /devtools</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+    - <span class="string"><span class="content">path: /metrics</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+    - <span class="string"><span class="content">path: /wd/hub/session</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">4444</span></span>
+    - <span class="string"><span class="content">path: /ui</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">9090</span></span>
+    - <span class="string"><span class="content">path: /</span></span>
+      <span class="key">port</span>: <span class="string"><span class="content">8080</span></span>
+<span class="key">quota</span>:
+  <span class="key">moon</span>: <span class="string"><span class="content">null</span></span>
+  <span class="key">alpha-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">alpha</span></span>
+  <span class="key">beta-team</span>:
+    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span>
+    <span class="key">password</span>: <span class="string"><span class="content">beta-team-password</span></span></code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Apply Helm chart:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon moon aerokube/moon2
+$ helm upgrade --install -f values.yaml --set-file ingress.tlsCert=server.crt --set-file ingress.tlsKey=server.key -n moon moon aerokube/moon2 # The same with TLS encryption</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect4">
@@ -6251,142 +6557,8 @@ ejbh
 </div>
 <div class="sect2">
 <h3 id="multiple-namespaces"><a class="anchor" href="#multiple-namespaces"></a>3.9. Multiple Namespaces Mode</h3>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Existing Moon operation modes are described <a href="#moon-operation-modes">here</a>.</p>
-</li>
-<li>
-<p>You should have permissions to create new Kubernetes namespaces. Detailed description of required Moon permissions is available <a href="#permissions-multiple-namespaces">here</a>.</p>
-</li>
-</ol>
-</div>
-</td>
-</tr>
-</table>
-</div>
 <div class="paragraph">
-<p>This section describes how to configure Moon in multiple namespaces mode. To do this:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Add Aerokube <a href="https://github.com/aerokube/charts">charts</a> repository:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo add aerokube https://charts.aerokube.com/
-$ helm repo update</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Create a <code>values.yaml</code> file with a list of users to be created:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">quota</span>:
-  <span class="key">moon</span>: <span class="string"><span class="content">null</span></span> <span class="comment"># This one is needed to disable single-namespace mode in Moon</span>
-  <span class="key">alfa-team</span>:
-    <span class="key">namespace</span>: <span class="string"><span class="content">alfa</span></span> <span class="comment"># Password for this team will be generated automatically</span>
-  <span class="key">beta-team</span>:
-    <span class="key">namespace</span>: <span class="string"><span class="content">beta</span></span>
-    <span class="key">password</span>: <span class="string"><span class="content">beta-team-password</span></span> <span class="comment"># You can also set password value explicitly</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Depending on the number of users setting or not setting <code>password</code> field behaves differently:</p>
-</div>
-<div class="paragraph">
-<p><strong>Option 1. You have only one user.</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>password</code> is missing: no authentication is configured.</p>
-</li>
-<li>
-<p><code>password: ''</code> (empty string): authentication is configured, password is generated.</p>
-</li>
-<li>
-<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p><strong>Option 2. You have 2 or more users.</strong></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>password</code> is missing or empty string: authentication is configured, password is generated.</p>
-</li>
-<li>
-<p><code>password: some-password</code>: authentication is configured, password is set to provided value.</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</li>
-<li>
-<p>Deploy Moon with your <code>values.yaml</code> applied:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f values.yaml -n moon moon aerokube/moon2</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>This will create a separate namespace for every team:</p>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get namespaces
-NAME              STATUS   AGE
-alfa              Active   40m
-beta              Active   40m
-# Other namespaces</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In every such namespace chart a secret with user password will be automatically created:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secrets -n alfa
-NAME                            TYPE                                  DATA   AGE
-alfa-team-basic-auth-password   Opaque                                1      2m11s
-# Other secrets</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Password is stored in this secret. To print generated password value - simply extract <code>password</code> field (stored as <a href="https://en.wikipedia.org/wiki/Base64">Base64</a>) from the secret and decode it. A one line command how to do this:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get secret alfa-team-basic-auth-password -n alfa -o 'go-template={{index .data &quot;password&quot;}}' | base64 -d
-8X4juoCQ9gHAACqbc05B3oPXUcV6Oxb7KNTSYdM15eYF</code></pre>
-</div>
-</div>
-</li>
-<li>
-<p>Use quota name (<code>alfa-team</code>, <code>beta-team</code> and so on) as username and password from the secret. The same credentials should be used in your tests code and to access user interface. In multiple namespaces mode user interface is only showing browser sessions corresponding to one user.</p>
-</li>
-</ol>
+<p>This section has <a href="#users-basic-http-nginx-automated">moved</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -6797,6 +6969,24 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
     upstream url (default http://127.0.0.1:4444/)
 -version
     show version and exit</pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="cli-flags-moon-basic-auth"><a class="anchor" href="#cli-flags-moon-basic-auth"></a>3.13.3. Moon Basic Auth Container Flags</h4>
+<div class="paragraph">
+<p>The following flags are supported:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>-f string
+    htpasswd file path (default "/conf/auth")
+-grace-period duration
+    graceful shutdown period (default 30s)
+-listen string
+    address to bind (default ":4545")
+-upstream-url value
+    upstream url (default http://127.0.0.1:4444/)</pre>
 </div>
 </div>
 </div>
@@ -7782,7 +7972,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2022-12-30 16:21:34 UTC
+Last updated 2023-01-02 11:17:16 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
