@@ -1,8 +1,7 @@
 # Moon
 [![Docker Pulls](https://img.shields.io/docker/pulls/aerokube/moon.svg)](https://hub.docker.com/r/aerokube/moon)
 
-
-Moon is a commercial closed-source enterprise [Selenium](https://en.wikipedia.org/wiki/Selenium_(software)) implementation using [Kubernetes](https://kubernetes.io/) to launch browsers.
+Moon is a commercial closed-source solution for organizing browser automation infrastructure. It is fully compatible with [Selenium](https://selenium.dev/), [Playwright](https://playwright.dev/), [Cypress](https://cypress.io) and [Puppeteer](https://pptr.dev/). Moon is using [Kubernetes](https://kubernetes.io/) or [Openshift](https://www.redhat.com/en/technologies/cloud-computing/openshift) to launch browsers.
 
 ![Moon Animation](img/moon-animation.gif)
 
@@ -11,7 +10,7 @@ Moon is a commercial closed-source enterprise [Selenium](https://en.wikipedia.or
 * The only limitation that determines final Moon price is the **total number of browser pods** being run in parallel.
 * You can run up to **4 (four)** parallel pods for free. Everything on top of free limit is paid as a subscription.
 * **Detailed pricing** information is available in respective documentation [section](https://aerokube.com/moon/latest/#_pricing).
-* To obtain **a free evaluation license key** email to [sales@aerokube.com](mailto:sales@aerokube.com)
+* You can obtain **a free evaluation license key** on our [web-site](https://aerokube.com/moon/).
 
 ## Free Support
 
@@ -28,26 +27,15 @@ The main idea behind Moon is to be easily installable and require zero maintenan
 
 ### One-command Installation
 
-Having a running [Kubernetes](https://kubernetes.io/) cluster and `kubectl` pointing to it you can launch free Moon cluster with this one-liner:
+Having a running [Kubernetes](https://kubernetes.io/) cluster and `kubectl` pointing to it, you can launch free Moon cluster by typing commands below:
 
-```
-$ git clone https://github.com/aerokube/moon-deploy.git && cd moon-deploy && kubectl apply -f moon.yaml
-```
-
-To obtain Moon load balancer IP address use the following command:
-
-```
-$ kubectl get svc -n moon
-NAME      TYPE           CLUSTER-IP      EXTERNAL-IP      PORT(S)                         AGE
-moon      LoadBalancer   10.63.242.109   104.154.161.58   4444:31894/TCP,8080:30625/TCP   1m
+```(bash)
+$ helm repo add aerokube https://charts.aerokube.com/
+$ helm repo update
+$ helm upgrade --install --create-namespace -n moon moon aerokube/moon2
 ```
 
-Now use the following Selenium URL in your code:
-```
-http://104.154.161.58:4444/wd/hub
-```
-
-We also provide [detailed installation video](https://www.youtube.com/watch?v=x6MjkS_31e4). 
+See our [documentation](https://aerokube.com/moon/latest/#install) for more installation options. 
 
 ### Automatic Browser Management
 
@@ -65,10 +53,9 @@ We also provide [detailed installation video](https://www.youtube.com/watch?v=x6
 
 ### Efficient and Lightning Fast
 
-* Completely new Selenium protocol implementation using lightning fast [Golang](https://golang.org/).
+* Moon is implemented using lightning fast [Golang](https://golang.org/).
 * One Moon replica consumes **0.5 CPU** and **512 Mb RAM** maximum.
 * One Moon replica is able to work with **thousands** of running sessions.
-* **No Selenium Grid** components used.
 
 ### Logs and Video
 
