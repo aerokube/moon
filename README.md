@@ -27,7 +27,7 @@ The main idea behind Moon is to be easily installable and require zero maintenan
 
 ### One-command Installation
 
-Having a running [Kubernetes](https://kubernetes.io/) cluster and `kubectl` pointing to it, you can launch free Moon cluster by typing commands below:
+Having a running [Kubernetes](https://kubernetes.io/) cluster and [Helm](https://helm.sh) configured to use it, you can launch free Moon cluster by typing commands below:
 
 ```(bash)
 $ helm repo add aerokube https://charts.aerokube.com/
