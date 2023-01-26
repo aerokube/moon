@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-01-20</span>
+<span id="revdate">2023-01-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -889,6 +889,39 @@ $ openssl x509 -req -sha256 -days 365 -in server.csr -CA ca.crt -CAkey ca.key -s
 </div>
 <div class="sect4">
 <h5 id="install-minikube"><a class="anchor" href="#install-minikube"></a>Option 2: you have Minikube</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Every browser by default requires 1 CPU and 2 GB of memory. We recommend having at least 4 CPUs and 8GB of memory in your Minikube cluster. When having less CPUs browser pods may not start because of insufficient computing resources. We do not recommend using Docker driver for Minikube.</p>
+</div>
+<div class="listingblock">
+<div class="title">Minikube startup under Linux</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ minikube start --cpus=4 --memory=8G --disk-size=20G --driver kvm2</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Minikube startup under MacOS</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ minikube start --cpus=4 --memory=8G --disk-size=20G --driver=hyperkit</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Minikube startup under Windows</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ DISM /Online /Enable-Feature /All /FeatureName:Microsoft-Hyper-V # Enable Hyper-V
+$ minikube start --cpus=4 --memory=8G --disk-size=20G --driver=hyperv</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -7960,7 +7993,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-01-20 08:28:52 UTC
+Last updated 2023-01-26 17:22:04 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
