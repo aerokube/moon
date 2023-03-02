@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-02-27</span>
+<span id="revdate">2023-03-02</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2992,6 +2992,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">additionalFonts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable <a href="#capability-additional-fonts">additional fonts</a> for Chinese, Japanese, Thai and other languages.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">configFile</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Custom Cypress configuration file</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
@@ -3020,6 +3026,12 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">label</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes pod labels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more <a href="#browsers-set-custom-labels">custom Kubernetes labels</a> that will be added to browser pod. Can be passed multiple times: <code>label=first-label%3Dsome-value&amp;env=another-label%3Danother-value</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
@@ -3261,6 +3273,12 @@ This feature works with Cypress images 9.6.0 and above.
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">additionalFonts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable <a href="#capability-additional-fonts">additional fonts</a> for Chinese, Japanese, Thai and other languages.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">arg</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
@@ -3301,6 +3319,12 @@ This feature works with Cypress images 9.6.0 and above.
 <td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">label</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes pod labels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more <a href="#browsers-set-custom-labels">custom Kubernetes labels</a> that will be added to browser pod. Can be passed multiple times: <code>label=first-label%3Dsome-value&amp;env=another-label%3Danother-value</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
@@ -3484,6 +3508,12 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">additionalFonts</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code> or <code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable <a href="#capability-additional-fonts">additional fonts</a> for Chinese, Japanese, Thai and other languages.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">arg</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Browser command-line arguments</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
@@ -3518,6 +3548,12 @@ const host = <span class="string"><span class="delimiter">'</span><span class="c
 <td class="tableblock halign-left valign-top"><p class="tableblock">A typical <code>/etc/hosts</code> entry in format <code>www.example.com:127.0.0.1</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to explicitly add <code>/etc/hosts</code> entries. Can be passed multiple times.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">label</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Kubernetes pod labels</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Not set</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One or more <a href="#browsers-set-custom-labels">custom Kubernetes labels</a> that will be added to browser pod. Can be passed multiple times: <code>label=first-label%3Dsome-value&amp;env=another-label%3Danother-value</code>.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">name</p></td>
@@ -7993,7 +8029,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-02-27 13:18:15 UTC
+Last updated 2023-03-02 08:59:29 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
