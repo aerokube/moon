@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-03-02</span>
+<span id="revdate">2023-03-20</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -5565,7 +5565,8 @@ Moon is using exactly the same tolerations configuration YAML format as <a href=
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">selenium</span>:
   <span class="key">chrome</span>:
-    <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/google-chrome-stable</span></span>
+    <span class="comment"># For example Android emulators may require privileged mode</span>
+    <span class="key">repository</span>: <span class="string"><span class="content">browsers/android</span></span>
     <span class="key">privileged</span>: <span class="string"><span class="content">true                    </span></span><i class="conum" data-value="1"></i><b>(1)</b></code></pre>
 </div>
 </div>
@@ -8029,7 +8030,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-03-02 08:59:29 UTC
+Last updated 2023-03-20 09:44:46 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
