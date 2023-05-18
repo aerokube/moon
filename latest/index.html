@@ -543,7 +543,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-05-17</span>
+<span id="revdate">2023-05-18</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1166,6 +1166,11 @@ $ helm repo update</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">defender</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows only one browser session to be created in the pod, handles session timeouts</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Always</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">proxy</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Handles proxy authentication for Selenium</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">When <a href="#selenium-proxy">proxy</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">video-recoder</p></td>
@@ -4672,18 +4677,20 @@ items:
             memory: 64Mi
       defender:                               <i class="conum" data-value="14"></i><b>(14)</b>
         # The same fields as for ca-certs
-      video-recorder:                         <i class="conum" data-value="15"></i><b>(15)</b>
+      proxy:                                  <i class="conum" data-value="15"></i><b>(15)</b>
         # The same fields as for ca-certs
-      vnc-server:                             <i class="conum" data-value="16"></i><b>(16)</b>
+      video-recorder:                         <i class="conum" data-value="16"></i><b>(16)</b>
         # The same fields as for ca-certs
-      x-server:                               <i class="conum" data-value="17"></i><b>(17)</b>
+      vnc-server:                             <i class="conum" data-value="17"></i><b>(17)</b>
         # The same fields as for ca-certs
-    group:                                    <i class="conum" data-value="18"></i><b>(18)</b>
-      id: 4096                                <i class="conum" data-value="19"></i><b>(19)</b>
-      name: user                              <i class="conum" data-value="20"></i><b>(20)</b>
-    serviceAccountName: default               <i class="conum" data-value="21"></i><b>(21)</b>
-    sessionTimeout: 5m                        <i class="conum" data-value="22"></i><b>(22)</b>
-    storage:                                  <i class="conum" data-value="23"></i><b>(23)</b>
+      x-server:                               <i class="conum" data-value="18"></i><b>(18)</b>
+        # The same fields as for ca-certs
+    group:                                    <i class="conum" data-value="19"></i><b>(19)</b>
+      id: 4096                                <i class="conum" data-value="20"></i><b>(20)</b>
+      name: user                              <i class="conum" data-value="21"></i><b>(21)</b>
+    serviceAccountName: default               <i class="conum" data-value="22"></i><b>(22)</b>
+    sessionTimeout: 5m                        <i class="conum" data-value="23"></i><b>(23)</b>
+    storage:                                  <i class="conum" data-value="24"></i><b>(24)</b>
       accessKey: &quot;&quot;
       bucket: &quot;&quot;
       filename: &quot;&quot;
@@ -4694,9 +4701,9 @@ items:
         accessKey: RootUser
         name: minio
         secretKey: RootPass
-    user:                                     <i class="conum" data-value="24"></i><b>(24)</b>
-      id: 4096                                <i class="conum" data-value="25"></i><b>(25)</b>
-      name: user                              <i class="conum" data-value="26"></i><b>(26)</b>
+    user:                                     <i class="conum" data-value="25"></i><b>(25)</b>
+      id: 4096                                <i class="conum" data-value="26"></i><b>(26)</b>
+      name: user                              <i class="conum" data-value="27"></i><b>(27)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
@@ -4714,7 +4721,7 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Service containers (<code>ca-certs</code>, <code>defender</code>, <code>video-recorder</code>, <code>vnc-server</code>, <code>x-server</code>) configuration</td>
+<td>Service containers (<code>ca-certs</code>, <code>defender</code>, <code>proxy</code>, <code>video-recorder</code>, <code>vnc-server</code>, <code>x-server</code>) configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="4"></i><b>4</b></td>
@@ -4762,50 +4769,54 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="15"></i><b>15</b></td>
-<td><code>video-recorder-server</code> container configuration</td>
+<td><code>proxy</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="16"></i><b>16</b></td>
-<td><code>vnc-server</code> container configuration</td>
+<td><code>video-recorder</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="17"></i><b>17</b></td>
-<td><code>x-server</code> container configuration</td>
+<td><code>vnc-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="18"></i><b>18</b></td>
-<td>System group used to start containers</td>
+<td><code>x-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="19"></i><b>19</b></td>
-<td>System group numeric identifier (<code>gid</code>)</td>
+<td>System group used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="20"></i><b>20</b></td>
-<td>System group name</td>
+<td>System group numeric identifier (<code>gid</code>)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="21"></i><b>21</b></td>
-<td>Kubernetes service account name to use</td>
+<td>System group name</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
-<td>Default Selenium session timeout</td>
+<td>Kubernetes service account name to use</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="23"></i><b>23</b></td>
-<td>S3 storage settings (used to save recorded videos)</td>
+<td>Default Selenium session timeout</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="24"></i><b>24</b></td>
-<td>System user used to start containers</td>
+<td>S3 storage settings (used to save recorded videos)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="25"></i><b>25</b></td>
-<td>System user numeric identifier (<code>uid</code>)</td>
+<td>System user used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="26"></i><b>26</b></td>
+<td>System user numeric identifier (<code>uid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="27"></i><b>27</b></td>
 <td>System username</td>
 </tr>
 </table>
@@ -6313,6 +6324,7 @@ $ oc secrets link moon my-registry.example.com --for=pull -n moon</pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">aerokube/ca-certs:2.0.0 =&gt; my-registry.example.com/aerokube/ca-certs:2.0.0
 aerokube/defender:2.0.0 =&gt; my-registry.example.com/aerokube/defender:2.0.0
+aerokube/proxy:2.0.0 =&gt; my-registry.example.com/aerokube/proxy:2.0.0
 aerokube/vnc-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0
 aerokube/video-recorder:2.0.0 =&gt; my-registry.example.com/aerokube/video-recorder:2.0.0
 aerokube/x-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0</code></pre>
@@ -6336,6 +6348,8 @@ aerokube/x-server:2.0.0 =&gt; my-registry.example.com/aerokube/vnc-server:2.0.0<
         <span class="key">version</span>: <span class="string"><span class="content">2.0.0</span></span> <span class="comment"># You can omit this field and then Moon will use its own image tag (recommended approach)</span>
       <span class="key">defender</span>:
         <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/defender</span></span>
+      <span class="key">proxy</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/proxy</span></span>
       <span class="key">vnc-server</span>:
         <span class="key">repository</span>: <span class="string"><span class="content">my-registry.example.com/aerokube/vnc-server</span></span>
       <span class="key">x-server</span>:
@@ -8096,7 +8110,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-05-17 12:36:51 UTC
+Last updated 2023-05-18 08:21:05 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
