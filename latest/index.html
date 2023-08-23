@@ -540,7 +540,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-08-10</span>
+<span id="revdate">2023-08-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -679,19 +679,20 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#advanced-settings-service-account">3.10.9. Setting Custom Service Account</a></li>
 </ul>
 </li>
-<li><a href="#monitoring">3.11. Monitoring</a>
+<li><a href="#upgrade">3.11. Upgrading Moon Version</a></li>
+<li><a href="#monitoring">3.12. Monitoring</a>
 <ul class="sectlevel3">
-<li><a href="#monitoring-setup">3.11.1. Setup</a></li>
-<li><a href="#monitoring-built-in-metrics">3.11.2. Built-in Moon metrics</a></li>
-<li><a href="#filter-by-labels">3.11.3. Filtering Browser Pods by Labels</a></li>
+<li><a href="#monitoring-setup">3.12.1. Setup</a></li>
+<li><a href="#monitoring-built-in-metrics">3.12.2. Built-in Moon metrics</a></li>
+<li><a href="#filter-by-labels">3.12.3. Filtering Browser Pods by Labels</a></li>
 </ul>
 </li>
-<li><a href="#log-files">3.12. Log Files</a></li>
-<li><a href="#_cli_flags">3.13. CLI Flags</a>
+<li><a href="#log-files">3.13. Log Files</a></li>
+<li><a href="#_cli_flags">3.14. CLI Flags</a>
 <ul class="sectlevel3">
-<li><a href="#cli-flags-moon">3.13.1. Moon Container Flags</a></li>
-<li><a href="#cli-flags-moon-auth">3.13.2. Moon Auth Container Flags</a></li>
-<li><a href="#cli-flags-moon-basic-auth">3.13.3. Moon Basic Auth Container Flags</a></li>
+<li><a href="#cli-flags-moon">3.14.1. Moon Container Flags</a></li>
+<li><a href="#cli-flags-moon-auth">3.14.2. Moon Auth Container Flags</a></li>
+<li><a href="#cli-flags-moon-basic-auth">3.14.3. Moon Basic Auth Container Flags</a></li>
 </ul>
 </li>
 </ul>
@@ -6874,12 +6875,71 @@ ejbh
 </div>
 </div>
 <div class="sect2">
-<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.11. Monitoring</h3>
+<h3 id="upgrade"><a class="anchor" href="#upgrade"></a>3.11. Upgrading Moon Version</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Moon versions are following <a href="https://semver.org/">semantic versioning</a> scheme (<code>MAJOR.MINOR.PATCH</code>), e.g. 2.3.0, 2.5.3 and so on. Major version component means Moon generation (currently always equals to <code>2</code>). Minor version component is changed when we add new important features. Patch version component is changed when release mainly contains minor improvements and bug fixes.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Moon main <a href="#install-helm">installation</a> method is using <a href="https://helm.sh/">Helm</a> and a typical command allowing to do this is:</p>
+</div>
+<div class="listingblock">
+<div class="title">A typical Moon installation command</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Usually to upgrade software version with Helm you do:</p>
+</div>
+<div class="listingblock">
+<div class="title">Upgrading Moon to the version with changed patch component only</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo update # To fetch latest Helm chart information
+$ helm upgrade --install -n moon moon aerokube/moon2 # Exactly the same command as for fresh installation</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Commands above will work when upgrading Moon to the version where patch number changed (e.g. from 2.5.0 to 2.5.1, 2.5.2 and so on). However, if you are upgrading Moon to the version where minor component has changed (e.g. from 2.4.0 to 2.5.0), then upgrade procedure can be a bit more complex. This is because Moon 2 relies on so-called Kubernetes <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a> to store its configuration and from time to time we add new configuration fields to these resources. Currently, Helm <a href="https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations">never upgrades</a> previously installed custom resource definitions, so you have to do this manually when upgrading to the new version with changed custom resource definitions:</p>
+</div>
+<div class="listingblock">
+<div class="title">Upgrading Moon to the version with changed custom resource definitions</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm repo update
+$ helm delete moon -n moon # Completely uninstall previous version
+$ kubectl delete crd $(kubectl get crd | grep moon.aerokube.com | awk '{print $1}') # Delete custom resource definitions from previous Moon version
+$ helm upgrade --install -n moon moon aerokube/moon2 # Install new Moon version</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We usually note about custom resource definitions change in release notes (like <a href="https://github.com/aerokube/moon/releases/2.5.0">here</a>). If you forget to upgrade custom resource definitions Moon can stop working with messages like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash"># During Helm upgrade command
+unknown field &quot;spec.containers.proxy&quot;
+
+# In Moon logs:
+moon: no such config: &quot;default&quot;
+config controller: config &quot;default&quot;: add: validate containers.proxy: value is not set: using default</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="monitoring"><a class="anchor" href="#monitoring"></a>3.12. Monitoring</h3>
 <div class="paragraph">
 <p>You can easily visualize browsers consumption and other Moon metrics with <a href="https://prometheus.io/">Prometheus</a> and <a href="https://grafana.com/">Grafana</a>. One of the simplest ways of deploying Prometheus in Kubernetes is using <a href="https://github.com/coreos/prometheus-operator">Prometheus Operator</a>.</p>
 </div>
 <div class="sect3">
-<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.11.1. Setup</h4>
+<h4 id="monitoring-setup"><a class="anchor" href="#monitoring-setup"></a>3.12.1. Setup</h4>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -6916,7 +6976,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect3">
-<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.11.2. Built-in Moon metrics</h4>
+<h4 id="monitoring-built-in-metrics"><a class="anchor" href="#monitoring-built-in-metrics"></a>3.12.2. Built-in Moon metrics</h4>
 <div class="paragraph">
 <p>Built-in Moon metrics are exposed on the standard <code>/metrics</code> HTTP API.</p>
 </div>
@@ -6981,7 +7041,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </table>
 </div>
 <div class="sect3">
-<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.11.3. Filtering Browser Pods by Labels</h4>
+<h4 id="filter-by-labels"><a class="anchor" href="#filter-by-labels"></a>3.12.3. Filtering Browser Pods by Labels</h4>
 <div class="paragraph">
 <p>Installing Prometheus with <code>kube-prometheus-stack</code> will also automatically install <a href="https://github.com/kubernetes/kube-state-metrics">kube-state-metrics</a> component. This component allows you to filter Kubernetes pods by labels, annotations, status, start time and so on. To fetch information about browser pods with some labels set, use the following Prometheus query:</p>
 </div>
@@ -7004,7 +7064,7 @@ $ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack 
 </div>
 </div>
 <div class="sect2">
-<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.12. Log Files</h3>
+<h3 id="log-files"><a class="anchor" href="#log-files"></a>3.13. Log Files</h3>
 <div class="paragraph">
 <p>Although Moon should just work out of the box, sometimes you may need the log output. Every Moon component is outputting logs to standard output (<code>stdout</code>), so you can use well-known <code>kubectl</code> commands to see the log. Everything related to browser sessions is being output by <code>moon</code> container:</p>
 </div>
@@ -7043,12 +7103,12 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.13. CLI Flags</h3>
+<h3 id="_cli_flags"><a class="anchor" href="#_cli_flags"></a>3.14. CLI Flags</h3>
 <div class="paragraph">
 <p>These flags should be <a href="https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/#define-a-command-and-arguments-when-you-create-a-pod">specified</a> in Kubernetes YAML files when starting the cluster.</p>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.13.1. Moon Container Flags</h4>
+<h4 id="cli-flags-moon"><a class="anchor" href="#cli-flags-moon"></a>3.14.1. Moon Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -7074,7 +7134,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.13.2. Moon Auth Container Flags</h4>
+<h4 id="cli-flags-moon-auth"><a class="anchor" href="#cli-flags-moon-auth"></a>3.14.2. Moon Auth Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -7108,7 +7168,7 @@ $ kubectl logs -f -lapp=moon -c moon-ui -n moon</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="cli-flags-moon-basic-auth"><a class="anchor" href="#cli-flags-moon-basic-auth"></a>3.13.3. Moon Basic Auth Container Flags</h4>
+<h4 id="cli-flags-moon-basic-auth"><a class="anchor" href="#cli-flags-moon-basic-auth"></a>3.14.3. Moon Basic Auth Container Flags</h4>
 <div class="paragraph">
 <p>The following flags are supported:</p>
 </div>
@@ -8107,7 +8167,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-08-10 07:31:08 UTC
+Last updated 2023-08-23 16:29:26 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
