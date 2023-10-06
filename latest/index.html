@@ -540,7 +540,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-09-15</span>
+<span id="revdate">2023-10-06</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -6123,12 +6123,12 @@ secret/minio created</code></pre>
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
 <span class="key">kind</span>: <span class="string"><span class="content">BrowserSet</span></span>
 <span class="key">metadata</span>:
-    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
-    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
-    <span class="key">annotations</span>:
-      <span class="key">iam.amazonaws.com/role</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube-moon</span><span class="delimiter">&quot;</span></span>
-    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+  <span class="comment"># Other Kubernetes metadata</span>
 <span class="key">spec</span>:
+  <span class="key">annotations</span>:
+    <span class="key">iam.amazonaws.com/role</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">aerokube-moon</span><span class="delimiter">&quot;</span></span>
   <span class="comment"># Other fields</span></code></pre>
 </div>
 </div>
@@ -8167,7 +8167,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-09-15 14:20:31 UTC
+Last updated 2023-10-06 10:50:39 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
