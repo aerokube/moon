@@ -540,7 +540,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-10-25</span>
+<span id="revdate">2023-10-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -676,7 +676,8 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#tolerations">3.10.6. Using Tolerations</a></li>
 <li><a href="#privileged-mode">3.10.7. Running Browser Pods in Privileged Mode</a></li>
 <li><a href="#advanced-settings-user-group">3.10.8. Setting Custom User and Group Identifier to Browser Pods</a></li>
-<li><a href="#advanced-settings-service-account">3.10.9. Setting Custom Service Account</a></li>
+<li><a href="#advanced-settings-service-account">3.10.9. Setting Custom Service Account For Browser Pods</a></li>
+<li><a href="#advanced-settings-security-context">3.10.10. Setting Security Context For Browser Pods</a></li>
 </ul>
 </li>
 <li><a href="#upgrade">3.11. Upgrading Moon Version</a></li>
@@ -4673,35 +4674,40 @@ items:
           requests:                           <i class="conum" data-value="13"></i><b>(13)</b>
             cpu: 100m
             memory: 64Mi
-      defender:                               <i class="conum" data-value="14"></i><b>(14)</b>
+        securityContext:                      <i class="conum" data-value="14"></i><b>(14)</b>
+          # Security context definition goes here
+      defender:                               <i class="conum" data-value="15"></i><b>(15)</b>
         # The same fields as for ca-certs
-      proxy:                                  <i class="conum" data-value="15"></i><b>(15)</b>
+      proxy:                                  <i class="conum" data-value="16"></i><b>(16)</b>
         # The same fields as for ca-certs
-      video-recorder:                         <i class="conum" data-value="16"></i><b>(16)</b>
+      video-recorder:                         <i class="conum" data-value="17"></i><b>(17)</b>
         # The same fields as for ca-certs
-      vnc-server:                             <i class="conum" data-value="17"></i><b>(17)</b>
+      vnc-server:                             <i class="conum" data-value="18"></i><b>(18)</b>
         # The same fields as for ca-certs
-      x-server:                               <i class="conum" data-value="18"></i><b>(18)</b>
+      x-server:                               <i class="conum" data-value="19"></i><b>(19)</b>
         # The same fields as for ca-certs
-    group:                                    <i class="conum" data-value="19"></i><b>(19)</b>
-      id: 4096                                <i class="conum" data-value="20"></i><b>(20)</b>
-      name: user                              <i class="conum" data-value="21"></i><b>(21)</b>
-    serviceAccountName: default               <i class="conum" data-value="22"></i><b>(22)</b>
-    sessionTimeout: 5m                        <i class="conum" data-value="23"></i><b>(23)</b>
-    storage:                                  <i class="conum" data-value="24"></i><b>(24)</b>
+    group:                                    <i class="conum" data-value="20"></i><b>(20)</b>
+      id: 4096                                <i class="conum" data-value="21"></i><b>(21)</b>
+      name: user                              <i class="conum" data-value="22"></i><b>(22)</b>
+    serviceAccountName: default               <i class="conum" data-value="23"></i><b>(23)</b>
+    sessionTimeout: 5m                        <i class="conum" data-value="24"></i><b>(24)</b>
+    storage:                                  <i class="conum" data-value="25"></i><b>(25)</b>
       accessKey: &quot;&quot;
       bucket: &quot;&quot;
       filename: &quot;&quot;
       endpoint: &quot;&quot;
+      noProxy: &quot;&quot;
+      httpProxy: &quot;&quot;
+      httpsProxy: &quot;&quot;
       pattern: &quot;&quot;
       secretKey: &quot;&quot;
       secretRef:
         accessKey: RootUser
         name: minio
         secretKey: RootPass
-    user:                                     <i class="conum" data-value="25"></i><b>(25)</b>
-      id: 4096                                <i class="conum" data-value="26"></i><b>(26)</b>
-      name: user                              <i class="conum" data-value="27"></i><b>(27)</b>
+    user:                                     <i class="conum" data-value="26"></i><b>(26)</b>
+      id: 4096                                <i class="conum" data-value="27"></i><b>(27)</b>
+      name: user                              <i class="conum" data-value="28"></i><b>(28)</b>
 kind: List
 metadata:
   # List metadata</code></pre>
@@ -4763,58 +4769,62 @@ metadata:
 </tr>
 <tr>
 <td><i class="conum" data-value="14"></i><b>14</b></td>
-<td><code>defender</code> container configuration</td>
+<td>Security context definition for container</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="15"></i><b>15</b></td>
-<td><code>proxy</code> container configuration</td>
+<td><code>defender</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="16"></i><b>16</b></td>
-<td><code>video-recorder</code> container configuration</td>
+<td><code>proxy</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="17"></i><b>17</b></td>
-<td><code>vnc-server</code> container configuration</td>
+<td><code>video-recorder</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="18"></i><b>18</b></td>
-<td><code>x-server</code> container configuration</td>
+<td><code>vnc-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="19"></i><b>19</b></td>
-<td>System group used to start containers</td>
+<td><code>x-server</code> container configuration</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="20"></i><b>20</b></td>
-<td>System group numeric identifier (<code>gid</code>)</td>
+<td>System group used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="21"></i><b>21</b></td>
-<td>System group name</td>
+<td>System group numeric identifier (<code>gid</code>)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="22"></i><b>22</b></td>
-<td>Kubernetes service account name to use</td>
+<td>System group name</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="23"></i><b>23</b></td>
-<td>Default Selenium session timeout</td>
+<td>Kubernetes service account name to use</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="24"></i><b>24</b></td>
-<td>S3 storage settings (used to save recorded videos)</td>
+<td>Default Selenium session timeout</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="25"></i><b>25</b></td>
-<td>System user used to start containers</td>
+<td>S3 storage settings (used to save recorded videos)</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="26"></i><b>26</b></td>
-<td>System user numeric identifier (<code>uid</code>)</td>
+<td>System user used to start containers</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="27"></i><b>27</b></td>
+<td>System user numeric identifier (<code>uid</code>)</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="28"></i><b>28</b></td>
 <td>System username</td>
 </tr>
 </table>
@@ -5976,7 +5986,10 @@ metadata:
 <div class="paragraph">
 <p>To define an S3 key pattern for every browser session independently - use <code>pattern</code> capability described in <a href="#selenium-moon-capabilities">Moon-specific Capabilities</a> section.</p>
 </div>
-<div id="video-recording-s3-secret" class="admonitionblock note">
+</div>
+<div class="sect4">
+<h5 id="video-recording-s3-secret"><a class="anchor" href="#video-recording-s3-secret"></a>Getting S3 credentials from Kubernetes secret</h5>
+<div class="admonitionblock note">
 <table>
 <tr>
 <td class="icon">
@@ -6147,6 +6160,48 @@ secret/minio created</code></pre>
 <p>Configure Moon to <a href="#faq-kubernetes-service-account">use</a> this service account.</p>
 </li>
 </ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="video-recording-proxy"><a class="anchor" href="#video-recording-proxy"></a>Uploading Videos Through Proxy</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This feature is available since Moon 2.6.0.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In some restricted environments videos should be uploaded to S3 bucket using a proxy server. To configure this - update configuration object as follows:</p>
+</div>
+<div class="listingblock">
+<div class="title">Setting a proxy server for uploading to S3</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+  <span class="key">kind</span>: <span class="string"><span class="content">Config</span></span>
+  <span class="key">metadata</span>:
+    <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+    <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+    <span class="comment"># Other Kubernetes metadata</span>
+  <span class="key">spec</span>:
+    <span class="comment"># Some fields before</span>
+    <span class="key">storage</span>:
+      <span class="comment"># Other S3 storage settings</span>
+      <span class="key">noProxy</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">*.example.com</span><span class="delimiter">&quot;</span></span> <span class="comment"># Don't use proxy for these hosts</span>
+      <span class="key">httpProxy</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">proxy.example.com:3128</span><span class="delimiter">&quot;</span></span> <span class="comment"># Proxy host and port for HTTP traffic</span>
+      <span class="key">httpsProxy</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">proxy.example.com:3128</span><span class="delimiter">&quot;</span></span> <span class="comment"># Proxy host and port for HTTPS traffic</span>
+    <span class="comment"># Other fields</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Syntax of these fields correspond to <code>NO_PROXY</code>, <code>HTTP_PROXY</code> and <code>HTTPS_PROXY</code> environment variables.</p>
 </div>
 </div>
 </div>
@@ -6733,19 +6788,19 @@ ejbh
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span><span class="content">
-  kind: BrowserSet
-  metadata:
-    name: default
-    namespace: moon
-    # Other Kubernetes metadata
-  spec:
-    annotations:
-      key1: &quot;value1&quot;
-      key2: &quot;value2&quot;
-    labels:
-      key1: &quot;value1&quot;
-      key2: &quot;value2&quot;</span></span></code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">BrowserSet</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">default</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span>
+<span class="comment"># Other Kubernetes metadata</span>
+<span class="key">spec</span>:
+  <span class="key">annotations</span>:
+    <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+    <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span>
+  <span class="key">labels</span>:
+    <span class="key">key1</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value1</span><span class="delimiter">&quot;</span></span>
+    <span class="key">key2</span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">value2</span><span class="delimiter">&quot;</span></span></code></pre>
 </div>
 </div>
 <div class="sect3">
@@ -6868,9 +6923,92 @@ ejbh
 </table>
 </div>
 <div class="sect3">
-<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.10.9. Setting Custom Service Account</h4>
+<h4 id="advanced-settings-service-account"><a class="anchor" href="#advanced-settings-service-account"></a>3.10.9. Setting Custom Service Account For Browser Pods</h4>
 <div class="paragraph">
 <p>This is configured globally for all browser pods in <a href="#configuration-object">configuration object</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Configuring service account for browser pods</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Config
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    # Other fields
+    serviceAccountName: my-account        <i class="conum" data-value="1"></i><b>(1)</b>
+    # Other fields</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Custom service account setting</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="advanced-settings-security-context"><a class="anchor" href="#advanced-settings-security-context"></a>3.10.10. Setting Security Context For Browser Pods</h4>
+<div class="paragraph">
+<p>This is configured separately for each Moon container in <a href="#configuration-object">configuration object</a>. YAML syntax is exactly the same as for <a href="https://kubernetes.io/docs/tasks/configure-pod-container/security-context/">Kubernetes pod containers</a>.</p>
+</div>
+<div class="listingblock">
+<div class="title">Adding security context to browser pod containers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get configs -n moon -o yaml
+apiVersion: v1
+items:
+- apiVersion: moon.aerokube.com/v1
+  kind: Config
+  metadata:
+    name: default
+    namespace: moon
+    # Other Kubernetes metadata
+  spec:
+    # Other fields
+    containers:
+      browser:
+        # Other fields
+        securityContext:                    <i class="conum" data-value="1"></i><b>(1)</b>
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          privileged: false
+          runAsGroup: 4096
+          runAsNonRoot: true
+          runAsUser: 4096
+          seccompProfile:
+            type: RuntimeDefault
+        # Other fields
+      ca-certs:
+        # The same fields as for browser
+      defender:
+        # The same fields as for ca-certs
+      proxy:
+        # The same fields as for ca-certs
+      video-recorder:
+        # The same fields as for ca-certs
+      vnc-server:
+        # The same fields as for ca-certs
+      x-server:
+        # The same fields as for ca-certs</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Security context definition</td>
+</tr>
+</table>
 </div>
 </div>
 </div>
@@ -8167,7 +8305,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-10-25 16:36:10 UTC
+Last updated 2023-10-26 16:29:07 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
