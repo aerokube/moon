@@ -540,7 +540,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2023-12-14</span>
+<span id="revdate">2023-12-15</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -791,7 +791,16 @@ Moon 1.x documentation is published <a href="https://aerokube.com/moon/1-latest"
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-Helm chart is the recommended Moon installation way. Steps below require Helm 3 and will not work with older releases.
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Helm chart is the recommended Moon installation way. Steps below require Helm 3 and will not work with older releases.</p>
+</li>
+<li>
+<p>Helm chart source code is available <a href="https://github.com/aerokube/charts/tree/master/moon2">here</a>.</p>
+</li>
+</ol>
+</div>
 </td>
 </tr>
 </table>
@@ -6225,6 +6234,18 @@ This feature is available since Moon 2.3.0.
 </div>
 <div class="sect3">
 <h4 id="browser-ops-installation"><a class="anchor" href="#browser-ops-installation"></a>3.4.1. Installation</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Helm chart source code is available <a href="https://github.com/aerokube/charts/tree/master/browser-ops">here</a>.
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>To activate this solution you need to install one more <a href="https://helm.sh">Helm</a> chart:</p>
 </div>
@@ -8305,7 +8326,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2023-12-14 13:34:04 UTC
+Last updated 2023-12-15 13:18:33 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
