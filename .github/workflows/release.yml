@@ -1,0 +1,23 @@
+name: release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  moon:
+    runs-on: ubuntu-latest
+    if: github.repository == 'aerokube/moon'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Prepare release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF:10}" >> $GITHUB_ENV
+
+      - name: Download and extract release
+        run: ci/download.sh $RELEASE_VERSION
+
+      - uses: AButler/upload-release-assets@v2.0
+        with:
+          files: 'dist/*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
