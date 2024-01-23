@@ -14,6 +14,6 @@ for osArch in "linux_amd64" "darwin_amd64" "darwin_arm64" "windows_amd64" "windo
     downloadURL="$downloadURL.exe"
     outputFile="$outputFile.exe"
   fi
-  curl -o "$outputFile" -s "$downloadURL"
+  curl -L -o "$outputFile" -s "$downloadURL"
   chmod 755 "$outputFile"
 done
