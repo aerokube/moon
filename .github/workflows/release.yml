@@ -16,6 +16,8 @@ jobs:
 
       - name: Download and extract release
         run: ci/download.sh $RELEASE_VERSION
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: AButler/upload-release-assets@v2.0
         with:
