@@ -540,7 +540,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2024-01-25</span>
+<span id="revdate">2024-02-01</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -573,7 +573,12 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </li>
 <li><a href="#main-features">2. Main Features</a>
 <ul class="sectlevel2">
-<li><a href="#user-interface">2.1. User Interface</a></li>
+<li><a href="#user-interface">2.1. User Interface</a>
+<ul class="sectlevel3">
+<li><a href="#user-interface-overview">2.1.1. Overview</a></li>
+<li><a href="#user-interface-console">2.1.2. Console</a></li>
+</ul>
+</li>
 <li><a href="#selenium">2.2. Using Selenium</a>
 <ul class="sectlevel3">
 <li><a href="#selenium-moon-capabilities">2.2.1. Moon-specific Capabilities</a></li>
@@ -1493,6 +1498,8 @@ default   Acme Inc.         10         2022-10-11T18:38:42Z</pre>
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="user-interface-overview"><a class="anchor" href="#user-interface-overview"></a>2.1.1. Overview</h4>
 <div class="paragraph">
 <p>Moon comes with a powerful user interface allowing to list and filter running browser sessions, view browser screen, launch browser sessions for manual testing and so on.</p>
 </div>
@@ -1548,6 +1555,202 @@ project!=AnotherProject,buildNumber # Any project except AnotherProject, build n
 </div>
 <div class="paragraph">
 <p>When you click on a row in the sessions list, browser screen is shown automatically if possible. For example for browser sessions with invisible browser window (so-called <strong>headless</strong> browsers) - nothing happens when you click on a row. By default, browser screen is in view-only mode. To interact with the browser - click on the button with the lock icon (🔒). Click on this button again - to switch back to view-only mode. Browser screen allows to follow automated test execution and intercept it when needed. When you launch a manual testing session - use this screen to manually execute your scenario step-by-step. All browser features like opening developer toolbar are working exactly the same as on your personal computer. To copy and paste values from your computer to Moon browser session - use <strong>Ctrl+C\Ctrl+V</strong> or <strong>Cmd+C\Cmd+V</strong> shortcuts on your keyboard.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="user-interface-console"><a class="anchor" href="#user-interface-console"></a>2.1.2. Console</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This feature is available since Moon 2.6.1.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Console is a command-line interface available on Moon UI screen and giving more power to manual testing. The following features are available:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Listing available browsers and mobile emulation devices</p>
+</li>
+<li>
+<p>Starting, listing and deleting browser sessions with desktop browsers and with mobile emulation enabled</p>
+</li>
+<li>
+<p>Easily providing arbitrary additional browser capabilities</p>
+</li>
+<li>
+<p>Opening VNC sessions for manual testing</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This is how console looks like:</p>
+</div>
+<div class="paragraph">
+<div class="title">Moon Console</div>
+<p><span class="image"><img src="img/moon-ui-console.png" alt="moon ui console"></span></p>
+</div>
+<div class="paragraph">
+<p>To open console:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Option 1.</strong> Click on the button shown on the picture above.</p>
+</li>
+<li>
+<p><strong>Option 2.</strong> Type <code>~</code> (tilde) symbol on the keyboard.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Moon console works similarly to standard Unix terminal. To list all available commands type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing available commands</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ -h
+Usage:
+  create
+  delete
+  list
+  get
+  vnc
+  clear
+  exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To show command syntax add <code>-h</code> or <code>-help</code> to command:</p>
+</div>
+<div class="listingblock">
+<div class="title">Showing command help</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ delete -h
+Desc:
+  delete - stop session
+
+Usage:
+  delete &lt;session-id&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view previous commands use arrow up and arrow down buttons. To clear previous commands output type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Clearing console</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ clear</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To exit from console just close console window with mouse or type:</p>
+</div>
+<div class="listingblock">
+<div class="title">Exiting console</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ exit</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To list available browsers:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing available browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ get browser
+opera
+safari
+MicrosoftEdge
+chrome
+firefox</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To list last 5 versions of <code>chrome</code> browser:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing available browsers</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ get browser -n chrome -l 5
+120.0.6099.224-6 (default)
+# If there are more browser versions in browser set, they will be shown here</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To list mobile emulation devices:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing available mobile emulation devices</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ get device -e &quot;iPhone X&quot; # Partial name match
+&quot;Apple iPhone X&quot;
+&quot;Apple iPhone XR&quot;
+&quot;Apple iPhone Xs&quot;
+&quot;Apple iPhone Xs Max&quot;
+moon$ get device -e &quot;iPhone X$&quot; # Match device name by regex
+&quot;Apple iPhone X&quot;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To launch a Chrome browser:</p>
+</div>
+<div class="listingblock">
+<div class="title">Launching desktop browser</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ create browser -n chrome # Default Chrome version
+chrome-120-0-124bcfdf-6f03-424c-80b4-6c2ee5b2f36f # This is launched session ID
+moon$ create browser -n chrome -v 120.0 # Exact Chrome version
+moon$ create browser -n chrome -caps '{&quot;goog:chromeOptions&quot;: {&quot;args&quot;: [&quot;start-maximized&quot;]}}' # Additional Selenium capabilities in JSON format</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To launch mobile emulation:</p>
+</div>
+<div class="listingblock">
+<div class="title">Launching mobile emulation</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ create device -n &quot;Apple iPhone Xs&quot; -url https://aerokube.com/
+chrome-120-0-6099-224-6-46e1198c-f73d-401d-be6c-6e127ef53f24</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To view browser screen using VNC:</p>
+</div>
+<div class="listingblock">
+<div class="title">Showing browser screen</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ vnc chrome-120-0-6099-224-6-46e1198c-f73d-401d-be6c-6e127ef53f24</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To list available browser sessions:</p>
+</div>
+<div class="listingblock">
+<div class="title">Listing browser sessions</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ list
+chrome-120-0-124bcfdf-6f03-424c-80b4-6c2ee5b2f36f</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To delete a running browser session:</p>
+</div>
+<div class="listingblock">
+<div class="title">Deleting a browser session</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">moon$ delete chrome-120-0-124bcfdf-6f03-424c-80b4-6c2ee5b2f36f</code></pre>
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -8339,7 +8542,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2024-01-25 05:50:08 UTC
+Last updated 2024-02-01 15:07:04 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
