@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.21">
+<meta name="generator" content="Asciidoctor 2.0.22">
 <meta name="description" content="A Selenium, Cypress, Playwright and Puppeteer testing platform running in Kubernetes or Openshift clusters. Fully compatible with Selenium Webdriver protocol. Live and automated testing are supported. Runs on your own hardware or in any popular cloud platform: Google Cloud, Amazon Web Services, DigitalOcean, Microsoft Azure and so on.">
 <meta name="author" content="Aerokube Software OÜ">
 <link rel="icon" type="image/png" href="img/favicon.png">
@@ -541,7 +541,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2024-03-15</span>
+<span id="revdate">2024-03-26</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -720,7 +720,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 </ul>
 </li>
 <li><a href="#_license_agreement">5. License Agreement</a></li>
-<li><a href="#_pricing">6. Pricing</a></li>
+<li><a href="#pricing">6. Pricing</a></li>
 <li><a href="#mobile-emulation-devices">Appendix A: Supported Mobile Devices</a></li>
 </ul>
 </div>
@@ -1082,7 +1082,7 @@ $ helm repo update</code></pre>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>To test everything locally you can use <a href="https://console.redhat.com/openshift/create/local">RedHat CodeReady Containers</a>. In that case you need to additionally pass Ingress hostname as follows:</p>
+<p>To test everything locally you can use <a href="https://developers.redhat.com/products/openshift-local/overview">Openshift Local</a>. In that case you need to additionally pass Ingress hostname as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2290,7 +2290,7 @@ This feature is available since Moon 2.2.0.
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="python">capabilities = {
     <span class="string"><span class="delimiter">&quot;</span><span class="content">browserName</span><span class="delimiter">&quot;</span></span>: <span class="string"><span class="delimiter">&quot;</span><span class="content">chrome</span><span class="delimiter">&quot;</span></span>,
-    <span class="string"><span class="delimiter">&quot;</span><span class="content">google:chromeOptions</span><span class="delimiter">&quot;</span></span>: {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">goog:chromeOptions</span><span class="delimiter">&quot;</span></span>: {
         <span class="string"><span class="delimiter">&quot;</span><span class="content">args</span><span class="delimiter">&quot;</span></span>: [<span class="string"><span class="delimiter">&quot;</span><span class="content">--headless</span><span class="delimiter">&quot;</span></span>]
     }
 }</code></pre>
@@ -3186,31 +3186,31 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <p>You can request one of browsers supported by Cypress (<code>chrome</code>, <code>chromium</code>, <code>edge</code>, <code>electron</code> or <code>firefox</code>) by specifying its name in URL. By default, Moon will use <code>browsers/cypress-&lt;browser-name&gt;:latest</code> public image.</p>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Chrome (<code>browsers/cypress-chrome:latest</code> image)</div>
+<div class="title">Requesting Chrome (<code>quay.io/browsers/cypress-chrome:latest</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/chrome</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Chromium (<code>browsers/cypress-chromium:latest</code> image)</div>
+<div class="title">Requesting Chromium (<code>quay.io/browsers/cypress-chromium:latest</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/chromium</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Electron (<code>browsers/cypress-electron:latest</code> image)</div>
+<div class="title">Requesting Electron (<code>quay.io/browsers/cypress-electron:latest</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Microsoft Edge (<code>browsers/cypress-edge:latest</code> image)</div>
+<div class="title">Requesting Microsoft Edge (<code>quay.io/browsers/cypress-edge:latest</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/edge</code></pre>
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Requesting Firefox (<code>browsers/cypress-firefox:latest</code> image)</div>
+<div class="title">Requesting Firefox (<code>quay.io/browsers/cypress-firefox:latest</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/firefox</code></pre>
 </div>
@@ -3222,7 +3222,7 @@ my-test-project$ cypress-moon https://moon.example.com/cypress/chrome</code></pr
 <p>Cypress API can change from version to version. Because of that it is recommended to make sure that Cypress version being used in your project corresponds to Cypress version in browser image. To use an image compatible with exact Cypress version - add this version as follows:</p>
 </div>
 <div class="listingblock">
-<div class="title">Selecting an image compatible to Cypress 7.3.0 (<code>browsers/cypress-electron:cypress-7.3.0</code> image)</div>
+<div class="title">Selecting an image compatible to Cypress 7.3.0 (<code>quay.io/browsers/cypress-electron:cypress-7.3.0</code> image)</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ cypress-moon https://moon.example.com/cypress/electron/cypress-7.3.0</code></pre>
 </div>
@@ -5897,8 +5897,7 @@ default   2d23h</code></pre>
 <div class="listingblock">
 <div class="title">Listing device sets as YAML</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get browsersets -n moon -o yaml
-$ kubectl get devicesets -n moon -o yaml
+<pre class="CodeRay highlight"><code data-lang="bash">$ kubectl get devicesets -n moon -o yaml
 apiVersion: v1
 items:
 - apiVersion: moon.aerokube.com/v1
@@ -8116,7 +8115,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_pricing"><a class="anchor" href="#_pricing"></a>6. Pricing</h2>
+<h2 id="pricing"><a class="anchor" href="#pricing"></a>6. Pricing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Last updated December 17th, 2021. Replaces the prior version in its entirety.</p>
@@ -8248,39 +8247,71 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 15 Pro Max</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad 10.2 (2019)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 15 Pro</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 15 Plus</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 15</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 14 Pro Max</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (10.5)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 10.5"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (12.9)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 12.9"</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 14 Pro</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 14 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 14</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone SE 2022</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 13 Pro Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 13 Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 13</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 13 Mini</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 12 Pro Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 12 Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 12</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 12 Mini</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8288,7 +8319,31 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11 Pro</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 11</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Air</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad 10.2 (2019)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone XR</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8304,15 +8359,15 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone X</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7 Plus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8320,23 +8375,39 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 8</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7 Plus</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone SE</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone X</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini 4</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone XR</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (10.5)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 10.5"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Pro (12.9)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">iPad Pro 12.9"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPad Mini</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone Xs Max</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Apple iPhone 4</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8400,6 +8471,18 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Google Pixel 5</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nest Hub Max</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nest Hub</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">JioPhone 2</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -8408,15 +8491,15 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with touch</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with HiDPI screen</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with MDPI screen</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Laptop with touch</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8432,11 +8515,15 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Surface Pro 7</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Microsoft Surface Duo</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Moto G4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Motorola G4</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8453,6 +8540,14 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Red Hydrogen One</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy S20 Ultra</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Samsung Galaxy A51/71</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
@@ -8543,7 +8638,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2024-03-15 10:44:44 UTC
+Last updated 2024-03-26 09:19:04 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
