@@ -541,7 +541,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2024-04-23</span>
+<span id="revdate">2024-05-02</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -899,6 +899,31 @@ $ openssl x509 -req -sha256 -days 365 -in server.csr -CA ca.crt -CAkey ca.key -s
 <p>When using such self-signed TLS certificates you may need to explicitly allow opening Moon in your browser.</p>
 </div>
 </li>
+<li>
+<p>If you install Moon on ARM64 architecture (e.g. Mac M1 and similar CPUs or cloud ARM64 Kubernetes nodes), then the choice of available browsers is limited. Selenium will work with Chromium, Firefox and Safari (other browsers do not provide ARM64-compatible versions for Linux). Playwright, Cypress and Puppeteer will not work at all. To use ARM64 compatible browsers you have to apply the following <code>values.yaml</code> file:</p>
+<div class="listingblock">
+<div class="title">Using ARM64-compatible browser images</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browsers</span>:
+  <span class="key">default</span>:
+    <span class="key">playwright</span>: <span class="string"><span class="content">{}</span></span>
+    <span class="key">cypress</span>: <span class="string"><span class="content">{}</span></span>
+    <span class="key">devtools</span>: <span class="string"><span class="content">{}</span></span>
+    <span class="key">selenium</span>:
+      <span class="key">MicrosoftEdge</span>: <span class="string"><span class="content">null</span></span>
+      <span class="key">opera</span>: <span class="string"><span class="content">null</span></span>
+      <span class="key">chrome</span>:
+        <span class="key">default</span>: <span class="string"><span class="content">124.0.6367.60-1</span></span>
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/chromium</span></span>
+      <span class="key">firefox</span>:
+        <span class="key">default</span>: <span class="string"><span class="content">125.0.3-1</span></span>
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/firefox</span></span>
+      <span class="key">safari</span>:
+        <span class="key">default</span>: <span class="string"><span class="content">613.1.6.1</span></span>
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/webkit</span></span></code></pre>
+</div>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -921,9 +946,19 @@ $ openssl x509 -req -sha256 -days 365 -in server.csr -CA ca.crt -CAkey ca.key -s
 </div>
 </div>
 <div class="listingblock">
-<div class="title">Minikube startup under MacOS</div>
+<div class="title">Minikube startup under MacOS x86 CPU</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ minikube start --cpus=4 --memory=8G --disk-size=20G --driver=hyperkit</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Minikube startup under MacOS ARM64 CPU (M1 and similar CPUs)</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ brew install qemu
+$ brew install socket_vmnet
+$ brew tap homebrew/services
+$ HOMEBREW=$(which brew) &amp;&amp; sudo ${HOMEBREW} services start socket_vmnet
+$ minikube start --cpus=4 --memory=8G --disk-size=20G --driver qemu --network socket_vmnet</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -945,6 +980,9 @@ $ minikube start --cpus=4 --memory=8G --disk-size=20G --driver=hyperv</code></pr
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="bash">$ minikube addons enable ingress</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>This command may <a href="https://github.com/kubernetes/minikube/issues/18738">not work</a> on some Minikube versions for Mac M1 and similar CPUs.</p>
 </div>
 </li>
 <li>
@@ -8638,7 +8676,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2024-04-23 15:05:55 UTC
+Last updated 2024-05-02 10:53:56 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
