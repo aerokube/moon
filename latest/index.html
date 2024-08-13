@@ -541,7 +541,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2024-08-12</span>
+<span id="revdate">2024-08-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -552,6 +552,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <ul class="sectlevel3">
 <li><a href="#install-kubernetes">1.1.1. Installing to Kubernetes</a></li>
 <li><a href="#install-openshift">1.1.2. Installing to Openshift</a></li>
+<li><a href="#install-helm-recommendations">1.1.3. Recommendations on Working with Helm</a></li>
 </ul>
 </li>
 <li><a href="#architecture">1.2. Architecture</a>
@@ -1138,6 +1139,142 @@ $ helm repo update</code></pre>
 </td>
 </tr>
 </table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="install-helm-recommendations"><a class="anchor" href="#install-helm-recommendations"></a>1.1.3. Recommendations on Working with Helm</h4>
+<div class="sect4">
+<h5 id="install-helm-recommendations-values-file"><a class="anchor" href="#install-helm-recommendations-values-file"></a>Helm values files</h5>
+<div class="paragraph">
+<p>As you could see above Helm chart is the recommended Moon installation way for both Kubernetes and Openshift. Our Helm <a href="https://github.com/aerokube/charts/tree/master/moon2">chart</a> comes with recommended defaults that will work out of the box in most cases. However, there are situations when you wish to install Moon with some advanced features already activated and to be able to easily reproduce the same installation later. For example, by default Moon does not <a href="#video-recording">record videos of browser sessions</a>, and you may need this in your processes. Similarly, you may want to launch browsers in <a href="#multiple-namespaces">multiple namespaces</a> or use <a href="#ca-certs">additional trusted TLS certificates</a>.</p>
+</div>
+<div class="paragraph">
+<p>Although, all these features can be activated just by manually editing respective Moon objects (<a href="#configuration-object">configuration object</a>, <a href="#browsers-set">browsers set</a>, <a href="#devices-set">devices set</a>) with <code>kubectl edit</code> command, such changes will be overwritten by Helm during the next deployment. Helm provides better way of having reproducible deployment configuration state - <a href="https://helm.sh/docs/chart_template_guide/values_files/">values files</a>. It works like this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Every Helm chart has default settings stored in <code>values.yaml</code> file and distributed with all the rest of chart files. For example, an up-to-date <code>values.yaml</code> file for Moon 2.x Helm chart is stored <a href="https://github.com/aerokube/charts/blob/master/moon2/values.yaml">here</a>. This file contains reasonable defaults.</p>
+</li>
+<li>
+<p>If you need to change some defaults to custom values, you create a local <code>values.yaml</code> file containing only the values you wish to change. For example, in Moon Helm chart number of Moon replicas can be set using <code>deployment.replicas</code> field in <code>values.yaml</code>. You create a text <code>values.yaml</code> file like this:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">deployment</span>:
+  <span class="key">replicas</span>: <span class="string"><span class="content">3</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Such file should be stored under your preferred version control system. This guarantees - you will never lose your custom deployment settings.</p>
+</div>
+</li>
+<li>
+<p>To apply your custom settings while (re)deploying Moon - simply pass full path to your <code>values.yaml</code> file in Helm command:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install -f path/to/values.yaml -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Overriding some parameter in <code>values.yaml</code> is equivalent but more useful than providing the same key as <code>--set</code> flag, e.g.:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">$ helm upgrade --install --set deployment.replicas=3 -n moon moon aerokube/moon2</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="install-helm-recommendations-moon-objects"><a class="anchor" href="#install-helm-recommendations-moon-objects"></a>Configuring Moon Custom Resources</h5>
+<div class="paragraph">
+<p>Moon 2.x configuration is stored as native Kubernetes objects called <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">custom resources</a>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="#quotas">Quotas</a> - containing all configuration specific to one Moon user.</p>
+</li>
+<li>
+<p><a href="#configuration-object">Configuration Objects</a> - storing various configuration options.</p>
+</li>
+<li>
+<p><a href="#browsers-set">Browser Sets</a> - storing browsers startup configuration.</p>
+</li>
+<li>
+<p><a href="#devices-set">Devices Sets</a> - providing information about available mobile devices for <a href="#mobile-emulation">mobile emulation</a>.</p>
+</li>
+<li>
+<p><a href="#license">Licenses</a> - storing installed Moon license keys.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Our Helm chart contains a dedicated key in <code>values.yaml</code> corresponding to every such resource:</p>
+</div>
+<div class="listingblock">
+<div class="title">Moon custom resources can be also configured in values.yaml</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">quota</span>: <span class="comment"># Stores a list of quotas</span>
+  <span class="key">quota1</span>:
+    <span class="comment"># Quota1 specification</span>
+  <span class="key">quota2</span>:
+    <span class="comment"># Quota2 specification</span>
+
+<span class="key">configs</span>: <span class="comment"># Stores a list of configuration objects</span>
+  <span class="key">config1</span>:
+    <span class="comment"># Config1 specification</span>
+  <span class="key">config2</span>:
+    <span class="comment"># Config2 specification</span>
+
+<span class="key">browsers</span>: <span class="comment"># Stores a list of browsers sets</span>
+  <span class="key">browsersset1</span>:
+    <span class="comment"># Browsersset1 specification</span>
+  <span class="key">browsersset2</span>:
+    <span class="comment"># Browsersset2 specification</span>
+
+<span class="key">license</span>: <span class="comment"># Stores Moon license key (currently only one license key is supported in Helm chart)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you can see for all resources except licenses you can define multiple different instances: multiple configuration objects, multiple quota objects and multiple browsers sets. Every field you set in resource specification is converted as is to a Kubernetes custom resource. For example, consider the following browsers set in <code>values.yaml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="title">An example browsers set definition in values.yaml</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browsers</span>:
+  <span class="key">my-browserset</span>:
+    <span class="key">selenium</span>:
+      <span class="key">firefox</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/firefox</span></span>
+      <span class="key">chrome</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/chrome</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When you apply Helm chart with the following definition in values.yaml, it will be automatically converted to browsers set Kubernetes resource like this:</p>
+</div>
+<div class="listingblock">
+<div class="title">An equivalent browsers set Kubernetes object</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">apiVersion</span>: <span class="string"><span class="content">moon.aerokube.com/v1</span></span>
+<span class="key">kind</span>: <span class="string"><span class="content">BrowserSet</span></span>
+<span class="key">metadata</span>:
+  <span class="key">name</span>: <span class="string"><span class="content">my-browserset</span></span>
+  <span class="key">namespace</span>: <span class="string"><span class="content">moon</span></span> <span class="comment"># Your namespace name for Moon will be here</span>
+<span class="key">spec</span>:
+  <span class="key">selenium</span>:
+    <span class="key">firefox</span>:
+      <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/firefox</span></span>
+    <span class="key">chrome</span>:
+      <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/chrome</span></span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you create multiple entries in the list of browsers sets in <code>values.yaml</code>, then multiple Kubernetes resources will be created.</p>
+</div>
 </div>
 </div>
 </div>
@@ -8736,7 +8873,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2024-08-12 16:22:04 UTC
+Last updated 2024-08-13 14:12:44 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
