@@ -541,7 +541,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2024-09-23</span>
+<span id="revdate">2024-09-25</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -2170,6 +2170,39 @@ It is important to add <code>mp4</code> file extension.
 </div>
 </div>
 <div class="sect4">
+<h5 id="capability-har"><a class="anchor" href="#capability-har"></a>Capturing web page network activity: enableHAR</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.7.2.</p>
+</li>
+<li>
+<p>Using this capability requires <a href="#video-recording-s3">initial S3 storage configuration</a>.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>In some cases you may need to capture all HTTP requests being sent by browser during Selenium session. Moon can automatically capture all network traffic to so-called <a href="https://en.wikipedia.org/wiki/HAR_(file_format)">HAR</a> format file and upload it to S3 storage. To enable capturing web page network activity for a browser session, add the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>enableHAR: true</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
 <h5 id="capability-env"><a class="anchor" href="#capability-env"></a>Per-session Environment Variables: env</h5>
 <div class="paragraph">
 <p>Sometimes you may want to set some environment variables for every test case (for example to test with different default locales). To achieve this pass one more capability:</p>
@@ -2473,6 +2506,39 @@ This feature is available since Moon 2.2.0.
 <div class="title">Type: boolean</div>
 <div class="content">
 <pre>windowManager: false # Default is true</pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="capability-auto-select-client-certs"><a class="anchor" href="#capability-auto-select-client-certs"></a>Automatically Select Mutual TLS Client Certificate: autoSelectClientCerts</h5>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>This feature is available since Moon 2.7.2.</p>
+</li>
+<li>
+<p>This capability is only needed for Chrome browser.</p>
+</li>
+</ol>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Some tested applications are now relying on so-called <a href="https://en.wikipedia.org/wiki/Mutual_authentication">mutual TLS authentication</a>. To automatically select first available TLS client certificate, use the following capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Type: boolean</div>
+<div class="content">
+<pre>autoSelectClientCerts: true</pre>
 </div>
 </div>
 </div>
@@ -8873,7 +8939,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2024-09-23 13:08:30 UTC
+Last updated 2024-09-25 12:34:53 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
