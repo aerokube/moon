@@ -586,16 +586,17 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <li><a href="#selenium-moon-capabilities">2.2.1. Moon-specific Capabilities</a></li>
 <li><a href="#selenium-headless">2.2.2. Headless Mode</a></li>
 <li><a href="#selenium-video-recording">2.2.3. Video Recording</a></li>
-<li><a href="#mobile-emulation">2.2.4. Mobile Emulation</a></li>
-<li><a href="#clipboard">2.2.5. Accessing Clipboard</a></li>
-<li><a href="#uploading-files">2.2.6. Uploading Files to Browser</a></li>
-<li><a href="#selenium-context">2.2.7. Providing Additional Browser Data</a></li>
-<li><a href="#accessing-downloaded-files">2.2.8. Accessing Files Downloaded with Browser</a></li>
-<li><a href="#selenium-devtools">2.2.9. Accessing Developer Tools</a></li>
-<li><a href="#selenium-locale">2.2.10. Changing Browser Locale</a></li>
-<li><a href="#selenium-time-zone">2.2.11. Changing Browser Time Zone</a></li>
-<li><a href="#selenium-external-host">2.2.12. Using External Hosts</a></li>
-<li><a href="#selenium-proxy">2.2.13. Using Proxy Servers</a></li>
+<li><a href="#_audio_support">2.2.4. Audio Support</a></li>
+<li><a href="#mobile-emulation">2.2.5. Mobile Emulation</a></li>
+<li><a href="#clipboard">2.2.6. Accessing Clipboard</a></li>
+<li><a href="#uploading-files">2.2.7. Uploading Files to Browser</a></li>
+<li><a href="#selenium-context">2.2.8. Providing Additional Browser Data</a></li>
+<li><a href="#accessing-downloaded-files">2.2.9. Accessing Files Downloaded with Browser</a></li>
+<li><a href="#selenium-devtools">2.2.10. Accessing Developer Tools</a></li>
+<li><a href="#selenium-locale">2.2.11. Changing Browser Locale</a></li>
+<li><a href="#selenium-time-zone">2.2.12. Changing Browser Time Zone</a></li>
+<li><a href="#selenium-external-host">2.2.13. Using External Hosts</a></li>
+<li><a href="#selenium-proxy">2.2.14. Using Proxy Servers</a></li>
 </ul>
 </li>
 <li><a href="#cypress">2.3. Using Cypress</a>
@@ -2595,7 +2596,35 @@ Using video recording requires <a href="#video-recording">initial configuration<
 </div>
 </div>
 <div class="sect3">
-<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.2.4. Mobile Emulation</h4>
+<h4 id="_audio_support"><a class="anchor" href="#_audio_support"></a>2.2.4. Audio Support</h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This feature is available since Moon 2.7.5.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To record video with sound, pass additional capability:</p>
+</div>
+<div class="listingblock">
+<div class="title">Enabling audio in Selenium capabilities</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="python">capabilities = {
+    <span class="string"><span class="delimiter">&quot;</span><span class="content">moon:options</span><span class="delimiter">&quot;</span></span>: {
+        <span class="string"><span class="delimiter">&quot;</span><span class="content">enableAudio</span><span class="delimiter">&quot;</span></span>: <span class="predefined-constant">True</span>
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="mobile-emulation"><a class="anchor" href="#mobile-emulation"></a>2.2.5. Mobile Emulation</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2661,7 +2690,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.2.5. Accessing Clipboard</h4>
+<h4 id="clipboard"><a class="anchor" href="#clipboard"></a>2.2.6. Accessing Clipboard</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2732,7 +2761,7 @@ options.setCapability(<span class="string"><span class="delimiter">&quot;</span>
 </div>
 </div>
 <div class="sect3">
-<h4 id="uploading-files"><a class="anchor" href="#uploading-files"></a>2.2.6. Uploading Files to Browser</h4>
+<h4 id="uploading-files"><a class="anchor" href="#uploading-files"></a>2.2.7. Uploading Files to Browser</h4>
 <div class="paragraph">
 <p>Uploading files to browser is a built-in Selenium feature supported in the majority of Selenium clients. How to do this in different programming languages is shown below:</p>
 </div>
@@ -2810,7 +2839,7 @@ driver.FindElement(By.Id(&quot;uploadfile_0&quot;)).SendKeys(&quot;/tmp/file.txt
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-context"><a class="anchor" href="#selenium-context"></a>2.2.7. Providing Additional Browser Data</h4>
+<h4 id="selenium-context"><a class="anchor" href="#selenium-context"></a>2.2.8. Providing Additional Browser Data</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -3047,7 +3076,7 @@ $ ffmpeg -i my-video.mp4 -vf hflip -pix_fmt yuv420p -s 1280x720 webcam-video/web
 </div>
 </div>
 <div class="sect3">
-<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.2.8. Accessing Files Downloaded with Browser</h4>
+<h4 id="accessing-downloaded-files"><a class="anchor" href="#accessing-downloaded-files"></a>2.2.9. Accessing Files Downloaded with Browser</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -3115,7 +3144,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.2.9. Accessing Developer Tools</h4>
+<h4 id="selenium-devtools"><a class="anchor" href="#selenium-devtools"></a>2.2.10. Accessing Developer Tools</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -3154,7 +3183,7 @@ file-contents-go-here</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.2.10. Changing Browser Locale</h4>
+<h4 id="selenium-locale"><a class="anchor" href="#selenium-locale"></a>2.2.11. Changing Browser Locale</h4>
 <div class="paragraph">
 <p>In some test cases you may need to override preferred browser locale. You can do this with standard Selenium capabilities. How to override locale depends on browser.</p>
 </div>
@@ -3186,7 +3215,7 @@ WebDriver driver = <span class="keyword">new</span> RemoteWebDriver(<span class=
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.2.11. Changing Browser Time Zone</h4>
+<h4 id="selenium-time-zone"><a class="anchor" href="#selenium-time-zone"></a>2.2.12. Changing Browser Time Zone</h4>
 <div class="paragraph">
 <p>A common testing task is checking that your web application behaves as expected in different <a href="https://en.wikipedia.org/wiki/Time_zone">time zones</a>. Depending on tested web application one of the following approaches can help.</p>
 </div>
@@ -3246,7 +3275,7 @@ select.perform();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.2.12. Using External Hosts</h4>
+<h4 id="selenium-external-host"><a class="anchor" href="#selenium-external-host"></a>2.2.13. Using External Hosts</h4>
 <div class="paragraph">
 <p>Moon expects to run the majority of browsers in pods inside Kubernetes or Openshift cluster. However sometimes you may need to run Selenium tests on some external hosts: hardware servers or virtual machines. Mainly this could be needed in two situations:</p>
 </div>
@@ -3296,7 +3325,7 @@ select.perform();</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="selenium-proxy"><a class="anchor" href="#selenium-proxy"></a>2.2.13. Using Proxy Servers</h4>
+<h4 id="selenium-proxy"><a class="anchor" href="#selenium-proxy"></a>2.2.14. Using Proxy Servers</h4>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -8939,7 +8968,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2025-05-11 12:21:42 UTC
+Last updated 2025-05-11 15:59:42 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
