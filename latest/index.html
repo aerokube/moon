@@ -541,7 +541,7 @@ table.CodeRay td.code{padding:0 0 0 .75em}
 <div class="details">
 <span id="author" class="author">Aerokube Software OÜ</span><br>
 <span id="revnumber">version latest,</span>
-<span id="revdate">2026-09-12</span>
+<span id="revdate">2026-09-28</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -908,9 +908,15 @@ $ openssl x509 -req -sha256 -days 365 -in server.csr -CA ca.crt -CAkey ca.key -s
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">browsers</span>:
   <span class="key">default</span>:
-    <span class="key">playwright</span>: <span class="string"><span class="content">{}</span></span>
     <span class="key">cypress</span>: <span class="string"><span class="content">{}</span></span>
     <span class="key">devtools</span>: <span class="string"><span class="content">{}</span></span>
+    <span class="key">playwright</span>:
+      <span class="key">chromium</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/playwright-chromium</span></span>
+      <span class="key">firefox</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/playwright-firefox</span></span>
+      <span class="key">webkit</span>:
+        <span class="key">repository</span>: <span class="string"><span class="content">quay.io/browser/playwright-webkit</span></span>
     <span class="key">selenium</span>:
       <span class="key">MicrosoftEdge</span>: <span class="string"><span class="content">null</span></span>
       <span class="key">opera</span>: <span class="string"><span class="content">null</span></span>
@@ -8968,7 +8974,7 @@ $ kubectl edit license moon # Updating Moon license key</pre>
 <div id="footer">
 <div id="footer-text">
 Version latest<br>
-Last updated 2026-09-12 16:29:49 UTC
+Last updated 2026-09-28 11:24:24 UTC
 </div>
 </div>
 <!-- Global site tag (gtag.js) - Google Analytics -->
